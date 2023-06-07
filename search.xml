@@ -551,6 +551,310 @@
 </blockquote>
 </li>
 </ol>
+<h2 id="习题-1"><a href="#习题-1" class="headerlink" title="习题"></a>习题</h2><ol>
+<li>在本题中，考虑虚电路网络和数据报网络的某些优缺点。<br>a.假设路由器遇到了可能经常会引起它无法正常运转的情况。提出理由说明是虚电路体系结构还是数据报体系结构更好，为什么?<blockquote>
+<p>数据报网络更好，如果无法运转时可以使用其他的路线继续发送。如果是虚电路就需要重新建立连接了。</p>
+</blockquote>
+</li>
+</ol>
+<p>b对于源和目的结点间传输流量的排他性使用，假设该源和目的结点要求，在沿源到目的地的路径上的所有路由器总能提供固定的容量。提出理由说明是虚电路体系结构还是数据报体系结构更好，为什么?</p>
+<blockquote>
+<p>虚电路体系更好，因为提供固定的容量正好能搭建一个虚电路。</p>
+</blockquote>
+<p>c假设网络中的链路和路由器从不出故障，并且所有源/目的地对之间所使用的路径保持不变。在这种情况下，虚电路或数据报体系结构哪个控制流量开销会更多?为什么?</p>
+<blockquote>
+<p>数据报体系的控制流量开销更多，因为数据报需要更大报文首部。</p>
+</blockquote>
+<ol start="2">
+<li>考虑一个虚电路网络。假定其VC号是一个8比特字段。<br>a.链路能够承载的虚电路的最大数量是多少?<blockquote>
+<p>256个</p>
+</blockquote>
+</li>
+</ol>
+<p>b.假定某中心结点在连接建立时确定了路径和VC号。假定沿着某虚电路的路径在每段链路使用相同的VC号。描述在连接建立时中心结点如何确定VC号。进行中虚电路比在(a)中确定的最大值要少，也没有相同的未用 VC号，这种情况可能出现吗?</p>
+<blockquote>
+<p>可能的确定方法：有一个虚电路表，记录当前已经使用的VC号，中心结点设定一个未被使用的VC号。这样设置就不会出现比确定的最大值少的情况。</p>
+</blockquote>
+<p>c.假定沿着某条虚电路的路径允许不同的VC号。在连接建立期间，在端到端路径确定以后，描述链路如何以分散方式而不依赖中心结点选择它们的VC号并配置它们的转发表</p>
+<blockquote>
+<p>链路只需要向它的下一跳协商，VC号不与当前结点和下一跳结点中的其它VC号重复即可。</p>
+</blockquote>
+<ol start="3">
+<li><p>在虚电路网络中的基本转发表具有4列。在这些列中的值的含义是什么?在数据报网络中的基本转发表有两列。在这些列中的值的含义是什么?</p>
+<blockquote>
+<p>虚电路网络：<br>入接口，入VC号，出接口，出VC号<br>数据报网络：<br>目的子网，出接口</p>
+</blockquote>
+</li>
+<li><p>考虑下列网络<br>a假定网络是一个数据报网络。显示路由器A中的转发表，其中所有指向主机 H3的流量通过接口3转发。</p>
+</li>
+</ol>
+<table>
+<thead>
+<tr>
+<th align="center">目的地址</th>
+<th align="center">出接口</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">H1</td>
+<td align="center">1</td>
+</tr>
+<tr>
+<td align="center">H2</td>
+<td align="center">2</td>
+</tr>
+<tr>
+<td align="center">H3</td>
+<td align="center">3</td>
+</tr>
+</tbody></table>
+<p>b假定网络是一个数据报网络。你能写出路由器A中的转发表吗?其中所有从H1指向主机3的流量通过接口3转发，而所有从H2指向主机H3的流量通过接口4转发。提示:这是一个技巧问题。</p>
+<table>
+<thead>
+<tr>
+<th align="center">入接口</th>
+<th align="center">目的地址</th>
+<th align="center">出接口</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">1</td>
+<td align="center">H2</td>
+<td align="center">2</td>
+</tr>
+<tr>
+<td align="center">2</td>
+<td align="center">H1</td>
+<td align="center">1</td>
+</tr>
+<tr>
+<td align="center">1</td>
+<td align="center">H3</td>
+<td align="center">3</td>
+</tr>
+<tr>
+<td align="center">2</td>
+<td align="center">H3</td>
+<td align="center">4</td>
+</tr>
+</tbody></table>
+<p>c现在假定网络是虚电路网络，在H1和H3之间有一个进行中的呼叫，H2和H之间有另一个进行0中的呼叫。写出路由器A中的转发表，其中所有从H1指向主机H3的流量通过接口3转发，而所有从H2指向主机H3的流量通过接口4转发。</p>
+<blockquote>
+<p>设H1-H3各段的VC号为 01 02 03 04<br>设H2-H3各段的VC号为 05 06 07 08 </p>
+</blockquote>
+<table>
+<thead>
+<tr>
+<th align="center">入接口</th>
+<th align="center">入VC号</th>
+<th align="center">出接口</th>
+<th align="center">出VC号</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">1</td>
+<td align="center">01</td>
+<td align="center">3</td>
+<td align="center">02</td>
+</tr>
+<tr>
+<td align="center">2</td>
+<td align="center">05</td>
+<td align="center">4</td>
+<td align="center">06</td>
+</tr>
+<tr>
+<td align="center">d假设场景与(c)中相同，写出在结点B、C和D中的转发表</td>
+<td align="center"></td>
+<td align="center"></td>
+<td align="center"></td>
+</tr>
+</tbody></table>
+<p>路由器B:  </p>
+<table>
+<thead>
+<tr>
+<th align="center">入接口</th>
+<th align="center">入VC号</th>
+<th align="center">出接口</th>
+<th align="center">出VC号</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">1</td>
+<td align="center">02</td>
+<td align="center">2</td>
+<td align="center">03</td>
+</tr>
+</tbody></table>
+<p>路由器C:  </p>
+<table>
+<thead>
+<tr>
+<th align="center">入接口</th>
+<th align="center">入VC号</th>
+<th align="center">出接口</th>
+<th align="center">出VC号</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">1</td>
+<td align="center">06</td>
+<td align="center">2</td>
+<td align="center">07</td>
+</tr>
+</tbody></table>
+<p>路由器D:  </p>
+<table>
+<thead>
+<tr>
+<th align="center">入接口</th>
+<th align="center">入VC号</th>
+<th align="center">出接口</th>
+<th align="center">出VC号</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">1</td>
+<td align="center">03</td>
+<td align="center">3</td>
+<td align="center">04</td>
+</tr>
+<tr>
+<td align="center">2</td>
+<td align="center">07</td>
+<td align="center">3</td>
+<td align="center">08</td>
+</tr>
+</tbody></table>
+<p><img src="/2023/06/02/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C-%E7%AC%AC%E5%9B%9B%E7%AB%A0%E7%BD%91%E7%BB%9C%E5%B1%82/t3.png" alt="?"></p>
+<ol start="5">
+<li>考虑一个用2比特字段表示VC号的虚电路网络。假定该网络要通过4条链路(链路A、链路B链路C和链路D)建立一条虚电路。假定这些链路中的每条当前都承载两条其他的虚电路，这些其他虚电路的VC号如下:<br><img src="/2023/06/02/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C-%E7%AC%AC%E5%9B%9B%E7%AB%A0%E7%BD%91%E7%BB%9C%E5%B1%82/t4.png" alt="?"><br>在回答下列问题时，记住每个现有的虚电路可能通过这4条链路之一。<br>a如果每条虚电路要求沿着其路径使用相同的VC号，能为该新的虚电路分配什么样的VC号?<blockquote>
+<p>VC号分别为 00，01，10，11  </p>
+</blockquote>
+</li>
+</ol>
+<p>b.如果每条虚电路沿其路径允许不同的链路使用不同的VC号(因此转发表必须执行VC号转换)能够使用4个VC号的多少种不同的组合(一种组合用于这4条链路之一)?</p>
+<blockquote>
+<p>buhui</p>
+</blockquote>
+<ol start="6">
+<li><p>在本书中我们使用术语面向连接服务来描述运输层服务，使用术语连接服务描述网络层服务。在术语中为何有这种微妙的差异?</p>
+<blockquote>
+<p>网络层提供了主机之间的连接服务，运输层则使用这个服务建立进程间的连接。  </p>
+</blockquote>
+</li>
+<li><p>假设两个分组在完全相同的时刻到达一台路由器的两个不同输人端口。同时假设在该路由器中没有其他分组。<br>a假设这两个分组朝着两个不同的输出端口转发。当交换结构使用一条共享总线时，这两个分组可能在相同时刻通过交换结构转发吗?</p>
+<blockquote>
+<p>不能 </p>
+</blockquote>
+</li>
+</ol>
+<p>b假设这两个分组朝着两个不同的输出端口转发。当交换结构使用纵横方式时，这两个分组可能在6相同时刻通过交换结构转发吗?</p>
+<blockquote>
+<p>可以</p>
+</blockquote>
+<p>c假设这两个分组朝着相同的输出端口转发。当交换结构使用纵横方式时。这两个分组可能在相同0时刻通过交换结构转发吗?</p>
+<blockquote>
+<p>bu能<br>8. <img src="/2023/06/02/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C-%E7%AC%AC%E5%9B%9B%E7%AB%A0%E7%BD%91%E7%BB%9C%E5%B1%82/t5.png" alt="?"><br>最好方法：2个时隙  </p>
+</blockquote>
+<table>
+<thead>
+<tr>
+<th align="center">时间</th>
+<th align="center">入端口号</th>
+<th align="center">端口号</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">1</td>
+<td align="center">1</td>
+<td align="center">X</td>
+</tr>
+<tr>
+<td align="center">1</td>
+<td align="center">2</td>
+<td align="center">Y</td>
+</tr>
+<tr>
+<td align="center">1</td>
+<td align="center">3</td>
+<td align="center">Z</td>
+</tr>
+<tr>
+<td align="center">2</td>
+<td align="center">2</td>
+<td align="center">X</td>
+</tr>
+<tr>
+<td align="center">2</td>
+<td align="center">3</td>
+<td align="center">Y</td>
+</tr>
+</tbody></table>
+<p>最差方法：3个时隙  </p>
+<table>
+<thead>
+<tr>
+<th align="center">时间</th>
+<th align="center">入端口号</th>
+<th align="center">端口号</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">1</td>
+<td align="center">1</td>
+<td align="center">X</td>
+</tr>
+<tr>
+<td align="center">1</td>
+<td align="center">3</td>
+<td align="center">Y</td>
+</tr>
+<tr>
+<td align="center">2</td>
+<td align="center">2</td>
+<td align="center">Y</td>
+</tr>
+<tr>
+<td align="center">2</td>
+<td align="center">3</td>
+<td align="center">Z</td>
+</tr>
+<tr>
+<td align="center">3</td>
+<td align="center">2</td>
+<td align="center">X</td>
+</tr>
+</tbody></table>
+<ol start="10">
+<li><img src="/2023/06/02/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C-%E7%AC%AC%E5%9B%9B%E7%AB%A0%E7%BD%91%E7%BB%9C%E5%B1%82/t6.png" alt="?"><br>提供一个具有4个表项的转发表，使用最长前缀匹配，转发分组到正确的链路接口</li>
+</ol>
+<table>
+<thead>
+<tr>
+<th align="center">目的子网</th>
+<th align="center">出接口</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">224.0.0.0/22</td>
+<td align="center">0</td>
+</tr>
+<tr>
+<td align="center">224.64.0.0/16</td>
+<td align="center">1</td>
+</tr>
+<tr>
+<td align="center">224.64.0.0/22</td>
+<td align="center">2</td>
+</tr>
+<tr>
+<td align="center">其它</td>
+<td align="center">3</td>
+</tr>
+</tbody></table>
+<p>描述你的转发表是如何为具有下列目的地址的数据报决定适当链路接口的。<br>11001000 10010001 01010001 01010101<br>11100001 01000000 11000011 00111100<br>11100001 10000000 00010001 01110111</p>
 ]]></content>
       <tags>
         <tag>计算机网络</tag>
