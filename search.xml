@@ -33,7 +33,20 @@
   <entry>
     <title>计算机网络-第五章链路层</title>
     <url>/2023/06/08/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C-%E7%AC%AC%E4%BA%94%E7%AB%A0%E9%93%BE%E8%B7%AF%E5%B1%82/</url>
-    <content><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="\assets\css\APlayer.min.css"><script src="\assets\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script><script class="meting-secondary-script-marker" src="\assets\js\Meting.min.js"></script>]]></content>
+    <content><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="\assets\css\APlayer.min.css"><script src="\assets\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script><script class="meting-secondary-script-marker" src="\assets\js\Meting.min.js"></script><h2 id="总述"><a href="#总述" class="headerlink" title="总述"></a>总述</h2><p>在链路层的讨论中，我们将看到两种截然不同类型的链路层信道。</p>
+<p>第一种类型是广播信道，这种信道用于连接有线局域网、卫星网和混合光纤同轴电缆（Hybrid Fiber Coaxialcable, HFC）接入网中的多台主机。因为许多主机与相同的广播信道连接,需要所谓的媒体访问协议来协调帧传输。在某些场合中，可以使用中心控制器来协调传输。</p>
+<p>第二种类型的链路层信道是点对点通信链路，这在诸如长距离链路连接的两台路由器之间，或用户办公室计算机与它们所连接的邻近以太网交换机之间等场合经常能够发现。协调对点对点链路的访问较为简单;</p>
+<h2 id="链路层概述"><a href="#链路层概述" class="headerlink" title="链路层概述"></a>链路层概述</h2><p>在本章中为方便讨论，将运行链路层协议(即第2层)协议的任何设备均称为结点 (node)。结点包括主机、路由器、交换机和 Wii接入点。我们也把沿着通信路径连接相邻结点的通信信道称为链路(link)。为了将一个数据报从源主机传输到目的主机，数据报必须通过沿端到端路径上的各段链路传输。</p>
+<p>考虑从无线主机之一向服务器之一发送一个数据报。该数据报将实际通过6段链路:发送主机与WiFi接人点之间的Wifi链路，接入点和链路层交换机之间的以太网链路，链路层交换机与路由器之间的链路，两台路由器之间的链路，最后是交换机和服务器之间的以太网链路。在通过特定的链路时，传输结点将数据报封装在链路层帧中，并将该帧传送到链路中。<br><img src="/2023/06/08/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C-%E7%AC%AC%E4%BA%94%E7%AB%A0%E9%93%BE%E8%B7%AF%E5%B1%82/q1.png" alt="?"></p>
+<h3 id="链路层提供的服务"><a href="#链路层提供的服务" class="headerlink" title="链路层提供的服务"></a>链路层提供的服务</h3><p>**成帧(raming)**。在每个网络层数据报经链路传送之前，几乎所有的链路层协议都要将其用链路层帧封装起来。一个帧由一个数据字段和若干首部字段组成，其中网络层数据报就插在数据字段中。帧的结构由链路层协议规定。</p>
+<p><strong>链路接入</strong>。媒体访问控制(MediumAccessControl，MAC)协议规定了帧在链路上传输的规则。对于在链路的一端仅有一个发送方、链路的另一端仅有一个接收方的点对点链路，MAC协议比较简单(或者不存在)，即无论何时链路空闲，发送方都能够发送帧。更有趣的情况是当多个结点共享单个广播链路时，即所谓多路访问问题。这里，MAC协议用于协调多个结点的帧传输。</p>
+<p><strong>可靠交付</strong>。当链路层协议提供可靠交付服务时，它保证无差错地经链路层移动每个网络层数据报。链路层的可靠交付服务通常是通过确认和重传取得的。链路层可靠交付服务通常用于易于产生高差错率的链路，例如无线链路，其目的是本地(也就是在差错发生的链路上)纠正一个差错，而不是通过运输层或应用层协议迫使进行端到端的数据重传。然而，对于低比特差错的链路包括光纤、同轴电缆和许多双绞铜线链路，链路层可靠交付可能会被认为是一种不必要的开销。由于这个原因，许多有线的链路层协议不提供可靠交付服务。</p>
+<p><strong>差错检测和纠正</strong>。当帧中的一个比特作为1传输时，接收方结点中的链路层硬件可能不正确地将其判断为0，反之亦然。这种比特差错是由信号衰减和电磁噪声导致的。因为没有必要转发一个有差错的数据报，所以许多链路层协议提供一种机制来检测这样的比特差错。通过让发送结点在帧中包括差错检测比特，让接收结点进行差错检查，以此来完成这项工作。因特网的运输层和网络层也提供了有限形式的差错检测，即因特网检验和。链路层的差错检测通常更复杂并且用硬件实现。差错纠正类似于差错检测，区别在于接收方不仅能检测帧中出现的比特差错，而且能够准确地确定帧中的差错出现的位置(并因此纠正这些差错)。</p>
+]]></content>
+      <tags>
+        <tag>计算机网络</tag>
+        <tag>书籍_计算机网络-自顶向下</tag>
+      </tags>
   </entry>
   <entry>
     <title>人生不止有技术</title>
