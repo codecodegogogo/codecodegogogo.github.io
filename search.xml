@@ -31,6 +31,11 @@
       </tags>
   </entry>
   <entry>
+    <title>计算机网络-第二章链路层</title>
+    <url>/2023/06/08/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C-%E7%AC%AC%E4%BA%8C%E7%AB%A0%E9%93%BE%E8%B7%AF%E5%B1%82/</url>
+    <content><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="\assets\css\APlayer.min.css"><script src="\assets\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script><script class="meting-secondary-script-marker" src="\assets\js\Meting.min.js"></script>]]></content>
+  </entry>
+  <entry>
     <title>人生不止有技术</title>
     <url>/2023/06/03/%E4%BA%BA%E7%94%9F%E4%B8%8D%E6%AD%A2%E6%9C%89%E6%8A%80%E6%9C%AF/</url>
     <content><![CDATA[<div class="hbe hbe-container" id="hexo-blog-encrypt" data-wpm="如果你非常好奇，请与我联系。" data-whm="OOPS, these decrypted content may changed, but you can still have a look.">
@@ -1867,9 +1872,50 @@
 </tbody></table>
 <p>b.给出对c(x，w)或c(x，y)的链路费用的变化，使得执行了距离向量算法后，x将通知其邻居有一条通向u的新最低费用路径。</p>
 <p>c.给出对c(x，w)或c(x，r)的链路费用的变化，使得执行了距离向量算法后，x将不通知其邻居有一条通向”的新最低费用路径。</p>
-<ol start="31">
-<li></li>
+<ol start="35">
+<li><p>描述在BGP中是如何检测路径中的环路的。</p>
+<blockquote>
+<p>如果路由器收到一个通告发现它所在的AS包含在AS-PATH中，则他将拒绝这个通告。</p>
+</blockquote>
+</li>
+<li><p>一台BCP路由器将总是选择具有最短AS路径长度的无环路由吗?评估你的答案。</p>
+<blockquote>
+<p>不一定，因为路由器会被设置一些偏好，从而选择一些特殊的路径。</p>
+</blockquote>
+</li>
+<li><p>考虑下图所示的网络。假定AS3和AS2正在运行OSPF作为其AS内部路由选择协议。假定AS1和AS4正在运行RIP作为其AS内部路由选择协议。假定AS间路由选择协议使用的是eBGP和iBGP。假定最初在AS2和AS4之间不存在物理链路。<br><img src="/2023/06/02/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C-%E7%AC%AC%E5%9B%9B%E7%AB%A0%E7%BD%91%E7%BB%9C%E5%B1%82/y3.png" alt="?"><br>a.路由器3c从下列哪个路由选择协议学习到了前缀x:OSPF、RIP、eBGP或iBGP?</p>
+<blockquote>
+<p>eBGP</p>
+</blockquote>
+</li>
 </ol>
+<p>b.路由器3a从哪个路由选择协议学习到了前缀x?</p>
+<blockquote>
+<p>iBGP</p>
+</blockquote>
+<p>c.路由器1c从哪个路由选择协议学习到了前缀x?</p>
+<blockquote>
+<p>eBGP</p>
+</blockquote>
+<p>d路由器1d从哪个路由选择协议学习到了前缀x?</p>
+<blockquote>
+<p>iBGP</p>
+</blockquote>
+<ol start="38">
+<li>参考上一习题，一旦路由器1d知道了x的情况，它将一个表项(x，)放人其转发表中。</li>
+</ol>
+<p>a.对这个表项而言，I将等于1还是2?用一句话解释其原因。</p>
+<blockquote>
+<p>因为I1是到1c的最短路径</p>
+</blockquote>
+<p>b现在假定在AS2和AS4之间有一条物理链路，显示为图中的虚线。假定路由器1d知道经AS2以及经AS3能够访问到x。I将设置为还是L?用一句话解释其原因。</p>
+<blockquote>
+<p>2<br>因为在AS-PATH长度相同时，I2的内部路径最短</p>
+</blockquote>
+<p>c.现在假定有另一个AS，它称为AS5，其位于路径AS2和AS4之间(没有显示在图中)。假定路由器ld知道经AS2AS5AS4以及经AS3AS4能够访问到。将设置为还是L?用一话解释其原因</p>
+<blockquote>
+<p>I1<br>因为在AS-PATH长度更短</p>
+</blockquote>
 ]]></content>
       <tags>
         <tag>计算机网络</tag>
