@@ -1,0 +1,546 @@
+<!DOCTYPE html>
+<html lang=zh>
+<head>
+  <meta charset="utf-8">
+  
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, minimal-ui">
+  <meta name="renderer" content="webkit">
+  <meta http-equiv="Cache-Control" content="no-transform" />
+  <meta http-equiv="Cache-Control" content="no-siteapp" />
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <meta name="format-detection" content="telephone=no,email=no,adress=no">
+  <!-- Color theme for statusbar -->
+  <meta name="theme-color" content="#000000" />
+  <!-- 强制页面在当前窗口以独立页面显示,防止别人在框架里调用页面 -->
+  <meta http-equiv="window-target" content="_top" />
+  
+  
+  <title>现代操作系统-引论 | Sunny&#39;s Blog</title>
+  <meta name="description" content="引论现代计算机系统由一个或多个处理器、主存、磁盘、打印机、键盘、鼠标、显示器、网络接口以及各种其他输入&#x2F;输出设备组成。 计算机安装了一层软件，称为操作系统，它的任务是为用户程序提供一个更好、更简单、更清晰的计算机模型，并管理刚才提到的所有设备。 用户与之交互的程序，基于文本的通常称为shell，而基于图标的则称为图形用户界面(GraphicalUserInterface，GUI)，它们实际上并不是">
+<meta property="og:type" content="article">
+<meta property="og:title" content="现代操作系统-引论">
+<meta property="og:url" content="https://codecodegogogo.github.io/2023/06/12/%E7%8E%B0%E4%BB%A3%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-%E5%BC%95%E8%AE%BA/index.html">
+<meta property="og:site_name" content="Sunny">
+<meta property="og:description" content="引论现代计算机系统由一个或多个处理器、主存、磁盘、打印机、键盘、鼠标、显示器、网络接口以及各种其他输入&#x2F;输出设备组成。 计算机安装了一层软件，称为操作系统，它的任务是为用户程序提供一个更好、更简单、更清晰的计算机模型，并管理刚才提到的所有设备。 用户与之交互的程序，基于文本的通常称为shell，而基于图标的则称为图形用户界面(GraphicalUserInterface，GUI)，它们实际上并不是">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://codecodegogogo.github.io/2023/06/12/%E7%8E%B0%E4%BB%A3%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-%E5%BC%95%E8%AE%BA/q1.png">
+<meta property="og:image" content="https://codecodegogogo.github.io/2023/06/12/%E7%8E%B0%E4%BB%A3%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-%E5%BC%95%E8%AE%BA/q2.png">
+<meta property="article:published_time" content="2023-06-12T06:51:32.000Z">
+<meta property="article:modified_time" content="2023-06-12T09:01:24.736Z">
+<meta property="article:author" content="Sunny">
+<meta property="article:tag" content="os">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://codecodegogogo.github.io/2023/06/12/%E7%8E%B0%E4%BB%A3%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-%E5%BC%95%E8%AE%BA/q1.png">
+  <!-- Canonical links -->
+  <link rel="canonical" href="https://codecodegogogo.github.io/2023/06/12/%E7%8E%B0%E4%BB%A3%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-%E5%BC%95%E8%AE%BA/index.html">
+  
+    <link rel="alternate" href="/atom.xml" title="Sunny" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/images/favicon.png" type="image/x-icon">
+  
+  <!-- <link rel="icon" href="/images/favicon.png" type="image/x-icon"> -->
+
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  
+  
+  
+  
+<meta name="generator" content="Hexo 5.4.2"></head>
+
+
+<body class="main-center theme-purple" itemscope itemtype="http://schema.org/WebPage">
+  <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+  <div class="slimContent">
+    <div class="navbar-header">
+      
+      
+      <div class="profile-block text-center">
+        <a id="avatar" href="https://github.com/codecodegogogo" target="_blank">
+          <img class="img-circle img-rotate" src="/images/avatar.jpg" width="200" height="200">
+        </a>
+        <h2 id="name" class="hidden-xs hidden-sm">Sunny</h2>
+        <h3 id="title" class="hidden-xs hidden-sm hidden-md"></h3>
+        <small id="location" class="text-muted hidden-xs hidden-sm"><i class="icon icon-map-marker"></i> China</small>
+      </div>
+      
+      <div class="search" id="search-form-wrap">
+
+    <form class="search-form sidebar-form">
+        <div class="input-group">
+            <input type="text" class="search-form-input form-control" placeholder="搜索" />
+            <span class="input-group-btn">
+                <button type="submit" class="search-form-submit btn btn-flat" onclick="return false;"><i class="icon icon-search"></i></button>
+            </span>
+        </div>
+    </form>
+    <div class="ins-search">
+  <div class="ins-search-mask"></div>
+  <div class="ins-search-container">
+    <div class="ins-input-wrapper">
+      <input type="text" class="ins-search-input" placeholder="想要查找什么..." x-webkit-speech />
+      <button type="button" class="close ins-close ins-selectable" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+    </div>
+    <div class="ins-section-wrapper">
+      <div class="ins-section-container"></div>
+    </div>
+  </div>
+</div>
+
+
+</div>
+      <button class="navbar-toggle collapsed" type="button" data-toggle="collapse" data-target="#main-navbar" aria-controls="main-navbar" aria-expanded="false">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+    </div>
+    <nav id="main-navbar" class="collapse navbar-collapse" itemscope itemtype="http://schema.org/SiteNavigationElement" role="navigation">
+      <ul class="nav navbar-nav main-nav menu-highlight">
+        
+        
+        <li class="menu-item menu-item-home">
+          <a href="/.">
+            
+            <i class="icon icon-home-fill"></i>
+            
+            <span class="menu-title">首页</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags">
+            
+            <i class="icon icon-tags"></i>
+            
+            <span class="menu-title">标签</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-repository">
+          <a target="_blank" rel="noopener" href="https://github.com/codecodegogogo">
+            
+            <i class="icon icon-project"></i>
+            
+            <span class="menu-title">项目</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about">
+            
+            <i class="icon icon-cup-fill"></i>
+            
+            <span class="menu-title">关于</span>
+          </a>
+        </li>
+        
+      </ul>
+      
+	
+    <ul class="social-links">
+    	
+        <li><a href="https://github.com/codecodegogogo" target="_blank" title="Github" data-toggle=tooltip data-placement=top><i class="icon icon-github"></i></a></li>
+        
+    </ul>
+
+    </nav>
+  </div>
+</header>
+
+  
+    <aside class="sidebar" itemscope itemtype="http://schema.org/WPSideBar">
+  <div class="slimContent">
+    
+      <div class="widget">
+    <h3 class="widget-title">公告</h3>
+    <div class="widget-body">
+        <div id="board">
+            <div class="content">
+                <p>今天网站换了个新皮肤~</p> <p align="right">2023.4.14</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">标签</h3>
+    <div class="widget-body">
+      <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/C-Primer/" rel="tag">C++ Primer</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/c/" rel="tag">c++</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/code/" rel="tag">code</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/linux/" rel="tag">linux</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/os/" rel="tag">os</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%9D%82%E8%B0%88/" rel="tag">杂谈</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%9F%BA%E7%A1%80/" rel="tag">计算机基础</a><span class="tag-list-count">6</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%B7%A5%E5%85%B7/" rel="tag">计算机工具</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/" rel="tag">计算机网络</a><span class="tag-list-count">9</span></li></ul>
+    </div>
+  </div>
+
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">最新文章</h3>
+    <div class="widget-body">
+      <ul class="recent-post-list list-unstyled no-thumbnail">
+        
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                
+              </p>
+              <p class="item-title">
+                <a href="/2023/06/12/%E7%8E%B0%E4%BB%A3%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-%E5%BC%95%E8%AE%BA/" class="title">现代操作系统-引论</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2023-06-12T06:51:32.000Z" itemprop="datePublished">2023-06-12</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                
+              </p>
+              <p class="item-title">
+                <a href="/2023/06/12/%E8%AE%A1%E7%AE%97%E6%9C%BA%E9%80%9A%E4%BF%A1/" class="title">计算机通信</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2023-06-12T02:25:24.000Z" itemprop="datePublished">2023-06-12</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                
+              </p>
+              <p class="item-title">
+                <a href="/2023/06/08/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C-%E7%AC%AC%E4%BA%94%E7%AB%A0%E9%93%BE%E8%B7%AF%E5%B1%82/" class="title">计算机网络-第五章链路层</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2023-06-08T02:22:08.000Z" itemprop="datePublished">2023-06-08</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                
+              </p>
+              <p class="item-title">
+                <a href="/2023/06/03/%E4%BA%BA%E7%94%9F%E4%B8%8D%E6%AD%A2%E6%9C%89%E6%8A%80%E6%9C%AF/" class="title">人生不止有技术</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2023-06-03T14:37:06.000Z" itemprop="datePublished">2023-06-03</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                
+              </p>
+              <p class="item-title">
+                <a href="/2023/06/03/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E5%90%84%E5%B1%82%E7%BD%91%E7%BB%9C%E8%AE%BE%E5%A4%87/" class="title">计算机网络各层网络设备</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2023-06-03T11:56:50.000Z" itemprop="datePublished">2023-06-03</time>
+              </p>
+            </div>
+          </li>
+          
+      </ul>
+    </div>
+  </div>
+  
+
+    
+  </div>
+</aside>
+
+  
+  
+  <aside class="sidebar sidebar-toc collapse   in  " id="collapseToc" itemscope itemtype="http://schema.org/WPSideBar">
+  <div class="slimContent">
+    <nav id="toc" class="article-toc">
+      <h3 class="toc-title">文章目录</h3>
+      <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%BC%95%E8%AE%BA"><span class="toc-number">1.</span> <span class="toc-text">引论</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BB%80%E4%B9%88%E6%98%AF%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F"><span class="toc-number">1.1.</span> <span class="toc-text">什么是操作系统</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BD%9C%E4%B8%BA%E6%89%A9%E5%B1%95%E6%9C%BA%E5%99%A8%E7%9A%84%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F"><span class="toc-number">1.1.1.</span> <span class="toc-text">作为扩展机器的操作系统</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BD%9C%E4%B8%BA%E8%B5%84%E6%BA%90%E7%AE%A1%E7%90%86%E8%80%85%E7%9A%84%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F"><span class="toc-number">1.1.2.</span> <span class="toc-text">作为资源管理者的操作系统</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E7%9A%84%E5%8E%86%E5%8F%B2"><span class="toc-number">1.2.</span> <span class="toc-text">操作系统的历史</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%AC%AC%E4%B8%80%E4%BB%A3-1945-1955-%E7%9C%9F%E7%A9%BA%E7%AE%A1%E5%92%8C%E7%A9%BF%E5%AD%94%E5%8D%A1%E7%89%87"><span class="toc-number">1.2.1.</span> <span class="toc-text">第一代(1945~1955):真空管和穿孔卡片</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%AC%AC%E4%BA%8C%E4%BB%A3-1955-1965-%E6%99%B6%E4%BD%93%E7%AE%A1%E5%92%8C%E6%89%B9%E5%A4%84%E7%90%86%E7%B3%BB%E7%BB%9F"><span class="toc-number">1.2.2.</span> <span class="toc-text">第二代(1955~1965):晶体管和批处理系统</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%AC%AC%E4%B8%89%E4%BB%A3-1965-1980-%E9%9B%86%E6%88%90%E7%94%B5%E8%B7%AF%E5%92%8C%E5%A4%9A%E9%81%93%E7%A8%8B%E5%BA%8F%E8%AE%BE%E8%AE%A1"><span class="toc-number">1.2.3.</span> <span class="toc-text">第三代(1965~1980):集成电路和多道程序设计</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%AC%AC%E5%9B%9B%E4%BB%A3-1980%E5%B9%B4%E8%87%B3%E4%BB%8A-%E4%B8%AA%E4%BA%BA%E8%AE%A1%E7%AE%97%E6%9C%BA"><span class="toc-number">1.2.4.</span> <span class="toc-text">第四代(1980年至今):个人计算机</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%A1%AC%E4%BB%B6%E7%AE%80%E4%BB%8B"><span class="toc-number">1.3.</span> <span class="toc-text">计算机硬件简介</span></a></li></ol></li></ol>
+    </nav>
+  </div>
+</aside>
+
+<main class="main" role="main">
+  <div class="content">
+  <article id="post-现代操作系统-引论" class="article article-type-post" itemscope itemtype="http://schema.org/BlogPosting">
+    
+    <div class="article-header">
+      
+        
+  
+    <h1 class="article-title" itemprop="name">
+      现代操作系统-引论
+    </h1>
+  
+
+      
+      <div class="article-meta">
+        <span class="article-date">
+    <i class="icon icon-calendar-check"></i>
+	<a href="/2023/06/12/%E7%8E%B0%E4%BB%A3%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-%E5%BC%95%E8%AE%BA/" class="article-date">
+	  <time datetime="2023-06-12T06:51:32.000Z" itemprop="datePublished">2023-06-12</time>
+	</a>
+</span>
+        
+        
+  <span class="article-tag">
+    <i class="icon icon-tags"></i>
+	<a class="article-tag-link-link" href="/tags/os/" rel="tag">os</a>
+  </span>
+
+
+        
+	<span class="article-read hidden-xs">
+	    <i class="icon icon-eye-fill" aria-hidden="true"></i>
+	    <span id="busuanzi_container_page_pv">
+			<span id="busuanzi_value_page_pv">0</span>
+		</span>
+	</span>
+
+
+        <span class="post-comment"><i class="icon icon-comment"></i> <a href="/2023/06/12/%E7%8E%B0%E4%BB%A3%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-%E5%BC%95%E8%AE%BA/#comments" class="article-comment-link">评论</a></span>
+        
+	
+		<span class="post-wordcount hidden-xs" itemprop="wordCount">字数统计: 2.8k(字)</span>
+	
+	
+
+      </div>
+    </div>
+    <div class="article-entry marked-body" itemprop="articleBody">
+      
+        <h1 id="引论"><a href="#引论" class="headerlink" title="引论"></a>引论</h1><p>现代计算机系统由一个或多个处理器、主存、磁盘、打印机、键盘、鼠标、显示器、网络接口以及各种其他输入/输出设备组成。</p>
+<p>计算机安装了一层软件，称为操作系统，它的任务是为用户程序提供一个更好、更简单、更清晰的计算机模型，并管理刚才提到的所有设备。</p>
+<p><strong>用户与之交互的程序，基于文本的通常称为shell，而基于图标的则称为图形用户界面(GraphicalUserInterface，GUI)，它们实际上并不是操作系统的一部分，尽管这些程序使用操作系统来完成工作</strong></p>
+<p>简化视图的底部是硬件。硬件包括芯片、电路板磁盘、键盘、显示器以及类似的设备。在硬件的顶部是软件。<strong>多数计算机有两种运行模式:内核态和用户态。</strong> 软件中最基础的部分是操作系统，它运行在内核态(也称为管态、核心态)。在这个模式中，操作系统具有对所有硬件的完全访问权，可以执行机器能够运行的任何指令。软件的其余部分运行在用户态下。在用户态下，只使用了机器指令中的一个子集。特别地，那些会影响机器的控制或可进行I/0(输入/输出)操作的指令，在用户态中的程序里是禁止的。<br><img src="/2023/06/12/%E7%8E%B0%E4%BB%A3%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-%E5%BC%95%E8%AE%BA/q1.png" alt="?"></p>
+<p><strong>用户接口程序(shell或者GUI)处于用户态程序中的最低层次，允许用户运行其他程序</strong>，诸如Web浏览器、电子邮件阅读器或音乐播放器等这些程序也大量使用操作系统。<br><strong>操作系统运行在裸机之上，为所有其他软件提供基础的运行环境</strong></p>
+<h2 id="什么是操作系统"><a href="#什么是操作系统" class="headerlink" title="什么是操作系统"></a>什么是操作系统</h2><p>操作系统是一种运行在内核态的软件</p>
+<h3 id="作为扩展机器的操作系统"><a href="#作为扩展机器的操作系统" class="headerlink" title="作为扩展机器的操作系统"></a>作为扩展机器的操作系统</h3><p>在机器语言一级上，多数计算机的体系结构(指令集、存储组织、I/0和总线结构)是很原始的，而且编程是很困难的，尤其是对输入/输出操作而言。</p>
+<p><strong>使用一些叫作硬盘驱动 (disk driver)的软件来和硬件交互</strong>。这类软件提供了读写硬盘块的接口，而不用深入细节。操作系统包含很多用于控制输入/输出设备的驱动。但就算是在这个层面，对于大多数应用来说还是太底层了。因此，所有的操作系统都提供使用硬盘的又一层抽象:文件。使用该抽象，程序能创建、读写文件，而不用处理硬件实际工作中那些恼人的细节。</p>
+<p>抽象是管理复杂性的一个关键。好的抽象可以把一个几乎不可能管理的任务划分为两个可管理的部分。其第一部分是有关抽象的定义和实现，第二部分是随时用这些抽象解决问题。</p>
+<p>需要指出的是，操作系统的实际客户是应用程序(当然是通过应用程序员)。它们直接与操作系统及其抽象打交道。相反，最终用户与用户接口所提供的抽象打交道，或者是命令行shell或者是图形接口。而用户接口的抽象可以与操作系统提供的抽象类似，但也不总是这样。</p>
+<h3 id="作为资源管理者的操作系统"><a href="#作为资源管理者的操作系统" class="headerlink" title="作为资源管理者的操作系统"></a>作为资源管理者的操作系统</h3><p>把操作系统看作向应用程序提供基本抽象的概念，是一种自顶向下的观点。按照另一种自底向上的观点，操作系统则用来管理一个复杂系统的各个部分。现代计算机包含处理器、存储器、时钟、磁盘鼠标、网络接口、打印机以及许多其他设备。从这个角度看，操作系统的任务是在相互竞争的程序之间有序地控制对处理器、存储器以及其他I/O接口设备的分配。</p>
+<h2 id="操作系统的历史"><a href="#操作系统的历史" class="headerlink" title="操作系统的历史"></a>操作系统的历史</h2><p><strong>下面给出的有关操作系统的发展主要是按照时间线索叙述的，且在时间上是有重叠的。每个发展并不是等到先前一种发展完成后才开始。存在着大量的重叠，更不用说还存在有不少虚假的开始和终结时间。</strong></p>
+<p>第一台真正的数字计算机是英国数学家Charles Babbage(1792-1871)设计的。Babbage认识到他的分析机需要软件，所以他雇佣了一个名为AdaLovelace的年轻妇女，这是世界上第一个程序员，而她是著名的英国诗人Lord Byron的女儿。程序设计语言Ada是以她命名的.</p>
+<h3 id="第一代-1945-1955-真空管和穿孔卡片"><a href="#第一代-1945-1955-真空管和穿孔卡片" class="headerlink" title="第一代(1945~1955):真空管和穿孔卡片"></a>第一代(1945~1955):真空管和穿孔卡片</h3><p>在那个年代里，同一个小组的人(通常是工程师们)设计、建造、编程、操作并维护一台机器。所有的程序设计是用纯粹的机器语言编写的，其至更糟糕，需要通过将上千根电缆接到插件板上连接成电路，以便控制机器的基本功能。没有程序设计语言(甚至汇编语言也没有)，操作系统则从来没有听说过。使用机器的一般方式是，程序员在墙上的机时表上预约一段时间，然后到机房中将他的插件板接到计算机里，在接下来的几小时里，期盼正在运行中的两万多个真空管不会烧坏。那时，所有的计算问题实际上都只是简单的数学运算，如制作正弦、余弦、对数表或者计算炮弹弹道等。到了20世纪50年代初有了改进，出现了穿孔卡片，这时就可以将程序写在卡片上，然后读入计算机而不用插件板，但其他过程则依然如旧。</p>
+<h3 id="第二代-1955-1965-晶体管和批处理系统"><a href="#第二代-1955-1965-晶体管和批处理系统" class="headerlink" title="第二代(1955~1965):晶体管和批处理系统"></a>第二代(1955~1965):晶体管和批处理系统</h3><p>这些机器，现在被称作大型机(mainframe)，锁在有专用空调的大房间中，由专业操作人员运行。要运行一个作业(iob，即一个或一组程序)，程序员首先将程序写在纸上(用FORTRAN语言或汇编语言)，然后穿孔成卡片，再将卡片盒带到输入室，交给操作员，接着就喝咖啡直到输出完成。</p>
+<p>计算机运行完当前的任务后，其计算结果从打印机上输出，操作员到打印机上撕下运算结果并送到输出室，程序员稍后就可取到结果。然后，操作员从已送到输入室的卡片盒中读人另一个任务。如果需要FORTRAN编译器，操作员还要从文件柜把它取来读入计算机。<strong>当操作员在机房里走来走去时许多机时被浪费掉了。</strong></p>
+<p>人们很自然地要想办法减少机时的浪费。通常采用的解决方法就是<strong>批处理系统(batch system)。其思想是:在输入室收集全部的作业，然后用一台相对便宜的计算机如IBM1401计算机将它们读到磁带上。IBM1401计算机适用于读卡片、复制磁带和输出打印，但不适用于数值运算。另外用较昂贵的计算机如IBM7094来完成真正的计算。</strong></p>
+<p><img src="/2023/06/12/%E7%8E%B0%E4%BB%A3%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-%E5%BC%95%E8%AE%BA/q2.png" alt="?"></p>
+<p>在收集了大约一个小时的批量作业之后，这些卡片被读进磁带，然后磁带被送到机房里并装到磁带机上。随后，操作员装入一个特殊的程序(现代操作系统的前身)，它从磁带上读入第一个作业并运行其输出写到第二盘磁带上，而不打印。每个作业结束后，操作系统自动地从磁带上读入下一个作业并运行。当一批作业完全结束后，操作员取下输入和输出磁带，将输人磁带换成下一批作业，并把输出磁带拿到一台1401机器上进行脱机(不与主计算机联机)打印.</p>
+<p>第二代大型计算机主要用于科学与工程计算，例如，解偏微分方程。这些题目大多用FORTRAN语言和汇编语言编写。典型的操作系统是FMS(FORTRAN Monitor SystemFORTRAN监控系统)和IBSYS(IBM为7094机配备的操作系统)。</p>
+<h3 id="第三代-1965-1980-集成电路和多道程序设计"><a href="#第三代-1965-1980-集成电路和多道程序设计" class="headerlink" title="第三代(1965~1980):集成电路和多道程序设计"></a>第三代(1965~1980):集成电路和多道程序设计</h3><p>360是第一个采用(小规模)集成电路(C)的主流机型，与采用分立晶体管制造的第二代计算机相比，其性能/价格比有很大提高。360很快就获得了成功，其他主要厂商也很快采纳了系列兼容机的思想。这些计算机的后代仍在大型的计算中心里使用。现在，这些计算机的后代经常用来管理大型数据库如航班订票系统)或作为Web站点的服务器，这些服务器每秒必须处理数千次的请求。</p>
+<p>第三代操作系统很适用于大型科学计算和繁忙的商务数据处理，但其实质上仍旧是批处理系统。许多程序员很怀念第一代计算机的使用方式，那时他们可以几个小时地独占一台机器，可以即时地调试他们的程序。而对第三代计算机而言，从一个作业提交到运算结果取回往往长达数小时，更有其者，一个逗号的误用就会导致编译失败，而可能浪费了程序员半天的时间，程序员并不喜欢这样。</p>
+<p>程序员的希望很快得到了响应，这种需求导致了分时系统(timesharing)的出现。它实际上是多道程序的一个变体，每个用户都有一个联机终端。在分时系统中，假设有20个用户登录，其中17个在思考谈论或喝咖啡，则CPU可分配给其他三个需要的作业轮流执行。由于调试程序的用户常常只发出简短的命令(如编译一个五页的源文件)，而很少有长的费时命令(如上百万条记录的文件排序)，所以计算机能够为许多用户提供快速的交万式服务，同时在CPU空闲时还可能在后台运行一个大作业。第一个通用的分时系统一一兼容分时系统(Compatible Time Sharing System，CTSS)，是MIT(麻省理工学院)在一台改装过的7094机上开发成功的(Corbat6 等人，1962)。但直到第三代计算机广泛采用了必需的保护硬件之后，分时系统才逐渐流行开来。</p>
+<h3 id="第四代-1980年至今-个人计算机"><a href="#第四代-1980年至今-个人计算机" class="headerlink" title="第四代(1980年至今):个人计算机"></a>第四代(1980年至今):个人计算机</h3><p>主要讲了windows和unix</p>
+<h2 id="计算机硬件简介"><a href="#计算机硬件简介" class="headerlink" title="计算机硬件简介"></a>计算机硬件简介</h2>
+      
+    </div>
+    <div class="article-footer">
+      <br>
+<br>
+<blockquote class="mt-2x">
+  <ul class="post-copyright list-unstyled">
+    
+    <li class="post-copyright-link hidden-xs">
+      <strong>本文链接：</strong>
+      <a href="https://codecodegogogo.github.io/2023/06/12/%E7%8E%B0%E4%BB%A3%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-%E5%BC%95%E8%AE%BA/" title="现代操作系统-引论" target="_blank" rel="external">https://codecodegogogo.github.io/2023/06/12/现代操作系统-引论/</a>
+    </li>
+    
+    <li class="post-copyright-license">
+      <strong>集百家之长短，文章可随意转载，不需著名出处！</strong>
+      <!-- <strong>版权声明： </strong> 本博客所有文章除特别声明外，均采用 <a href="http://creativecommons.org/licenses/by/4.0/deed.zh" target="_blank" rel="external">CC BY 4.0 CN协议</a> 许可协议。转载请注明出处！ -->
+    </li>
+  </ul>
+</blockquote>
+
+    </div>
+  </article>
+  
+    
+  <section id="comments">
+  	
+  </section>
+
+
+  
+</div>
+
+  <nav class="bar bar-footer clearfix" data-stick-bottom>
+  <div class="bar-inner">
+  
+  <ul class="pager pull-left">
+    
+    
+    <li class="next">
+      <a href="/2023/06/12/%E8%AE%A1%E7%AE%97%E6%9C%BA%E9%80%9A%E4%BF%A1/" title="计算机通信"><span>下一篇&nbsp;&nbsp;</span><i class="icon icon-angle-right" aria-hidden="true"></i></a>
+    </li>
+    
+    
+    <li class="toggle-toc">
+      <a class="toggle-btn " data-toggle="collapse" href="#collapseToc" aria-expanded="false" title="文章目录" role="button">    <span>[&nbsp;</span><span>文章目录</span>
+        <i class="text-collapsed icon icon-anchor"></i>
+        <i class="text-in icon icon-close"></i>
+        <span>]</span>
+      </a>
+    </li>
+    
+  </ul>
+  
+  
+  <!-- Button trigger modal -->
+  <button type="button" class="btn btn-fancy btn-donate pop-onhover bg-gradient-warning" data-toggle="modal" data-target="#donateModal"><span>赏</span></button>
+  <!-- <div class="wave-icon wave-icon-danger btn-donate" data-toggle="modal" data-target="#donateModal">
+    <div class="wave-circle"><span class="icon"><i class="icon icon-bill"></i></span></div>
+  </div> -->
+  
+  
+  <div class="bar-right">
+    
+    <div class="share-component" data-sites="weibo,qq,wechat,facebook,twitter" data-mobile-sites="weibo,qq,qzone"></div>
+    
+  </div>
+  </div>
+</nav>
+  
+<!-- Modal -->
+<div class="modal modal-center modal-small modal-xs-full fade" id="donateModal" tabindex="-1" role="dialog">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content donate">
+      <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+      <div class="modal-body">
+        <div class="donate-box">
+          <div class="donate-head">
+            <p>感谢您的支持，我会继续努力的!</p>
+          </div>
+          <div class="tab-content">
+            <div role="tabpanel" class="tab-pane fade active in" id="alipay">
+              <div class="donate-payimg">
+                <img src="/images/donate/alipayimg.png" alt="扫码支持" title="扫一扫" />
+              </div>
+              <p class="text-muted mv">扫码打赏，你说多少就多少</p>
+              <p class="text-grey">打开支付宝扫一扫，即可进行扫码打赏哦</p>
+            </div>
+            <div role="tabpanel" class="tab-pane fade" id="wechatpay">
+              <div class="donate-payimg">
+                <img src="/images/donate/wechatpayimg.png" alt="扫码支持" title="扫一扫" />
+              </div>
+              <p class="text-muted mv">扫码打赏，你说多少就多少</p>
+              <p class="text-grey">打开微信扫一扫，即可进行扫码打赏哦</p>
+            </div>
+          </div>
+          <div class="donate-footer">
+            <ul class="nav nav-tabs nav-justified" role="tablist">
+              <li role="presentation" class="active">
+                <a href="#alipay" id="alipay-tab" role="tab" data-toggle="tab" aria-controls="alipay" aria-expanded="true"><i class="icon icon-alipay"></i> 支付宝</a>
+              </li>
+              <li role="presentation" class="">
+                <a href="#wechatpay" role="tab" id="wechatpay-tab" data-toggle="tab" aria-controls="wechatpay" aria-expanded="false"><i class="icon icon-wepay"></i> 微信支付</a>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+
+
+
+</main>
+
+  <footer class="footer" itemscope itemtype="http://schema.org/WPFooter">
+	
+	
+    <ul class="social-links">
+    	
+        <li><a href="https://github.com/codecodegogogo" target="_blank" title="Github" data-toggle=tooltip data-placement=top><i class="icon icon-github"></i></a></li>
+        
+    </ul>
+
+    <div class="copyright">
+    	
+        联系邮箱：<br>codecodegogogo@163.com
+        <!-- 2023 Sunny -->
+        
+        <!--  -->
+    </div>
+</footer>
+  <script src="//cdn.jsdelivr.net/npm/jquery@1.12.4/dist/jquery.min.js"></script>
+<script>
+window.jQuery || document.write('<script src="js/jquery.min.js"><\/script>')
+</script>
+
+<script src="/js/plugin.min.js"></script>
+
+
+<script src="/js/application.js"></script>
+
+
+    <script>
+(function (window) {
+    var INSIGHT_CONFIG = {
+        TRANSLATION: {
+            POSTS: '文章',
+            PAGES: '页面',
+            CATEGORIES: '分类',
+            TAGS: '标签',
+            UNTITLED: '(未命名)',
+        },
+        ROOT_URL: '/',
+        CONTENT_URL: '/content.json',
+    };
+    window.INSIGHT_CONFIG = INSIGHT_CONFIG;
+})(window);
+</script>
+
+<script src="/js/insight.js"></script>
+
+
+
+
+
+
+   
+<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+
+   
+
+
+
+
+
+
+</body>
+
+</html>
