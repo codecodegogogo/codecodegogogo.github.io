@@ -53,8 +53,9 @@
 <meta property="og:image" content="https://codecodegogogo.github.io/2023/06/08/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C-%E7%AC%AC%E4%BA%94%E7%AB%A0%E9%93%BE%E8%B7%AF%E5%B1%82/r1.png">
 <meta property="og:image" content="https://codecodegogogo.github.io/2023/06/08/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C-%E7%AC%AC%E4%BA%94%E7%AB%A0%E9%93%BE%E8%B7%AF%E5%B1%82/r1.png">
 <meta property="og:image" content="https://codecodegogogo.github.io/2023/06/08/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C-%E7%AC%AC%E4%BA%94%E7%AB%A0%E9%93%BE%E8%B7%AF%E5%B1%82/r2.png">
+<meta property="og:image" content="https://codecodegogogo.github.io/2023/06/08/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C-%E7%AC%AC%E4%BA%94%E7%AB%A0%E9%93%BE%E8%B7%AF%E5%B1%82/w9.png">
 <meta property="article:published_time" content="2023-06-08T02:22:08.000Z">
-<meta property="article:modified_time" content="2023-06-11T02:09:21.780Z">
+<meta property="article:modified_time" content="2023-06-11T15:34:04.738Z">
 <meta property="article:author" content="Sunny">
 <meta property="article:tag" content="计算机网络">
 <meta name="twitter:card" content="summary">
@@ -304,7 +305,7 @@
   <div class="slimContent">
     <nav id="toc" class="article-toc">
       <h3 class="toc-title">文章目录</h3>
-      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%80%BB%E8%BF%B0"><span class="toc-number">1.</span> <span class="toc-text">总述</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%93%BE%E8%B7%AF%E5%B1%82%E6%A6%82%E8%BF%B0"><span class="toc-number">2.</span> <span class="toc-text">链路层概述</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%93%BE%E8%B7%AF%E5%B1%82%E6%8F%90%E4%BE%9B%E7%9A%84%E6%9C%8D%E5%8A%A1"><span class="toc-number">2.1.</span> <span class="toc-text">链路层提供的服务</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%93%BE%E8%B7%AF%E5%B1%82%E5%9C%A8%E4%BD%95%E5%A4%84%E5%AE%9E%E7%8E%B0"><span class="toc-number">2.2.</span> <span class="toc-text">链路层在何处实现</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%AF%94%E7%89%B9%E7%BA%A7%E5%B7%AE%E9%94%99%E6%A3%80%E6%B5%8B%E5%92%8C%E7%BA%A0%E6%AD%A3"><span class="toc-number">3.</span> <span class="toc-text">比特级差错检测和纠正</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%A5%87%E5%81%B6%E6%A0%A1%E9%AA%8C"><span class="toc-number">3.1.</span> <span class="toc-text">奇偶校验</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%A3%80%E9%AA%8C%E5%92%8C%E6%96%B9%E6%B3%95"><span class="toc-number">3.2.</span> <span class="toc-text">检验和方法</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%BE%AA%E7%8E%AF%E5%86%97%E4%BD%99%E6%A3%80%E6%B5%8B"><span class="toc-number">3.3.</span> <span class="toc-text">循环冗余检测</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%A4%9A%E8%B7%AF%E8%AE%BF%E9%97%AE%E9%93%BE%E8%B7%AF%E5%92%8C%E5%8D%8F%E8%AE%AE"><span class="toc-number">4.</span> <span class="toc-text">多路访问链路和协议</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%A4%9A%E8%B7%AF%E8%AE%BF%E9%97%AE%E5%8D%8F%E8%AE%AE-multiple-access-protocol"><span class="toc-number">4.0.1.</span> <span class="toc-text">多路访问协议 (multiple access protocol)</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BF%A1%E9%81%93%E5%88%92%E5%88%86%E5%8D%8F%E8%AE%AE"><span class="toc-number">4.1.</span> <span class="toc-text">信道划分协议</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%9A%8F%E6%9C%BA%E6%8E%A5%E5%85%A5%E5%8D%8F%E8%AE%AE"><span class="toc-number">4.2.</span> <span class="toc-text">随机接入协议</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%97%B6%E9%9A%99ALOHA"><span class="toc-number">4.2.1.</span> <span class="toc-text">时隙ALOHA</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E7%BA%AFALOHA"><span class="toc-number">4.2.2.</span> <span class="toc-text">纯ALOHA</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E8%BD%BD%E6%B3%A2%E4%BE%A6%E5%90%AC%E5%A4%9A%E8%B7%AF%E8%AE%BF%E9%97%AE-CSMA"><span class="toc-number">4.2.3.</span> <span class="toc-text">载波侦听多路访问(CSMA)</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%BD%AE%E6%B5%81%E5%8D%8F%E8%AE%AE"><span class="toc-number">4.3.</span> <span class="toc-text">轮流协议</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#DOCSIS-%E7%94%A8%E4%BA%8E%E7%94%B5%E7%BC%86%E5%9B%A0%E7%89%B9%E7%BD%91%E6%8E%A5%E5%85%A5%E7%9A%84%E9%93%BE%E8%B7%AF%E5%B1%82%E5%8D%8F%E8%AE%AE"><span class="toc-number">4.4.</span> <span class="toc-text">DOCSIS:用于电缆因特网接入的链路层协议</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BA%A4%E6%8D%A2%E5%B1%80%E5%9F%9F%E7%BD%91"><span class="toc-number">5.</span> <span class="toc-text">交换局域网</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%93%BE%E8%B7%AF%E5%B1%82%E5%AF%BB%E5%9D%80%E5%92%8CARP"><span class="toc-number">5.1.</span> <span class="toc-text">链路层寻址和ARP</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#MAC%E5%9C%B0%E5%9D%80"><span class="toc-number">5.1.1.</span> <span class="toc-text">MAC地址</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%9C%B0%E5%9D%80%E8%A7%A3%E6%9E%90%E5%8D%8F%E8%AE%AE"><span class="toc-number">5.1.2.</span> <span class="toc-text">地址解析协议</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%8F%91%E9%80%81%E6%95%B0%E6%8D%AE%E6%8A%A5%E5%88%B0%E5%AD%90%E7%BD%91%E4%BB%A5%E5%A4%96"><span class="toc-number">5.1.3.</span> <span class="toc-text">发送数据报到子网以外</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BB%A5%E5%A4%AA%E7%BD%91"><span class="toc-number">5.2.</span> <span class="toc-text">以太网</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E4%BB%A5%E5%A4%AA%E7%BD%91%E5%B8%A7%E7%BB%93%E6%9E%84"><span class="toc-number">5.2.1.</span> <span class="toc-text">以太网帧结构</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E4%BB%A5%E5%A4%AA%E7%BD%91%E6%8A%80%E6%9C%AF"><span class="toc-number">5.2.2.</span> <span class="toc-text">以太网技术</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%93%BE%E8%B7%AF%E5%B1%82%E4%BA%A4%E6%8D%A2%E6%9C%BA"><span class="toc-number">5.3.</span> <span class="toc-text">链路层交换机</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E4%BA%A4%E6%8D%A2%E6%9C%BA%E8%BD%AC%E5%8F%91%E5%92%8C%E8%BF%87%E6%BB%A4"><span class="toc-number">5.3.1.</span> <span class="toc-text">交换机转发和过滤</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E8%87%AA%E5%AD%A6%E4%B9%A0"><span class="toc-number">5.3.2.</span> <span class="toc-text">自学习</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E9%93%BE%E8%B7%AF%E5%B1%82%E4%BA%A4%E6%8D%A2%E6%9C%BA%E7%9A%84%E6%80%A7%E8%B4%A8"><span class="toc-number">5.3.3.</span> <span class="toc-text">链路层交换机的性质</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E4%BA%A4%E6%8D%A2%E6%9C%BA%E5%92%8C%E8%B7%AF%E7%94%B1%E5%99%A8%E6%AF%94%E8%BE%83"><span class="toc-number">5.3.4.</span> <span class="toc-text">交换机和路由器比较</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%99%9A%E6%8B%9F%E5%B1%80%E5%9F%9F%E7%BD%91"><span class="toc-number">5.4.</span> <span class="toc-text">虚拟局域网</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%93%BE%E8%B7%AF%E8%99%9A%E6%8B%9F%E5%8C%96-%E7%BD%91%E7%BB%9C%E4%BD%9C%E4%B8%BA%E9%93%BE%E8%B7%AF%E5%B1%82"><span class="toc-number">6.</span> <span class="toc-text">链路虚拟化:网络作为链路层</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%A4%9A%E5%8D%8F%E8%AE%AE%E6%A0%87%E7%AD%BE%E4%BA%A4%E6%8D%A2"><span class="toc-number">6.1.</span> <span class="toc-text">多协议标签交换</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%95%B0%E6%8D%AE%E4%B8%AD%E5%BF%83%E7%BD%91%E7%BB%9C"><span class="toc-number">7.</span> <span class="toc-text">数据中心网络</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%B4%9F%E8%BD%BD%E5%9D%87%E8%A1%A1"><span class="toc-number">7.1.</span> <span class="toc-text">负载均衡</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%AD%89%E7%BA%A7%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84"><span class="toc-number">7.2.</span> <span class="toc-text">等级体系结构</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%9B%9E%E9%A1%BE-Web%E9%A1%B5%E9%9D%A2%E8%AF%B7%E6%B1%82%E7%9A%84%E5%8E%86%E7%A8%8B"><span class="toc-number">8.</span> <span class="toc-text">回顾:Web页面请求的历程</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%87%86%E5%A4%87-DHCP%E3%80%81UDP%E3%80%81IP%E5%92%8C%E4%BB%A5%E5%A4%AA%E7%BD%91"><span class="toc-number">8.1.</span> <span class="toc-text">准备:DHCP、UDP、IP和以太网</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BB%8D%E5%9C%A8%E5%87%86%E5%A4%87-DNS-%E5%92%8C-ARP"><span class="toc-number">8.2.</span> <span class="toc-text">仍在准备:DNS 和 ARP</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BB%8D%E5%9C%A8%E5%87%86%E5%A4%87-%E5%9F%9F%E5%86%85%E8%B7%AF%E7%94%B1%E9%80%89%E6%8B%A9%E5%88%B0-DNS-%E6%9C%8D%E5%8A%A1%E5%99%A8"><span class="toc-number">8.3.</span> <span class="toc-text">仍在准备:域内路由选择到 DNS 服务器</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Web-%E5%AE%A2%E6%88%B7-%E6%9C%8D%E5%8A%A1%E5%99%A8%E4%BA%A4%E4%BA%92-TCP%E5%92%8C-HTTP"><span class="toc-number">8.4.</span> <span class="toc-text">Web 客户-服务器交互:TCP和 HTTP</span></a></li></ol></li></ol>
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%80%BB%E8%BF%B0"><span class="toc-number">1.</span> <span class="toc-text">总述</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%93%BE%E8%B7%AF%E5%B1%82%E6%A6%82%E8%BF%B0"><span class="toc-number">2.</span> <span class="toc-text">链路层概述</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%93%BE%E8%B7%AF%E5%B1%82%E6%8F%90%E4%BE%9B%E7%9A%84%E6%9C%8D%E5%8A%A1"><span class="toc-number">2.1.</span> <span class="toc-text">链路层提供的服务</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%93%BE%E8%B7%AF%E5%B1%82%E5%9C%A8%E4%BD%95%E5%A4%84%E5%AE%9E%E7%8E%B0"><span class="toc-number">2.2.</span> <span class="toc-text">链路层在何处实现</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%AF%94%E7%89%B9%E7%BA%A7%E5%B7%AE%E9%94%99%E6%A3%80%E6%B5%8B%E5%92%8C%E7%BA%A0%E6%AD%A3"><span class="toc-number">3.</span> <span class="toc-text">比特级差错检测和纠正</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%A5%87%E5%81%B6%E6%A0%A1%E9%AA%8C"><span class="toc-number">3.1.</span> <span class="toc-text">奇偶校验</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%A3%80%E9%AA%8C%E5%92%8C%E6%96%B9%E6%B3%95"><span class="toc-number">3.2.</span> <span class="toc-text">检验和方法</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%BE%AA%E7%8E%AF%E5%86%97%E4%BD%99%E6%A3%80%E6%B5%8B"><span class="toc-number">3.3.</span> <span class="toc-text">循环冗余检测</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%A4%9A%E8%B7%AF%E8%AE%BF%E9%97%AE%E9%93%BE%E8%B7%AF%E5%92%8C%E5%8D%8F%E8%AE%AE"><span class="toc-number">4.</span> <span class="toc-text">多路访问链路和协议</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%A4%9A%E8%B7%AF%E8%AE%BF%E9%97%AE%E5%8D%8F%E8%AE%AE-multiple-access-protocol"><span class="toc-number">4.0.1.</span> <span class="toc-text">多路访问协议 (multiple access protocol)</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BF%A1%E9%81%93%E5%88%92%E5%88%86%E5%8D%8F%E8%AE%AE"><span class="toc-number">4.1.</span> <span class="toc-text">信道划分协议</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%9A%8F%E6%9C%BA%E6%8E%A5%E5%85%A5%E5%8D%8F%E8%AE%AE"><span class="toc-number">4.2.</span> <span class="toc-text">随机接入协议</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%97%B6%E9%9A%99ALOHA"><span class="toc-number">4.2.1.</span> <span class="toc-text">时隙ALOHA</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E7%BA%AFALOHA"><span class="toc-number">4.2.2.</span> <span class="toc-text">纯ALOHA</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E8%BD%BD%E6%B3%A2%E4%BE%A6%E5%90%AC%E5%A4%9A%E8%B7%AF%E8%AE%BF%E9%97%AE-CSMA"><span class="toc-number">4.2.3.</span> <span class="toc-text">载波侦听多路访问(CSMA)</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E4%BB%A5%E5%A4%AA%E7%BD%91%E5%B8%A7min%E5%92%8Cmax"><span class="toc-number">4.2.4.</span> <span class="toc-text">以太网帧min和max</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%BD%AE%E6%B5%81%E5%8D%8F%E8%AE%AE"><span class="toc-number">4.3.</span> <span class="toc-text">轮流协议</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#DOCSIS-%E7%94%A8%E4%BA%8E%E7%94%B5%E7%BC%86%E5%9B%A0%E7%89%B9%E7%BD%91%E6%8E%A5%E5%85%A5%E7%9A%84%E9%93%BE%E8%B7%AF%E5%B1%82%E5%8D%8F%E8%AE%AE"><span class="toc-number">4.4.</span> <span class="toc-text">DOCSIS:用于电缆因特网接入的链路层协议</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BA%A4%E6%8D%A2%E5%B1%80%E5%9F%9F%E7%BD%91"><span class="toc-number">5.</span> <span class="toc-text">交换局域网</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%93%BE%E8%B7%AF%E5%B1%82%E5%AF%BB%E5%9D%80%E5%92%8CARP"><span class="toc-number">5.1.</span> <span class="toc-text">链路层寻址和ARP</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#MAC%E5%9C%B0%E5%9D%80"><span class="toc-number">5.1.1.</span> <span class="toc-text">MAC地址</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%9C%B0%E5%9D%80%E8%A7%A3%E6%9E%90%E5%8D%8F%E8%AE%AE"><span class="toc-number">5.1.2.</span> <span class="toc-text">地址解析协议</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%8F%91%E9%80%81%E6%95%B0%E6%8D%AE%E6%8A%A5%E5%88%B0%E5%AD%90%E7%BD%91%E4%BB%A5%E5%A4%96"><span class="toc-number">5.1.3.</span> <span class="toc-text">发送数据报到子网以外</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BB%A5%E5%A4%AA%E7%BD%91"><span class="toc-number">5.2.</span> <span class="toc-text">以太网</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E4%BB%A5%E5%A4%AA%E7%BD%91%E5%B8%A7%E7%BB%93%E6%9E%84"><span class="toc-number">5.2.1.</span> <span class="toc-text">以太网帧结构</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E4%BB%A5%E5%A4%AA%E7%BD%91%E6%8A%80%E6%9C%AF"><span class="toc-number">5.2.2.</span> <span class="toc-text">以太网技术</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%93%BE%E8%B7%AF%E5%B1%82%E4%BA%A4%E6%8D%A2%E6%9C%BA"><span class="toc-number">5.3.</span> <span class="toc-text">链路层交换机</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E4%BA%A4%E6%8D%A2%E6%9C%BA%E8%BD%AC%E5%8F%91%E5%92%8C%E8%BF%87%E6%BB%A4"><span class="toc-number">5.3.1.</span> <span class="toc-text">交换机转发和过滤</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E8%87%AA%E5%AD%A6%E4%B9%A0"><span class="toc-number">5.3.2.</span> <span class="toc-text">自学习</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E9%93%BE%E8%B7%AF%E5%B1%82%E4%BA%A4%E6%8D%A2%E6%9C%BA%E7%9A%84%E6%80%A7%E8%B4%A8"><span class="toc-number">5.3.3.</span> <span class="toc-text">链路层交换机的性质</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E4%BA%A4%E6%8D%A2%E6%9C%BA%E5%92%8C%E8%B7%AF%E7%94%B1%E5%99%A8%E6%AF%94%E8%BE%83"><span class="toc-number">5.3.4.</span> <span class="toc-text">交换机和路由器比较</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%99%9A%E6%8B%9F%E5%B1%80%E5%9F%9F%E7%BD%91"><span class="toc-number">5.4.</span> <span class="toc-text">虚拟局域网</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%93%BE%E8%B7%AF%E8%99%9A%E6%8B%9F%E5%8C%96-%E7%BD%91%E7%BB%9C%E4%BD%9C%E4%B8%BA%E9%93%BE%E8%B7%AF%E5%B1%82"><span class="toc-number">6.</span> <span class="toc-text">链路虚拟化:网络作为链路层</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%A4%9A%E5%8D%8F%E8%AE%AE%E6%A0%87%E7%AD%BE%E4%BA%A4%E6%8D%A2"><span class="toc-number">6.1.</span> <span class="toc-text">多协议标签交换</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%95%B0%E6%8D%AE%E4%B8%AD%E5%BF%83%E7%BD%91%E7%BB%9C"><span class="toc-number">7.</span> <span class="toc-text">数据中心网络</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%B4%9F%E8%BD%BD%E5%9D%87%E8%A1%A1"><span class="toc-number">7.1.</span> <span class="toc-text">负载均衡</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%AD%89%E7%BA%A7%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84"><span class="toc-number">7.2.</span> <span class="toc-text">等级体系结构</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%9B%9E%E9%A1%BE-Web%E9%A1%B5%E9%9D%A2%E8%AF%B7%E6%B1%82%E7%9A%84%E5%8E%86%E7%A8%8B"><span class="toc-number">8.</span> <span class="toc-text">回顾:Web页面请求的历程</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%87%86%E5%A4%87-DHCP%E3%80%81UDP%E3%80%81IP%E5%92%8C%E4%BB%A5%E5%A4%AA%E7%BD%91"><span class="toc-number">8.1.</span> <span class="toc-text">准备:DHCP、UDP、IP和以太网</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BB%8D%E5%9C%A8%E5%87%86%E5%A4%87-DNS-%E5%92%8C-ARP"><span class="toc-number">8.2.</span> <span class="toc-text">仍在准备:DNS 和 ARP</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BB%8D%E5%9C%A8%E5%87%86%E5%A4%87-%E5%9F%9F%E5%86%85%E8%B7%AF%E7%94%B1%E9%80%89%E6%8B%A9%E5%88%B0-DNS-%E6%9C%8D%E5%8A%A1%E5%99%A8"><span class="toc-number">8.3.</span> <span class="toc-text">仍在准备:域内路由选择到 DNS 服务器</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Web-%E5%AE%A2%E6%88%B7-%E6%9C%8D%E5%8A%A1%E5%99%A8%E4%BA%A4%E4%BA%92-TCP%E5%92%8C-HTTP"><span class="toc-number">8.4.</span> <span class="toc-text">Web 客户-服务器交互:TCP和 HTTP</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B9%A0%E9%A2%98"><span class="toc-number">9.</span> <span class="toc-text">习题</span></a></li></ol>
     </nav>
   </div>
 </aside>
@@ -350,7 +351,7 @@
         <span class="post-comment"><i class="icon icon-comment"></i> <a href="/2023/06/08/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C-%E7%AC%AC%E4%BA%94%E7%AB%A0%E9%93%BE%E8%B7%AF%E5%B1%82/#comments" class="article-comment-link">评论</a></span>
         
 	
-		<span class="post-wordcount hidden-xs" itemprop="wordCount">字数统计: 20.4k(字)</span>
+		<span class="post-wordcount hidden-xs" itemprop="wordCount">字数统计: 21.8k(字)</span>
 	
 	
 
@@ -411,12 +412,13 @@
 <p>在图5-12中，结点没有进行碰撞检测;即使已经出现了碰撞，B和D都将继续完整地传输它们的帧。当某结点执行碰撞检测时，一旦它检测到碰撞将立即停止传输。图5-13表示了和图5-12相同的情况，只是这两个结点在检测到碰撞后很短的时间内都放弃了它们的传输。显然，在多路访问协议中加人碰撞检测，通过不传输一个无用的、(由来自另一个结点的顿干扰)损坏的帧，将有助于改善协议的性能。</p>
 <p><strong>CSMA/CD运行</strong><br>1)适配器从网络层一条获得数据报，准备链路层帧，并将其放入顿适配器缓存中。<br>2)如果适配器侦听到信道空闲(即无信号能量从信道进入适配器)，它开始传输帧在另一方面，如果适配器侦听到信道正在忙，它将等待，直到侦听到没有信号能量时才开始传输帧。<br>3)在传输过程中，适配器监视来自其他使用该广播信道的适配器的信号能量的存在。<br>4)如果适配器传输整个帧而未检测到来自其他适配器的信号能量，该适配器就完成了该帧。在另一方面，如果适配器在传输时检测到来自其他适配器的信号能量，它中止传输(即它停止了传输帧)。<br>5)中止传输后，适配器等待一个随机时间量，然后返回步骤2。</p>
 <p>用于以太网以及DOCSIS电缆网络多路访问协议中的<strong>二进制指数后退(binaryexponentialbackoff)算法</strong>，简练地解决了这个等待时间量。</p>
-<p>特别是，当传输一个给定，2”-1 中选择帧时，在该帧经历了一连串的n次碰撞后，结点随机地从0，1，2，··一个K值。因此，一个帧经历的碰撞越多，K选择的间隔越大。对于以太网，一个结点等待的实际时间量是飞·512比特时间(即发送512比特进入以太网所需时间量的K倍)，n能够取的最大值在10以内。</p>
+<p>特别是，当传输一个给定，2”-1 中选择帧时，在该帧经历了一连串的n次碰撞后，结点随机地从0，1，2，··一个K值。因此，一个帧经历的碰撞越多，K选择的间隔越大。对于以太网，一个结点等待的实际时间量是k·512比特时间(即发送512比特进入以太网所需时间量的K倍)，n能够取的最大值在10以内。</p>
 <blockquote>
-<p>我们看一个例子。假设一个适配器首次尝试传输一个帧，并在传输中它检测到碰撞然后该结点以概率0.5选择K=0，以概率05选择K=1。如果该结点选择K=0，则它立即开始侦听信道。如果这个适配器选择K=1，它在开始“侦听-当空闲时传输”。周期前等待512比特时间(例如对于100Mbps 以太网来说为5.12毫秒)。在第2次碰撞之后，从10,1，2,3 中等概率地选择K。在第3 次碰撞之后，从 0,1，2，3，4，5，6，7中等概率地选择K。在10次或更多次碰撞之后，从 0，1，2，··，1023中等概率地选择K。因此从中选择K的集合长度随着碰撞次数呈指数增长;正是由于这个原因，该算法被称为二进制指数后退。</p>
+<p>我们看一个例子。假设一个适配器首次尝试传输一个帧，并在传输中它检测到碰撞然后该结点以概率0.5选择K=0，以概率05选择K=1。如果该结点选择K=0，则它立即开始侦听信道。如果这个适配器选择K=1，它在开始“侦听-当空闲时传输”。周期前等待512比特时间(例如对于100Mbps 以太网来说为5.12微秒)。在第2次碰撞之后，从10,1，2,3 中等概率地选择K。在第3 次碰撞之后，从 0,1，2，3，4，5，6，7中等概率地选择K。在10次或更多次碰撞之后，从 0，1，2，··，1023中等概率地选择K。因此从中选择K的集合长度随着碰撞次数呈指数增长;正是由于这个原因，该算法被称为二进制指数后退。</p>
 </blockquote>
 <p>为了给出效率的一个闭式的近似表示，令dpp表示信号能量在任意两个适配器之间传播所需的最大时间。令dn表示传输一个最大长度的以太网的时间(对于10Mbps的以太网，该时间近似为12毫秒)。<br><img src="/2023/06/08/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C-%E7%AC%AC%E4%BA%94%E7%AB%A0%E9%93%BE%E8%B7%AF%E5%B1%82/w3.png" alt="?"></p>
 <p>从这个公式我们看到，当d-接近0时，效率接近1。这和我们的直觉相符，如果传播时延是0，碰撞的结点将立即中止而不会浪费信道。同时，当dmn变得很大时，效率也接近于1。这也和直觉相符，因为当一个帧取得了信道时，它将占有信道很长时间;因此信道在大多数时间都会有效地工作。</p>
+<h4 id="以太网帧min和max"><a href="#以太网帧min和max" class="headerlink" title="以太网帧min和max"></a>以太网帧min和max</h4><p><strong>以太网数据帧的长度在 64-1518 字节之间。. 数据部分在46~1500 B之间。<br>10Mbps以太网一帧的最小发送时间为51.2微秒。 这段时间所能传输的数据为512位，因此也称该时间为512位时。 这个时间定义为以太网时隙，或冲突时槽。 512位=64字节，这就是以太网帧最小64字节的原因。<br>最小帧的定义是在不包括任何额外头部或尾部的情况下的帧长度，因此在计算最小帧的长度时，不考虑VLAN标记。</strong></p>
 <h3 id="轮流协议"><a href="#轮流协议" class="headerlink" title="轮流协议"></a>轮流协议</h3><p>多路访问协议的两个理想特性是:<br>当只有一个结点活跃时，该活跃结点具有Rbps的吞吐量;<br>当有M个结点活跃时，每个活跃结点的吞吐量接近R/Mbps。<br>ALOHA和CSMA 协议具备第一个特性，但不具备第二个特性。</p>
 <p>第一种是轮询协议(pollingprotocol)。轮询协议要求这些结点之一要被指定为主结点。主结点以循环的方式轮询(poll)每个结点。特别是，主结点首先向结点1发送一个报文，告诉它(结点1)能够传输的帧的最多数量。在结点1传输了某些帧后，主结点告诉结点2它(结点2) 能够传输的帧的最多数量。(主结点能够通过观察在信道上是否缺乏信号，来决定一个结点何时完成了帧的发送。)上述过程以这种方式继续进行，主结点以循环的方式轮询了每个结点。轮询协议消除了困扰随机接入协议的碰撞和空时隙，这使得轮询取得高得多的效率但是它也有一些缺点。第一个缺点是该协议引人了轮询时延，即通知一个结点“它可以传输”所需的时间。例如，如果只有一个结点是活跃的，那么这个结点将以小于 Rbps 的速率传输，因为每次活跃结点发送了它最多数量的帧时，主结点必须依次轮询每一个非活跃的结点。第二个缺点可能更为严重，就是如果主结点有故障，整个信道都变得不可操作。</p>
 <p>第二种轮流协议是令牌传递协议 (token-passing protocol)。在这种协议中没有主结点。一个称为令牌(token)的小的特殊在结点之间以某种固定的次序进行交换。例如，结点1可能总是把令牌发送给结点2，结点2可能总是把令牌发送给结点3，而结点N可能总是把令牌发送给结点1。当一个结点收到令牌时，仅当它有一些帧要发送时，它才持有这个令牌;否则，它立即向下一个结点转发该令牌。当一个结点收到令牌时，如果它确实有帧要传输，它发送最大数目的帧数，然后把令牌转发给下一个结点。令牌传递是分散的，并有很高的效率。但是它也有自己的一些问题。例如，一个结点的故障可能会使整个信道崩溃。或者如果一个结点偶然忘记了释放令牌，则必须调用某些恢复步骤使令牌返回到循环中来。</p>
@@ -519,6 +521,89 @@
 <li>借助于Bob便携机上的套接字，现在（最终!)准备向<a target="_blank" rel="noopener" href="http://www.google.com/">www.google.com</a> 发送字节了，Bob 的浏览器生成包含要获取的URL 的HTTP CET报文。HTTP GET 报文则写入套接字，其中 GET报文成为一个TCP报文段的载荷。该TCP报文段放置进一个数据报中，并交付到www. google.com，如前面步骤18～20所述。</li>
 <li>在<a target="_blank" rel="noopener" href="http://www.google.com的/">www.google.com的</a> HTTP服务器从TCP套接字读取 HTTP GET 报文，生成一个HTTP响应报文，将请求的Web页内容放入HTTP响应体中，并将报文发送进TCP套接字中。</li>
 <li>包含 HTTP回答报文的数据报通过谷歌、Comcast和学校网络转发，到达Bob便携机。Bob 的 Web浏览器程序从套接字读取HTTP响应，从HT<br>响应体中抽取Web 网页的html，并终于（最终!)显示了 Web 网页。</li>
+</ol>
+<h2 id="习题"><a href="#习题" class="headerlink" title="习题"></a>习题</h2><ol start="2">
+<li><p>如果在因特网中的所有链路都提供可靠的交付服务，TCP可靠传输服务将是多余的吗?为什么?</p>
+<blockquote>
+<p>基本是多余的。<br>TCP可靠交付是多余的，拥塞控制是基于统计丢包的，也失去效果了。流量控制还有些用处。</p>
+</blockquote>
+</li>
+<li><p>链路层协议能够向网络层提供哪些可能的服务?在这些链路层服务中，哪些在iP中有对应的服务哪些在TCP中有对应的服务?</p>
+<blockquote>
+<p>可能提供的服务有：成帧，链路接入，可靠交付，差错检测和纠正<br>IP对应的服务：IP数据报，数据报交付<br>TCP对应的服务：TCP报文段，可靠交付，差错检测</p>
+</blockquote>
+</li>
+<li><p>假设<strong>两个结点同时</strong>经一个速率为R的广播信道开始传输一个长度为L的分组。用dp表示这两个结点之间的传播时延。如果dp&lt;L/R，会出现碰撞吗?为什么?</p>
+<blockquote>
+<p>会，节点还没有传输结束，就检测到别的结点的传输信号了。</p>
+</blockquote>
+</li>
+<li><p>我们列出了广播信道的4种希望的特性。这些特性中的哪些是时隙 ALOHA 所具有的?令牌传递具有这些特性中的哪些?</p>
+<blockquote>
+<p>仅有一个结点发送时有R的吞吐量。<br>M个结点同时发送时，每个结点的吞吐量为R/M<br>协议是分散的，不会因为某个结点故障而崩溃。<br>协议简单，实现不昂贵。<br>时隙ALOHA有： 1，3，4<br>令牌传递有： 1，2，4</p>
+</blockquote>
+</li>
+<li><p>在CSMA/CD中在第5次碰撞后，结点选择K=4的概率有多大?结果K=4在10Mbps以太网上对应于多少秒的时延?</p>
+<blockquote>
+<p>1/32的概率。<br>时延为4 * 5.12 * 10 = 204.8μs</p>
+</blockquote>
+</li>
+</ol>
+<p><strong>100Mbps以太网来说为5.12微秒</strong> 书上翻译错了</p>
+<ol start="7">
+<li><p>使用人类在鸡尾酒会交瓦的类比来描述轮询和令牌传递协议。</p>
+<blockquote>
+<p>轮询协议：有一个主持人，依次询问每个与会人员是否要发言，并且控制每个人的最长发言时间。<br>令牌传递协议：有一个话筒在每个与会人员之间传递，如果有人要发言则拿起话筒发言，不发言则传递给下一位与会人员。</p>
+</blockquote>
+</li>
+<li><p>如果局域网有很大的周长时，为什么令牌环协议将是低效的?</p>
+<blockquote>
+<p>因为如果需要发送的结点很少时，也需要固定每次循环一圈。而循环的时间很长，造成低效。</p>
+</blockquote>
+</li>
+<li><p>MAC地址空间有多大?IP4的地址空间呢?IP6的地址空间呢?</p>
+<blockquote>
+<p>MAC地址空间：2^48<br>IPV4地址空间：2^32<br>IPV6地址空间：2^128</p>
+</blockquote>
+</li>
+<li><p>假设结点A、B和C(通过它们的适配器)都连接到同一个广播局域网上。如果A向B发送数千个IP数据报，每个封装帧都有B的MAC地址，C的适配器会处理这些吗?如果会，C的适配器将会把这些帧中的IP数据报传递给C的网络层吗?如果A用MAC广播地址来发送这些，你的回答将有怎样的变化呢?</p>
+<blockquote>
+<p>C 的适配器会处理A发送的帧但不会传递给C的网络层；若用广播地址则 C的适配器会接收A发送的帧且传递给C的网络层。</p>
+</blockquote>
+</li>
+<li><p>ARP查询为什么要在广播中发送呢?ARP 响应为什么要在一个具有特定目的MAC地址的中发送呢?</p>
+<blockquote>
+<p>ARP查询因为不清楚的MAC地址，链路层不知道应该送往哪里。<br>ARP响应因为清楚目标主机的MAC地址，因此不需要广播。</p>
+</blockquote>
+</li>
+<li><p>对于图5-19中的网络，路由器有两个ARP模块，每个都有自己的ARP表。同样的MAC地址可能在两张表中都出现吗?<br><img src="/2023/06/08/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C-%E7%AC%AC%E4%BA%94%E7%AB%A0%E9%93%BE%E8%B7%AF%E5%B1%82/w9.png" alt="?"></p>
+</li>
+</ol>
+<p><strong>路由器中有多个ARP表，每个接口都有一个ARP表。因此，如果路由器有多个接口，它就会有多个ARP表。</strong></p>
+<blockquote>
+<p>会把。。。</p>
+</blockquote>
+<ol start="13">
+<li><p>比较10BASE-T、100BASE-T和吉比特以太网的帧结构。它们有什么不同吗?</p>
+<blockquote>
+<p>帧格式相同。</p>
+</blockquote>
+</li>
+<li><p>考虑图5-15。在4.4节的寻址意义下，有多少个子网呢?</p>
+<blockquote>
+<p>1个子网(路由器划分子网，所有的主机交换机都在一根链路)</p>
+</blockquote>
+</li>
+<li><p>在一个支持802.1Q协议交机上能够配置的VLAN的最大数量是多少?</p>
+<blockquote>
+<p>2^12个<br>IEEE 802.1Q是一个中继标准，802.1Q修改原始的以太网帧，插入4字节字段，通过这个字段标识带有VLAN 成员信息的以太帧。 由于标准规定用于标示VLAN ID的位置只有12bit，2的12次方=4096 也就是说最大4K个vlan</p>
+</blockquote>
+</li>
+<li><p>假设支持K个VLAN组的N台交换机经过一个线协议连接起来。连接这些交换机需要多少端口?评价你的答案。</p>
+<blockquote>
+<p>互相连接，最少需要2N-2个端口。</p>
+</blockquote>
+</li>
 </ol>
 
       
