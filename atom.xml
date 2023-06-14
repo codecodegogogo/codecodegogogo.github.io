@@ -6,7 +6,7 @@
   <link href="https://codecodegogogo.github.io/atom.xml" rel="self"/>
   
   <link href="https://codecodegogogo.github.io/"/>
-  <updated>2023-06-14T13:27:53.812Z</updated>
+  <updated>2023-06-14T15:24:00.202Z</updated>
   <id>https://codecodegogogo.github.io/</id>
   
   <author>
@@ -17,11 +17,11 @@
   <generator uri="https://hexo.io/">Hexo</generator>
   
   <entry>
-    <title>操作系统导论-抽象:进程</title>
-    <link href="https://codecodegogogo.github.io/2023/06/14/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%AF%BC%E8%AE%BA-%E6%8A%BD%E8%B1%A1-%E8%BF%9B%E7%A8%8B/"/>
-    <id>https://codecodegogogo.github.io/2023/06/14/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%AF%BC%E8%AE%BA-%E6%8A%BD%E8%B1%A1-%E8%BF%9B%E7%A8%8B/</id>
-    <published>2023-06-14T13:27:53.000Z</published>
-    <updated>2023-06-14T13:27:53.812Z</updated>
+    <title>操作系统导论-插叙:进程API</title>
+    <link href="https://codecodegogogo.github.io/2023/06/14/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%AF%BC%E8%AE%BA-%E6%8F%92%E5%8F%99-%E8%BF%9B%E7%A8%8BAPI/"/>
+    <id>https://codecodegogogo.github.io/2023/06/14/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%AF%BC%E8%AE%BA-%E6%8F%92%E5%8F%99-%E8%BF%9B%E7%A8%8BAPI/</id>
+    <published>2023-06-14T15:23:22.000Z</published>
+    <updated>2023-06-14T15:24:00.202Z</updated>
     
     <content type="html"><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="\assets\css\APlayer.min.css"><script src="\assets\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script><script class="meting-secondary-script-marker" src="\assets\js\Meting.min.js"></script>]]></content>
     
@@ -33,6 +33,30 @@
     
     
     
+    
+    <category term="OS" scheme="https://codecodegogogo.github.io/tags/OS/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>操作系统导论-抽象:进程</title>
+    <link href="https://codecodegogogo.github.io/2023/06/14/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%AF%BC%E8%AE%BA-%E6%8A%BD%E8%B1%A1-%E8%BF%9B%E7%A8%8B/"/>
+    <id>https://codecodegogogo.github.io/2023/06/14/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%AF%BC%E8%AE%BA-%E6%8A%BD%E8%B1%A1-%E8%BF%9B%E7%A8%8B/</id>
+    <published>2023-06-14T13:27:53.000Z</published>
+    <updated>2023-06-14T15:23:46.858Z</updated>
+    
+    <content type="html"><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="\assets\css\APlayer.min.css"><script src="\assets\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script><script class="meting-secondary-script-marker" src="\assets\js\Meting.min.js"></script><h1 id="抽象-进程"><a href="#抽象-进程" class="headerlink" title="抽象:进程"></a>抽象:进程</h1><p>进程就是运行中的程序。程序本身是没有生命周期的，它只是存在磁盘上面的一些指令（也可能是一些静态数据）。是操作系统让这些字节运行起来，让程序发挥作用。</p><p><em><strong>虽然只有少量的物理 CPU 可用，但是操作系统如何提供几乎有无数个 CPU 可用的假象？</strong></em></p><p>操作系统通过虚拟化（virtualizing）CPU 来提供这种假象。通过让一个进程只运行一个时间片，然后切换到其他进程，操作系统提供了存在多个虚拟 CPU 的假象。这就是时分共享（time sharing）CPU 技术，允许用户如愿运行多个并发进程。潜在的开销就是性能损失，因为如果 CPU 必须共享，每个进程的运行就会慢一点。</p><p><strong>时分共享和空分共享</strong><br>通过允许资源由一个实体使用一小段时间，然后由另一个实体使用一小段时间，如此下去，所谓的资源（例如，CPU 或网络链接）可以被许多人共享。时分共享的自然对应技术是空分共享，资源在空间上被划分给希望使用它的人。</p><p>例如，磁盘空间自然是一个空分共享资源，因为一旦将块分配给文件，在用户删除文件之前，不可能将它分配给其他文件。</p><h2 id="抽象：进程"><a href="#抽象：进程" class="headerlink" title="抽象：进程"></a>抽象：进程</h2><p>操作系统为正在运行的程序提供的抽象，就是所谓的进程（process）。</p><h3 id="地址空间"><a href="#地址空间" class="headerlink" title="地址空间"></a>地址空间</h3><p>进程的机器状态有一个明显组成部分，就是它的内存。指令存在内存中。正在运行的程序读取和写入的数据也在内存中。因此进程可以访问的内存（称为地址空间，address space）是该进程的一部分。</p><h3 id="寄存器"><a href="#寄存器" class="headerlink" title="寄存器"></a>寄存器</h3><p>进程的机器状态的另一部分是寄存器。许多指令明确地读取或更新寄存器。<br>程序计数器（Program Counter，PC）（有时称为指令指针，Instruction Pointer 或 IP）告诉我们程序当前正在执行哪个指令；类似地，栈指针（stack pointer）和相关的帧指针（frame pointer）用于管理函数参数栈、局部变量和返回地址。</p><p>程序也经常访问持久存储设备。此类 I/O 信息可能包含当前打开的文件列表。</p><h2 id="进程-API"><a href="#进程-API" class="headerlink" title="进程 API"></a>进程 API</h2><p>创建（create）：操作系统必须包含一些创建新进程的方法。在 shell 中键入命令或双击应用程序图标时，会调用操作系统来创建新进程，运行指定的程序。</p><p>销毁（destroy）：由于存在创建进程的接口，因此系统还提供了一个强制销毁进程的接口。当然，很多进程会在运行完成后自行退出。但是，如果它们不退出，用户可能希望终止它们，因此停止失控进程的接口非常有用。</p><p>等待（wait）：有时等待进程停止运行是有用的，因此经常提供某种等待接口。</p><p>其他控制（miscellaneous control）：除了杀死或等待进程外，有时还可能有其他控制。例如，大多数操作系统提供某种方法来暂停进程（停止运行一段时间），然后恢复（继续运行）。</p><p>状态（statu）：通常也有一些接口可以获得有关进程的状态信息，例如运行了多长时间，或者处于什么状态。</p><h2 id="进程创建：更多细节"><a href="#进程创建：更多细节" class="headerlink" title="进程创建：更多细节"></a>进程创建：更多细节</h2><ol><li>操作系统运行程序必须做的第一件事是将代码和所有静态数据（例如初始化变量）加载（load）到内存中，加载到进程的地址空间中。</li></ol><p>程序最初以某种可执行格式驻留在磁盘上（disk，或者在某些现代系统中，在基于闪存的 SSD 上）。因此，将程序和静态数据加载到内存中的过程，需要操作系统从磁盘读取这些字节，并将它们放在内存中的某处。<br><img src="/2023/06/14/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%AF%BC%E8%AE%BA-%E6%8A%BD%E8%B1%A1-%E8%BF%9B%E7%A8%8B/q1.png" alt="?"></p><p>在早期的（或简单的）操作系统中，加载过程尽早（eagerly）完成，即在运行程序之前全部完成。<br>现代操作系统惰性（lazily）执行该过程，即仅在程序执行期间需要加载的代码或数据片段，才会加载。</p><ol start="2"><li><p>将代码和静态数据加载到内存后，必须为程序的运行时栈（run-time stack 或 stack）分配一些内存。操作系统也可能为程序的堆（heap）分配一些内存。</p></li><li><p>操作系统还将执行一些其他初始化任务，特别是与输入/输出（I/O）相关的任务。</p></li></ol><p>例如，在 UNIX 系统中，默认情况下每个进程都有 3 个打开的文件描述符（file descriptor），用于标准输入、输出和错误。这些描述符让程序轻松读取来自终端的输入以及打印输出到屏幕。</p><ol start="4"><li>启动程序，在入口处运行，即 main()。通过跳转到 main()例程，OS 将 CPU的控制权转移到新创建的进程中，从而程序开始执行。</li></ol><h2 id="进程状态"><a href="#进程状态" class="headerlink" title="进程状态"></a>进程状态</h2><p>进程可以处于以下 3 种状态之一。</p><p>运行（running）：在运行状态下，进程正在处理器上运行。这意味着它正在执行指令。</p><p>就绪（ready）：在就绪状态下，进程已准备好运行，但由于某种原因，操作系统选择不在此时运行。</p><p>阻塞（blocked）：在阻塞状态下，一个进程执行了某种操作，直到发生其他事件时才会准备运行。一个常见的例子是，当进程向磁盘发起 I/O 请求时，它会被阻塞，因此其他进程可以使用处理器。<br><img src="/2023/06/14/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%AF%BC%E8%AE%BA-%E6%8A%BD%E8%B1%A1-%E8%BF%9B%E7%A8%8B/q2.png" alt="?"></p><p>举例：两个正在运行的进程，每个进程只使用 CPU（它们没有 I/O）<br><img src="/2023/06/14/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%AF%BC%E8%AE%BA-%E6%8A%BD%E8%B1%A1-%E8%BF%9B%E7%A8%8B/q3.png" alt="?"></p><p>举例：第一个进程在运行一段时间后发起 I/O 请求。此时，该进程被阻塞，让另一个进程有机会运行。<br><img src="/2023/06/14/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%AF%BC%E8%AE%BA-%E6%8A%BD%E8%B1%A1-%E8%BF%9B%E7%A8%8B/q4.png" alt="?"></p><p>除了运行、就绪和阻塞之外，还有其他一些进程可以处于的状态。有时候系统会有一个初始（initial）状态，表示进程在创建时处于的状态。</p><p>另外，一个进程可以处于已退出但尚未清理的最终（final）状态（在基于 UNIX 的系统中，这称为僵尸状态）。</p><p>这个最终状态非常有用，因为它允许其他进程（通常是创建进程的父进程）检查进程的返回代码，并查看刚刚完成的进程是否成功执行（通常，在基于 UNIX 的系统中，程序成功完成任务时返回零，否则返回非零）。完成后，父进程将进行最后一次调用（例如，wait()），以等待子进程的完成，并告诉操作系统它可以清理这个正在结束的进程的所有相关数据结构。</p><h2 id="数据结构"><a href="#数据结构" class="headerlink" title="数据结构"></a>数据结构</h2><p>操作系统是一个程序，和其他程序一样，它有一些关键的数据结构来跟踪各种相关的信息。</p><p>为了跟踪每个进程的状态，操作系统可能会为所有就绪的进程保留某种进程列表（process list），以及跟踪当前正在运行的进程的一些附加信息。</p><p>操作系统追踪进程的一些重要信息。对于停止的进程，寄存器上下文将保存其寄存器的内容。当一个进程停止时，它的寄存器将被保存到这个内存位置。通过恢复这些寄存器（将它们的值放回实际的物理寄存器中），操作系统可以恢复运行该进程。它被称为<strong>上下文切换（context switch）</strong>。</p><p>除了运行、就绪和阻塞之外，还有其他一些进程可以处于的状态。有时候系统会有一个初始（initial）状态，表示进程在创建时处于的状态。<br>另外，一个进程可以处于已退出但尚未清理的最终（final）状态（在基于 UNIX 的系统中，这称为僵尸状态）。这个最终状态非常有用，因为它允许其他进程（通常是创建进程的父进程）检查进程的返回代码，并查看刚刚完成的进程是否成功执行（通常，在基于 UNIX 的系统中，程序成功完成任务时返回零，否则返回非零）。完成后，父进程将进行最后一次调用（例如，wait()），以等待子进程的完成，并告诉操作系统它可以清理这个正在结束的进程的所有相关数据结构。</p><blockquote><p>数据结构——进程列表<br>进程列表（process list）是第一个这样的结构。任何能够同时运行多个程序的操作系统当然都会有类似这种结构的东西，以便跟踪系统中正在运行的所有程序。有时候人们会将存储关于进程的信息的个体结构称为进程控制块（Process Control Block，PCB），这是谈论包含每个进程信息的 C 结构的一种方式。</p></blockquote>]]></content>
+    
+    
+      
+      
+    <summary type="html">&lt;link rel=&quot;stylesheet&quot; class=&quot;aplayer-secondary-style-marker&quot; href=&quot;\assets\css\APlayer.min.css&quot;&gt;&lt;script src=&quot;\assets\js\APlayer.min.js&quot; cla</summary>
+      
+    
+    
+    
+    
+    <category term="OS" scheme="https://codecodegogogo.github.io/tags/OS/"/>
     
   </entry>
   
@@ -428,30 +452,6 @@
     
     
     <category term="linux" scheme="https://codecodegogogo.github.io/tags/linux/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>linux_shell编程</title>
-    <link href="https://codecodegogogo.github.io/2023/05/17/linux-shell%E7%BC%96%E7%A8%8B/"/>
-    <id>https://codecodegogogo.github.io/2023/05/17/linux-shell%E7%BC%96%E7%A8%8B/</id>
-    <published>2023-05-17T02:56:45.000Z</published>
-    <updated>2023-06-02T15:55:55.274Z</updated>
-    
-    <content type="html"><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="\assets\css\APlayer.min.css"><script src="\assets\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script><script class="meting-secondary-script-marker" src="\assets\js\Meting.min.js"></script><p>相关文章：</p><blockquote><p><a href="https://sunnyli1024.github.io/2023/05/18/linux%E5%B0%8F%E9%A2%98/">linux小题</a><br><a href="https://sunnyli1024.github.io/2023/05/18/%E5%AE%A2%E5%88%B6%E5%8C%96linux/">客制化linux</a><br><a href="https://sunnyli1024.github.io/2023/05/17/linux-shell%E7%BC%96%E7%A8%8B/">linux_shell编程</a><br><a href="https://sunnyli1024.github.io/2023/05/16/linux%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4/">linux基础</a></p></blockquote><h4 id="shell"><a href="#shell" class="headerlink" title="shell"></a>shell</h4><p>Shell 是一个用 C 语言编写的程序，它是用户使用 Linux 的桥梁。Shell 既是一种命令语言，又是一种程序设计语言。</p><p>Shell 是指一种应用程序，这个应用程序提供了一个界面，用户通过这个界面访问操作系统内核的服务。</p><p>Ken Thompson 的 sh 是第一种 Unix Shell，Windows Explorer 是一个典型的图形界面 Shell。</p><blockquote><p>#!/bin/bash<br>echo “Hello World !”</p></blockquote><p>! 是一个约定的标记，它告诉系统这个脚本需要什么解释器来执行，即使用哪一种 Shell。</p><p>echo 命令用于向窗口输出文本。</p><p><strong>运行 Shell 脚本有两种方法：</strong></p><blockquote><p><strong>1、作为可执行程序</strong><br>将上面的代码保存为 test.sh，并 cd 到相应目录：<br>chmod +x ./test.sh  #使脚本具有执行权限<br>./test.sh  #执行脚本<br>注意，一定要写成 ./test.sh，而不是 test.sh，运行其它二进制的程序也一样，直接写 test.sh，linux 系统会去 PATH 里寻找有没有叫 test.sh 的，而只有 /bin, /sbin, /usr/bin，/usr/sbin 等在 PATH 里，你的当前目录通常不在 PATH 里，所以写成 test.sh 是会找不到命令的，要用 ./test.sh 告诉系统说，就在当前目录找。<br><strong>2、作为解释器参数</strong><br>这种运行方式是，直接运行解释器，其参数就是 shell 脚本的文件名，如：<br>/bin/sh test.sh<br>/bin/php test.php<br>这种方式运行的脚本，不需要在第一行指定解释器信息，写了也没用。</p></blockquote><h4 id="变量"><a href="#变量" class="headerlink" title="变量"></a>变量</h4><p><strong>定义变量</strong><br>定义变量时，变量名不加美元符号（$，PHP语言中变量需要），如：</p><blockquote><p>your_name=”runoob.com”</p></blockquote><p>注意，<strong>变量名和等号之间不能有空格</strong>，这可能和你熟悉的所有编程语言都不一样。同时，变量名的命名须遵循如下规则：<br>命名只能使用英文字母，数字和下划线，首个字符不能以数字开头。<br>中间不能有空格，可以使用下划线 _。<br>不能使用标点符号。<br>不能使用bash里的关键字（可用help命令查看保留关键字）。</p><p><strong>使用变量</strong><br><strong>$在Linux shell编程中用于取变量值</strong><br>使用一个定义过的变量，只要在变量名前面 <strong>加$</strong> 即可，如：</p><blockquote><p>your_name=”qinjx”<br>echo $your_name<br>echo ${your_name}</p></blockquote><p><strong>变量名外面的花括号是可选的，加不加都行</strong>，加花括号是为了帮助解释器识别变量的边界，比如下面这种情况：</p><blockquote><p>for skill in Ada Coffe Action Java; do<br>    echo “I am good at ${skill}Script”<br>done</p></blockquote><p>``可以带回指令的返回值，除了显式地直接赋值，还可以用语句给变量赋值，如：</p><blockquote><p>for file in <code>ls /etc</code><br>或<br>for file in $(ls /etc)</p></blockquote><p><strong>命令行参数</strong><br>以上语句将 /etc 下目录的文件名循环出来。</p><blockquote><p>$1,$2…${10}获取命令行位置参数<br>$#    传递到脚本或函数的参数个数<br>$*    以一个单字符串显示所有向脚本传递的参数<br>$$    脚本运行的当前进程ID号<br>$!    后台运行的最后一个进程的ID号<br>$@    与$<em>相同，但是使用时加引号，并在引号中返回每个参数。<br>$-    显示Shell使用的当前选项，与set命令功能相同。<br>$?    显示最后命令的退出状态。0表示没有错误，其他任何值表明有错误。*<em>函数返回值在调用该函数后通过$? 来获得。</em></em><br>这几个参数都通过命令行输入</p></blockquote><p><strong>只读变量</strong><br>使用 readonly 命令可以将变量定义为只读变量，只读变量的值不能被改变。<br>下面的例子尝试更改只读变量，结果报错：</p><blockquote><p>#!/bin/bash<br>myUrl=”<a href="https://www.google.com&quot;/">https://www.google.com&quot;</a><br>readonly myUrl<br>myUrl=”<a href="https://www.baidu.com&quot;/">https://www.baidu.com&quot;</a></p></blockquote><p>运行脚本，结果如下：</p><blockquote><p>/bin/sh: NAME: This variable is read only.</p></blockquote><p><strong>删除变量</strong><br>使用 unset 命令可以删除变量。语法：</p><blockquote><p>unset variable_name</p></blockquote><p>变量被删除后不能再次使用。unset 命令不能删除只读变量。</p><h4 id="输出"><a href="#输出" class="headerlink" title="输出"></a>输出</h4><p><strong>printf</strong><br>和c类似</p><blockquote><blockquote><p>printf “%d %s\n” 1 “abc”</p></blockquote></blockquote><p>echo</p><blockquote><blockquote><p>echo “\“It is a test\“”</p></blockquote></blockquote><h4 id="运算符"><a href="#运算符" class="headerlink" title="运算符"></a>运算符</h4><p><img src="/2023/05/17/linux-shell%E7%BC%96%E7%A8%8B/%E8%BF%90%E7%AE%97%E7%AC%A6.png" alt="运算符"></p><blockquote><p>echo $[5*3]<br>echo $(((2+3)-3))<br>echo `expr 3+3`</p><blockquote><p>15<br>2<br>3+3</p></blockquote></blockquote><h4 id="test"><a href="#test" class="headerlink" title="test"></a>test</h4><blockquote><p>-eq    检测两个数是否相等，相等返回 true。    [ \$a -eq \$b ] 返回 false。<br>-ne    检测两个数是否不相等，不相等返回 true。    [ $a -ne $b ] 返回 true。<br>-gt    检测左边的数是否大于右边的，如果是，则返回 true。    [ $a -gt $b ] 返回 false。<br>-lt    检测左边的数是否小于右边的，如果是，则返回 true。    [ $a -lt $b ] 返回 true。<br>-ge    检测左边的数是否大于等于右边的，如果是，则返回 true。    [ $a -ge $b ] 返回 false。<br>-le    检测左边的数是否小于等于右边的，如果是，则返回 true。    [ $a -le $b ] 返回 true。<br>-e 文件名    如果文件存在则为真<br>-r 文件名    如果文件存在且可读则为真<br>-w 文件名    如果文件存在且可写则为真<br>-x 文件名    如果文件存在且可执行则为真<br>-s 文件名    如果文件存在且至少有一个字符则为真<br>-d 文件名    如果文件存在且为目录则为真<br>-f 文件名    如果文件存在且为普通文件则为真<br>-c 文件名    如果文件存在且为字符型特殊文件则为真<br>-b 文件名    如果文件存在且为块特殊文件则为真</p></blockquote><h4 id="流程控制"><a href="#流程控制" class="headerlink" title="流程控制"></a>流程控制</h4><p>所有的流程控制[ 条件 ] 条件两侧有空格<br><strong>if</strong></p><blockquote><p><strong>if condition1<br>then<br>    command1<br>elif condition2<br>then<br>    command2<br>else<br>    commandN<br>fi</strong></p></blockquote><blockquote><blockquote><p>a=10<br>b=20<br>if [ $a == $b ]<br>then<br>   echo “a 等于 b”<br>elif [ $a -gt $b ]<br>then<br>   echo “a 大于 b”<br>elif [ $a -lt $b ]<br>then<br>   echo “a 小于 b”<br>else<br>   echo “没有符合的条件”<br>fi</p></blockquote></blockquote><p>末尾的 fi 就是 if 倒过来拼写，后面还会遇到类似的</p><p><strong>case</strong></p><blockquote><p>*<em>case $变量名 in<br>“值”)<br>语句<br>;;<br>“值”)<br>语句<br>;;<br><em>)<br>语句<br>;;<br>esac</em></em></p></blockquote><blockquote><blockquote><p>case $1 in<br>“1”)<br>echo “1”<br>;;<br>*)<br>echo ‘…’<br>;;<br>esac</p></blockquote></blockquote><p><strong>for</strong><br>for循环一般格式为：</p><blockquote><p><strong>for var in item1 item2 … itemN<br>do<br>    command1<br>    command2<br>    …<br>    commandN<br>done</strong></p><blockquote><p>for loop in 1 2 3 4 5<br>do<br>    echo “The value is: $loop”<br>done</p></blockquote></blockquote><p><strong>while</strong></p><blockquote><p><strong>while condition<br>do<br>    command<br>done</strong></p><blockquote><p>#!/bin/bash<br>int=1<br>while(( $int&lt;=5 ))<br>do<br>    echo $int<br>    let “int++”<br>done</p></blockquote></blockquote><p>以上实例使用了 Bash let 命令，它用于执行一个或多个表达式，变量计算中不需要加上 $ 来表示变量</p><h4 id="函数"><a href="#函数" class="headerlink" title="函数"></a>函数</h4><blockquote><p>[ function ] funname [()]<br>{<br>    action;<br>    [return int;]<br>}</p><blockquote><p>funWithReturn(){<br>    echo “这个函数会对输入的两个数字进行相加运算…”<br>    echo “输入第一个数字: “<br>    read aNum<br>    echo “输入第二个数字: “<br>    read anotherNum<br>    echo “两个数字分别为 $aNum 和 $anotherNum !”<br>    return $(($aNum+$anotherNum))<br>}<br>funWithReturn<br>echo “输入的两个数字之和为 $? !”</p></blockquote></blockquote>]]></content>
-    
-    
-      
-      
-    <summary type="html">&lt;link rel=&quot;stylesheet&quot; class=&quot;aplayer-secondary-style-marker&quot; href=&quot;\assets\css\APlayer.min.css&quot;&gt;&lt;script src=&quot;\assets\js\APlayer.min.js&quot; cla</summary>
-      
-    
-    
-    
-    
-    <category term="linux" scheme="https://codecodegogogo.github.io/tags/linux/"/>
-    
-    <category term="计算机基础" scheme="https://codecodegogogo.github.io/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%9F%BA%E7%A1%80/"/>
     
   </entry>
   

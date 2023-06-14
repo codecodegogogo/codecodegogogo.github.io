@@ -18,15 +18,23 @@
   
   
   <title>操作系统导论-抽象:进程 | Sunny&#39;s Blog</title>
-  <meta property="og:type" content="article">
+  <meta name="description" content="抽象:进程进程就是运行中的程序。程序本身是没有生命周期的，它只是存在磁盘上面的一些指令（也可能是一些静态数据）。是操作系统让这些字节运行起来，让程序发挥作用。 虽然只有少量的物理 CPU 可用，但是操作系统如何提供几乎有无数个 CPU 可用的假象？ 操作系统通过虚拟化（virtualizing）CPU 来提供这种假象。通过让一个进程只运行一个时间片，然后切换到其他进程，操作系统提供了存在多个虚拟">
+<meta property="og:type" content="article">
 <meta property="og:title" content="操作系统导论-抽象:进程">
 <meta property="og:url" content="https://codecodegogogo.github.io/2023/06/14/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%AF%BC%E8%AE%BA-%E6%8A%BD%E8%B1%A1-%E8%BF%9B%E7%A8%8B/index.html">
 <meta property="og:site_name" content="Sunny">
+<meta property="og:description" content="抽象:进程进程就是运行中的程序。程序本身是没有生命周期的，它只是存在磁盘上面的一些指令（也可能是一些静态数据）。是操作系统让这些字节运行起来，让程序发挥作用。 虽然只有少量的物理 CPU 可用，但是操作系统如何提供几乎有无数个 CPU 可用的假象？ 操作系统通过虚拟化（virtualizing）CPU 来提供这种假象。通过让一个进程只运行一个时间片，然后切换到其他进程，操作系统提供了存在多个虚拟">
 <meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://codecodegogogo.github.io/2023/06/14/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%AF%BC%E8%AE%BA-%E6%8A%BD%E8%B1%A1-%E8%BF%9B%E7%A8%8B/q1.png">
+<meta property="og:image" content="https://codecodegogogo.github.io/2023/06/14/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%AF%BC%E8%AE%BA-%E6%8A%BD%E8%B1%A1-%E8%BF%9B%E7%A8%8B/q2.png">
+<meta property="og:image" content="https://codecodegogogo.github.io/2023/06/14/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%AF%BC%E8%AE%BA-%E6%8A%BD%E8%B1%A1-%E8%BF%9B%E7%A8%8B/q3.png">
+<meta property="og:image" content="https://codecodegogogo.github.io/2023/06/14/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%AF%BC%E8%AE%BA-%E6%8A%BD%E8%B1%A1-%E8%BF%9B%E7%A8%8B/q4.png">
 <meta property="article:published_time" content="2023-06-14T13:27:53.000Z">
-<meta property="article:modified_time" content="2023-06-14T13:27:53.812Z">
+<meta property="article:modified_time" content="2023-06-14T15:23:46.858Z">
 <meta property="article:author" content="Sunny">
+<meta property="article:tag" content="OS">
 <meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://codecodegogogo.github.io/2023/06/14/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%AF%BC%E8%AE%BA-%E6%8A%BD%E8%B1%A1-%E8%BF%9B%E7%A8%8B/q1.png">
   <!-- Canonical links -->
   <link rel="canonical" href="https://codecodegogogo.github.io/2023/06/14/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%AF%BC%E8%AE%BA-%E6%8A%BD%E8%B1%A1-%E8%BF%9B%E7%A8%8B/index.html">
   
@@ -170,7 +178,7 @@
   <div class="widget">
     <h3 class="widget-title">标签</h3>
     <div class="widget-body">
-      <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/C-Primer/" rel="tag">C++ Primer</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/OS/" rel="tag">OS</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/c/" rel="tag">c++</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/code/" rel="tag">code</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/linux/" rel="tag">linux</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%9D%82%E8%B0%88/" rel="tag">杂谈</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%9F%BA%E7%A1%80/" rel="tag">计算机基础</a><span class="tag-list-count">6</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%B7%A5%E5%85%B7/" rel="tag">计算机工具</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/" rel="tag">计算机网络</a><span class="tag-list-count">9</span></li></ul>
+      <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/C-Primer/" rel="tag">C++ Primer</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/OS/" rel="tag">OS</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/c/" rel="tag">c++</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/code/" rel="tag">code</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/linux/" rel="tag">linux</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%9D%82%E8%B0%88/" rel="tag">杂谈</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%9F%BA%E7%A1%80/" rel="tag">计算机基础</a><span class="tag-list-count">6</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%B7%A5%E5%85%B7/" rel="tag">计算机工具</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/" rel="tag">计算机网络</a><span class="tag-list-count">9</span></li></ul>
     </div>
   </div>
 
@@ -182,6 +190,21 @@
     <div class="widget-body">
       <ul class="recent-post-list list-unstyled no-thumbnail">
         
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                
+              </p>
+              <p class="item-title">
+                <a href="/2023/06/14/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%AF%BC%E8%AE%BA-%E6%8F%92%E5%8F%99-%E8%BF%9B%E7%A8%8BAPI/" class="title">操作系统导论-插叙:进程API</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2023-06-14T15:23:22.000Z" itemprop="datePublished">2023-06-14</time>
+              </p>
+            </div>
+          </li>
+          
           <li>
             
             <div class="item-inner">
@@ -242,21 +265,6 @@
             </div>
           </li>
           
-          <li>
-            
-            <div class="item-inner">
-              <p class="item-category">
-                
-              </p>
-              <p class="item-title">
-                <a href="/2023/06/03/%E4%BA%BA%E7%94%9F%E4%B8%8D%E6%AD%A2%E6%9C%89%E6%8A%80%E6%9C%AF/" class="title">人生不止有技术</a>
-              </p>
-              <p class="item-date">
-                <time datetime="2023-06-03T14:37:06.000Z" itemprop="datePublished">2023-06-03</time>
-              </p>
-            </div>
-          </li>
-          
       </ul>
     </div>
   </div>
@@ -268,6 +276,15 @@
 
   
   
+  <aside class="sidebar sidebar-toc collapse   in  " id="collapseToc" itemscope itemtype="http://schema.org/WPSideBar">
+  <div class="slimContent">
+    <nav id="toc" class="article-toc">
+      <h3 class="toc-title">文章目录</h3>
+      <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E6%8A%BD%E8%B1%A1-%E8%BF%9B%E7%A8%8B"><span class="toc-number">1.</span> <span class="toc-text">抽象:进程</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%8A%BD%E8%B1%A1%EF%BC%9A%E8%BF%9B%E7%A8%8B"><span class="toc-number">1.1.</span> <span class="toc-text">抽象：进程</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%9C%B0%E5%9D%80%E7%A9%BA%E9%97%B4"><span class="toc-number">1.1.1.</span> <span class="toc-text">地址空间</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AF%84%E5%AD%98%E5%99%A8"><span class="toc-number">1.1.2.</span> <span class="toc-text">寄存器</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%BF%9B%E7%A8%8B-API"><span class="toc-number">1.2.</span> <span class="toc-text">进程 API</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%BF%9B%E7%A8%8B%E5%88%9B%E5%BB%BA%EF%BC%9A%E6%9B%B4%E5%A4%9A%E7%BB%86%E8%8A%82"><span class="toc-number">1.3.</span> <span class="toc-text">进程创建：更多细节</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%BF%9B%E7%A8%8B%E7%8A%B6%E6%80%81"><span class="toc-number">1.4.</span> <span class="toc-text">进程状态</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84"><span class="toc-number">1.5.</span> <span class="toc-text">数据结构</span></a></li></ol></li></ol>
+    </nav>
+  </div>
+</aside>
+
 <main class="main" role="main">
   <div class="content">
   <article id="post-操作系统导论-抽象-进程" class="article article-type-post" itemscope itemtype="http://schema.org/BlogPosting">
@@ -291,6 +308,11 @@
 </span>
         
         
+  <span class="article-tag">
+    <i class="icon icon-tags"></i>
+	<a class="article-tag-link-link" href="/tags/OS/" rel="tag">OS</a>
+  </span>
+
 
         
 	<span class="article-read hidden-xs">
@@ -304,7 +326,7 @@
         <span class="post-comment"><i class="icon icon-comment"></i> <a href="/2023/06/14/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%AF%BC%E8%AE%BA-%E6%8A%BD%E8%B1%A1-%E8%BF%9B%E7%A8%8B/#comments" class="article-comment-link">评论</a></span>
         
 	
-		<span class="post-wordcount hidden-xs" itemprop="wordCount">字数统计: 0(字)</span>
+		<span class="post-wordcount hidden-xs" itemprop="wordCount">字数统计: 2.3k(字)</span>
 	
 	
 
@@ -312,7 +334,52 @@
     </div>
     <div class="article-entry marked-body" itemprop="articleBody">
       
-        
+        <h1 id="抽象-进程"><a href="#抽象-进程" class="headerlink" title="抽象:进程"></a>抽象:进程</h1><p>进程就是运行中的程序。程序本身是没有生命周期的，它只是存在磁盘上面的一些指令（也可能是一些静态数据）。是操作系统让这些字节运行起来，让程序发挥作用。</p>
+<p><em><strong>虽然只有少量的物理 CPU 可用，但是操作系统如何提供几乎有无数个 CPU 可用的假象？</strong></em></p>
+<p>操作系统通过虚拟化（virtualizing）CPU 来提供这种假象。通过让一个进程只运行一个时间片，然后切换到其他进程，操作系统提供了存在多个虚拟 CPU 的假象。这就是时分共享（time sharing）CPU 技术，允许用户如愿运行多个并发进程。潜在的开销就是性能损失，因为如果 CPU 必须共享，每个进程的运行就会慢一点。</p>
+<p><strong>时分共享和空分共享</strong><br>通过允许资源由一个实体使用一小段时间，然后由另一个实体使用一小段时间，如此下去，所谓的资源（例如，CPU 或网络链接）可以被许多人共享。时分共享的自然对应技术是空分共享，资源在空间上被划分给希望使用它的人。</p>
+<p>例如，磁盘空间自然是一个空分共享资源，因为一旦将块分配给文件，在用户删除文件之前，不可能将它分配给其他文件。</p>
+<h2 id="抽象：进程"><a href="#抽象：进程" class="headerlink" title="抽象：进程"></a>抽象：进程</h2><p>操作系统为正在运行的程序提供的抽象，就是所谓的进程（process）。</p>
+<h3 id="地址空间"><a href="#地址空间" class="headerlink" title="地址空间"></a>地址空间</h3><p>进程的机器状态有一个明显组成部分，就是它的内存。指令存在内存中。正在运行的程序读取和写入的数据也在内存中。因此进程可以访问的内存（称为地址空间，address space）是该进程的一部分。</p>
+<h3 id="寄存器"><a href="#寄存器" class="headerlink" title="寄存器"></a>寄存器</h3><p>进程的机器状态的另一部分是寄存器。许多指令明确地读取或更新寄存器。<br>程序计数器（Program Counter，PC）（有时称为指令指针，Instruction Pointer 或 IP）告诉我们程序当前正在执行哪个指令；类似地，栈指针（stack pointer）和相关的帧指针（frame pointer）用于管理函数参数栈、局部变量和返回地址。</p>
+<p>程序也经常访问持久存储设备。此类 I/O 信息可能包含当前打开的文件列表。</p>
+<h2 id="进程-API"><a href="#进程-API" class="headerlink" title="进程 API"></a>进程 API</h2><p>创建（create）：操作系统必须包含一些创建新进程的方法。在 shell 中键入命令或双击应用程序图标时，会调用操作系统来创建新进程，运行指定的程序。</p>
+<p>销毁（destroy）：由于存在创建进程的接口，因此系统还提供了一个强制销毁进程的接口。当然，很多进程会在运行完成后自行退出。但是，如果它们不退出，用户可能希望终止它们，因此停止失控进程的接口非常有用。</p>
+<p>等待（wait）：有时等待进程停止运行是有用的，因此经常提供某种等待接口。</p>
+<p>其他控制（miscellaneous control）：除了杀死或等待进程外，有时还可能有其他控制。例如，大多数操作系统提供某种方法来暂停进程（停止运行一段时间），然后恢复（继续运行）。</p>
+<p>状态（statu）：通常也有一些接口可以获得有关进程的状态信息，例如运行了多长时间，或者处于什么状态。</p>
+<h2 id="进程创建：更多细节"><a href="#进程创建：更多细节" class="headerlink" title="进程创建：更多细节"></a>进程创建：更多细节</h2><ol>
+<li>操作系统运行程序必须做的第一件事是将代码和所有静态数据（例如初始化变量）加载（load）到内存中，加载到进程的地址空间中。</li>
+</ol>
+<p>程序最初以某种可执行格式驻留在磁盘上（disk，或者在某些现代系统中，在基于闪存的 SSD 上）。因此，将程序和静态数据加载到内存中的过程，需要操作系统从磁盘读取这些字节，并将它们放在内存中的某处。<br><img src="/2023/06/14/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%AF%BC%E8%AE%BA-%E6%8A%BD%E8%B1%A1-%E8%BF%9B%E7%A8%8B/q1.png" alt="?"></p>
+<p>在早期的（或简单的）操作系统中，加载过程尽早（eagerly）完成，即在运行程序之前全部完成。<br>现代操作系统惰性（lazily）执行该过程，即仅在程序执行期间需要加载的代码或数据片段，才会加载。</p>
+<ol start="2">
+<li><p>将代码和静态数据加载到内存后，必须为程序的运行时栈（run-time stack 或 stack）分配一些内存。操作系统也可能为程序的堆（heap）分配一些内存。</p>
+</li>
+<li><p>操作系统还将执行一些其他初始化任务，特别是与输入/输出（I/O）相关的任务。</p>
+</li>
+</ol>
+<p>例如，在 UNIX 系统中，默认情况下每个进程都有 3 个打开的文件描述符（file descriptor），用于标准输入、输出和错误。这些描述符让程序轻松读取来自终端的输入以及打印输出到屏幕。</p>
+<ol start="4">
+<li>启动程序，在入口处运行，即 main()。通过跳转到 main()例程，OS 将 CPU的控制权转移到新创建的进程中，从而程序开始执行。</li>
+</ol>
+<h2 id="进程状态"><a href="#进程状态" class="headerlink" title="进程状态"></a>进程状态</h2><p>进程可以处于以下 3 种状态之一。</p>
+<p>运行（running）：在运行状态下，进程正在处理器上运行。这意味着它正在执行指令。</p>
+<p>就绪（ready）：在就绪状态下，进程已准备好运行，但由于某种原因，操作系统选择不在此时运行。</p>
+<p>阻塞（blocked）：在阻塞状态下，一个进程执行了某种操作，直到发生其他事件时才会准备运行。一个常见的例子是，当进程向磁盘发起 I/O 请求时，它会被阻塞，因此其他进程可以使用处理器。<br><img src="/2023/06/14/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%AF%BC%E8%AE%BA-%E6%8A%BD%E8%B1%A1-%E8%BF%9B%E7%A8%8B/q2.png" alt="?"></p>
+<p>举例：两个正在运行的进程，每个进程只使用 CPU（它们没有 I/O）<br><img src="/2023/06/14/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%AF%BC%E8%AE%BA-%E6%8A%BD%E8%B1%A1-%E8%BF%9B%E7%A8%8B/q3.png" alt="?"></p>
+<p>举例：第一个进程在运行一段时间后发起 I/O 请求。此时，该进程被阻塞，让另一个进程有机会运行。<br><img src="/2023/06/14/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%AF%BC%E8%AE%BA-%E6%8A%BD%E8%B1%A1-%E8%BF%9B%E7%A8%8B/q4.png" alt="?"></p>
+<p>除了运行、就绪和阻塞之外，还有其他一些进程可以处于的状态。有时候系统会有一个初始（initial）状态，表示进程在创建时处于的状态。</p>
+<p>另外，一个进程可以处于已退出但尚未清理的最终（final）状态（在基于 UNIX 的系统中，这称为僵尸状态）。</p>
+<p>这个最终状态非常有用，因为它允许其他进程（通常是创建进程的父进程）检查进程的返回代码，并查看刚刚完成的进程是否成功执行（通常，在基于 UNIX 的系统中，程序成功完成任务时返回零，否则返回非零）。完成后，父进程将进行最后一次调用（例如，wait()），以等待子进程的完成，并告诉操作系统它可以清理这个正在结束的进程的所有相关数据结构。</p>
+<h2 id="数据结构"><a href="#数据结构" class="headerlink" title="数据结构"></a>数据结构</h2><p>操作系统是一个程序，和其他程序一样，它有一些关键的数据结构来跟踪各种相关的信息。</p>
+<p>为了跟踪每个进程的状态，操作系统可能会为所有就绪的进程保留某种进程列表（process list），以及跟踪当前正在运行的进程的一些附加信息。</p>
+<p>操作系统追踪进程的一些重要信息。对于停止的进程，寄存器上下文将保存其寄存器的内容。当一个进程停止时，它的寄存器将被保存到这个内存位置。通过恢复这些寄存器（将它们的值放回实际的物理寄存器中），操作系统可以恢复运行该进程。它被称为<strong>上下文切换（context switch）</strong>。</p>
+<p>除了运行、就绪和阻塞之外，还有其他一些进程可以处于的状态。有时候系统会有一个初始（initial）状态，表示进程在创建时处于的状态。<br>另外，一个进程可以处于已退出但尚未清理的最终（final）状态（在基于 UNIX 的系统中，这称为僵尸状态）。这个最终状态非常有用，因为它允许其他进程（通常是创建进程的父进程）检查进程的返回代码，并查看刚刚完成的进程是否成功执行（通常，在基于 UNIX 的系统中，程序成功完成任务时返回零，否则返回非零）。完成后，父进程将进行最后一次调用（例如，wait()），以等待子进程的完成，并告诉操作系统它可以清理这个正在结束的进程的所有相关数据结构。</p>
+<blockquote>
+<p>数据结构——进程列表<br>进程列表（process list）是第一个这样的结构。任何能够同时运行多个程序的操作系统当然都会有类似这种结构的东西，以便跟踪系统中正在运行的所有程序。有时候人们会将存储关于进程的信息的个体结构称为进程控制块（Process Control Block，PCB），这是谈论包含每个进程信息的 C 结构的一种方式。</p>
+</blockquote>
+
       
     </div>
     <div class="article-footer">
@@ -350,11 +417,23 @@
   
   <ul class="pager pull-left">
     
+    <li class="prev">
+      <a href="/2023/06/14/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%AF%BC%E8%AE%BA-%E6%8F%92%E5%8F%99-%E8%BF%9B%E7%A8%8BAPI/" title="操作系统导论-插叙:进程API"><i class="icon icon-angle-left" aria-hidden="true"></i><span>&nbsp;&nbsp;上一篇</span></a>
+    </li>
+    
     
     <li class="next">
       <a href="/2023/06/14/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%AF%BC%E8%AE%BA-%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E4%BB%8B%E7%BB%8D/" title="操作系统导论-操作系统介绍"><span>下一篇&nbsp;&nbsp;</span><i class="icon icon-angle-right" aria-hidden="true"></i></a>
     </li>
     
+    
+    <li class="toggle-toc">
+      <a class="toggle-btn " data-toggle="collapse" href="#collapseToc" aria-expanded="false" title="文章目录" role="button">    <span>[&nbsp;</span><span>文章目录</span>
+        <i class="text-collapsed icon icon-anchor"></i>
+        <i class="text-in icon icon-close"></i>
+        <span>]</span>
+      </a>
+    </li>
     
   </ul>
   
