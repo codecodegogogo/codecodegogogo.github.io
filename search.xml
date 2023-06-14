@@ -31,9 +31,37 @@
       </tags>
   </entry>
   <entry>
+    <title>操作系统导论-抽象:进程</title>
+    <url>/2023/06/14/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%AF%BC%E8%AE%BA-%E6%8A%BD%E8%B1%A1-%E8%BF%9B%E7%A8%8B/</url>
+    <content><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="\assets\css\APlayer.min.css"><script src="\assets\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script><script class="meting-secondary-script-marker" src="\assets\js\Meting.min.js"></script>]]></content>
+  </entry>
+  <entry>
     <title>操作系统导论-操作系统介绍</title>
     <url>/2023/06/14/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%AF%BC%E8%AE%BA-%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E4%BB%8B%E7%BB%8D/</url>
-    <content><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="\assets\css\APlayer.min.css"><script src="\assets\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script><script class="meting-secondary-script-marker" src="\assets\js\Meting.min.js"></script>]]></content>
+    <content><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="\assets\css\APlayer.min.css"><script src="\assets\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script><script class="meting-secondary-script-marker" src="\assets\js\Meting.min.js"></script><h1 id="操作系统介绍"><a href="#操作系统介绍" class="headerlink" title="操作系统介绍"></a>操作系统介绍</h1><p>操作系统主要利用一种通用的技术，虚拟化（virtualization）。操作系统将物理（physical）资源（如处理器、内存或磁盘）转换为更通用、更强大且更易于使用的虚拟形式。因此，我们有时将操作系统称为虚拟机（virtual machine）。</p>
+<p>因为虚拟化让许多程序运行（从而共享 CPU），让许多程序可以同时访问自己的指令和数据（从而共享内存），让许多程序访问设备（从而共享磁盘等），所以操作系统有时被称为资源操理器（resource manager）。每个 CPU、内存和磁盘都是系统的资源（resource），因此操作系统扮演的主要角色就是操理（manage）这些资源，以做到高效或公平</p>
+<h2 id="虚拟化-CPU"><a href="#虚拟化-CPU" class="headerlink" title="虚拟化 CPU"></a>虚拟化 CPU</h2><p>在硬件的一些帮助下，操作系统负责提供这种假象（illusion），即系统拥有非常多的虚拟 CPU 的假象。将单个 CPU（或其中一小部分）转换为看似无限数量的 CPU，从而让许多程序看似同时运行，这就是所谓的虚拟化 CPU（virtualizing the CPU）</p>
+<blockquote>
+<p><strong>虚拟化cpu就是一个cpu当成好几个用</strong></p>
+</blockquote>
+<h2 id="虚拟化内存"><a href="#虚拟化内存" class="headerlink" title="虚拟化内存"></a>虚拟化内存</h2><p>每个进程访问自己的私有虚拟地址空间（virtual address space）（有时称为地址空间，address space），操作系统以某种方式映射到机器的物理内存上。一个正在运行的程序中的内存引用不会影响其他进程（或操作系统本身）的地址空间。对于正在运行的程序，它完全拥有自己的物理内存。</p>
+<blockquote>
+<p><strong>虚拟化内存的实现方式是通过建立虚拟内存地址空间，将进程所需的内存映射到实际的物理内存上，从而实现内存的虚拟化</strong></p>
+</blockquote>
+<h2 id="并发"><a href="#并发" class="headerlink" title="并发"></a>并发</h2><h2 id="持久性"><a href="#持久性" class="headerlink" title="持久性"></a>持久性</h2><h2 id="设计目标"><a href="#设计目标" class="headerlink" title="设计目标"></a>设计目标</h2><p>它取得 CPU、内存或磁盘等物理资源（resources），甚对它们进行虚拟化（virtualize）。它处理与甚发（concurrency）有关的麻烦且棘手的问题。它持久地（persistently）存储文件，从而使它们长期随全。</p>
+<blockquote>
+<p>抽象是一种思维方式，是指从具体的事物中抽离出其本质特征和属性，形成一个更为普遍和概括的概念或模型。在计算机科学领域中，抽象是指将复杂的问题或系统抽象为一个简单的模型或接口，以便更好地理解和处理问题。</p>
+</blockquote>
+<h2 id="简单历史"><a href="#简单历史" class="headerlink" title="简单历史"></a>简单历史</h2><h3 id="早期操作系统：只是一些库"><a href="#早期操作系统：只是一些库" class="headerlink" title="早期操作系统：只是一些库"></a>早期操作系统：只是一些库</h3><p>一开始，操作系统甚没有做太多事情。基本上，它只是一组常用函数库。例如，不是让系统中的每个程序员都编写低级 I/O 处理代码，而是让“OS”提供这样的 API，这样开发人员的工作更加轻松。<br>通常，在这些老的大型机系统上，一一运行一个程序，由操作员来控制。这个操作员完成了你认为现现操作系统会做的许多事情（例如，决定运行作业的顺序）。<br>这种计算模式被称为批（batch）处理，先把一些工作准备好，然后由操作员以“分批”的方式运行。此时，计算机甚没有以交互的方式使用，因为这样做成本太高：让用户坐在计算机前使用它，大部分时间它都会闲置，所以会导致设施每小时浪费数千美元。</p>
+<h3 id="超越库：保护"><a href="#超越库：保护" class="headerlink" title="超越库：保护"></a>超越库：保护</h3><p>假设允许任何应用程序从磁盘上的任何地方读取。因为任何程序都可以读取任何文件，所以隐私的概念消失了。<br>因此，系统调用（system call）的概念诞生了，不是将操作系统例程作为一个库来提供（你只需创建一个过程调用（procedure call）来访问它们），这里的想法是添加一些特殊的硬件指令和硬件状态，让向操作系统过渡变为更正式的、受控的过程。</p>
+<p><strong>系统调用和过程调用之间的关键区别在于，系统调用将控制转移（跳转）到 OS 中，同时提高硬件特权级别（hardware privilege level）。用户应用程序以所谓的用户模式（user mode）运行，这意味着硬件限制了应用程序的功能。</strong></p>
+<h3 id="多道程序时代"><a href="#多道程序时代" class="headerlink" title="多道程序时代"></a>多道程序时代</h3><p>操作系统不是一一只运行一项作业，而是将大量作业加载到内存中甚在它们之间快速切换，从而提高 CPU 利用率。这种切换非常重要，因为 I/O 设备很慢。在处理 I/O 时让程序占着CPU，浪费了 CPU 时间。</p>
+<p>在 I/O 进行和任务中断时，要支持多道程序和重叠运行。内存保护（memory protection）等问题变得重要。我们不希望一个程序能够访问操一个程序的内存。</p>
+<p>当时主要的实际进展之一是引入了 UNIX 操作系统，主要归功于贝尔实验室。</p>
+]]></content>
+      <tags>
+        <tag>OS</tag>
+      </tags>
   </entry>
   <entry>
     <title>计算机通信</title>
