@@ -31,6 +31,20 @@
       </tags>
   </entry>
   <entry>
+    <title>操作系统导论-操作系统介绍</title>
+    <url>/2023/06/14/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%AF%BC%E8%AE%BA-%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E4%BB%8B%E7%BB%8D/</url>
+    <content><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="\assets\css\APlayer.min.css"><script src="\assets\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script><script class="meting-secondary-script-marker" src="\assets\js\Meting.min.js"></script>]]></content>
+  </entry>
+  <entry>
+    <title>操作系统导论</title>
+    <url>/2023/06/14/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%AF%BC%E8%AE%BA/</url>
+    <content><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="\assets\css\APlayer.min.css"><script src="\assets\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script><script class="meting-secondary-script-marker" src="\assets\js\Meting.min.js"></script><h1 id="对话"><a href="#对话" class="headerlink" title="对话"></a>对话</h1><p><strong>不闻不若闻之，闻之不若见之，见之不若知之，知之不若行之</strong></p>
+]]></content>
+      <tags>
+        <tag>OS</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>现代操作系统-引论</title>
     <url>/2023/06/12/%E7%8E%B0%E4%BB%A3%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-%E5%BC%95%E8%AE%BA/</url>
     <content><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="\assets\css\APlayer.min.css"><script src="\assets\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script><script class="meting-secondary-script-marker" src="\assets\js\Meting.min.js"></script><h1 id="引论"><a href="#引论" class="headerlink" title="引论"></a>引论</h1><p>现代计算机系统由一个或多个处理器、主存、磁盘、打印机、键盘、鼠标、显示器、网络接口以及各种其他输入/输出设备组成。</p>
@@ -177,9 +191,6 @@
 <p>理解link是如何工作的也许有助于读者看清其作用。在UNIX中，每个文件都有唯一的编号，即i-编号，用以标识文件。<strong>该i-编号是对i-节点表格的一个引用</strong> ，它们一一对应，说明该文件的拥有者、磁盘块的位置等。目录就是一个包含了(i-编号，ASCII名称)对集合的文件。link所做的只是利用某个已有文件的i-编号，创建一个新目录项(许用一个新名称)。在图1-21b中两个目录项有相同的-编号(70)，从而指向同一个文件。如果使用unink系统调用将其中一个文件移走了，可以保留另一个。如果两个都被移走了，UNIX00看到尚且存在的文件没有目录项(i-节点中的一个域记录着指向该文件的目录项)，就会把该文件从磁盘中移去。<br><img src="/2023/06/12/%E7%8E%B0%E4%BB%A3%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-%E5%BC%95%E8%AE%BA/e1.png" alt="?"></p>
 <h3 id="Windows-Win32API"><a href="#Windows-Win32API" class="headerlink" title="Windows Win32API"></a>Windows Win32API</h3><p>库调用和实际的系统调用几乎是不对应的。微软定义了套过程，称为Win32应用编程接口(Application ProgramInterface，API)，程序员用这套过程获得模作系统的服务。从Windows95开始的所有Windows版本都(或部分)支持这个接口。由于接口与实际的系统调用不对应，微软保留了随着时间(甚至随着版本到版本)改变实际系统调用的能力，防止已有的程序失效。<br><img src="/2023/06/12/%E7%8E%B0%E4%BB%A3%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-%E5%BC%95%E8%AE%BA/e2.png" alt="?"></p>
 <h2 id="操作系统结构"><a href="#操作系统结构" class="headerlink" title="操作系统结构"></a>操作系统结构</h2>]]></content>
-      <tags>
-        <tag>os</tag>
-      </tags>
   </entry>
   <entry>
     <title>计算机通信</title>
