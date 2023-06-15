@@ -17,18 +17,18 @@
   <meta http-equiv="window-target" content="_top" />
   
   
-  <title>归档: 2023 | Sunny&#39;s Blog</title>
+  <title>Sunny&#39;s Blog</title>
   <meta name="description" content="学生、编程爱好者">
 <meta property="og:type" content="website">
 <meta property="og:title" content="Sunny">
-<meta property="og:url" content="https://codecodegogogo.github.io/archives/2023/page/3/index.html">
+<meta property="og:url" content="https://codecodegogogo.github.io/page/4/index.html">
 <meta property="og:site_name" content="Sunny">
 <meta property="og:description" content="学生、编程爱好者">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:author" content="Sunny">
 <meta name="twitter:card" content="summary">
   <!-- Canonical links -->
-  <link rel="canonical" href="https://codecodegogogo.github.io/archives/2023/page/3/index.html">
+  <link rel="canonical" href="https://codecodegogogo.github.io/page/4/index.html">
   
     <link rel="alternate" href="/atom.xml" title="Sunny" type="application/atom+xml">
   
@@ -267,153 +267,114 @@
 </aside>
 
   
-  
-<main class="main" role="main">
-  	<article class="content article article-archives article-type-list" itemscope="">
-	    <header class="article-header">
-	      <h1 itemprop="title">归档: 2023</h1>
-	      <p class="text-muted">共 31 篇文章</p>
-	    </header>
-	    <div class="article-body">
-	      
+  <main class="main" role="main">
   
   
+    <div class="content">
+  <article id="post-C-指针常量和常量指针" class="article article-type-post" itemscope itemtype="http://schema.org/BlogPosting">
     
-    
+    <div class="article-header">
       
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2023/04/09/C-%E6%8C%87%E9%92%88%E5%B8%B8%E9%87%8F%E5%92%8C%E5%B8%B8%E9%87%8F%E6%8C%87%E9%92%88/">C++:指针常量和常量指针</a>
+    </h1>
+  
+
       
-      <section class="panel panel-default b-no">
-        <div class="panel-heading" role="tab">
-          <h3 class="panel-title">
-            <a data-toggle="collapse" href="#collapse2023" aria-expanded="true">
-              <i class="icon icon-calendar-plus text-active"></i><i class="icon icon-calendar-minus text"></i>
-              2023
-            </a>
-            <!-- <a href="/archives/2023" class="archive-year">2023</a> -->
-          </h3>
-        </div>
-        <div id="collapse2023" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="heading2023">
-        <div class="panel-body">
-          <div class="collection">
+      <div class="article-meta">
+        <span class="article-date">
+    <i class="icon icon-calendar-check"></i>
+	<a href="/2023/04/09/C-%E6%8C%87%E9%92%88%E5%B8%B8%E9%87%8F%E5%92%8C%E5%B8%B8%E9%87%8F%E6%8C%87%E9%92%88/" class="article-date">
+	  <time datetime="2023-04-09T08:21:46.000Z" itemprop="datePublished">2023-04-09</time>
+	</a>
+</span>
+        
+        
+  <span class="article-tag">
+    <i class="icon icon-tags"></i>
+	<a class="article-tag-link-link" href="/tags/c/" rel="tag">c++</a>, <a class="article-tag-link-link" href="/tags/code/" rel="tag">code</a>
+  </span>
+
+
+        
+	<span class="article-read hidden-xs">
+	    <i class="icon icon-eye-fill" aria-hidden="true"></i>
+	    <span id="busuanzi_container_page_pv">
+			<span id="busuanzi_value_page_pv">0</span>
+		</span>
+	</span>
+
+
+        <span class="post-comment"><i class="icon icon-comment"></i> <a href="/2023/04/09/C-%E6%8C%87%E9%92%88%E5%B8%B8%E9%87%8F%E5%92%8C%E5%B8%B8%E9%87%8F%E6%8C%87%E9%92%88/#comments" class="article-comment-link">评论</a></span>
+        
+	
+		<span class="post-wordcount hidden-xs" itemprop="wordCount">字数统计: 727(字)</span>
+	
+	
+
+      </div>
+    </div>
+    <div class="article-entry marked-body" itemprop="articleBody">
+      
+        <h2 id="常量指针与指针常量的区分"><a href="#常量指针与指针常量的区分" class="headerlink" title="常量指针与指针常量的区分"></a>常量指针与指针常量的区分</h2><h4 id="常量指针-const-int-p"><a href="#常量指针-const-int-p" class="headerlink" title="常量指针(const int* p)"></a>常量指针(const int* p)</h4><p>常量指针本质上是一个指针，是一个指向“常量”的指针，即不能通过指针改变指向对象的值（不能解除引用），但可以更改指向。用法如下</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">int a=3,b=4;</span><br><span class="line">const int *p=&amp;a;  /初始化指向a</span><br><span class="line">p=&amp;b;  /可以更改指向，现在指向b</span><br><span class="line">*p=5; /不可以通过指针改变对象的值</span><br></pre></td></tr></table></figure>
+<h4 id="指针常量-int-const-p"><a href="#指针常量-int-const-p" class="headerlink" title="指针常量(int* const p)"></a>指针常量(int* const p)</h4><p>指针常量本质上是一个常量，const是修饰p的，即指针的值自身是一个常量，不可改变，始终指向一个地址，在创建的同时必须进行初始化，用法如下</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">int a=3,b=4;</span><br><span class="line">int* const p=&amp;a; /初始化指向a</span><br><span class="line">*p=5; /可以进行解引用，更改指向对象的值</span><br><span class="line">p=&amp;b; /不可以更改指向</span><br></pre></td></tr></table></figure>
+<h4 id="区分"><a href="#区分" class="headerlink" title="区分:"></a>区分:</h4><figure class="highlight plaintext"><figcaption><span>a</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">const int c=5; /常量，创建时就需要初始化</span><br><span class="line">const int* p1; /常量指针</span><br><span class="line">int* const p2=&amp;a; /指针常量，创建时就需要初始化，指向a</span><br><span class="line">-----------------------------------------------------------</span><br><span class="line">int *wrong=&amp;c; /错误，常量地址不能初始化普通指针，只能赋值给常量指针</span><br><span class="line">int* const p=&amp;c; /错误，报错：无法从“const int *”转换为“int *”，即必须拥有相同的底层const资格</span><br><span class="line">p1=&amp;c; /正确，只能赋值给常量指针</span><br><span class="line">-----------------------------------------------------------</span><br><span class="line">const int* const p3=&amp;a; /指向“常量”的指针常量，具有常量指针和指针常量的特点，指针内容不能改变，也不能指向其他地方，定义同时要进行初始化</span><br><span class="line">*p3=5; /错误</span><br><span class="line">p3=&amp;b; /错误</span><br><span class="line">--------------------------------------------------------------------</span><br><span class="line">char* p4=&quot;abc&quot;; /&quot;abc&quot;是字符常量放在常量区，p4指向的是&quot;abc&quot;的首地址，即&#x27;a&#x27;的地址</span><br><span class="line">*p4=&#x27;b&#x27;; /错误，*p4相当于对字符&#x27;a&#x27;修改，但&quot;abc&quot;是一个字符串常量，不可修改</span><br></pre></td></tr></table></figure>
+
+
+<h2 id="常量引用与引用常量区分"><a href="#常量引用与引用常量区分" class="headerlink" title="常量引用与引用常量区分"></a>常量引用与引用常量区分</h2><h4 id="常量引用-const-int-amp-a"><a href="#常量引用-const-int-amp-a" class="headerlink" title="常量引用(const int&amp; a)"></a>常量引用(const int&amp; a)</h4><p>本质上是一个引用，对常量的引用，不能通过引用改变绑定对象的值<br>注：当初始化值是一个字面值时，则只能对一个const T&amp;（常量引用）赋值。而且这个赋值是有一个过程的：首先将值隐式转换到类型T，然后将这个转换结果存放在一个临时对象里，最后用这个临时对象来初始化这个引用变量。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">int a=3;</span><br><span class="line">const int&amp; reference1=a;</span><br><span class="line">const int&amp; reference2=5;/ 对常量、字面值的引用只能通过常量引用，会创建一个临时对象，用这个对象进行初始化</span><br><span class="line">reference1=5; /错误，常量引用不能改变对象的值</span><br></pre></td></tr></table></figure>
+<h4 id="引用常量-int-amp-const-t"><a href="#引用常量-int-amp-const-t" class="headerlink" title="引用常量(int&amp; const t???)"></a>引用常量(int&amp; const t???)</h4><p>注意：原则上不存在引用常量（所以我使用了？？？），会报warning C4227: 使用了记时错误: 忽略引用上的限定符。</p>
+
+      
+    </div>
+    <div class="article-footer">
+      <br>
+<br>
+<blockquote class="mt-2x">
+  <ul class="post-copyright list-unstyled">
     
+    <li class="post-copyright-link hidden-xs">
+      <strong>本文链接：</strong>
+      <a href="https://codecodegogogo.github.io/2023/04/09/C-%E6%8C%87%E9%92%88%E5%B8%B8%E9%87%8F%E5%92%8C%E5%B8%B8%E9%87%8F%E6%8C%87%E9%92%88/" title="C++:指针常量和常量指针" target="_blank" rel="external">https://codecodegogogo.github.io/2023/04/09/C-指针常量和常量指针/</a>
+    </li>
     
-<a href="/2023/05/18/%E5%AE%A2%E5%88%B6%E5%8C%96linux/" class="collection-item"   itemprop="url">
-  <time datetime="2023-05-18T01:00:14.000Z" itemprop="datePublished">2023-05-18</time>
-  <span>&nbsp;&nbsp;&nbsp;</span> 客制化linux
-</a>
+    <li class="post-copyright-license">
+      <strong>集百家之长短，文章可随意转载，不需著名出处！</strong>
+      <!-- <strong>版权声明： </strong> 本博客所有文章除特别声明外，均采用 <a href="http://creativecommons.org/licenses/by/4.0/deed.zh" target="_blank" rel="external">CC BY 4.0 CN协议</a> 许可协议。转载请注明出处！ -->
+    </li>
+  </ul>
+</blockquote>
+
+    </div>
+  </article>
+  
+</div>
+
+
 
 
   
-    
-    
-    
-<a href="/2023/05/17/linux-shell%E7%BC%96%E7%A8%8B/" class="collection-item"   itemprop="url">
-  <time datetime="2023-05-17T02:56:45.000Z" itemprop="datePublished">2023-05-17</time>
-  <span>&nbsp;&nbsp;&nbsp;</span> linux_shell编程
-</a>
-
 
   
-    
-    
-    
-<a href="/2023/05/16/linux%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4/" class="collection-item"   itemprop="url">
-  <time datetime="2023-05-16T02:49:49.000Z" itemprop="datePublished">2023-05-16</time>
-  <span>&nbsp;&nbsp;&nbsp;</span> linux基础
-</a>
-
-
-  
-    
-    
-    
-<a href="/2023/05/15/%E8%99%9A%E6%8B%9F%E6%9C%BA%E9%80%9A%E4%BF%A1%E7%9A%84%E4%B8%89%E7%A7%8D%E6%A8%A1%E5%BC%8F/" class="collection-item"   itemprop="url">
-  <time datetime="2023-05-15T08:49:28.000Z" itemprop="datePublished">2023-05-15</time>
-  <span>&nbsp;&nbsp;&nbsp;</span> 虚拟机通信的三种模式
-</a>
-
-
-  
-    
-    
-    
-<a href="/2023/05/10/%E5%BC%82%E6%AD%A5%E5%92%8C%E5%9B%9E%E8%B0%83%E5%87%BD%E6%95%B0/" class="collection-item"   itemprop="url">
-  <time datetime="2023-05-10T08:00:22.000Z" itemprop="datePublished">2023-05-10</time>
-  <span>&nbsp;&nbsp;&nbsp;</span> 异步和回调函数
-</a>
-
-
-  
-    
-    
-    
-<a href="/2023/05/09/codecodegogogo/" class="collection-item"   itemprop="url">
-  <time datetime="2023-05-09T15:01:28.000Z" itemprop="datePublished">2023-05-09</time>
-  <span>&nbsp;&nbsp;&nbsp;</span> codecodegogogo
-</a>
-
-
-  
-    
-    
-    
-<a href="/2023/04/18/%E6%B2%81%E5%9B%AD%E6%98%A5-%E9%95%BF%E6%B2%99/" class="collection-item"   itemprop="url">
-  <time datetime="2023-04-18T06:59:21.000Z" itemprop="datePublished">2023-04-18</time>
-  <span>&nbsp;&nbsp;&nbsp;</span> 沁园春 长沙
-</a>
-
-
-  
-    
-    
-    
-<a href="/2023/04/14/gitee/" class="collection-item"   itemprop="url">
-  <time datetime="2023-04-14T15:13:20.000Z" itemprop="datePublished">2023-04-14</time>
-  <span>&nbsp;&nbsp;&nbsp;</span> gitee
-</a>
-
-
-  
-    
-    
-    
-<a href="/2023/04/10/%E5%85%B3%E4%BA%8Esizeof%E7%9A%84%E4%B8%80%E4%BA%9B%E9%97%AE%E9%A2%98/" class="collection-item"   itemprop="url">
-  <time datetime="2023-04-10T08:23:48.000Z" itemprop="datePublished">2023-04-10</time>
-  <span>&nbsp;&nbsp;&nbsp;</span> 关于sizeof的一些问题
-</a>
-
-
-  
-    
-    
-    
-<a href="/2023/04/09/C-%E6%8C%87%E9%92%88%E5%B8%B8%E9%87%8F%E5%92%8C%E5%B8%B8%E9%87%8F%E6%8C%87%E9%92%88/" class="collection-item"   itemprop="url">
-  <time datetime="2023-04-09T08:21:46.000Z" itemprop="datePublished">2023-04-09</time>
-  <span>&nbsp;&nbsp;&nbsp;</span> C++:指针常量和常量指针
-</a>
-
-
-  
-  
-    </div></div></div></section>
-  
-
-	    </div>
-  	</article>
-  	
     
     <nav class="bar bar-footer clearfix" data-stick-bottom>
         <div class="bar-inner">
         <div class="pager pull-left">
             
-            <a class="extend prev" rel="prev" href="/archives/2023/page/2/"><i class="icon icon-angle-left"></i> 上一页</a><a class="page-number" href="/archives/2023/">1</a><a class="page-number" href="/archives/2023/page/2/">2</a><span class="page-number current">3</span><a class="page-number" href="/archives/2023/page/4/">4</a><a class="extend next" rel="next" href="/archives/2023/page/4/">下一页 <i class="icon icon-angle-right"></i></a>
+            <a class="extend prev" rel="prev" href="/page/3/"><i class="icon icon-angle-left"></i> 上一页</a><a class="page-number" href="/">1</a><a class="page-number" href="/page/2/">2</a><a class="page-number" href="/page/3/">3</a><span class="page-number current">4</span>
+            
+            <a class="next disabled" href="javascript:;">下一页 <i class="icon icon-angle-right"></i></a>
             
         </div>
-        <div class="total-article bar-right">Page 3 of 4</div>
+        <div class="total-article bar-right">Page 4 of 4</div>
         </div>
     </nav>
     
- 	
+ 
 </main>
 
   <footer class="footer" itemscope itemtype="http://schema.org/WPFooter">
@@ -464,6 +425,12 @@ window.jQuery || document.write('<script src="js/jquery.min.js"><\/script>')
 <script src="/js/insight.js"></script>
 
 
+
+
+
+
+   
+<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
 
 
 
