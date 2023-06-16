@@ -31,6 +31,14 @@
       </tags>
   </entry>
   <entry>
+    <title>操作系统导论-内存虚拟化</title>
+    <url>/2023/06/16/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%AF%BC%E8%AE%BA-%E5%86%85%E5%AD%98%E8%99%9A%E6%8B%9F%E5%8C%96/</url>
+    <content><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="\assets\css\APlayer.min.css"><script src="\assets\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script><script class="meting-secondary-script-marker" src="\assets\js\Meting.min.js"></script>]]></content>
+      <tags>
+        <tag>os</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>操作系统导论-进程调度</title>
     <url>/2023/06/16/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%AF%BC%E8%AE%BA-%E8%BF%9B%E7%A8%8B%E8%B0%83%E5%BA%A6/</url>
     <content><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="\assets\css\APlayer.min.css"><script src="\assets\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script><script class="meting-secondary-script-marker" src="\assets\js\Meting.min.js"></script><h1 id="进程调度-介绍"><a href="#进程调度-介绍" class="headerlink" title="进程调度:介绍"></a>进程调度:介绍</h1><h2 id="调度指标"><a href="#调度指标" class="headerlink" title="调度指标"></a>调度指标</h2><p>周转时间（turnaround time）。任务的周转时间定义为任务完成时间减去任务到达系统的时间。</p>
@@ -396,9 +404,11 @@
 <p><strong>当需要进行调度时，选择目前拥有最小行程值的进程，并且在运行之后将该进程的行程值增加一个步长。</strong><br><img src="/2023/06/16/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%AF%BC%E8%AE%BA-%E8%BF%9B%E7%A8%8B%E8%B0%83%E5%BA%A6/e4.png" alt="?"></p>
 <p>在我们的例子中，3 个进程（A、B、C）的步长值分别为 100、200 和 40，初始行程值都为 0。因此，最初，所有进程都可能被选择执行。假设选择 A（任意的，所有具有同样低的行程值的进程，都可能被选中）。A 执行一个时间片后，更新它的行程值为 100。然后运行 B，并更新其行程值为 200。最后执行 C，C 的行程值变为 40。这时，算法选择最小的行程值，是 C，执行并增加为 80（C 的步长是 40）。然后 C 再次运行（依然行程值最小），行程值增加到 120。现在运行 A，更新它的行程值为 200（现在与 B 相同）。然后 C 再次连续运行两次，行程值也变为 200。此时，所有行程值再次相等，这个过程会无限地重复下去。<br>表 9.1 展示了一段时间内调度程序的行为。<br><img src="/2023/06/16/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%AF%BC%E8%AE%BA-%E8%BF%9B%E7%A8%8B%E8%B0%83%E5%BA%A6/e5.png" alt="?"><br>可以看出，C 运行了 5 次、A 运行了 2 次，B 一次，正好是票数的比例——200、100 和 50。彩票调度算法只能一段时间后，在概率上实现比例，而步长调度算法可以在每个调度周期后做到完全正确。</p>
 <hr>
+<h1 id="多处理器调度（高级）"><a href="#多处理器调度（高级）" class="headerlink" title="多处理器调度（高级）"></a>多处理器调度（高级）</h1><p>多核处理器（multicore）将多个 CPU核组装在一块芯片上，是这种扩散的根源。</p>
+<p><strong>多线程应用可以将工作分散到多个 CPU 上，因此 CPU资源越多就运行越快。</strong></p>
 ]]></content>
       <tags>
-        <tag>OS</tag>
+        <tag>os</tag>
       </tags>
   </entry>
   <entry>
@@ -580,7 +590,7 @@
 <p>当时主要的实际进展之一是引入了 UNIX 操作系统，主要归功于贝尔实验室。</p>
 ]]></content>
       <tags>
-        <tag>OS</tag>
+        <tag>os</tag>
       </tags>
   </entry>
   <entry>
