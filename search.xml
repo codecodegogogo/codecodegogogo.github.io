@@ -31,72 +31,9 @@
       </tags>
   </entry>
   <entry>
-    <title>操作系统导论-多处理器调度-高级</title>
-    <url>/2023/06/16/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%AF%BC%E8%AE%BA-%E5%A4%9A%E5%A4%84%E7%90%86%E5%99%A8%E8%B0%83%E5%BA%A6-%E9%AB%98%E7%BA%A7/</url>
-    <content><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="\assets\css\APlayer.min.css"><script src="\assets\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script><script class="meting-secondary-script-marker" src="\assets\js\Meting.min.js"></script>]]></content>
-  </entry>
-  <entry>
-    <title>操作系统导论-调度-比例份额</title>
-    <url>/2023/06/16/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%AF%BC%E8%AE%BA-%E8%B0%83%E5%BA%A6-%E6%AF%94%E4%BE%8B%E4%BB%BD%E9%A2%9D/</url>
-    <content><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="\assets\css\APlayer.min.css"><script src="\assets\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script><script class="meting-secondary-script-marker" src="\assets\js\Meting.min.js"></script><h1 id="操作系统导论-调度-比例份额"><a href="#操作系统导论-调度-比例份额" class="headerlink" title="操作系统导论-调度-比例份额"></a>操作系统导论-调度-比例份额</h1><p>比例份额算法基于一个简单的想法：调度程序的最终目标，是确保每个工作获得一定比例的 CPU 时间，而不是优化周转时间和响应时间。</p>
-<h2 id="基本概念：彩票数表示份额"><a href="#基本概念：彩票数表示份额" class="headerlink" title="基本概念：彩票数表示份额"></a>基本概念：彩票数表示份额</h2><p>调度程序知道总共的彩票数（在我们的例子中，有 100 张）。调度程序抽取中奖彩票，这是从 0 和 99之间的一个数，拥有这个数对应的彩票的进程中奖。假设进程 A 拥有 0 到 74 共 75 张彩票，进程 B 拥有 75 到 99 的 25 张，中奖的彩票就决定了运行 A 或 B。调度程序然后加载中奖进程的状态，并运行它。<br><img src="/2023/06/16/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%AF%BC%E8%AE%BA-%E8%B0%83%E5%BA%A6-%E6%AF%94%E4%BE%8B%E4%BB%BD%E9%A2%9D/q1.png" alt="?"></p>
-<h2 id="彩票机制"><a href="#彩票机制" class="headerlink" title="彩票机制"></a>彩票机制</h2><p>一种方式是利用彩票货币（ticket currency）的概念。这种方式允许拥有一组彩票的用户以他们喜欢的某种货币，将彩票分给自己的不同工作。之后操作系统再自动将这种货币兑换为正确的全局彩票。</p>
-<p>比如，假设用户 A 和用户 B 每人拥有 100 张彩票。用户 A 有两个工作 A1 和 A2，他以自己的货币，给每个工作 500 张彩票（共 1000 张）。用户 B 只运行一个工作，给它 10 张彩票（总共 10 张）。操作系统将进行兑换，将 A1 和 A2 拥有的 A 的货币 500 张，兑换成全局货币 50 张。类似地，兑换给 B1 的 10 张彩票兑换成 100 张。然后会对全局彩票货币（共 200张）举行抽奖，决定哪个工作运行。</p>
-<p>另一个有用的机制是彩票转让（ticket transfer）。通过转让，一个进程可以临时将自己的彩票交给另一个进程。这种机制在客户端/服务端交互的场景中尤其有用，在这种场景中，客户端进程向服务端发送消息，请求其按自己的需求执行工作，为了加速服务端的执行，客户端可以将自己的彩票转让给服务端，从而尽可能加速服务端执行自己请求的速度。服务端执行结束后会将这部分彩票归还给客户端。</p>
-<p>最后，彩票通胀（ticket inflation）有时也很有用。利用通胀，一个进程可以临时提升或降低自己拥有的彩票数量。当然在竞争环境中，进程之间互相不信任，这种机制就没什么意义。一个贪婪的进程可能给自己非常多的彩票，从而接管机器。但是，通胀可以用于进程之间相互信任的环境。在这种情况下，如果一个进程知道它需要更多 CPU 时间，就可以增加自己的彩票，从而将自己的需求告知操作系统，这一切不需要与任何其他进程通信。</p>
-<h2 id="实现"><a href="#实现" class="headerlink" title="实现"></a>实现</h2><p><img src="/2023/06/16/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%AF%BC%E8%AE%BA-%E8%B0%83%E5%BA%A6-%E6%AF%94%E4%BE%8B%E4%BB%BD%E9%A2%9D/q2.png" alt="?"><br><img src="/2023/06/16/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%AF%BC%E8%AE%BA-%E8%B0%83%E5%BA%A6-%E6%AF%94%E4%BE%8B%E4%BB%BD%E9%A2%9D/q3.png" alt="?"><br>这段代码从前向后遍历进程列表，将每张票的值加到 counter 上，直到值超过 winner。这时，当前的列表元素所对应的进程就是中奖者。在我们的例子中，中奖彩票是 300。首先，计 A 的票后，counter 增加到 100。因为 100 小于 300，继续遍历。然后 counter 会增加到 150（B 的彩票），仍然小于 300，继续遍历。最后，counter 增加到 400（显然大于 300），因此退出遍历，current 指向 C（中奖者）。</p>
-<h2 id="步长调度"><a href="#步长调度" class="headerlink" title="步长调度"></a>步长调度</h2><p>系统中的每个工作都有自己的步长，这个值与票数值成反比。在上面的例子中，A、B、C 这 3 个工作的票数分别是 100、50 和 250，<strong>我们通过用一个大数分别除以他们的票数来获得每个进程的步长。比如用 10000 除以这些票数值，得到了 3 个进程的步长分别为 100、200 和 40。</strong> 我们称这个值为每个进程的步长（stride）。每次进程运行后，我们会让它的计数器 [称为行程（pass）值] 增加它的步长，记录它的总体进展。</p>
-<p><strong>当需要进行调度时，选择目前拥有最小行程值的进程，并且在运行之后将该进程的行程值增加一个步长。</strong><br><img src="/2023/06/16/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%AF%BC%E8%AE%BA-%E8%B0%83%E5%BA%A6-%E6%AF%94%E4%BE%8B%E4%BB%BD%E9%A2%9D/q4.png" alt="?"></p>
-<p>在我们的例子中，3 个进程（A、B、C）的步长值分别为 100、200 和 40，初始行程值都为 0。因此，最初，所有进程都可能被选择执行。假设选择 A（任意的，所有具有同样低的行程值的进程，都可能被选中）。A 执行一个时间片后，更新它的行程值为 100。然后运行 B，并更新其行程值为 200。最后执行 C，C 的行程值变为 40。这时，算法选择最小的行程值，是 C，执行并增加为 80（C 的步长是 40）。然后 C 再次运行（依然行程值最小），行程值增加到 120。现在运行 A，更新它的行程值为 200（现在与 B 相同）。然后 C 再次连续运行两次，行程值也变为 200。此时，所有行程值再次相等，这个过程会无限地重复下去。<br>表 9.1 展示了一段时间内调度程序的行为。<br><img src="/2023/06/16/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%AF%BC%E8%AE%BA-%E8%B0%83%E5%BA%A6-%E6%AF%94%E4%BE%8B%E4%BB%BD%E9%A2%9D/q5.png" alt="?"><br>可以看出，C 运行了 5 次、A 运行了 2 次，B 一次，正好是票数的比例——200、100 和 50。彩票调度算法只能一段时间后，在概率上实现比例，而步长调度算法可以在每个调度周期后做到完全正确。</p>
-]]></content>
-      <tags>
-        <tag>OS</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>操作系统导论-调度-多级反馈队列</title>
-    <url>/2023/06/16/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%AF%BC%E8%AE%BA-%E8%B0%83%E5%BA%A6-%E5%A4%9A%E7%BA%A7%E5%8F%8D%E9%A6%88%E9%98%9F%E5%88%97/</url>
-    <content><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="\assets\css\APlayer.min.css"><script src="\assets\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script><script class="meting-secondary-script-marker" src="\assets\js\Meting.min.js"></script><h1 id="调度-多级反馈队列"><a href="#调度-多级反馈队列" class="headerlink" title="调度-多级反馈队列"></a>调度-多级反馈队列</h1><blockquote>
-<p>多级反馈队列需要解决两方面的问题。</p>
-</blockquote>
-<blockquote>
-<p>首先，它要优化周转时间。这通过先执行短工作来实现。然而，操作系统通常不知道工作要运行多久，而这又是SJF（或 STCF）等算法所必需的。</p>
-</blockquote>
-<blockquote>
-<p>其次，MLFQ 希望给交互用户（如用户坐在屏幕前，等着进程结束）很好的交互体验，因此需要降低响应时间。然而，像轮转这样的算法虽然降低了响应时间，周转时间却很差。</p>
-</blockquote>
-<p>所以这里的问题是：通常我们对进程一无所知，应该如何构建调度程序来实现这些目标？调度程序如何在运行过程中学习进程的特征，从而做出更好的调度决策？</p>
-<h2 id="MLFQ：基本规则"><a href="#MLFQ：基本规则" class="headerlink" title="MLFQ：基本规则"></a>MLFQ：基本规则</h2><p>MLFQ 中有许多独立的队列（queue），每个队列有不同的优先级（priority level）。任何时刻，一个工作只能存在于一个队列中。MLFQ 总是优先执行较高优先级的工作（即在较<br>高级队列中的工作）。<br>当然，每个队列中可能会有多个工作，因此具有同样的优先级。在这种情况下，我们就对这些工作采用轮转调度。</p>
-<p><strong>规则 1：如果 A 的优先级 &gt; B 的优先级，运行 A（不运行 B）。<br>规则 2：如果 A 的优先级 = B 的优先级，轮转运行A 和 B。</strong></p>
-<p><img src="/2023/06/16/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%AF%BC%E8%AE%BA-%E8%B0%83%E5%BA%A6-%E5%A4%9A%E7%BA%A7%E5%8F%8D%E9%A6%88%E9%98%9F%E5%88%97/q1.png" alt="?"></p>
-<h2 id="尝试-1：如何改变优先级"><a href="#尝试-1：如何改变优先级" class="headerlink" title="尝试 1：如何改变优先级"></a>尝试 1：如何改变优先级</h2><p><strong>规则 3：工作进入系统时，放在最高优先级（最上层队列）。<br>规则 4a：工作用完整个时间片后，降低其优先级（移入下一个队列）。<br>规则 4b：如果工作在其时间片以内主动释放 CPU，则优先级不变。</strong></p>
-<h3 id="实例-1：单个长工作"><a href="#实例-1：单个长工作" class="headerlink" title="实例 1：单个长工作"></a>实例 1：单个长工作</h3><p><img src="/2023/06/16/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%AF%BC%E8%AE%BA-%E8%B0%83%E5%BA%A6-%E5%A4%9A%E7%BA%A7%E5%8F%8D%E9%A6%88%E9%98%9F%E5%88%97/q2.png" alt="?"><br>该工作首先进入最高优先级（Q2）。执行一个 10ms 的时间片后，调度程序将工作的优先级减 1，因此进入 Q1。在 Q1 执行一个时间片后，最终降低优先级进入系统的最低优先级（Q0），一直留在那里。</p>
-<h3 id="实例-2：来了一个短工作"><a href="#实例-2：来了一个短工作" class="headerlink" title="实例 2：来了一个短工作"></a>实例 2：来了一个短工作</h3><p>有两个工作：A是一个长时间运行的 CPU 密集型工作，B 是一个运行时间很短的交互型工作。假设 A 执行一段时间后 B 到达。</p>
-<p>A（用黑色表示）在最低优先级队列执行（长时间运行的 CPU 密集型工作都这样）。B（用灰色表示）在时间 T=100 时到达，并被加入最高优先级队列。由于它的运行时间很短（只有 20ms），经过两个时间片，在被移入最低优先级队列之前，B 执行完毕。然后 A 继续运行（在低优先级）。</p>
-<p><strong>主要目标：如果不知道工作是短工作还是长工作，那么就在开始的时候假设其是短工作，并赋予最高优先级。如果确实是短工作，则很快会执行完毕，否则将被慢慢移入低优先级队列，而这时该工作也被认为是长工作了。通过这种方式，MLFQ 近似于 SJF。</strong><br><img src="/2023/06/16/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%AF%BC%E8%AE%BA-%E8%B0%83%E5%BA%A6-%E5%A4%9A%E7%BA%A7%E5%8F%8D%E9%A6%88%E9%98%9F%E5%88%97/q3.png" alt="?"></p>
-<h3 id="实例-3：如果有-I-O-呢"><a href="#实例-3：如果有-I-O-呢" class="headerlink" title="实例 3：如果有 I/O 呢"></a>实例 3：如果有 I/O 呢</h3><p>假设交互型工作中有大量的 I/O 操作（比如等待用户的键盘或鼠标输入），它会在时间片用完之前放弃 CPU。在这种情况下，我们不想处罚它，只是保持它的优先级不变。</p>
-<p>交互型工作 B（用灰色表示）每执行 1ms 便需要进行 I/O操作，它与长时间运行的工作 A（用黑色表示）竞争 CPU。MLFQ 算法保持 B 在最高优先级，因为 B 总是让出 CPU。如果 B 是交互型工作，MLFQ 就进一步实现了它的目标，让交互型工作快速运行。<br><img src="/2023/06/16/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%AF%BC%E8%AE%BA-%E8%B0%83%E5%BA%A6-%E5%A4%9A%E7%BA%A7%E5%8F%8D%E9%A6%88%E9%98%9F%E5%88%97/q3.png" alt="?"></p>
-<h3 id="当前-MLFQ-的一些问题"><a href="#当前-MLFQ-的一些问题" class="headerlink" title="当前 MLFQ 的一些问题"></a>当前 MLFQ 的一些问题</h3><p>首先，会有饥饿（starvation）问题。如果系统有“太多”交互型工作，就会不断占用CPU，导致长工作永远无法得到 CPU（它们饿死了）。即使在这种情况下，我们希望这些长工作也能有所进展。</p>
-<blockquote>
-<p>愚弄调度程序指的是用一些卑鄙的手段欺骗调度程序，让它给你远超公平的资源。上述算法对如下的攻击束手无策：进程在时间片用完之前，调用一个 I/O 操作（比如访问一个无关的文件），从而主动释放 CPU。如此便可以保持在高优先级，占用更多的 CPU 时间。做得好时（比如，每运行 99%的时间片时间就主动放弃一次 CPU），工作可以几乎独占 CPU。</p>
-</blockquote>
-<p>最后，一个程序可能在不同时间表现不同。一个计算密集的进程可能在某段时间表现为一个交互型的进程。用我们目前的方法，它不会享受系统中其他交互型工作的待遇。</p>
-<h2 id="尝试-2：提升优先级"><a href="#尝试-2：提升优先级" class="headerlink" title="尝试 2：提升优先级"></a>尝试 2：提升优先级</h2><p><strong>规则 5：经过一段时间 S，就将系统中所有工作重新加入最高优先级队列。</strong><br>新规则一下解决了两个问题。首先，进程不会饿死——在最高优先级队列中，它会以轮转的方式，与其他高优先级工作分享 CPU，从而最终获得执行。其次，如果一个 CPU 密集型工作变成了交互型，当它优先级提升时，调度程序会正确对待它。</p>
-<p><img src="/2023/06/16/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%AF%BC%E8%AE%BA-%E8%B0%83%E5%BA%A6-%E5%A4%9A%E7%BA%A7%E5%8F%8D%E9%A6%88%E9%98%9F%E5%88%97/q4.png" alt="?"><br>左边没有优先级提升，长工作在两个短工作到达后被饿死。右边每 50ms 就有一次优先级提升（这里只是举例，这个值可能过小），因此至少保证长工作会有一些进展，每过 50ms 就被提升到最高优先级，从而定期获得执行。</p>
-<h2 id="尝试-3：更好的计时方式"><a href="#尝试-3：更好的计时方式" class="headerlink" title="尝试 3：更好的计时方式"></a>尝试 3：更好的计时方式</h2><p>工作在时间片以内释放 CPU，就保留它的优先级。那么应该怎么做？</p>
-<p>这里的解决方案，是为 MLFQ 的每层队列提供更完善的 CPU 计时方式（accounting）。<strong>调度程序应该记录一个进程在某一层中消耗的总时间，而不是在调度时重新计时。</strong> 只要进程用完了自己的配额，就将它降到低一优先级的队列中去。不论它是一次用完的，还是拆成很多次用完。因此，我们重写规则 4a 和 4b。</p>
-<p><strong>规则 4：一旦工作用完了其在某一层中的时间配额（无论中间主动放弃了多少次CPU），就降低其优先级（移入低一级队列）。</strong><br><img src="/2023/06/16/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%AF%BC%E8%AE%BA-%E8%B0%83%E5%BA%A6-%E5%A4%9A%E7%BA%A7%E5%8F%8D%E9%A6%88%E9%98%9F%E5%88%97/q5.png" alt="?"></p>
-<h2 id="MLFQ-调优及其他问题"><a href="#MLFQ-调优及其他问题" class="headerlink" title="MLFQ 调优及其他问题"></a>MLFQ 调优及其他问题</h2><p>大多数的 MLFQ 变体都支持不同队列可变的时间片长度。高优先级队列通常只有较短的时间片（比如 10ms 或者更少），因而这一层的交互工作可以更快地切换。相反，低优先级队列中更多的是 CPU 密集型工作，配置更长的时间片会取得更好的效果。图 8.7展示了一个例子，两个长工作在高优先级队列执行 10ms，中间队列执行 20ms，最后在最低优先级队列执行 40ms。<br><img src="/2023/06/16/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%AF%BC%E8%AE%BA-%E8%B0%83%E5%BA%A6-%E5%A4%9A%E7%BA%A7%E5%8F%8D%E9%A6%88%E9%98%9F%E5%88%97/q6.png" alt="?"></p>
-<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>本章包含了一组优化的 MLFQ 规则。为了方便查阅，我们重新列在这里。<br>规则 1：如果 A 的优先级 &gt; B 的优先级，运行 A（不运行 B）。<br>规则 2：如果 A 的优先级 = B 的优先级，轮转运行 A 和 B。<br>规则 3：工作进入系统时，放在最高优先级（最上层队列）。<br>规则 4：一旦工作用完了其在某一层中的时间配额（无论中间主动放弃了多少次CPU），就降低其优先级（移入低一级队列）。<br>规则 5：经过一段时间 S，就将系统中所有工作重新加入最高优先级队列。</p>
-]]></content>
-      <tags>
-        <tag>OS</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>操作系统导论-进程调度:介绍</title>
-    <url>/2023/06/15/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%AF%BC%E8%AE%BA-%E8%BF%9B%E7%A8%8B%E8%B0%83%E5%BA%A6-%E4%BB%8B%E7%BB%8D/</url>
-    <content><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="\assets\css\APlayer.min.css"><script src="\assets\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script><script class="meting-secondary-script-marker" src="\assets\js\Meting.min.js"></script><h2 id="调度指标"><a href="#调度指标" class="headerlink" title="调度指标"></a>调度指标</h2><p>周转时间（turnaround time）。任务的周转时间定义为任务完成时间减去任务到达系统的时间。</p>
+    <title>操作系统导论-进程调度</title>
+    <url>/2023/06/16/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%AF%BC%E8%AE%BA-%E8%BF%9B%E7%A8%8B%E8%B0%83%E5%BA%A6/</url>
+    <content><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="\assets\css\APlayer.min.css"><script src="\assets\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script><script class="meting-secondary-script-marker" src="\assets\js\Meting.min.js"></script><h1 id="进程调度-介绍"><a href="#进程调度-介绍" class="headerlink" title="进程调度:介绍"></a>进程调度:介绍</h1><h2 id="调度指标"><a href="#调度指标" class="headerlink" title="调度指标"></a>调度指标</h2><p>周转时间（turnaround time）。任务的周转时间定义为任务完成时间减去任务到达系统的时间。</p>
 <h2 id="先进先出（FIFO）"><a href="#先进先出（FIFO）" class="headerlink" title="先进先出（FIFO）"></a>先进先出（FIFO）</h2><blockquote>
 <p>3 个工作 A、B 和 C 在大致相同的时间（T 到达时间 = 0）到达系统。因为 FIFO 必须将某个工作放在前面，所以我们假设当它们都同时到达时，A 比 B 早一点点，然后 B 比 C 早到达一点点。假设每个工作运行 10s。这些工作的平均周转时间（average turnaround time）是多少？</p>
 </blockquote>
@@ -105,21 +42,21 @@
 <p>假设 3 个任务（A、B 和 C），但这次 A 运行100s，而 B 和 C 运行 10s。</p>
 </blockquote>
 <p>A 先运行 100s，B 或 C 才有机会运行。因此，系统的平均周转时间是比<br>较高的：令人不快的 110s（（100 + 110 + 120）/ 3 = 110）。</p>
-<p><img src="/2023/06/15/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%AF%BC%E8%AE%BA-%E8%BF%9B%E7%A8%8B%E8%B0%83%E5%BA%A6-%E4%BB%8B%E7%BB%8D/q1.png" alt="?"></p>
+<p><img src="/2023/06/16/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%AF%BC%E8%AE%BA-%E8%BF%9B%E7%A8%8B%E8%B0%83%E5%BA%A6/q1.png" alt="?"></p>
 <h2 id="最短任务优先（SJF）"><a href="#最短任务优先（SJF）" class="headerlink" title="最短任务优先（SJF）"></a>最短任务优先（SJF）</h2><p>先运行最短的任务，然后是次短的任务，如此下去。<br>我们用上面的例子，SJF 调度策略更好。仅通过在 A 之前运行B和C，SJF 将平均周转时间从 110s 降低到 50s ((10+20 +120)/3=50)。</p>
 <p><strong>考虑到所有工作<red>同时</red>到达的假设，我们可以证明 SJF 确实是一个最优（optimal）调度算法。</strong></p>
 <blockquote>
 <p>假设A在t = 0时到达,且需要运行 100s。而 B 和 C 在 t = 10 到达，且各需要运行 10s。用纯 SJF，我们可以得到如图 7.4 所示的调度。</p>
 </blockquote>
-<p><img src="/2023/06/15/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%AF%BC%E8%AE%BA-%E8%BF%9B%E7%A8%8B%E8%B0%83%E5%BA%A6-%E4%BB%8B%E7%BB%8D/q2.png" alt="?"></p>
+<p><img src="/2023/06/16/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%AF%BC%E8%AE%BA-%E8%BF%9B%E7%A8%8B%E8%B0%83%E5%BA%A6/q2.png" alt="?"></p>
 <h2 id="最短完成时间优先（STCF）"><a href="#最短完成时间优先（STCF）" class="headerlink" title="最短完成时间优先（STCF）"></a>最短完成时间优先（STCF）</h2><p>为了解决这个问题，需要调度程序本身的一些机制。当B和C到达时，调度程序当然可以做其他事情:它可以抢占 (preempt) 工作 A，并决定运行另一个工作，或许稍后继续工作 A。根据我们的定义，SJF 是一种非抢占式(non-preemptive) 调度程序，因此存在上述问题。</p>
 <p>向 SJF 添加抢占，称为最短完成时间优先（Shortest Time-to-Completion First，STCF）或抢占式最短作业优先（Preemptive Shortest JobFirst ，PSJF）调度程序。每当新工作进入系统时，它就会确定剩余工作和新工作中，谁的剩余时间最少，然后调度该工作。</p>
-<p><img src="/2023/06/15/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%AF%BC%E8%AE%BA-%E8%BF%9B%E7%A8%8B%E8%B0%83%E5%BA%A6-%E4%BB%8B%E7%BB%8D/q3.png" alt="?"></p>
+<p><img src="/2023/06/16/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%AF%BC%E8%AE%BA-%E8%BF%9B%E7%A8%8B%E8%B0%83%E5%BA%A6/q3.png" alt="?"></p>
 <h2 id="度量指标：响应时间"><a href="#度量指标：响应时间" class="headerlink" title="度量指标：响应时间"></a>度量指标：响应时间</h2><p>如果我们知道任务长度，而且任务只使用 CPU，而我们唯一的衡量是周转时间，STCF 将是一个很好的策略。事实上，对于许多早期批处理系统，这些类型的调度算法有一定的意义。然而，引入分时系统改变了这一切。现在，<strong>用户将会坐在终端前面，同时也要求系统的交互性好。</strong> 因此，一个新的度量标准诞生了：响应时间（response time）。</p>
 <p>响应时间定义为从任务到达系统到首次运行的时间。更正式的定义是：<br><strong>T 响应时间= T 首次运行−T 到达时间</strong></p>
 <h2 id="轮转-引入响应时间"><a href="#轮转-引入响应时间" class="headerlink" title="轮转(引入响应时间)"></a>轮转(引入响应时间)</h2><p>RR调度基本思想很简单:RR 在一个时间片(time slice,有时称为调度量子，(schedulingquantum)内运行一个工作，然后切换到运行队列中的下一个任务，而不是运行一个任务直到结束。</p>
 <p>它反复执行，直到所有任务完成。因此，RR 有时被称为时间切片 (time-slicing)请注意，时间片长度必须是时钟中断周期的倍数。因此，如果时钟中断是每 10ms 中断一次则时间片可以是 10ms、20ms 或 10ms 的任何其他倍数。</p>
-<p><img src="/2023/06/15/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%AF%BC%E8%AE%BA-%E8%BF%9B%E7%A8%8B%E8%B0%83%E5%BA%A6-%E4%BB%8B%E7%BB%8D/q4.png" alt="?"><br>RR 的平均响应时间是：（0 + 1 + 2）/3 = 1; SJF 算法平均响应时间是：（0 + 5 + 10）/ 3 = 5。</p>
+<p><img src="/2023/06/16/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%AF%BC%E8%AE%BA-%E8%BF%9B%E7%A8%8B%E8%B0%83%E5%BA%A6/q4.png" alt="?"><br>RR 的平均响应时间是：（0 + 1 + 2）/3 = 1; SJF 算法平均响应时间是：（0 + 5 + 10）/ 3 = 5。</p>
 <p>时间片太短是有问题的：突然上下文切换的成本将影响整体性能。</p>
 <blockquote>
 <p>当系统某些操作有固定成本时，<strong>通常会使用摊销技术（amortization）。通过减少成本的频度（即执行较少次的操作）</strong>，系统的总成本就会降低。例如，如果时间片设置为 10ms，并且上下文切换时间为 1ms，那么浪费大约 10%的时间用于上下文切换。如果要摊销这个成本，可以把时间片增加到 100ms。在这种情况下，不到 1%的时间用于上下文切换，因此时间片带来的成本就被摊销了。</p>
@@ -131,7 +68,7 @@
 <p><strong>第一种类型（SJF、STCF）优化周转时间，但对响应时间不利。第二种类型（RR）优化响应时间，但对周转时间不利。</strong></p>
 <h2 id="结合-I-O"><a href="#结合-I-O" class="headerlink" title="结合 I/O"></a>结合 I/O</h2><p>调度程序显然要在工作发起 I/O 请求时做出决定，因为当前正在运行的作业在 I/O 期间不会使用 CPU，它被阻塞等待 I/O 完成。如果将 I/O 发送到硬盘驱动器，则进程可能会被阻塞几毫秒或更长时间，具体取决于驱动器当前的 I/O 负载。因此，这时调度程序应该在 CPU上安排另一项工作。</p>
 <p>调度程序还必须在 I/O 完成时做出决定。发生这种情况时，会产生中断，操作系统运行并将发出 I/O 的进程从阻塞状态移回就绪状态。当然，它甚至可以决定在那个时候运行该项工作。</p>
-<p>让我们假设有两项工作 A 和 B，每项工作需要 50ms 的 CPU时间。但是，有一个明显的区别：A 运行 10ms，然后发出 I/O 请求（假设 I/O 每个都需要10ms），而 B 只是使用 CPU 50ms，不执行 I/O。调度程序先运行 A，然后运行 B。<br><img src="/2023/06/15/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%AF%BC%E8%AE%BA-%E8%BF%9B%E7%A8%8B%E8%B0%83%E5%BA%A6-%E4%BB%8B%E7%BB%8D/q5.png" alt="?"></p>
+<p>让我们假设有两项工作 A 和 B，每项工作需要 50ms 的 CPU时间。但是，有一个明显的区别：A 运行 10ms，然后发出 I/O 请求（假设 I/O 每个都需要10ms），而 B 只是使用 CPU 50ms，不执行 I/O。调度程序先运行 A，然后运行 B。<br><img src="/2023/06/16/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%AF%BC%E8%AE%BA-%E8%BF%9B%E7%A8%8B%E8%B0%83%E5%BA%A6/q5.png" alt="?"></p>
 <h2 id="题目"><a href="#题目" class="headerlink" title="题目"></a>题目</h2><p>1.使用 SJF 和 FIFO 调度程序运行长度为 200 的 3 个作业时,计算响应时间和周转时间。</p>
 <p>SJF:</p>
 <table>
@@ -414,68 +351,106 @@
 <blockquote>
 <p>时间片 &gt;= 工作最长运行时间时,有最坏情况<br>即 ti 为作业运行时间<br>res_avg = (0 + t1 + (t1+t2) + (t1+t2+t3) + … (t1+t2+t3 +…tN-1))/N</p>
 </blockquote>
+<hr>
+<h1 id="调度-多级反馈队列"><a href="#调度-多级反馈队列" class="headerlink" title="调度-多级反馈队列"></a>调度-多级反馈队列</h1><blockquote>
+<p>多级反馈队列需要解决两方面的问题。</p>
+</blockquote>
+<blockquote>
+<p>首先，它要优化周转时间。这通过先执行短工作来实现。然而，操作系统通常不知道工作要运行多久，而这又是SJF（或 STCF）等算法所必需的。</p>
+</blockquote>
+<blockquote>
+<p>其次，MLFQ 希望给交互用户（如用户坐在屏幕前，等着进程结束）很好的交互体验，因此需要降低响应时间。然而，像轮转这样的算法虽然降低了响应时间，周转时间却很差。</p>
+</blockquote>
+<p>所以这里的问题是：通常我们对进程一无所知，应该如何构建调度程序来实现这些目标？调度程序如何在运行过程中学习进程的特征，从而做出更好的调度决策？</p>
+<h2 id="MLFQ：基本规则"><a href="#MLFQ：基本规则" class="headerlink" title="MLFQ：基本规则"></a>MLFQ：基本规则</h2><p>MLFQ 中有许多独立的队列（queue），每个队列有不同的优先级（priority level）。任何时刻，一个工作只能存在于一个队列中。MLFQ 总是优先执行较高优先级的工作（即在较<br>高级队列中的工作）。<br>当然，每个队列中可能会有多个工作，因此具有同样的优先级。在这种情况下，我们就对这些工作采用轮转调度。</p>
+<p><strong>规则 1：如果 A 的优先级 &gt; B 的优先级，运行 A（不运行 B）。<br>规则 2：如果 A 的优先级 = B 的优先级，轮转运行A 和 B。</strong></p>
+<p><img src="/2023/06/16/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%AF%BC%E8%AE%BA-%E8%BF%9B%E7%A8%8B%E8%B0%83%E5%BA%A6/w1.png" alt="?"></p>
+<h2 id="尝试-1：如何改变优先级"><a href="#尝试-1：如何改变优先级" class="headerlink" title="尝试 1：如何改变优先级"></a>尝试 1：如何改变优先级</h2><p><strong>规则 3：工作进入系统时，放在最高优先级（最上层队列）。<br>规则 4a：工作用完整个时间片后，降低其优先级（移入下一个队列）。<br>规则 4b：如果工作在其时间片以内主动释放 CPU，则优先级不变。</strong></p>
+<h3 id="实例-1：单个长工作"><a href="#实例-1：单个长工作" class="headerlink" title="实例 1：单个长工作"></a>实例 1：单个长工作</h3><p><img src="/2023/06/16/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%AF%BC%E8%AE%BA-%E8%BF%9B%E7%A8%8B%E8%B0%83%E5%BA%A6/w2.png" alt="?"><br>该工作首先进入最高优先级（Q2）。执行一个 10ms 的时间片后，调度程序将工作的优先级减 1，因此进入 Q1。在 Q1 执行一个时间片后，最终降低优先级进入系统的最低优先级（Q0），一直留在那里。</p>
+<h3 id="实例-2：来了一个短工作"><a href="#实例-2：来了一个短工作" class="headerlink" title="实例 2：来了一个短工作"></a>实例 2：来了一个短工作</h3><p>有两个工作：A是一个长时间运行的 CPU 密集型工作，B 是一个运行时间很短的交互型工作。假设 A 执行一段时间后 B 到达。</p>
+<p>A（用黑色表示）在最低优先级队列执行（长时间运行的 CPU 密集型工作都这样）。B（用灰色表示）在时间 T=100 时到达，并被加入最高优先级队列。由于它的运行时间很短（只有 20ms），经过两个时间片，在被移入最低优先级队列之前，B 执行完毕。然后 A 继续运行（在低优先级）。</p>
+<p><strong>主要目标：如果不知道工作是短工作还是长工作，那么就在开始的时候假设其是短工作，并赋予最高优先级。如果确实是短工作，则很快会执行完毕，否则将被慢慢移入低优先级队列，而这时该工作也被认为是长工作了。通过这种方式，MLFQ 近似于 SJF。</strong><br><img src="/2023/06/16/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%AF%BC%E8%AE%BA-%E8%BF%9B%E7%A8%8B%E8%B0%83%E5%BA%A6/q3.png" alt="?"></p>
+<h3 id="实例-3：如果有-I-O-呢"><a href="#实例-3：如果有-I-O-呢" class="headerlink" title="实例 3：如果有 I/O 呢"></a>实例 3：如果有 I/O 呢</h3><p>假设交互型工作中有大量的 I/O 操作（比如等待用户的键盘或鼠标输入），它会在时间片用完之前放弃 CPU。在这种情况下，我们不想处罚它，只是保持它的优先级不变。</p>
+<p>交互型工作 B（用灰色表示）每执行 1ms 便需要进行 I/O操作，它与长时间运行的工作 A（用黑色表示）竞争 CPU。MLFQ 算法保持 B 在最高优先级，因为 B 总是让出 CPU。如果 B 是交互型工作，MLFQ 就进一步实现了它的目标，让交互型工作快速运行。<br><img src="/2023/06/16/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%AF%BC%E8%AE%BA-%E8%BF%9B%E7%A8%8B%E8%B0%83%E5%BA%A6/w3.png" alt="?"></p>
+<h3 id="当前-MLFQ-的一些问题"><a href="#当前-MLFQ-的一些问题" class="headerlink" title="当前 MLFQ 的一些问题"></a>当前 MLFQ 的一些问题</h3><p>首先，会有饥饿（starvation）问题。如果系统有“太多”交互型工作，就会不断占用CPU，导致长工作永远无法得到 CPU（它们饿死了）。即使在这种情况下，我们希望这些长工作也能有所进展。</p>
+<blockquote>
+<p>愚弄调度程序指的是用一些卑鄙的手段欺骗调度程序，让它给你远超公平的资源。上述算法对如下的攻击束手无策：进程在时间片用完之前，调用一个 I/O 操作（比如访问一个无关的文件），从而主动释放 CPU。如此便可以保持在高优先级，占用更多的 CPU 时间。做得好时（比如，每运行 99%的时间片时间就主动放弃一次 CPU），工作可以几乎独占 CPU。</p>
+</blockquote>
+<p>最后，一个程序可能在不同时间表现不同。一个计算密集的进程可能在某段时间表现为一个交互型的进程。用我们目前的方法，它不会享受系统中其他交互型工作的待遇。</p>
+<h2 id="尝试-2：提升优先级"><a href="#尝试-2：提升优先级" class="headerlink" title="尝试 2：提升优先级"></a>尝试 2：提升优先级</h2><p><strong>规则 5：经过一段时间 S，就将系统中所有工作重新加入最高优先级队列。</strong><br>新规则一下解决了两个问题。首先，进程不会饿死——在最高优先级队列中，它会以轮转的方式，与其他高优先级工作分享 CPU，从而最终获得执行。其次，如果一个 CPU 密集型工作变成了交互型，当它优先级提升时，调度程序会正确对待它。</p>
+<p><img src="/2023/06/16/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%AF%BC%E8%AE%BA-%E8%BF%9B%E7%A8%8B%E8%B0%83%E5%BA%A6/w4.png" alt="?"><br>左边没有优先级提升，长工作在两个短工作到达后被饿死。右边每 50ms 就有一次优先级提升（这里只是举例，这个值可能过小），因此至少保证长工作会有一些进展，每过 50ms 就被提升到最高优先级，从而定期获得执行。</p>
+<h2 id="尝试-3：更好的计时方式"><a href="#尝试-3：更好的计时方式" class="headerlink" title="尝试 3：更好的计时方式"></a>尝试 3：更好的计时方式</h2><p>工作在时间片以内释放 CPU，就保留它的优先级。那么应该怎么做？</p>
+<p>这里的解决方案，是为 MLFQ 的每层队列提供更完善的 CPU 计时方式（accounting）。<strong>调度程序应该记录一个进程在某一层中消耗的总时间，而不是在调度时重新计时。</strong> 只要进程用完了自己的配额，就将它降到低一优先级的队列中去。不论它是一次用完的，还是拆成很多次用完。因此，我们重写规则 4a 和 4b。</p>
+<p><strong>规则 4：一旦工作用完了其在某一层中的时间配额（无论中间主动放弃了多少次CPU），就降低其优先级（移入低一级队列）。</strong><br><img src="/2023/06/16/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%AF%BC%E8%AE%BA-%E8%BF%9B%E7%A8%8B%E8%B0%83%E5%BA%A6/w5.png" alt="?"></p>
+<h2 id="MLFQ-调优及其他问题"><a href="#MLFQ-调优及其他问题" class="headerlink" title="MLFQ 调优及其他问题"></a>MLFQ 调优及其他问题</h2><p>大多数的 MLFQ 变体都支持不同队列可变的时间片长度。高优先级队列通常只有较短的时间片（比如 10ms 或者更少），因而这一层的交互工作可以更快地切换。相反，低优先级队列中更多的是 CPU 密集型工作，配置更长的时间片会取得更好的效果。图 8.7展示了一个例子，两个长工作在高优先级队列执行 10ms，中间队列执行 20ms，最后在最低优先级队列执行 40ms。<br><img src="/2023/06/16/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%AF%BC%E8%AE%BA-%E8%BF%9B%E7%A8%8B%E8%B0%83%E5%BA%A6/w6.png" alt="?"></p>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>本章包含了一组优化的 MLFQ 规则。为了方便查阅，我们重新列在这里。<br>规则 1：如果 A 的优先级 &gt; B 的优先级，运行 A（不运行 B）。<br>规则 2：如果 A 的优先级 = B 的优先级，轮转运行 A 和 B。<br>规则 3：工作进入系统时，放在最高优先级（最上层队列）。<br>规则 4：一旦工作用完了其在某一层中的时间配额（无论中间主动放弃了多少次CPU），就降低其优先级（移入低一级队列）。<br>规则 5：经过一段时间 S，就将系统中所有工作重新加入最高优先级队列。</p>
+<hr>
+<h1 id="操作系统导论-调度-比例份额"><a href="#操作系统导论-调度-比例份额" class="headerlink" title="操作系统导论-调度-比例份额"></a>操作系统导论-调度-比例份额</h1><p>比例份额算法基于一个简单的想法：调度程序的最终目标，是确保每个工作获得一定比例的 CPU 时间，而不是优化周转时间和响应时间。</p>
+<h2 id="基本概念：彩票数表示份额"><a href="#基本概念：彩票数表示份额" class="headerlink" title="基本概念：彩票数表示份额"></a>基本概念：彩票数表示份额</h2><p>调度程序知道总共的彩票数（在我们的例子中，有 100 张）。调度程序抽取中奖彩票，这是从 0 和 99之间的一个数，拥有这个数对应的彩票的进程中奖。假设进程 A 拥有 0 到 74 共 75 张彩票，进程 B 拥有 75 到 99 的 25 张，中奖的彩票就决定了运行 A 或 B。调度程序然后加载中奖进程的状态，并运行它。<br><img src="/2023/06/16/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%AF%BC%E8%AE%BA-%E8%BF%9B%E7%A8%8B%E8%B0%83%E5%BA%A6/e1.png" alt="?"></p>
+<h2 id="彩票机制"><a href="#彩票机制" class="headerlink" title="彩票机制"></a>彩票机制</h2><p>一种方式是利用彩票货币（ticket currency）的概念。这种方式允许拥有一组彩票的用户以他们喜欢的某种货币，将彩票分给自己的不同工作。之后操作系统再自动将这种货币兑换为正确的全局彩票。</p>
+<p>比如，假设用户 A 和用户 B 每人拥有 100 张彩票。用户 A 有两个工作 A1 和 A2，他以自己的货币，给每个工作 500 张彩票（共 1000 张）。用户 B 只运行一个工作，给它 10 张彩票（总共 10 张）。操作系统将进行兑换，将 A1 和 A2 拥有的 A 的货币 500 张，兑换成全局货币 50 张。类似地，兑换给 B1 的 10 张彩票兑换成 100 张。然后会对全局彩票货币（共 200张）举行抽奖，决定哪个工作运行。</p>
+<p>另一个有用的机制是彩票转让（ticket transfer）。通过转让，一个进程可以临时将自己的彩票交给另一个进程。这种机制在客户端/服务端交互的场景中尤其有用，在这种场景中，客户端进程向服务端发送消息，请求其按自己的需求执行工作，为了加速服务端的执行，客户端可以将自己的彩票转让给服务端，从而尽可能加速服务端执行自己请求的速度。服务端执行结束后会将这部分彩票归还给客户端。</p>
+<p>最后，彩票通胀（ticket inflation）有时也很有用。利用通胀，一个进程可以临时提升或降低自己拥有的彩票数量。当然在竞争环境中，进程之间互相不信任，这种机制就没什么意义。一个贪婪的进程可能给自己非常多的彩票，从而接管机器。但是，通胀可以用于进程之间相互信任的环境。在这种情况下，如果一个进程知道它需要更多 CPU 时间，就可以增加自己的彩票，从而将自己的需求告知操作系统，这一切不需要与任何其他进程通信。</p>
+<h2 id="实现"><a href="#实现" class="headerlink" title="实现"></a>实现</h2><p><img src="/2023/06/16/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%AF%BC%E8%AE%BA-%E8%BF%9B%E7%A8%8B%E8%B0%83%E5%BA%A6/e2.png" alt="?"><br><img src="/2023/06/16/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%AF%BC%E8%AE%BA-%E8%BF%9B%E7%A8%8B%E8%B0%83%E5%BA%A6/e3.png" alt="?"><br>这段代码从前向后遍历进程列表，将每张票的值加到 counter 上，直到值超过 winner。这时，当前的列表元素所对应的进程就是中奖者。在我们的例子中，中奖彩票是 300。首先，计 A 的票后，counter 增加到 100。因为 100 小于 300，继续遍历。然后 counter 会增加到 150（B 的彩票），仍然小于 300，继续遍历。最后，counter 增加到 400（显然大于 300），因此退出遍历，current 指向 C（中奖者）。</p>
+<h2 id="步长调度"><a href="#步长调度" class="headerlink" title="步长调度"></a>步长调度</h2><p>系统中的每个工作都有自己的步长，这个值与票数值成反比。在上面的例子中，A、B、C 这 3 个工作的票数分别是 100、50 和 250，<strong>我们通过用一个大数分别除以他们的票数来获得每个进程的步长。比如用 10000 除以这些票数值，得到了 3 个进程的步长分别为 100、200 和 40。</strong> 我们称这个值为每个进程的步长（stride）。每次进程运行后，我们会让它的计数器 [称为行程（pass）值] 增加它的步长，记录它的总体进展。</p>
+<p><strong>当需要进行调度时，选择目前拥有最小行程值的进程，并且在运行之后将该进程的行程值增加一个步长。</strong><br><img src="/2023/06/16/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%AF%BC%E8%AE%BA-%E8%BF%9B%E7%A8%8B%E8%B0%83%E5%BA%A6/e4.png" alt="?"></p>
+<p>在我们的例子中，3 个进程（A、B、C）的步长值分别为 100、200 和 40，初始行程值都为 0。因此，最初，所有进程都可能被选择执行。假设选择 A（任意的，所有具有同样低的行程值的进程，都可能被选中）。A 执行一个时间片后，更新它的行程值为 100。然后运行 B，并更新其行程值为 200。最后执行 C，C 的行程值变为 40。这时，算法选择最小的行程值，是 C，执行并增加为 80（C 的步长是 40）。然后 C 再次运行（依然行程值最小），行程值增加到 120。现在运行 A，更新它的行程值为 200（现在与 B 相同）。然后 C 再次连续运行两次，行程值也变为 200。此时，所有行程值再次相等，这个过程会无限地重复下去。<br>表 9.1 展示了一段时间内调度程序的行为。<br><img src="/2023/06/16/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%AF%BC%E8%AE%BA-%E8%BF%9B%E7%A8%8B%E8%B0%83%E5%BA%A6/e5.png" alt="?"><br>可以看出，C 运行了 5 次、A 运行了 2 次，B 一次，正好是票数的比例——200、100 和 50。彩票调度算法只能一段时间后，在概率上实现比例，而步长调度算法可以在每个调度周期后做到完全正确。</p>
+<hr>
 ]]></content>
       <tags>
         <tag>OS</tag>
       </tags>
   </entry>
   <entry>
-    <title>操作系统导论-机制:受限直接执行</title>
-    <url>/2023/06/15/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%AF%BC%E8%AE%BA-%E6%9C%BA%E5%88%B6-%E5%8F%97%E9%99%90%E7%9B%B4%E6%8E%A5%E6%89%A7%E8%A1%8C/</url>
-    <content><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="\assets\css\APlayer.min.css"><script src="\assets\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script><script class="meting-secondary-script-marker" src="\assets\js\Meting.min.js"></script><h1 id="机制-受限直接执行"><a href="#机制-受限直接执行" class="headerlink" title="机制:受限直接执行"></a>机制:受限直接执行</h1><p>为了虚拟化 CPU，操作系统需要以某种方式让许多任务共享物理 CPU，让它们看起来像是同时运行。基本思想很简单:运行一个进程一段时间，然后运行另一个进程，如此轮换。通过以这种方式时分共享 (time sharing)CPU，就实现了虚拟化。</p>
+    <title>操作系统导论-cpu虚拟化</title>
+    <url>/2023/06/16/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%AF%BC%E8%AE%BA-cpu%E8%99%9A%E6%8B%9F%E5%8C%96/</url>
+    <content><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="\assets\css\APlayer.min.css"><script src="\assets\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script><script class="meting-secondary-script-marker" src="\assets\js\Meting.min.js"></script><h1 id="抽象-进程"><a href="#抽象-进程" class="headerlink" title="抽象:进程"></a>抽象:进程</h1><p>进程就是运行中的程序。程序本身是没有生命周期的，它只是存在磁盘上面的一些指令（也可能是一些静态数据）。是操作系统让这些字节运行起来，让程序发挥作用。</p>
+<p><em><strong>虽然只有少量的物理 CPU 可用，但是操作系统如何提供几乎有无数个 CPU 可用的假象？</strong></em></p>
+<p>操作系统通过虚拟化（virtualizing）CPU 来提供这种假象。通过让一个进程只运行一个时间片，然后切换到其他进程，操作系统提供了存在多个虚拟 CPU 的假象。这就是时分共享（time sharing）CPU 技术，允许用户如愿运行多个并发进程。潜在的开销就是性能损失，因为如果 CPU 必须共享，每个进程的运行就会慢一点。</p>
+<p><strong>时分共享和空分共享</strong><br>通过允许资源由一个实体使用一小段时间，然后由另一个实体使用一小段时间，如此下去，所谓的资源（例如，CPU 或网络链接）可以被许多人共享。时分共享的自然对应技术是空分共享，资源在空间上被划分给希望使用它的人。</p>
+<p>例如，磁盘空间自然是一个空分共享资源，因为一旦将块分配给文件，在用户删除文件之前，不可能将它分配给其他文件。</p>
+<h2 id="抽象：进程"><a href="#抽象：进程" class="headerlink" title="抽象：进程"></a>抽象：进程</h2><p>操作系统为正在运行的程序提供的抽象，就是所谓的进程（process）。</p>
+<h3 id="地址空间"><a href="#地址空间" class="headerlink" title="地址空间"></a>地址空间</h3><p>进程的机器状态有一个明显组成部分，就是它的内存。指令存在内存中。正在运行的程序读取和写入的数据也在内存中。因此进程可以访问的内存（称为地址空间，address space）是该进程的一部分。</p>
+<h3 id="寄存器"><a href="#寄存器" class="headerlink" title="寄存器"></a>寄存器</h3><p>进程的机器状态的另一部分是寄存器。许多指令明确地读取或更新寄存器。<br>程序计数器（Program Counter，PC）（有时称为指令指针，Instruction Pointer 或 IP）告诉我们程序当前正在执行哪个指令；类似地，栈指针（stack pointer）和相关的帧指针（frame pointer）用于管理函数参数栈、局部变量和返回地址。</p>
+<p>程序也经常访问持久存储设备。此类 I/O 信息可能包含当前打开的文件列表。</p>
+<h2 id="进程-API"><a href="#进程-API" class="headerlink" title="进程 API"></a>进程 API</h2><p>创建（create）：操作系统必须包含一些创建新进程的方法。在 shell 中键入命令或双击应用程序图标时，会调用操作系统来创建新进程，运行指定的程序。</p>
+<p>销毁（destroy）：由于存在创建进程的接口，因此系统还提供了一个强制销毁进程的接口。当然，很多进程会在运行完成后自行退出。但是，如果它们不退出，用户可能希望终止它们，因此停止失控进程的接口非常有用。</p>
+<p>等待（wait）：有时等待进程停止运行是有用的，因此经常提供某种等待接口。</p>
+<p>其他控制（miscellaneous control）：除了杀死或等待进程外，有时还可能有其他控制。例如，大多数操作系统提供某种方法来暂停进程（停止运行一段时间），然后恢复（继续运行）。</p>
+<p>状态（statu）：通常也有一些接口可以获得有关进程的状态信息，例如运行了多长时间，或者处于什么状态。</p>
+<h2 id="进程创建：更多细节"><a href="#进程创建：更多细节" class="headerlink" title="进程创建：更多细节"></a>进程创建：更多细节</h2><ol>
+<li>操作系统运行程序必须做的第一件事是将代码和所有静态数据（例如初始化变量）加载（load）到内存中，加载到进程的地址空间中。</li>
+</ol>
+<p>程序最初以某种可执行格式驻留在磁盘上（disk，或者在某些现代系统中，在基于闪存的 SSD 上）。因此，将程序和静态数据加载到内存中的过程，需要操作系统从磁盘读取这些字节，并将它们放在内存中的某处。<br><img src="/2023/06/16/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%AF%BC%E8%AE%BA-cpu%E8%99%9A%E6%8B%9F%E5%8C%96/q1.png" alt="?"></p>
+<p>在早期的（或简单的）操作系统中，加载过程尽早（eagerly）完成，即在运行程序之前全部完成。<br>现代操作系统惰性（lazily）执行该过程，即仅在程序执行期间需要加载的代码或数据片段，才会加载。</p>
+<ol start="2">
+<li><p>将代码和静态数据加载到内存后，必须为程序的运行时栈（run-time stack 或 stack）分配一些内存。操作系统也可能为程序的堆（heap）分配一些内存。</p>
+</li>
+<li><p>操作系统还将执行一些其他初始化任务，特别是与输入/输出（I/O）相关的任务。</p>
+</li>
+</ol>
+<p>例如，在 UNIX 系统中，默认情况下每个进程都有 3 个打开的文件描述符（file descriptor），用于标准输入、输出和错误。这些描述符让程序轻松读取来自终端的输入以及打印输出到屏幕。</p>
+<ol start="4">
+<li>启动程序，在入口处运行，即 main()。通过跳转到 main()例程，OS 将 CPU的控制权转移到新创建的进程中，从而程序开始执行。</li>
+</ol>
+<h2 id="进程状态"><a href="#进程状态" class="headerlink" title="进程状态"></a>进程状态</h2><p>进程可以处于以下 3 种状态之一。</p>
+<p>运行（running）：在运行状态下，进程正在处理器上运行。这意味着它正在执行指令。</p>
+<p>就绪（ready）：在就绪状态下，进程已准备好运行，但由于某种原因，操作系统选择不在此时运行。</p>
+<p>阻塞（blocked）：在阻塞状态下，一个进程执行了某种操作，直到发生其他事件时才会准备运行。一个常见的例子是，当进程向磁盘发起 I/O 请求时，它会被阻塞，因此其他进程可以使用处理器。<br><img src="/2023/06/16/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%AF%BC%E8%AE%BA-cpu%E8%99%9A%E6%8B%9F%E5%8C%96/q2.png" alt="?"></p>
+<p>举例：两个正在运行的进程，每个进程只使用 CPU（它们没有 I/O）<br><img src="/2023/06/16/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%AF%BC%E8%AE%BA-cpu%E8%99%9A%E6%8B%9F%E5%8C%96/q3.png" alt="?"></p>
+<p>举例：第一个进程在运行一段时间后发起 I/O 请求。此时，该进程被阻塞，让另一个进程有机会运行。<br><img src="/2023/06/16/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%AF%BC%E8%AE%BA-cpu%E8%99%9A%E6%8B%9F%E5%8C%96/q4.png" alt="?"></p>
+<p>除了运行、就绪和阻塞之外，还有其他一些进程可以处于的状态。有时候系统会有一个初始（initial）状态，表示进程在创建时处于的状态。</p>
+<p>另外，一个进程可以处于已退出但尚未清理的最终（final）状态（在基于 UNIX 的系统中，这称为僵尸状态）。</p>
+<p>这个最终状态非常有用，因为它允许其他进程（通常是创建进程的父进程）检查进程的返回代码，并查看刚刚完成的进程是否成功执行（通常，在基于 UNIX 的系统中，程序成功完成任务时返回零，否则返回非零）。完成后，父进程将进行最后一次调用（例如，wait()），以等待子进程的完成，并告诉操作系统它可以清理这个正在结束的进程的所有相关数据结构。</p>
+<h2 id="数据结构"><a href="#数据结构" class="headerlink" title="数据结构"></a>数据结构</h2><p>操作系统是一个程序，和其他程序一样，它有一些关键的数据结构来跟踪各种相关的信息。</p>
+<p>为了跟踪每个进程的状态，操作系统可能会为所有就绪的进程保留某种进程列表（process list），以及跟踪当前正在运行的进程的一些附加信息。</p>
+<p>操作系统追踪进程的一些重要信息。对于停止的进程，寄存器上下文将保存其寄存器的内容。当一个进程停止时，它的寄存器将被保存到这个内存位置。通过恢复这些寄存器（将它们的值放回实际的物理寄存器中），操作系统可以恢复运行该进程。它被称为<strong>上下文切换（context switch）</strong>。</p>
+<p>除了运行、就绪和阻塞之外，还有其他一些进程可以处于的状态。有时候系统会有一个初始（initial）状态，表示进程在创建时处于的状态。<br>另外，一个进程可以处于已退出但尚未清理的最终（final）状态（在基于 UNIX 的系统中，这称为僵尸状态）。这个最终状态非常有用，因为它允许其他进程（通常是创建进程的父进程）检查进程的返回代码，并查看刚刚完成的进程是否成功执行（通常，在基于 UNIX 的系统中，程序成功完成任务时返回零，否则返回非零）。完成后，父进程将进行最后一次调用（例如，wait()），以等待子进程的完成，并告诉操作系统它可以清理这个正在结束的进程的所有相关数据结构。</p>
 <blockquote>
-<p>第一个是性能：如何在不增加系统开销的情况下实现虚拟化？<br>第二个是控制权：如何有效地运行进程，同时保留对 CPU 的控制？</p>
+<p>数据结构——进程列表<br>进程列表（process list）是第一个这样的结构。任何能够同时运行多个程序的操作系统当然都会有类似这种结构的东西，以便跟踪系统中正在运行的所有程序。有时候人们会将存储关于进程的信息的个体结构称为进程控制块（Process Control Block，PCB），这是谈论包含每个进程信息的 C 结构的一种方式。</p>
 </blockquote>
-<h2 id="基本技巧：受限直接执行"><a href="#基本技巧：受限直接执行" class="headerlink" title="基本技巧：受限直接执行"></a>基本技巧：受限直接执行</h2><p>这个概念的“直接执行”部分很简单：只需直接在 CPU上运行程序即可。因此，当 OS 希望启动程序运行时，它会在进程列表中为其创建一个进程条目，为其分配一些内存，将程序代码（从磁盘）加载到内存中，找到入口点（main()函数或类似的），跳转到那里，并开始运行用户的代码。<br><img src="/2023/06/15/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%AF%BC%E8%AE%BA-%E6%9C%BA%E5%88%B6-%E5%8F%97%E9%99%90%E7%9B%B4%E6%8E%A5%E6%89%A7%E8%A1%8C/q2.png" alt="?"></p>
-<blockquote>
-<p>这种方法在我们的虚拟化 CPU 时产生了一些问题。<br>第一个问题很简单：如果我们只运行一个程序，操作系统怎么能确保程序不做任何我们不希望它做的事，同时仍然高效地运行它？<br>第二个问题：当我们运行一个进程时，操作系统如何让它停下来并切换到另一个进程，从而实现虚拟化 CPU 所需的时分共享？</p>
-</blockquote>
-<h2 id="问题-1：受限制的操作"><a href="#问题-1：受限制的操作" class="headerlink" title="问题 1：受限制的操作"></a>问题 1：受限制的操作</h2><p>该程序直接在硬件 CPU 上运行，因此执行速度与预期的一样快。</p>
-<p>硬件通过提供不同的执行模式来协助操作系统。在用户模式（user mode）下，应用程序不能完全访问硬件资源。在内核模式（kernel mode）下，操作系统可以访问机器的全部资源。还提供了陷入（trap)内核和从陷阱返回（return-from-trap）到用户模式程序的特别说明，以及一些指令，让操作系统告诉硬件陷阱表（trap table）在内存中的位置。</p>
-<blockquote>
-<p>用户希望执行某种特权操作（如从磁盘读取），应该怎么做？<br>系统调用允许内核小心地向用户程序暴露某些关键功能，例如访问文件系统、创建和销毁进程、与其他进程通信，以及分配更多内存。大多数操作系统提供几百个调用。</p>
-</blockquote>
-<p>要执行系统调用，程序必须执行特殊的陷阱 (trap) 指令。该指令同时跳入内核并将特权级别提升到内核模式。一旦进入内核，系统就可以执行任何需要的特权操作(如果允许).从而为调用进程执行所需的工作。完成后，操作系统调用一个特殊的从陷阱返回(return-from-trap)指令，如你期望的那样，该指令返回到发起调用的用户程序中，同时将特权级别降低，回到用户模式。</p>
-<p>执行陷阱时，硬件必须确保存储足够的调用者寄存器，以便在操作系统发出从陷阱返回指令时能够正确返回。例如，在 x86 上，处理器会将程序计数器、标志和其他一些寄存器推送到每个进程的内核栈(kernelstack)上。从返回陷阱将从栈弹出这些值，并恢复执行用户模式程序(有关详细信息。</p>
-<blockquote>
-<p><strong>为什么对系统调用的调用(如 open()或 read())看起来完全就像 C 中的典型过程调用?</strong></p>
-</blockquote>
-<blockquote>
-<p>它是一个过程调用，但隐藏在过程调用内部的是著名的陷阱指令。更具体地说，当你调用 open()(举个例子)时，你正在执行对 C 库的过程调用。其中，无论是对于open()还是提供的其他系统调用，库都使用与内核一致的调用约定来将参数放在众所周知的位置(例如，在栈中或特定的寄存器中)，将系统调用号也放入一个众所周知的位置(同样，放在栈或寄存器中 )，然后执行上述的陷阱指令。库中陷阱之后的代码准备好返回值，并将控制权返回给发出系统调用的程序。因此，C 库中进行系统调用的部分是用汇编手工编码的，因为它们需要仔细遵循约定，以便正确处理参数和返回值，以及执行硬件特定的陷阱指令。</p>
-</blockquote>
-<blockquote>
-<p><strong>陷阱如何知道在 OS 内运行哪些代码？</strong></p>
-</blockquote>
-<blockquote>
-<p>内核通过在启动时设置陷阱表 (trap table) 来实现。当机器启动时，它在特权(内核)模式下执行，因此可以根据需要自由配置机器硬件。操作系统做的第一件事，就是告诉硬件在发生某些异常事件时要运行哪些代码。例如，当发生硬盘中断，发生键盘中断或程序进行系统调用时，应该运行哪些代码?操作系统通常通过某种特殊的指令，通知硬件这些陷阱处理程序的位置。一旦硬件被通知，它就会记住这些处理程序的位置，直到下一次重新启动机器并且硬件知道在发生系统调用和其他异常事件时要做什么 (即跳转到哪段代码)。</p>
-</blockquote>
-<p><img src="/2023/06/15/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%AF%BC%E8%AE%BA-%E6%9C%BA%E5%88%B6-%E5%8F%97%E9%99%90%E7%9B%B4%E6%8E%A5%E6%89%A7%E8%A1%8C/q3.png" alt="?"></p>
-<h2 id="问题-2：在进程之间切换"><a href="#问题-2：在进程之间切换" class="headerlink" title="问题 2：在进程之间切换"></a>问题 2：在进程之间切换</h2><blockquote>
-<p>操作系统如何重新获得 CPU 的控制权（regain control），以便它可以在进程之间切换？</p>
-</blockquote>
-<h3 id="协作方式：等待系统调用"><a href="#协作方式：等待系统调用" class="headerlink" title="协作方式：等待系统调用"></a>协作方式：等待系统调用</h3><p>如果应用程序执行了某些非法操作，也会将控制转移给操作系统。例如，如果应用程序以 0 为除数，或者尝试访问应该无法访问的内存，就会陷入（trap）操作系统。操作系统将再次控制 CPU（并可能终止违规进程）。</p>
-<h3 id="非协作方式：操作系统进行控制"><a href="#非协作方式：操作系统进行控制" class="headerlink" title="非协作方式：操作系统进行控制"></a>非协作方式：操作系统进行控制</h3><p><strong>没有硬件的额外帮助，如果进程拒绝进行系统调用（也不出错），从而将控制权交还给操作系统，那么操作系统无法做任何事情。</strong></p>
-<p>时钟中断（timer interrupt）。时钟设备可以编程为每隔几毫秒产生一次中断。产生中断时，当前正在运行的进程停止，操作系统中预先配置的中断处理程序（interrupt handler）会运行。此时，操作系统重新获得 CPU 的控制权，因此可以做它想做的事：停止当前进程，并启动另一个进程。</p>
-<p>操作系统必须通知硬件哪些代码在发生时钟中断时运行。因此，在启动时，操作系统就是这样做的。其次，在启动过程中，操作系统也必须启动时钟，这当然是一项特权操作。一旦时钟开始运行，操作系统就感到安全<br>了，因为控制权最终会归还给它，因此操作系统可以自由运行用户程序。时钟也可以关闭（也是特权操作）。</p>
-<p>硬件在发生中断时要为正在运行的程序保存足够的状态，以便随后从陷阱返回指令能够正确恢复正在运行的程序。这一组操作与硬件在显式系统调用陷入内核时的行为非常相似，其中各种寄存器因此被保存（进入内核栈），因此从陷阱返回指令可以容易地恢复。</p>
-<h3 id="保存和恢复上下文"><a href="#保存和恢复上下文" class="headerlink" title="保存和恢复上下文"></a>保存和恢复上下文</h3><p>继续运行当前正在运行的进程，还是切换到另一个进程,这个决定是由调度程序（scheduler）做出的。</p>
-<p>如果决定进行切换，OS 就会执行一些底层代码，即所谓的上下文切换（context switch）。上下文切换在概念上很简单：操作系统要做的就是为当前正在执行的进程保存一些寄存器的值（例如，到它的内核栈），并为即将执行的进程恢复一些寄存器的值（从它的内核栈）。这样一来，操作系统就可以确保最后执行从陷阱返回指令时，不是返回到之前运行的进程，而是继续执行另一个进程。</p>
-<p>为了保存当前正在运行的进程的上下文，操作系统会执行一些底层汇编代码，来保存通用寄存器、程序计数器，以及当前正在运行的进程的内核栈指针，然后恢复寄存器、程序计数器，并切换内核栈，供即将运行的进程使用。通过切换栈，内核在进入切换代码调用时，是一个进程（被中断的进程）的上下文，在返回时，是另一进程（即将执行的进程）的上下文。当操作系统最终执行从陷阱返回指令时，即将执行的进程变成了当前运行的进程。至此上下文切换完成。</p>
-<blockquote>
-<p>进程 A 正在运行，然后被中断时钟中断。硬件保存它的寄存器（在内核栈中），并进入内核（切换到内核模式）。在时钟中断处理程序中，操作系统决定从正在运行的进程 A 切换到进程 B。此时，它调用 switch()例程，该例程仔细保存当前寄存器的值（保存到 A 的进程结构），恢复寄存器进程 B（从它的进程结构），然后切换上下文（switch context），具体来说是通过改变栈指针来使用 B 的内核栈（而不是 A 的）。最后，操作系统从陷阱返回，恢复 B 的寄存器并开始运行它。<br><img src="/2023/06/15/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%AF%BC%E8%AE%BA-%E6%9C%BA%E5%88%B6-%E5%8F%97%E9%99%90%E7%9B%B4%E6%8E%A5%E6%89%A7%E8%A1%8C/q4.png" alt="?"></p>
-</blockquote>
-<p>在此协议中，有两种类型的寄存器保存/恢复。第一种是发生时钟中断的时候。在这种情况下，运行进程的用户寄存器由硬件隐式保存，使用该进程的内核栈。第二种是当操作系统决定从 A 切换到 B。在这种情况下，内核寄存器被软件（即 OS）明确地保存，但这次被存储在该进程的进程结构的内存中。后一个操作让系统从好像刚刚由 A 陷入内核，变成好像刚刚由 B 陷入内核。</p>
-<h2 id="担心并发吗"><a href="#担心并发吗" class="headerlink" title="担心并发吗"></a>担心并发吗</h2><p>操作系统可能简单地决定，在中断处理期间禁止中断（disable interrupt）。这样做可以确保在处理一个中断时，不会将其他中断交给 CPU。</p>
-<h2 id="小结"><a href="#小结" class="headerlink" title="小结"></a>小结</h2><p>我们已经描述了一些实现 CPU 虚拟化的关键底层机制，并将其统称为受限直接执行(limited directexecution)。基本思路很简单:就让你想运行的程序在 CPU 上运行，但首先确保设置好硬件，以便在没有操作系统帮助的情况下限制进程可以执行的操作。</p>
-]]></content>
-      <tags>
-        <tag>OS</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>操作系统导论-插叙:进程API</title>
-    <url>/2023/06/14/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%AF%BC%E8%AE%BA-%E6%8F%92%E5%8F%99-%E8%BF%9B%E7%A8%8BAPI/</url>
-    <content><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="\assets\css\APlayer.min.css"><script src="\assets\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script><script class="meting-secondary-script-marker" src="\assets\js\Meting.min.js"></script><h1 id="插叙-进程API"><a href="#插叙-进程API" class="headerlink" title="插叙:进程API"></a>插叙:进程API</h1><h2 id="fork-系统调用"><a href="#fork-系统调用" class="headerlink" title="fork()系统调用"></a>fork()系统调用</h2><p>进程调用了fork()系统调用，这是操作系统提供的创建新进程的方法。</p>
+<hr>
+<h1 id="插叙-进程API"><a href="#插叙-进程API" class="headerlink" title="插叙:进程API"></a>插叙:进程API</h1><h2 id="fork-系统调用"><a href="#fork-系统调用" class="headerlink" title="fork()系统调用"></a>fork()系统调用</h2><p>进程调用了fork()系统调用，这是操作系统提供的创建新进程的方法。</p>
 <p>对操作系统来说，这谁看起来有两个完全一样的程序谁运行，并都从 fork()系统调用中返回。新创建的进程称为子进程（child），原来的进程称为父进程（parent）。子进程不会从 main()函数开始执行，而是直接从 fork()系统调用返回，就好像是它自己调用了fork()。</p>
 <p>子进程拥有自己的地址空间（即拥有自己的私有内存）、寄存器、程序计数器等，但是它从 fork()返回的值是不同的。父进程获得的返回值是新创建子进程的PID，而子进程获得的返回值是0。这个差别非常重要，因为这样就很容易编写代码处理两种不同的情况。</p>
 <h2 id="wait-系统调用"><a href="#wait-系统调用" class="headerlink" title="wait()系统调用"></a>wait()系统调用</h2><p>有时候父进程需要等待子进程执行完毕，这项任务由 wait()系统调用。如果父进程想要和子进程抢跑，那么wait()会阻塞父进程。</p>
@@ -495,7 +470,7 @@
 <p>UNIX 管谁也是用类似的方式实现的，但用的是 pipe()系统调用。谁这种情况下，一个进程的输出被链接到了一个内核管谁（pipe）上（队列），另一个进程的输入也被连接到了同一个管谁上。因此，前一个进程的输出无缝地作为后一个进程的输入，许多命令可以用这种方式串联谁一起，共同完成某项任务。比如通过将 grep、wc 命令用管谁连接可以完成从一个文件中查找某个词，并统计其出现次数的功能：grep -o foo file | wc -l。</p>
 <h2 id="习题"><a href="#习题" class="headerlink" title="习题"></a>习题</h2><p>1.编写一个调用 fork0的程序。在调用 fork()之前，让主进程访问一个变量(例如x)并将其值设置为某个值(例如 100)。子进程中的变量有什么值?当子进程和父进程都改变x 的值时，变量会发生什么?</p>
 <figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;unistd.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;stdlib.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="type">void</span> <span class="title function_">test1</span><span class="params">()</span>;</span><br><span class="line"></span><br><span class="line"><span class="type">void</span> <span class="title function_">test2</span><span class="params">()</span>;</span><br><span class="line"></span><br><span class="line"><span class="type">int</span> <span class="title function_">main</span><span class="params">(<span class="type">int</span> argc, <span class="type">char</span> *argv[])</span> &#123;</span><br><span class="line">    <span class="keyword">if</span> (argc == <span class="number">1</span>) &#123;</span><br><span class="line">        test1();</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        test2();</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="type">void</span> <span class="title function_">test1</span><span class="params">()</span> &#123;</span><br><span class="line">    <span class="type">int</span> pid = fork();</span><br><span class="line">    <span class="type">int</span> x = <span class="number">100</span>;</span><br><span class="line">    <span class="keyword">if</span> (pid &lt; <span class="number">0</span>) &#123;</span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">&quot;fork error\n&quot;</span>);</span><br><span class="line">        <span class="built_in">exit</span>(<span class="number">1</span>);</span><br><span class="line">    &#125; <span class="keyword">else</span> <span class="keyword">if</span> (pid == <span class="number">0</span>) &#123;</span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">&quot;child, x %d\n&quot;</span>, x);</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">&quot;parent, x %d\n&quot;</span>, x);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="type">void</span> <span class="title function_">test2</span><span class="params">()</span> &#123;</span><br><span class="line">    <span class="type">int</span> pid = fork();</span><br><span class="line">    <span class="type">int</span> x = <span class="number">100</span>;</span><br><span class="line">    <span class="keyword">if</span> (pid &lt; <span class="number">0</span>) &#123;</span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">&quot;fork error\n&quot;</span>);</span><br><span class="line">        <span class="built_in">exit</span>(<span class="number">1</span>);</span><br><span class="line">    &#125; <span class="keyword">else</span> <span class="keyword">if</span> (pid == <span class="number">0</span>) &#123;</span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">&quot;child,x %d\n&quot;</span>, x);</span><br><span class="line">        x = <span class="number">0</span>;</span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">&quot;child,x %d\n&quot;</span>, x);</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">&quot;parent,x %d\n&quot;</span>, x);</span><br><span class="line">        x = <span class="number">1</span>;</span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">&quot;parent,x %d\n&quot;</span>, x);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p><img src="/2023/06/14/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%AF%BC%E8%AE%BA-%E6%8F%92%E5%8F%99-%E8%BF%9B%E7%A8%8BAPI/q1.png" alt="?"></p>
+<p><img src="/2023/06/16/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%AF%BC%E8%AE%BA-cpu%E8%99%9A%E6%8B%9F%E5%8C%96/w1.png" alt="?"></p>
 <p>2.编写一个打开文件的程序(使用 open(系统调用)，然后调用 fork0创建一个新进程子进程和父进程都可以访问 open()返回的文件描述符吗?当它们并发(即同时)写入文件时会发生什么?</p>
 <figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;fcntl.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;stdlib.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;string.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;sys/wait.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;unistd.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="type">int</span> <span class="title function_">main</span><span class="params">()</span> &#123;</span><br><span class="line">    <span class="type">int</span> fd = open(<span class="string">&quot;./check.txt&quot;</span>, O_CREAT | O_RDWR | O_TRUNC, S_IRWXU);</span><br><span class="line">    <span class="type">int</span> pid = fork();</span><br><span class="line">    <span class="keyword">if</span> (pid &lt; <span class="number">0</span>) &#123;</span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">&quot;fork error\n&quot;</span>);</span><br><span class="line">        <span class="built_in">exit</span>(<span class="number">1</span>);</span><br><span class="line">    &#125; <span class="keyword">else</span> <span class="keyword">if</span> (pid == <span class="number">0</span>) &#123;</span><br><span class="line">        <span class="type">char</span> *buf = <span class="string">&quot;child\n&quot;</span>;</span><br><span class="line">        <span class="type">int</span> error = write(fd, buf, <span class="keyword">sizeof</span>(<span class="type">char</span>) * <span class="built_in">strlen</span>(buf));</span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">&quot;child error: %d\n&quot;</span>, error == <span class="number">-1</span> ? <span class="number">1</span> : <span class="number">0</span>);</span><br><span class="line"></span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        <span class="type">char</span> *buf = <span class="string">&quot;parent\n&quot;</span>;</span><br><span class="line">        <span class="type">int</span> error = write(fd, buf, <span class="keyword">sizeof</span>(<span class="type">char</span>) * <span class="built_in">strlen</span>(buf));</span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">&quot;child error: %d\n&quot;</span>, error == <span class="number">-1</span> ? <span class="number">1</span> : <span class="number">0</span>);</span><br><span class="line"></span><br><span class="line">        <span class="type">int</span> wc = wait(<span class="literal">NULL</span>);</span><br><span class="line">        close(fd);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <blockquote>
@@ -527,62 +502,57 @@
 <p>子进程printf 不会打印到控制台，父进程不影响</p>
 </blockquote>
 <p>8.编写一个程序，创建两个子进程，并使用 pipe()系统调用，将一个子进程的标准输出连接到另一个子进程的标准输入。</p>
-<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;stdlib.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;string.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;sys/wait.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;unistd.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="type">int</span> <span class="title function_">main</span><span class="params">()</span> &#123;</span><br><span class="line">  <span class="type">int</span> fd[<span class="number">2</span>];</span><br><span class="line">  <span class="keyword">if</span> (pipe(fd) &lt; <span class="number">0</span>) &#123;</span><br><span class="line">    perror(<span class="string">&quot;pipe&quot;</span>);</span><br><span class="line">    <span class="built_in">exit</span>(<span class="number">1</span>);</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="type">int</span> pid = fork();</span><br><span class="line">  <span class="keyword">if</span> (pid == <span class="number">0</span>) &#123;</span><br><span class="line">    <span class="type">int</span> ppid = fork();</span><br><span class="line">    <span class="keyword">if</span> (ppid == <span class="number">0</span>) &#123;</span><br><span class="line">      <span class="type">char</span> *msg = <span class="string">&quot;Hello!\n&quot;</span>;</span><br><span class="line"><span class="comment">//      关闭多余管道端</span></span><br><span class="line">      close(fd[<span class="number">0</span>]);</span><br><span class="line">      write(fd[<span class="number">1</span>], msg, <span class="keyword">sizeof</span>(<span class="type">char</span>) * <span class="built_in">strlen</span>(msg));</span><br><span class="line">    &#125; <span class="keyword">else</span> <span class="keyword">if</span> (ppid &gt; <span class="number">0</span>) &#123;</span><br><span class="line">      wait(<span class="literal">NULL</span>);</span><br><span class="line">      <span class="type">char</span> asw[<span class="number">10</span>];</span><br><span class="line">      close(fd[<span class="number">1</span>]);</span><br><span class="line">      <span class="type">int</span> res = read(fd[<span class="number">0</span>], asw, <span class="keyword">sizeof</span>(<span class="type">char</span>) * <span class="number">10</span>);</span><br><span class="line">      <span class="built_in">printf</span>(<span class="string">&quot;size:%d, %s&quot;</span>, res, asw);</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>]]></content>
-      <tags>
-        <tag>OS</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>操作系统导论-抽象:进程</title>
-    <url>/2023/06/14/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%AF%BC%E8%AE%BA-%E6%8A%BD%E8%B1%A1-%E8%BF%9B%E7%A8%8B/</url>
-    <content><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="\assets\css\APlayer.min.css"><script src="\assets\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script><script class="meting-secondary-script-marker" src="\assets\js\Meting.min.js"></script><h1 id="抽象-进程"><a href="#抽象-进程" class="headerlink" title="抽象:进程"></a>抽象:进程</h1><p>进程就是运行中的程序。程序本身是没有生命周期的，它只是存在磁盘上面的一些指令（也可能是一些静态数据）。是操作系统让这些字节运行起来，让程序发挥作用。</p>
-<p><em><strong>虽然只有少量的物理 CPU 可用，但是操作系统如何提供几乎有无数个 CPU 可用的假象？</strong></em></p>
-<p>操作系统通过虚拟化（virtualizing）CPU 来提供这种假象。通过让一个进程只运行一个时间片，然后切换到其他进程，操作系统提供了存在多个虚拟 CPU 的假象。这就是时分共享（time sharing）CPU 技术，允许用户如愿运行多个并发进程。潜在的开销就是性能损失，因为如果 CPU 必须共享，每个进程的运行就会慢一点。</p>
-<p><strong>时分共享和空分共享</strong><br>通过允许资源由一个实体使用一小段时间，然后由另一个实体使用一小段时间，如此下去，所谓的资源（例如，CPU 或网络链接）可以被许多人共享。时分共享的自然对应技术是空分共享，资源在空间上被划分给希望使用它的人。</p>
-<p>例如，磁盘空间自然是一个空分共享资源，因为一旦将块分配给文件，在用户删除文件之前，不可能将它分配给其他文件。</p>
-<h2 id="抽象：进程"><a href="#抽象：进程" class="headerlink" title="抽象：进程"></a>抽象：进程</h2><p>操作系统为正在运行的程序提供的抽象，就是所谓的进程（process）。</p>
-<h3 id="地址空间"><a href="#地址空间" class="headerlink" title="地址空间"></a>地址空间</h3><p>进程的机器状态有一个明显组成部分，就是它的内存。指令存在内存中。正在运行的程序读取和写入的数据也在内存中。因此进程可以访问的内存（称为地址空间，address space）是该进程的一部分。</p>
-<h3 id="寄存器"><a href="#寄存器" class="headerlink" title="寄存器"></a>寄存器</h3><p>进程的机器状态的另一部分是寄存器。许多指令明确地读取或更新寄存器。<br>程序计数器（Program Counter，PC）（有时称为指令指针，Instruction Pointer 或 IP）告诉我们程序当前正在执行哪个指令；类似地，栈指针（stack pointer）和相关的帧指针（frame pointer）用于管理函数参数栈、局部变量和返回地址。</p>
-<p>程序也经常访问持久存储设备。此类 I/O 信息可能包含当前打开的文件列表。</p>
-<h2 id="进程-API"><a href="#进程-API" class="headerlink" title="进程 API"></a>进程 API</h2><p>创建（create）：操作系统必须包含一些创建新进程的方法。在 shell 中键入命令或双击应用程序图标时，会调用操作系统来创建新进程，运行指定的程序。</p>
-<p>销毁（destroy）：由于存在创建进程的接口，因此系统还提供了一个强制销毁进程的接口。当然，很多进程会在运行完成后自行退出。但是，如果它们不退出，用户可能希望终止它们，因此停止失控进程的接口非常有用。</p>
-<p>等待（wait）：有时等待进程停止运行是有用的，因此经常提供某种等待接口。</p>
-<p>其他控制（miscellaneous control）：除了杀死或等待进程外，有时还可能有其他控制。例如，大多数操作系统提供某种方法来暂停进程（停止运行一段时间），然后恢复（继续运行）。</p>
-<p>状态（statu）：通常也有一些接口可以获得有关进程的状态信息，例如运行了多长时间，或者处于什么状态。</p>
-<h2 id="进程创建：更多细节"><a href="#进程创建：更多细节" class="headerlink" title="进程创建：更多细节"></a>进程创建：更多细节</h2><ol>
-<li>操作系统运行程序必须做的第一件事是将代码和所有静态数据（例如初始化变量）加载（load）到内存中，加载到进程的地址空间中。</li>
-</ol>
-<p>程序最初以某种可执行格式驻留在磁盘上（disk，或者在某些现代系统中，在基于闪存的 SSD 上）。因此，将程序和静态数据加载到内存中的过程，需要操作系统从磁盘读取这些字节，并将它们放在内存中的某处。<br><img src="/2023/06/14/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%AF%BC%E8%AE%BA-%E6%8A%BD%E8%B1%A1-%E8%BF%9B%E7%A8%8B/q1.png" alt="?"></p>
-<p>在早期的（或简单的）操作系统中，加载过程尽早（eagerly）完成，即在运行程序之前全部完成。<br>现代操作系统惰性（lazily）执行该过程，即仅在程序执行期间需要加载的代码或数据片段，才会加载。</p>
-<ol start="2">
-<li><p>将代码和静态数据加载到内存后，必须为程序的运行时栈（run-time stack 或 stack）分配一些内存。操作系统也可能为程序的堆（heap）分配一些内存。</p>
-</li>
-<li><p>操作系统还将执行一些其他初始化任务，特别是与输入/输出（I/O）相关的任务。</p>
-</li>
-</ol>
-<p>例如，在 UNIX 系统中，默认情况下每个进程都有 3 个打开的文件描述符（file descriptor），用于标准输入、输出和错误。这些描述符让程序轻松读取来自终端的输入以及打印输出到屏幕。</p>
-<ol start="4">
-<li>启动程序，在入口处运行，即 main()。通过跳转到 main()例程，OS 将 CPU的控制权转移到新创建的进程中，从而程序开始执行。</li>
-</ol>
-<h2 id="进程状态"><a href="#进程状态" class="headerlink" title="进程状态"></a>进程状态</h2><p>进程可以处于以下 3 种状态之一。</p>
-<p>运行（running）：在运行状态下，进程正在处理器上运行。这意味着它正在执行指令。</p>
-<p>就绪（ready）：在就绪状态下，进程已准备好运行，但由于某种原因，操作系统选择不在此时运行。</p>
-<p>阻塞（blocked）：在阻塞状态下，一个进程执行了某种操作，直到发生其他事件时才会准备运行。一个常见的例子是，当进程向磁盘发起 I/O 请求时，它会被阻塞，因此其他进程可以使用处理器。<br><img src="/2023/06/14/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%AF%BC%E8%AE%BA-%E6%8A%BD%E8%B1%A1-%E8%BF%9B%E7%A8%8B/q2.png" alt="?"></p>
-<p>举例：两个正在运行的进程，每个进程只使用 CPU（它们没有 I/O）<br><img src="/2023/06/14/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%AF%BC%E8%AE%BA-%E6%8A%BD%E8%B1%A1-%E8%BF%9B%E7%A8%8B/q3.png" alt="?"></p>
-<p>举例：第一个进程在运行一段时间后发起 I/O 请求。此时，该进程被阻塞，让另一个进程有机会运行。<br><img src="/2023/06/14/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%AF%BC%E8%AE%BA-%E6%8A%BD%E8%B1%A1-%E8%BF%9B%E7%A8%8B/q4.png" alt="?"></p>
-<p>除了运行、就绪和阻塞之外，还有其他一些进程可以处于的状态。有时候系统会有一个初始（initial）状态，表示进程在创建时处于的状态。</p>
-<p>另外，一个进程可以处于已退出但尚未清理的最终（final）状态（在基于 UNIX 的系统中，这称为僵尸状态）。</p>
-<p>这个最终状态非常有用，因为它允许其他进程（通常是创建进程的父进程）检查进程的返回代码，并查看刚刚完成的进程是否成功执行（通常，在基于 UNIX 的系统中，程序成功完成任务时返回零，否则返回非零）。完成后，父进程将进行最后一次调用（例如，wait()），以等待子进程的完成，并告诉操作系统它可以清理这个正在结束的进程的所有相关数据结构。</p>
-<h2 id="数据结构"><a href="#数据结构" class="headerlink" title="数据结构"></a>数据结构</h2><p>操作系统是一个程序，和其他程序一样，它有一些关键的数据结构来跟踪各种相关的信息。</p>
-<p>为了跟踪每个进程的状态，操作系统可能会为所有就绪的进程保留某种进程列表（process list），以及跟踪当前正在运行的进程的一些附加信息。</p>
-<p>操作系统追踪进程的一些重要信息。对于停止的进程，寄存器上下文将保存其寄存器的内容。当一个进程停止时，它的寄存器将被保存到这个内存位置。通过恢复这些寄存器（将它们的值放回实际的物理寄存器中），操作系统可以恢复运行该进程。它被称为<strong>上下文切换（context switch）</strong>。</p>
-<p>除了运行、就绪和阻塞之外，还有其他一些进程可以处于的状态。有时候系统会有一个初始（initial）状态，表示进程在创建时处于的状态。<br>另外，一个进程可以处于已退出但尚未清理的最终（final）状态（在基于 UNIX 的系统中，这称为僵尸状态）。这个最终状态非常有用，因为它允许其他进程（通常是创建进程的父进程）检查进程的返回代码，并查看刚刚完成的进程是否成功执行（通常，在基于 UNIX 的系统中，程序成功完成任务时返回零，否则返回非零）。完成后，父进程将进行最后一次调用（例如，wait()），以等待子进程的完成，并告诉操作系统它可以清理这个正在结束的进程的所有相关数据结构。</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;stdlib.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;string.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;sys/wait.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;unistd.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="type">int</span> <span class="title function_">main</span><span class="params">()</span> &#123;</span><br><span class="line">  <span class="type">int</span> fd[<span class="number">2</span>];</span><br><span class="line">  <span class="keyword">if</span> (pipe(fd) &lt; <span class="number">0</span>) &#123;</span><br><span class="line">    perror(<span class="string">&quot;pipe&quot;</span>);</span><br><span class="line">    <span class="built_in">exit</span>(<span class="number">1</span>);</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="type">int</span> pid = fork();</span><br><span class="line">  <span class="keyword">if</span> (pid == <span class="number">0</span>) &#123;</span><br><span class="line">    <span class="type">int</span> ppid = fork();</span><br><span class="line">    <span class="keyword">if</span> (ppid == <span class="number">0</span>) &#123;</span><br><span class="line">      <span class="type">char</span> *msg = <span class="string">&quot;Hello!\n&quot;</span>;</span><br><span class="line"><span class="comment">//      关闭多余管道端</span></span><br><span class="line">      close(fd[<span class="number">0</span>]);</span><br><span class="line">      write(fd[<span class="number">1</span>], msg, <span class="keyword">sizeof</span>(<span class="type">char</span>) * <span class="built_in">strlen</span>(msg));</span><br><span class="line">    &#125; <span class="keyword">else</span> <span class="keyword">if</span> (ppid &gt; <span class="number">0</span>) &#123;</span><br><span class="line">      wait(<span class="literal">NULL</span>);</span><br><span class="line">      <span class="type">char</span> asw[<span class="number">10</span>];</span><br><span class="line">      close(fd[<span class="number">1</span>]);</span><br><span class="line">      <span class="type">int</span> res = read(fd[<span class="number">0</span>], asw, <span class="keyword">sizeof</span>(<span class="type">char</span>) * <span class="number">10</span>);</span><br><span class="line">      <span class="built_in">printf</span>(<span class="string">&quot;size:%d, %s&quot;</span>, res, asw);</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<hr>
+<h1 id="机制-受限直接执行"><a href="#机制-受限直接执行" class="headerlink" title="机制:受限直接执行"></a>机制:受限直接执行</h1><p>为了虚拟化 CPU，操作系统需要以某种方式让许多任务共享物理 CPU，让它们看起来像是同时运行。基本思想很简单:运行一个进程一段时间，然后运行另一个进程，如此轮换。通过以这种方式时分共享 (time sharing)CPU，就实现了虚拟化。</p>
 <blockquote>
-<p>数据结构——进程列表<br>进程列表（process list）是第一个这样的结构。任何能够同时运行多个程序的操作系统当然都会有类似这种结构的东西，以便跟踪系统中正在运行的所有程序。有时候人们会将存储关于进程的信息的个体结构称为进程控制块（Process Control Block，PCB），这是谈论包含每个进程信息的 C 结构的一种方式。</p>
+<p>第一个是性能：如何在不增加系统开销的情况下实现虚拟化？<br>第二个是控制权：如何有效地运行进程，同时保留对 CPU 的控制？</p>
 </blockquote>
+<h2 id="基本技巧：受限直接执行"><a href="#基本技巧：受限直接执行" class="headerlink" title="基本技巧：受限直接执行"></a>基本技巧：受限直接执行</h2><p>这个概念的“直接执行”部分很简单：只需直接在 CPU上运行程序即可。因此，当 OS 希望启动程序运行时，它会在进程列表中为其创建一个进程条目，为其分配一些内存，将程序代码（从磁盘）加载到内存中，找到入口点（main()函数或类似的），跳转到那里，并开始运行用户的代码。<br><img src="/2023/06/16/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%AF%BC%E8%AE%BA-cpu%E8%99%9A%E6%8B%9F%E5%8C%96/e1.png" alt="?"></p>
+<blockquote>
+<p>这种方法在我们的虚拟化 CPU 时产生了一些问题。<br>第一个问题很简单：如果我们只运行一个程序，操作系统怎么能确保程序不做任何我们不希望它做的事，同时仍然高效地运行它？<br>第二个问题：当我们运行一个进程时，操作系统如何让它停下来并切换到另一个进程，从而实现虚拟化 CPU 所需的时分共享？</p>
+</blockquote>
+<h2 id="问题-1：受限制的操作"><a href="#问题-1：受限制的操作" class="headerlink" title="问题 1：受限制的操作"></a>问题 1：受限制的操作</h2><p>该程序直接在硬件 CPU 上运行，因此执行速度与预期的一样快。</p>
+<p>硬件通过提供不同的执行模式来协助操作系统。在用户模式（user mode）下，应用程序不能完全访问硬件资源。在内核模式（kernel mode）下，操作系统可以访问机器的全部资源。还提供了陷入（trap)内核和从陷阱返回（return-from-trap）到用户模式程序的特别说明，以及一些指令，让操作系统告诉硬件陷阱表（trap table）在内存中的位置。</p>
+<blockquote>
+<p>用户希望执行某种特权操作（如从磁盘读取），应该怎么做？<br>系统调用允许内核小心地向用户程序暴露某些关键功能，例如访问文件系统、创建和销毁进程、与其他进程通信，以及分配更多内存。大多数操作系统提供几百个调用。</p>
+</blockquote>
+<p>要执行系统调用，程序必须执行特殊的陷阱 (trap) 指令。该指令同时跳入内核并将特权级别提升到内核模式。一旦进入内核，系统就可以执行任何需要的特权操作(如果允许).从而为调用进程执行所需的工作。完成后，操作系统调用一个特殊的从陷阱返回(return-from-trap)指令，如你期望的那样，该指令返回到发起调用的用户程序中，同时将特权级别降低，回到用户模式。</p>
+<p>执行陷阱时，硬件必须确保存储足够的调用者寄存器，以便在操作系统发出从陷阱返回指令时能够正确返回。例如，在 x86 上，处理器会将程序计数器、标志和其他一些寄存器推送到每个进程的内核栈(kernelstack)上。从返回陷阱将从栈弹出这些值，并恢复执行用户模式程序(有关详细信息。</p>
+<blockquote>
+<p><strong>为什么对系统调用的调用(如 open()或 read())看起来完全就像 C 中的典型过程调用?</strong></p>
+</blockquote>
+<blockquote>
+<p>它是一个过程调用，但隐藏在过程调用内部的是著名的陷阱指令。更具体地说，当你调用 open()(举个例子)时，你正在执行对 C 库的过程调用。其中，无论是对于open()还是提供的其他系统调用，库都使用与内核一致的调用约定来将参数放在众所周知的位置(例如，在栈中或特定的寄存器中)，将系统调用号也放入一个众所周知的位置(同样，放在栈或寄存器中 )，然后执行上述的陷阱指令。库中陷阱之后的代码准备好返回值，并将控制权返回给发出系统调用的程序。因此，C 库中进行系统调用的部分是用汇编手工编码的，因为它们需要仔细遵循约定，以便正确处理参数和返回值，以及执行硬件特定的陷阱指令。</p>
+</blockquote>
+<blockquote>
+<p><strong>陷阱如何知道在 OS 内运行哪些代码？</strong></p>
+</blockquote>
+<blockquote>
+<p>内核通过在启动时设置陷阱表 (trap table) 来实现。当机器启动时，它在特权(内核)模式下执行，因此可以根据需要自由配置机器硬件。操作系统做的第一件事，就是告诉硬件在发生某些异常事件时要运行哪些代码。例如，当发生硬盘中断，发生键盘中断或程序进行系统调用时，应该运行哪些代码?操作系统通常通过某种特殊的指令，通知硬件这些陷阱处理程序的位置。一旦硬件被通知，它就会记住这些处理程序的位置，直到下一次重新启动机器并且硬件知道在发生系统调用和其他异常事件时要做什么 (即跳转到哪段代码)。</p>
+</blockquote>
+<p><img src="/2023/06/16/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%AF%BC%E8%AE%BA-cpu%E8%99%9A%E6%8B%9F%E5%8C%96/e2.png" alt="?"></p>
+<h2 id="问题-2：在进程之间切换"><a href="#问题-2：在进程之间切换" class="headerlink" title="问题 2：在进程之间切换"></a>问题 2：在进程之间切换</h2><blockquote>
+<p>操作系统如何重新获得 CPU 的控制权（regain control），以便它可以在进程之间切换？</p>
+</blockquote>
+<h3 id="协作方式：等待系统调用"><a href="#协作方式：等待系统调用" class="headerlink" title="协作方式：等待系统调用"></a>协作方式：等待系统调用</h3><p>如果应用程序执行了某些非法操作，也会将控制转移给操作系统。例如，如果应用程序以 0 为除数，或者尝试访问应该无法访问的内存，就会陷入（trap）操作系统。操作系统将再次控制 CPU（并可能终止违规进程）。</p>
+<h3 id="非协作方式：操作系统进行控制"><a href="#非协作方式：操作系统进行控制" class="headerlink" title="非协作方式：操作系统进行控制"></a>非协作方式：操作系统进行控制</h3><p><strong>没有硬件的额外帮助，如果进程拒绝进行系统调用（也不出错），从而将控制权交还给操作系统，那么操作系统无法做任何事情。</strong></p>
+<p>时钟中断（timer interrupt）。时钟设备可以编程为每隔几毫秒产生一次中断。产生中断时，当前正在运行的进程停止，操作系统中预先配置的中断处理程序（interrupt handler）会运行。此时，操作系统重新获得 CPU 的控制权，因此可以做它想做的事：停止当前进程，并启动另一个进程。</p>
+<p>操作系统必须通知硬件哪些代码在发生时钟中断时运行。因此，在启动时，操作系统就是这样做的。其次，在启动过程中，操作系统也必须启动时钟，这当然是一项特权操作。一旦时钟开始运行，操作系统就感到安全<br>了，因为控制权最终会归还给它，因此操作系统可以自由运行用户程序。时钟也可以关闭（也是特权操作）。</p>
+<p>硬件在发生中断时要为正在运行的程序保存足够的状态，以便随后从陷阱返回指令能够正确恢复正在运行的程序。这一组操作与硬件在显式系统调用陷入内核时的行为非常相似，其中各种寄存器因此被保存（进入内核栈），因此从陷阱返回指令可以容易地恢复。</p>
+<h3 id="保存和恢复上下文"><a href="#保存和恢复上下文" class="headerlink" title="保存和恢复上下文"></a>保存和恢复上下文</h3><p>继续运行当前正在运行的进程，还是切换到另一个进程,这个决定是由调度程序（scheduler）做出的。</p>
+<p>如果决定进行切换，OS 就会执行一些底层代码，即所谓的上下文切换（context switch）。上下文切换在概念上很简单：操作系统要做的就是为当前正在执行的进程保存一些寄存器的值（例如，到它的内核栈），并为即将执行的进程恢复一些寄存器的值（从它的内核栈）。这样一来，操作系统就可以确保最后执行从陷阱返回指令时，不是返回到之前运行的进程，而是继续执行另一个进程。</p>
+<p>为了保存当前正在运行的进程的上下文，操作系统会执行一些底层汇编代码，来保存通用寄存器、程序计数器，以及当前正在运行的进程的内核栈指针，然后恢复寄存器、程序计数器，并切换内核栈，供即将运行的进程使用。通过切换栈，内核在进入切换代码调用时，是一个进程（被中断的进程）的上下文，在返回时，是另一进程（即将执行的进程）的上下文。当操作系统最终执行从陷阱返回指令时，即将执行的进程变成了当前运行的进程。至此上下文切换完成。</p>
+<blockquote>
+<p>进程 A 正在运行，然后被中断时钟中断。硬件保存它的寄存器（在内核栈中），并进入内核（切换到内核模式）。在时钟中断处理程序中，操作系统决定从正在运行的进程 A 切换到进程 B。此时，它调用 switch()例程，该例程仔细保存当前寄存器的值（保存到 A 的进程结构），恢复寄存器进程 B（从它的进程结构），然后切换上下文（switch context），具体来说是通过改变栈指针来使用 B 的内核栈（而不是 A 的）。最后，操作系统从陷阱返回，恢复 B 的寄存器并开始运行它。</p>
+</blockquote>
+<p><img src="/2023/06/16/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%AF%BC%E8%AE%BA-cpu%E8%99%9A%E6%8B%9F%E5%8C%96/e3.png" alt="?"></p>
+<p>在此协议中，有两种类型的寄存器保存/恢复。第一种是发生时钟中断的时候。在这种情况下，运行进程的用户寄存器由硬件隐式保存，使用该进程的内核栈。第二种是当操作系统决定从 A 切换到 B。在这种情况下，内核寄存器被软件（即 OS）明确地保存，但这次被存储在该进程的进程结构的内存中。后一个操作让系统从好像刚刚由 A 陷入内核，变成好像刚刚由 B 陷入内核。</p>
+<h2 id="担心并发吗"><a href="#担心并发吗" class="headerlink" title="担心并发吗"></a>担心并发吗</h2><p>操作系统可能简单地决定，在中断处理期间禁止中断（disable interrupt）。这样做可以确保在处理一个中断时，不会将其他中断交给 CPU。</p>
+<h2 id="小结"><a href="#小结" class="headerlink" title="小结"></a>小结</h2><p>我们已经描述了一些实现 CPU 虚拟化的关键底层机制，并将其统称为受限直接执行(limited directexecution)。基本思路很简单:就让你想运行的程序在 CPU 上运行，但首先确保设置好硬件，以便在没有操作系统帮助的情况下限制进程可以执行的操作。</p>
 ]]></content>
       <tags>
-        <tag>OS</tag>
+        <tag>os</tag>
       </tags>
   </entry>
   <entry>
