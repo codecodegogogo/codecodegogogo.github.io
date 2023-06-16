@@ -18,16 +18,24 @@
   
   
   <title>操作系统导论-进程调度:介绍 | Sunny&#39;s Blog</title>
-  <meta property="og:type" content="article">
+  <meta name="description" content="调度指标周转时间（turnaround time）。任务的周转时间定义为任务完成时间减去任务到达系统的时间。 先进先出（FIFO） 3 个工作 A、B 和 C 在大致相同的时间（T 到达时间 &#x3D; 0）到达系统。因为 FIFO 必须将某个工作放在前面，所以我们假设当它们都同时到达时，A 比 B 早一点点，然后 B 比 C 早到达一点点。假设每个工作运行 10s。这些工作的平均周转时间（average">
+<meta property="og:type" content="article">
 <meta property="og:title" content="操作系统导论-进程调度:介绍">
 <meta property="og:url" content="https://codecodegogogo.github.io/2023/06/15/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%AF%BC%E8%AE%BA-%E8%BF%9B%E7%A8%8B%E8%B0%83%E5%BA%A6-%E4%BB%8B%E7%BB%8D/index.html">
 <meta property="og:site_name" content="Sunny">
+<meta property="og:description" content="调度指标周转时间（turnaround time）。任务的周转时间定义为任务完成时间减去任务到达系统的时间。 先进先出（FIFO） 3 个工作 A、B 和 C 在大致相同的时间（T 到达时间 &#x3D; 0）到达系统。因为 FIFO 必须将某个工作放在前面，所以我们假设当它们都同时到达时，A 比 B 早一点点，然后 B 比 C 早到达一点点。假设每个工作运行 10s。这些工作的平均周转时间（average">
 <meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://codecodegogogo.github.io/2023/06/15/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%AF%BC%E8%AE%BA-%E8%BF%9B%E7%A8%8B%E8%B0%83%E5%BA%A6-%E4%BB%8B%E7%BB%8D/q1.png">
+<meta property="og:image" content="https://codecodegogogo.github.io/2023/06/15/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%AF%BC%E8%AE%BA-%E8%BF%9B%E7%A8%8B%E8%B0%83%E5%BA%A6-%E4%BB%8B%E7%BB%8D/q2.png">
+<meta property="og:image" content="https://codecodegogogo.github.io/2023/06/15/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%AF%BC%E8%AE%BA-%E8%BF%9B%E7%A8%8B%E8%B0%83%E5%BA%A6-%E4%BB%8B%E7%BB%8D/q3.png">
+<meta property="og:image" content="https://codecodegogogo.github.io/2023/06/15/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%AF%BC%E8%AE%BA-%E8%BF%9B%E7%A8%8B%E8%B0%83%E5%BA%A6-%E4%BB%8B%E7%BB%8D/q4.png">
+<meta property="og:image" content="https://codecodegogogo.github.io/2023/06/15/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%AF%BC%E8%AE%BA-%E8%BF%9B%E7%A8%8B%E8%B0%83%E5%BA%A6-%E4%BB%8B%E7%BB%8D/q5.png">
 <meta property="article:published_time" content="2023-06-15T14:44:50.000Z">
-<meta property="article:modified_time" content="2023-06-15T14:45:15.131Z">
+<meta property="article:modified_time" content="2023-06-16T02:48:17.081Z">
 <meta property="article:author" content="Sunny">
 <meta property="article:tag" content="OS">
 <meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://codecodegogogo.github.io/2023/06/15/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%AF%BC%E8%AE%BA-%E8%BF%9B%E7%A8%8B%E8%B0%83%E5%BA%A6-%E4%BB%8B%E7%BB%8D/q1.png">
   <!-- Canonical links -->
   <link rel="canonical" href="https://codecodegogogo.github.io/2023/06/15/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%AF%BC%E8%AE%BA-%E8%BF%9B%E7%A8%8B%E8%B0%83%E5%BA%A6-%E4%BB%8B%E7%BB%8D/index.html">
   
@@ -190,6 +198,21 @@
                 
               </p>
               <p class="item-title">
+                <a href="/2023/06/16/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%AF%BC%E8%AE%BA-%E8%B0%83%E5%BA%A6-%E5%A4%9A%E7%BA%A7%E5%8F%8D%E9%A6%88%E9%98%9F%E5%88%97/" class="title">操作系统导论-调度-多级反馈队列</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2023-06-16T05:32:39.000Z" itemprop="datePublished">2023-06-16</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                
+              </p>
+              <p class="item-title">
                 <a href="/2023/06/15/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%AF%BC%E8%AE%BA-%E8%BF%9B%E7%A8%8B%E8%B0%83%E5%BA%A6-%E4%BB%8B%E7%BB%8D/" class="title">操作系统导论-进程调度:介绍</a>
               </p>
               <p class="item-date">
@@ -243,21 +266,6 @@
             </div>
           </li>
           
-          <li>
-            
-            <div class="item-inner">
-              <p class="item-category">
-                
-              </p>
-              <p class="item-title">
-                <a href="/2023/06/14/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%AF%BC%E8%AE%BA-%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E4%BB%8B%E7%BB%8D/" class="title">操作系统导论-操作系统介绍</a>
-              </p>
-              <p class="item-date">
-                <time datetime="2023-06-14T08:32:01.000Z" itemprop="datePublished">2023-06-14</time>
-              </p>
-            </div>
-          </li>
-          
       </ul>
     </div>
   </div>
@@ -273,7 +281,7 @@
   <div class="slimContent">
     <nav id="toc" class="article-toc">
       <h3 class="toc-title">文章目录</h3>
-      
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%B0%83%E5%BA%A6%E6%8C%87%E6%A0%87"><span class="toc-number">1.</span> <span class="toc-text">调度指标</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%85%88%E8%BF%9B%E5%85%88%E5%87%BA%EF%BC%88FIFO%EF%BC%89"><span class="toc-number">2.</span> <span class="toc-text">先进先出（FIFO）</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%9C%80%E7%9F%AD%E4%BB%BB%E5%8A%A1%E4%BC%98%E5%85%88%EF%BC%88SJF%EF%BC%89"><span class="toc-number">3.</span> <span class="toc-text">最短任务优先（SJF）</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%9C%80%E7%9F%AD%E5%AE%8C%E6%88%90%E6%97%B6%E9%97%B4%E4%BC%98%E5%85%88%EF%BC%88STCF%EF%BC%89"><span class="toc-number">4.</span> <span class="toc-text">最短完成时间优先（STCF）</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%BA%A6%E9%87%8F%E6%8C%87%E6%A0%87%EF%BC%9A%E5%93%8D%E5%BA%94%E6%97%B6%E9%97%B4"><span class="toc-number">5.</span> <span class="toc-text">度量指标：响应时间</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%BD%AE%E8%BD%AC-%E5%BC%95%E5%85%A5%E5%93%8D%E5%BA%94%E6%97%B6%E9%97%B4"><span class="toc-number">6.</span> <span class="toc-text">轮转(引入响应时间)</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%BB%93%E5%90%88-I-O"><span class="toc-number">7.</span> <span class="toc-text">结合 I&#x2F;O</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%A2%98%E7%9B%AE"><span class="toc-number">8.</span> <span class="toc-text">题目</span></a></li></ol>
     </nav>
   </div>
 </aside>
@@ -319,7 +327,7 @@
         <span class="post-comment"><i class="icon icon-comment"></i> <a href="/2023/06/15/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%AF%BC%E8%AE%BA-%E8%BF%9B%E7%A8%8B%E8%B0%83%E5%BA%A6-%E4%BB%8B%E7%BB%8D/#comments" class="article-comment-link">评论</a></span>
         
 	
-		<span class="post-wordcount hidden-xs" itemprop="wordCount">字数统计: 0(字)</span>
+		<span class="post-wordcount hidden-xs" itemprop="wordCount">字数统计: 2.1k(字)</span>
 	
 	
 
@@ -327,7 +335,325 @@
     </div>
     <div class="article-entry marked-body" itemprop="articleBody">
       
-        
+        <h2 id="调度指标"><a href="#调度指标" class="headerlink" title="调度指标"></a>调度指标</h2><p>周转时间（turnaround time）。任务的周转时间定义为任务完成时间减去任务到达系统的时间。</p>
+<h2 id="先进先出（FIFO）"><a href="#先进先出（FIFO）" class="headerlink" title="先进先出（FIFO）"></a>先进先出（FIFO）</h2><blockquote>
+<p>3 个工作 A、B 和 C 在大致相同的时间（T 到达时间 = 0）到达系统。因为 FIFO 必须将某个工作放在前面，所以我们假设当它们都同时到达时，A 比 B 早一点点，然后 B 比 C 早到达一点点。假设每个工作运行 10s。这些工作的平均周转时间（average turnaround time）是多少？</p>
+</blockquote>
+<p>A 在 10s 时完成，B 在 20s 时完成，C 在 30s 时完成。因此，这3个任务的平均周转时间就是（10 + 20 + 30）/ 3 = 20。</p>
+<blockquote>
+<p>假设 3 个任务（A、B 和 C），但这次 A 运行100s，而 B 和 C 运行 10s。</p>
+</blockquote>
+<p>A 先运行 100s，B 或 C 才有机会运行。因此，系统的平均周转时间是比<br>较高的：令人不快的 110s（（100 + 110 + 120）/ 3 = 110）。</p>
+<p><img src="/2023/06/15/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%AF%BC%E8%AE%BA-%E8%BF%9B%E7%A8%8B%E8%B0%83%E5%BA%A6-%E4%BB%8B%E7%BB%8D/q1.png" alt="?"></p>
+<h2 id="最短任务优先（SJF）"><a href="#最短任务优先（SJF）" class="headerlink" title="最短任务优先（SJF）"></a>最短任务优先（SJF）</h2><p>先运行最短的任务，然后是次短的任务，如此下去。<br>我们用上面的例子，SJF 调度策略更好。仅通过在 A 之前运行B和C，SJF 将平均周转时间从 110s 降低到 50s ((10+20 +120)/3=50)。</p>
+<p><strong>考虑到所有工作<red>同时</red>到达的假设，我们可以证明 SJF 确实是一个最优（optimal）调度算法。</strong></p>
+<blockquote>
+<p>假设A在t = 0时到达,且需要运行 100s。而 B 和 C 在 t = 10 到达，且各需要运行 10s。用纯 SJF，我们可以得到如图 7.4 所示的调度。</p>
+</blockquote>
+<p><img src="/2023/06/15/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%AF%BC%E8%AE%BA-%E8%BF%9B%E7%A8%8B%E8%B0%83%E5%BA%A6-%E4%BB%8B%E7%BB%8D/q2.png" alt="?"></p>
+<h2 id="最短完成时间优先（STCF）"><a href="#最短完成时间优先（STCF）" class="headerlink" title="最短完成时间优先（STCF）"></a>最短完成时间优先（STCF）</h2><p>为了解决这个问题，需要调度程序本身的一些机制。当B和C到达时，调度程序当然可以做其他事情:它可以抢占 (preempt) 工作 A，并决定运行另一个工作，或许稍后继续工作 A。根据我们的定义，SJF 是一种非抢占式(non-preemptive) 调度程序，因此存在上述问题。</p>
+<p>向 SJF 添加抢占，称为最短完成时间优先（Shortest Time-to-Completion First，STCF）或抢占式最短作业优先（Preemptive Shortest JobFirst ，PSJF）调度程序。每当新工作进入系统时，它就会确定剩余工作和新工作中，谁的剩余时间最少，然后调度该工作。</p>
+<p><img src="/2023/06/15/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%AF%BC%E8%AE%BA-%E8%BF%9B%E7%A8%8B%E8%B0%83%E5%BA%A6-%E4%BB%8B%E7%BB%8D/q3.png" alt="?"></p>
+<h2 id="度量指标：响应时间"><a href="#度量指标：响应时间" class="headerlink" title="度量指标：响应时间"></a>度量指标：响应时间</h2><p>如果我们知道任务长度，而且任务只使用 CPU，而我们唯一的衡量是周转时间，STCF 将是一个很好的策略。事实上，对于许多早期批处理系统，这些类型的调度算法有一定的意义。然而，引入分时系统改变了这一切。现在，<strong>用户将会坐在终端前面，同时也要求系统的交互性好。</strong> 因此，一个新的度量标准诞生了：响应时间（response time）。</p>
+<p>响应时间定义为从任务到达系统到首次运行的时间。更正式的定义是：<br><strong>T 响应时间= T 首次运行−T 到达时间</strong></p>
+<h2 id="轮转-引入响应时间"><a href="#轮转-引入响应时间" class="headerlink" title="轮转(引入响应时间)"></a>轮转(引入响应时间)</h2><p>RR调度基本思想很简单:RR 在一个时间片(time slice,有时称为调度量子，(schedulingquantum)内运行一个工作，然后切换到运行队列中的下一个任务，而不是运行一个任务直到结束。</p>
+<p>它反复执行，直到所有任务完成。因此，RR 有时被称为时间切片 (time-slicing)请注意，时间片长度必须是时钟中断周期的倍数。因此，如果时钟中断是每 10ms 中断一次则时间片可以是 10ms、20ms 或 10ms 的任何其他倍数。</p>
+<p><img src="/2023/06/15/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%AF%BC%E8%AE%BA-%E8%BF%9B%E7%A8%8B%E8%B0%83%E5%BA%A6-%E4%BB%8B%E7%BB%8D/q4.png" alt="?"><br>RR 的平均响应时间是：（0 + 1 + 2）/3 = 1; SJF 算法平均响应时间是：（0 + 5 + 10）/ 3 = 5。</p>
+<p>时间片太短是有问题的：突然上下文切换的成本将影响整体性能。</p>
+<blockquote>
+<p>当系统某些操作有固定成本时，<strong>通常会使用摊销技术（amortization）。通过减少成本的频度（即执行较少次的操作）</strong>，系统的总成本就会降低。例如，如果时间片设置为 10ms，并且上下文切换时间为 1ms，那么浪费大约 10%的时间用于上下文切换。如果要摊销这个成本，可以把时间片增加到 100ms。在这种情况下，不到 1%的时间用于上下文切换，因此时间片带来的成本就被摊销了。</p>
+</blockquote>
+<p>上下文切换的成本不仅仅来自保存和恢复少量寄存器的操作系统操作。程序运行时，它们在 CPU 高要缓存、TLB、分支预测器和其他片上硬件中建立了大量的状态。切换到另一个工作会导致此状态被刷新，且与当前运行的作业相关的新状态被引入。</p>
+<blockquote>
+<p><strong>如果你愿意不公平，你可以运行较短的工作直到完成，但是要以响应时间为代价。如果你重视公平性，则响应时间会较短，但会以周转时间为代价。这种权衡在系统中很常见。</strong></p>
+</blockquote>
+<p><strong>第一种类型（SJF、STCF）优化周转时间，但对响应时间不利。第二种类型（RR）优化响应时间，但对周转时间不利。</strong></p>
+<h2 id="结合-I-O"><a href="#结合-I-O" class="headerlink" title="结合 I/O"></a>结合 I/O</h2><p>调度程序显然要在工作发起 I/O 请求时做出决定，因为当前正在运行的作业在 I/O 期间不会使用 CPU，它被阻塞等待 I/O 完成。如果将 I/O 发送到硬盘驱动器，则进程可能会被阻塞几毫秒或更长时间，具体取决于驱动器当前的 I/O 负载。因此，这时调度程序应该在 CPU上安排另一项工作。</p>
+<p>调度程序还必须在 I/O 完成时做出决定。发生这种情况时，会产生中断，操作系统运行并将发出 I/O 的进程从阻塞状态移回就绪状态。当然，它甚至可以决定在那个时候运行该项工作。</p>
+<p>让我们假设有两项工作 A 和 B，每项工作需要 50ms 的 CPU时间。但是，有一个明显的区别：A 运行 10ms，然后发出 I/O 请求（假设 I/O 每个都需要10ms），而 B 只是使用 CPU 50ms，不执行 I/O。调度程序先运行 A，然后运行 B。<br><img src="/2023/06/15/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%AF%BC%E8%AE%BA-%E8%BF%9B%E7%A8%8B%E8%B0%83%E5%BA%A6-%E4%BB%8B%E7%BB%8D/q5.png" alt="?"></p>
+<h2 id="题目"><a href="#题目" class="headerlink" title="题目"></a>题目</h2><p>1.使用 SJF 和 FIFO 调度程序运行长度为 200 的 3 个作业时,计算响应时间和周转时间。</p>
+<p>SJF:</p>
+<table>
+<thead>
+<tr>
+<th>作业 id</th>
+<th>响应时间</th>
+<th>周转时间</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>0</td>
+<td>0</td>
+<td>200</td>
+</tr>
+<tr>
+<td>1</td>
+<td>200</td>
+<td>400</td>
+</tr>
+<tr>
+<td>2</td>
+<td>400</td>
+<td>600</td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>FIFO:</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>作业 id</td>
+<td>响应时间</td>
+<td>周转时间</td>
+</tr>
+<tr>
+<td>—</td>
+<td>—</td>
+<td>—</td>
+</tr>
+<tr>
+<td>0</td>
+<td>0</td>
+<td>200</td>
+</tr>
+<tr>
+<td>1</td>
+<td>200</td>
+<td>400</td>
+</tr>
+<tr>
+<td>2</td>
+<td>400</td>
+<td>600</td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>调度策略</td>
+<td>平均响应时间</td>
+<td>平均周转时间</td>
+</tr>
+<tr>
+<td>—</td>
+<td>—</td>
+<td>—</td>
+</tr>
+<tr>
+<td>SJF</td>
+<td>200</td>
+<td>400</td>
+</tr>
+<tr>
+<td>FIFO</td>
+<td>200</td>
+<td>400</td>
+</tr>
+</tbody></table>
+<p>2.现在做同样的事情,但有不同长度的作业,即 100、200 和 300</p>
+<p>SJF:</p>
+<table>
+<thead>
+<tr>
+<th>作业 id</th>
+<th>响应时间</th>
+<th>周转时间</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>0</td>
+<td>0</td>
+<td>100</td>
+</tr>
+<tr>
+<td>1</td>
+<td>100</td>
+<td>300</td>
+</tr>
+<tr>
+<td>2</td>
+<td>300</td>
+<td>600</td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>FIFO:</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>作业 id</td>
+<td>响应时间</td>
+<td>周转时间</td>
+</tr>
+<tr>
+<td>—</td>
+<td>—</td>
+<td>—</td>
+</tr>
+<tr>
+<td>0</td>
+<td>0</td>
+<td>100</td>
+</tr>
+<tr>
+<td>1</td>
+<td>100</td>
+<td>300</td>
+</tr>
+<tr>
+<td>2</td>
+<td>300</td>
+<td>600</td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>调度策略</td>
+<td>平均响应时间</td>
+<td>平均周转时间</td>
+</tr>
+<tr>
+<td>—</td>
+<td>—</td>
+<td>—</td>
+</tr>
+<tr>
+<td>SJF</td>
+<td>400/3</td>
+<td>1000/3</td>
+</tr>
+<tr>
+<td>FIFO</td>
+<td>400/3</td>
+<td>1000/3</td>
+</tr>
+</tbody></table>
+<p>3.现在做同样的事情,但采用 RR 调度程序,时间片为 1</p>
+<p>长度为 200:<br>RR:</p>
+<table>
+<thead>
+<tr>
+<th>作业 id</th>
+<th>响应时间</th>
+<th>周转时间</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>0</td>
+<td>0</td>
+<td>598</td>
+</tr>
+<tr>
+<td>1</td>
+<td>1</td>
+<td>599</td>
+</tr>
+<tr>
+<td>2</td>
+<td>2</td>
+<td>600</td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>平均响应时间 = 1</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>平均周转时间 = 599</td>
+<td></td>
+<td></td>
+</tr>
+</tbody></table>
+<p>长度为 100, 200, 300:<br>RR:</p>
+<table>
+<thead>
+<tr>
+<th>作业 id</th>
+<th>响应时间</th>
+<th>周转时间</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>0</td>
+<td>0</td>
+<td>298</td>
+</tr>
+<tr>
+<td>1</td>
+<td>1</td>
+<td>499</td>
+</tr>
+<tr>
+<td>2</td>
+<td>2</td>
+<td>600</td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>平均响应时间  = 1</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>平均周转时间  = 456.67</td>
+<td></td>
+<td></td>
+</tr>
+</tbody></table>
+<p>4.对于什么类型的工作负载,SJF 提供与 FIFO 相同的周转时间?</p>
+<blockquote>
+<p>运行时间相同的任务</p>
+</blockquote>
+<p>5.对于什么类型的工作负载和量子长度(时间片长度),SJF 与 RR 提供相同的响应时间?</p>
+<blockquote>
+<p>运行时间 &lt;= 时间片</p>
+</blockquote>
+<p>6.随着工作长度的增加,SJF 的响应时间会怎样?你能使用模拟程序来展示趋势吗?</p>
+<blockquote>
+<p>响应时间越来越长</p>
+</blockquote>
+<p>7.随着量子长度(时间片长度)的增加,RR 的响应时间会怎样?你能写出一个方程,计算给定 N 个工作时,最坏情况的响应时间吗?</p>
+<blockquote>
+<p>平均响应时间增加</p>
+</blockquote>
+<blockquote>
+<p>时间片 &gt;= 工作最长运行时间时,有最坏情况<br>即 ti 为作业运行时间<br>res_avg = (0 + t1 + (t1+t2) + (t1+t2+t3) + … (t1+t2+t3 +…tN-1))/N</p>
+</blockquote>
+
       
     </div>
     <div class="article-footer">
@@ -364,6 +690,10 @@
   <div class="bar-inner">
   
   <ul class="pager pull-left">
+    
+    <li class="prev">
+      <a href="/2023/06/16/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%AF%BC%E8%AE%BA-%E8%B0%83%E5%BA%A6-%E5%A4%9A%E7%BA%A7%E5%8F%8D%E9%A6%88%E9%98%9F%E5%88%97/" title="操作系统导论-调度-多级反馈队列"><i class="icon icon-angle-left" aria-hidden="true"></i><span>&nbsp;&nbsp;上一篇</span></a>
+    </li>
     
     
     <li class="next">
