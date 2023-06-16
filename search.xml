@@ -31,9 +31,49 @@
       </tags>
   </entry>
   <entry>
+    <title>操作系统导论-调度-比例份额</title>
+    <url>/2023/06/16/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%AF%BC%E8%AE%BA-%E8%B0%83%E5%BA%A6-%E6%AF%94%E4%BE%8B%E4%BB%BD%E9%A2%9D/</url>
+    <content><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="\assets\css\APlayer.min.css"><script src="\assets\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script><script class="meting-secondary-script-marker" src="\assets\js\Meting.min.js"></script>]]></content>
+  </entry>
+  <entry>
     <title>操作系统导论-调度-多级反馈队列</title>
     <url>/2023/06/16/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%AF%BC%E8%AE%BA-%E8%B0%83%E5%BA%A6-%E5%A4%9A%E7%BA%A7%E5%8F%8D%E9%A6%88%E9%98%9F%E5%88%97/</url>
-    <content><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="\assets\css\APlayer.min.css"><script src="\assets\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script><script class="meting-secondary-script-marker" src="\assets\js\Meting.min.js"></script>]]></content>
+    <content><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="\assets\css\APlayer.min.css"><script src="\assets\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script><script class="meting-secondary-script-marker" src="\assets\js\Meting.min.js"></script><h1 id="调度-多级反馈队列"><a href="#调度-多级反馈队列" class="headerlink" title="调度-多级反馈队列"></a>调度-多级反馈队列</h1><blockquote>
+<p>多级反馈队列需要解决两方面的问题。</p>
+</blockquote>
+<blockquote>
+<p>首先，它要优化周转时间。这通过先执行短工作来实现。然而，操作系统通常不知道工作要运行多久，而这又是SJF（或 STCF）等算法所必需的。</p>
+</blockquote>
+<blockquote>
+<p>其次，MLFQ 希望给交互用户（如用户坐在屏幕前，等着进程结束）很好的交互体验，因此需要降低响应时间。然而，像轮转这样的算法虽然降低了响应时间，周转时间却很差。</p>
+</blockquote>
+<p>所以这里的问题是：通常我们对进程一无所知，应该如何构建调度程序来实现这些目标？调度程序如何在运行过程中学习进程的特征，从而做出更好的调度决策？</p>
+<h2 id="MLFQ：基本规则"><a href="#MLFQ：基本规则" class="headerlink" title="MLFQ：基本规则"></a>MLFQ：基本规则</h2><p>MLFQ 中有许多独立的队列（queue），每个队列有不同的优先级（priority level）。任何时刻，一个工作只能存在于一个队列中。MLFQ 总是优先执行较高优先级的工作（即在较<br>高级队列中的工作）。<br>当然，每个队列中可能会有多个工作，因此具有同样的优先级。在这种情况下，我们就对这些工作采用轮转调度。</p>
+<p><strong>规则 1：如果 A 的优先级 &gt; B 的优先级，运行 A（不运行 B）。<br>规则 2：如果 A 的优先级 = B 的优先级，轮转运行A 和 B。</strong></p>
+<p><img src="/2023/06/16/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%AF%BC%E8%AE%BA-%E8%B0%83%E5%BA%A6-%E5%A4%9A%E7%BA%A7%E5%8F%8D%E9%A6%88%E9%98%9F%E5%88%97/q1.png" alt="?"></p>
+<h2 id="尝试-1：如何改变优先级"><a href="#尝试-1：如何改变优先级" class="headerlink" title="尝试 1：如何改变优先级"></a>尝试 1：如何改变优先级</h2><p><strong>规则 3：工作进入系统时，放在最高优先级（最上层队列）。<br>规则 4a：工作用完整个时间片后，降低其优先级（移入下一个队列）。<br>规则 4b：如果工作在其时间片以内主动释放 CPU，则优先级不变。</strong></p>
+<h3 id="实例-1：单个长工作"><a href="#实例-1：单个长工作" class="headerlink" title="实例 1：单个长工作"></a>实例 1：单个长工作</h3><p><img src="/2023/06/16/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%AF%BC%E8%AE%BA-%E8%B0%83%E5%BA%A6-%E5%A4%9A%E7%BA%A7%E5%8F%8D%E9%A6%88%E9%98%9F%E5%88%97/q2.png" alt="?"><br>该工作首先进入最高优先级（Q2）。执行一个 10ms 的时间片后，调度程序将工作的优先级减 1，因此进入 Q1。在 Q1 执行一个时间片后，最终降低优先级进入系统的最低优先级（Q0），一直留在那里。</p>
+<h3 id="实例-2：来了一个短工作"><a href="#实例-2：来了一个短工作" class="headerlink" title="实例 2：来了一个短工作"></a>实例 2：来了一个短工作</h3><p>有两个工作：A是一个长时间运行的 CPU 密集型工作，B 是一个运行时间很短的交互型工作。假设 A 执行一段时间后 B 到达。</p>
+<p>A（用黑色表示）在最低优先级队列执行（长时间运行的 CPU 密集型工作都这样）。B（用灰色表示）在时间 T=100 时到达，并被加入最高优先级队列。由于它的运行时间很短（只有 20ms），经过两个时间片，在被移入最低优先级队列之前，B 执行完毕。然后 A 继续运行（在低优先级）。</p>
+<p><strong>主要目标：如果不知道工作是短工作还是长工作，那么就在开始的时候假设其是短工作，并赋予最高优先级。如果确实是短工作，则很快会执行完毕，否则将被慢慢移入低优先级队列，而这时该工作也被认为是长工作了。通过这种方式，MLFQ 近似于 SJF。</strong><br><img src="/2023/06/16/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%AF%BC%E8%AE%BA-%E8%B0%83%E5%BA%A6-%E5%A4%9A%E7%BA%A7%E5%8F%8D%E9%A6%88%E9%98%9F%E5%88%97/q3.png" alt="?"></p>
+<h3 id="实例-3：如果有-I-O-呢"><a href="#实例-3：如果有-I-O-呢" class="headerlink" title="实例 3：如果有 I/O 呢"></a>实例 3：如果有 I/O 呢</h3><p>假设交互型工作中有大量的 I/O 操作（比如等待用户的键盘或鼠标输入），它会在时间片用完之前放弃 CPU。在这种情况下，我们不想处罚它，只是保持它的优先级不变。</p>
+<p>交互型工作 B（用灰色表示）每执行 1ms 便需要进行 I/O操作，它与长时间运行的工作 A（用黑色表示）竞争 CPU。MLFQ 算法保持 B 在最高优先级，因为 B 总是让出 CPU。如果 B 是交互型工作，MLFQ 就进一步实现了它的目标，让交互型工作快速运行。<br><img src="/2023/06/16/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%AF%BC%E8%AE%BA-%E8%B0%83%E5%BA%A6-%E5%A4%9A%E7%BA%A7%E5%8F%8D%E9%A6%88%E9%98%9F%E5%88%97/q3.png" alt="?"></p>
+<h3 id="当前-MLFQ-的一些问题"><a href="#当前-MLFQ-的一些问题" class="headerlink" title="当前 MLFQ 的一些问题"></a>当前 MLFQ 的一些问题</h3><p>首先，会有饥饿（starvation）问题。如果系统有“太多”交互型工作，就会不断占用CPU，导致长工作永远无法得到 CPU（它们饿死了）。即使在这种情况下，我们希望这些长工作也能有所进展。</p>
+<blockquote>
+<p>愚弄调度程序指的是用一些卑鄙的手段欺骗调度程序，让它给你远超公平的资源。上述算法对如下的攻击束手无策：进程在时间片用完之前，调用一个 I/O 操作（比如访问一个无关的文件），从而主动释放 CPU。如此便可以保持在高优先级，占用更多的 CPU 时间。做得好时（比如，每运行 99%的时间片时间就主动放弃一次 CPU），工作可以几乎独占 CPU。</p>
+</blockquote>
+<p>最后，一个程序可能在不同时间表现不同。一个计算密集的进程可能在某段时间表现为一个交互型的进程。用我们目前的方法，它不会享受系统中其他交互型工作的待遇。</p>
+<h2 id="尝试-2：提升优先级"><a href="#尝试-2：提升优先级" class="headerlink" title="尝试 2：提升优先级"></a>尝试 2：提升优先级</h2><p><strong>规则 5：经过一段时间 S，就将系统中所有工作重新加入最高优先级队列。</strong><br>新规则一下解决了两个问题。首先，进程不会饿死——在最高优先级队列中，它会以轮转的方式，与其他高优先级工作分享 CPU，从而最终获得执行。其次，如果一个 CPU 密集型工作变成了交互型，当它优先级提升时，调度程序会正确对待它。</p>
+<p><img src="/2023/06/16/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%AF%BC%E8%AE%BA-%E8%B0%83%E5%BA%A6-%E5%A4%9A%E7%BA%A7%E5%8F%8D%E9%A6%88%E9%98%9F%E5%88%97/q4.png" alt="?"><br>左边没有优先级提升，长工作在两个短工作到达后被饿死。右边每 50ms 就有一次优先级提升（这里只是举例，这个值可能过小），因此至少保证长工作会有一些进展，每过 50ms 就被提升到最高优先级，从而定期获得执行。</p>
+<h2 id="尝试-3：更好的计时方式"><a href="#尝试-3：更好的计时方式" class="headerlink" title="尝试 3：更好的计时方式"></a>尝试 3：更好的计时方式</h2><p>工作在时间片以内释放 CPU，就保留它的优先级。那么应该怎么做？</p>
+<p>这里的解决方案，是为 MLFQ 的每层队列提供更完善的 CPU 计时方式（accounting）。<strong>调度程序应该记录一个进程在某一层中消耗的总时间，而不是在调度时重新计时。</strong> 只要进程用完了自己的配额，就将它降到低一优先级的队列中去。不论它是一次用完的，还是拆成很多次用完。因此，我们重写规则 4a 和 4b。</p>
+<p><strong>规则 4：一旦工作用完了其在某一层中的时间配额（无论中间主动放弃了多少次CPU），就降低其优先级（移入低一级队列）。</strong><br><img src="/2023/06/16/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%AF%BC%E8%AE%BA-%E8%B0%83%E5%BA%A6-%E5%A4%9A%E7%BA%A7%E5%8F%8D%E9%A6%88%E9%98%9F%E5%88%97/q5.png" alt="?"></p>
+<h2 id="MLFQ-调优及其他问题"><a href="#MLFQ-调优及其他问题" class="headerlink" title="MLFQ 调优及其他问题"></a>MLFQ 调优及其他问题</h2><p>大多数的 MLFQ 变体都支持不同队列可变的时间片长度。高优先级队列通常只有较短的时间片（比如 10ms 或者更少），因而这一层的交互工作可以更快地切换。相反，低优先级队列中更多的是 CPU 密集型工作，配置更长的时间片会取得更好的效果。图 8.7展示了一个例子，两个长工作在高优先级队列执行 10ms，中间队列执行 20ms，最后在最低优先级队列执行 40ms。<br><img src="/2023/06/16/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%AF%BC%E8%AE%BA-%E8%B0%83%E5%BA%A6-%E5%A4%9A%E7%BA%A7%E5%8F%8D%E9%A6%88%E9%98%9F%E5%88%97/q6.png" alt="?"></p>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>本章包含了一组优化的 MLFQ 规则。为了方便查阅，我们重新列在这里。<br>规则 1：如果 A 的优先级 &gt; B 的优先级，运行 A（不运行 B）。<br>规则 2：如果 A 的优先级 = B 的优先级，轮转运行 A 和 B。<br>规则 3：工作进入系统时，放在最高优先级（最上层队列）。<br>规则 4：一旦工作用完了其在某一层中的时间配额（无论中间主动放弃了多少次CPU），就降低其优先级（移入低一级队列）。<br>规则 5：经过一段时间 S，就将系统中所有工作重新加入最高优先级队列。</p>
+]]></content>
+      <tags>
+        <tag>OS</tag>
+      </tags>
   </entry>
   <entry>
     <title>操作系统导论-进程调度:介绍</title>
