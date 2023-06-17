@@ -168,6 +168,50 @@
 <p>物理内存很快充满了许多空闲空间的小洞，因而很难分配给新的段，或扩大已有的段。这种问题被称为外部碎片。<br><img src="/2023/06/16/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%AF%BC%E8%AE%BA-%E5%86%85%E5%AD%98%E8%99%9A%E6%8B%9F%E5%8C%96/w7.png" alt="?"><br>问题的一种解决方案是紧凑（compact）物理内存，重新安排原有的段。例如，操作系统先终止运行的进程，将它们的数据复制到连续的内存区域中去，改变它们的段寄存器中的值，指向新的物理地址，从而得到了足够大的连续空闲空间。这样做，操作系统能让新的内存分配请求成功。但是，内存紧凑成本很高，因为拷贝段是内存密集型的，一般会占用大量的处理器时间。</p>
 <p>一种更简单的做法是利用空闲列表管理算法，试图保留大的内存块用于分配。相关的算法可能有成百上千种，包括传统的最优匹配（best-fit，从空闲链表中找最接近需要分配空间的空闲块返回）、最坏匹配（worst-fit）、首次匹配（first-fit）以及像伙伴算法（buddy algorithm）这样更复杂的算法。</p>
 <p><strong>无论算法多么精妙，都无法完全消除外部碎片</strong></p>
+<hr>
+<h1 id="空闲空间管理"><a href="#空闲空间管理" class="headerlink" title="空闲空间管理"></a>空闲空间管理</h1><p>如果需要管理的空间被划分为固定大小的单元，就很容易。在这种情况下，只需要维护这些大小固定的单元的列表，如果有请求，就返回列表中的第一项。</p>
+<p>如果要管理的空闲空间由大小不同的单元构成，管理就变得困难（而且有趣）。这种情况出现在用户级的内存分配库（如 malloc()和 free()），或者操作系统用分段（segmentation）的方式实现虚拟内存。</p>
+<p><strong>这两种情况下，出现了外部碎片（external fragmentation）的问题：<br>空闲空间被分割成不同大小的小块，成为碎片，后续的请求可能失败，因为没有一块足够大的连续空闲空间，即使这时总的空闲空间超出了请求的大小。</strong></p>
+<h2 id="假设-1"><a href="#假设-1" class="headerlink" title="假设"></a>假设</h2><p>我们假定基本的接口就像 malloc()和 free()提供的那样。<br>该库管理的空间由于历史原因被称为堆，在堆上管理空闲空间的数据结构通常称为空闲列表（free list）。该结构包含了管理内存区域中所有空闲块的引用。当然，该数据结构不一定真的是列表，而只是某种可以追踪空闲空间的数据结构。</p>
+<p>进一步假设，我们主要关心的是外部碎片。<br>当然，分配程序也可能有内部碎片（internal fragmentation）的问题。如果分配程序给出的内存块超出请求的大小，在这种块中超出请求的空间（因此而未使用）就被认为是内部碎片（因为浪费发生在已分配单元的内部），这是另一种形式的空间浪费。</p>
+<p>我们还假设，内存一旦被分配给客户，就不可以被重定位到其他位置。</p>
+<p>最后我们假设，分配程序所管理的是连续的一块字节区域。</p>
+<h2 id="底层机制"><a href="#底层机制" class="headerlink" title="底层机制"></a>底层机制</h2><h3 id="分割与合并"><a href="#分割与合并" class="headerlink" title="分割与合并"></a>分割与合并</h3><p>空闲列表包含一组元素，记录了堆中的哪些空间还没有分配。假设有下面的 30 字节的堆：<br><img src="/2023/06/16/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%AF%BC%E8%AE%BA-%E5%86%85%E5%AD%98%E8%99%9A%E6%8B%9F%E5%8C%96/e1.png" alt="?"></p>
+<p>这个堆对应的空闲列表会有两个元素，一个描述第一个 10 字节的空闲区域（字节 0～9），一个描述另一个空闲区域（字节 20～29）：<br><img src="/2023/06/16/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%AF%BC%E8%AE%BA-%E5%86%85%E5%AD%98%E8%99%9A%E6%8B%9F%E5%8C%96/e2.png" alt="?"></p>
+<p>任何大于 10 字节的分配请求都会失败（返回 NULL），因为没有足够的连续可用空间。</p>
+<p>假设我们只申请一个字节的内存。这种情况下，分配程序会执行所谓的分割（splitting）动作：它找到一块可以满足请求的空闲空间，将其分割，第一块返回给用户，第二块留在空闲列表中。<br><img src="/2023/06/16/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%AF%BC%E8%AE%BA-%E5%86%85%E5%AD%98%E8%99%9A%E6%8B%9F%E5%8C%96/e3.png" alt="?"></p>
+<p><strong>因此，如果请求的空间大小小于某块空闲块，分配程序通常会进行分割。</strong></p>
+<p><strong>分配程序会在释放一块内存时合并可用空间。</strong> 在归还一块空闲内存时，仔细查看要归还的内存块的地址以及邻它的空闲空间块。如果新归还的空间与一个原有空闲块相邻（或两个，就像这个例子），就将它们合并为一个较大的空闲块。<br><img src="/2023/06/16/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%AF%BC%E8%AE%BA-%E5%86%85%E5%AD%98%E8%99%9A%E6%8B%9F%E5%8C%96/e4.png" alt="?"></p>
+<h3 id="追踪已分配空间的大小"><a href="#追踪已分配空间的大小" class="headerlink" title="追踪已分配空间的大小"></a>追踪已分配空间的大小</h3><p>该头块中至少包含所分配空间的大小（这个例子中是 20）。它也可能包含一些额外的指针来加速空间释放，包含一个幻数来提供完整性检查，以及其他信息。</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="keyword">typedef</span> <span class="class"><span class="keyword">struct</span> <span class="title">header_t</span> &#123;</span></span><br><span class="line"><span class="type">int</span> size;</span><br><span class="line"><span class="type">int</span> magic;</span><br><span class="line">&#125; <span class="type">header_t</span>;</span><br></pre></td></tr></table></figure>
+
+<p>用户调用 free(ptr)时，库会通过简单的指针运算得到头块的位置：</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="type">void</span> <span class="title function_">free</span><span class="params">(<span class="type">void</span> *ptr)</span> &#123;</span><br><span class="line"><span class="type">header_t</span> *hptr = (<span class="type">void</span> *)ptr - <span class="keyword">sizeof</span>(<span class="type">header_t</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><img src="/2023/06/16/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%AF%BC%E8%AE%BA-%E5%86%85%E5%AD%98%E8%99%9A%E6%8B%9F%E5%8C%96/e5.png" alt="?"><br>获得头块的指针后，库可以很容易地确定幻数是否符合预期的值，作为正常性检查（assert（hptr-&gt;magic == 1234567）），并简单计算要释放的空间大小（即头块的大小加区域长度）。实际释放的是头块大小加上分配给用户的空间的大小。因此，如果用户请求 N 字节的内存，库不是寻找大小为 N 的空闲块，而是寻找N 加上头块大小的空闲块。</p>
+<h3 id="嵌入空闲列表"><a href="#嵌入空闲列表" class="headerlink" title="嵌入空闲列表"></a>嵌入空闲列表</h3><p>假设我们需要管理一个 4096 字节的内存块（即堆是 4KB）。为了将它作为一个空闲空间列表来管理，首先要初始化这个列表。开始，列表中只有一个条目，记录了大小为 4096的空间（减去头块的大小）。</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="keyword">typedef</span> <span class="class"><span class="keyword">struct</span> <span class="title">node_t</span> &#123;</span></span><br><span class="line">    <span class="type">int</span> size;</span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">node_t</span> *<span class="title">next</span>;</span></span><br><span class="line">&#125; <span class="type">node_t</span>;</span><br></pre></td></tr></table></figure>
+
+<p>现在来看一些代码，它们初始化堆，并将空闲列表的第一个元素放在该空间中。这块空间通过系统调用 mmap()获得。</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="type">node_t</span> *head = mmap(<span class="literal">NULL</span>, <span class="number">4096</span>, PROT_READ|PROT_WRITE,</span><br><span class="line">    MAP_ANON|MAP_PRIVATE, <span class="number">-1</span>, <span class="number">0</span>);</span><br><span class="line">head-&gt;size = <span class="number">4096</span> - <span class="keyword">sizeof</span>(<span class="type">node_t</span>);</span><br><span class="line">head-&gt;next = <span class="literal">NULL</span>;</span><br></pre></td></tr></table></figure>
+
+<p>因为只有一个 4088 字节的块，所以选中这个块。然后，这个块被分割（split）为两块：一块足够满足请求（以及头块，如前所述），一块是剩余的空闲块。假设记录头块为 8 个字节（一个整数记录大小，一个整数记录幻数），堆中的空间如图:<br><img src="/2023/06/16/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%AF%BC%E8%AE%BA-%E5%86%85%E5%AD%98%E8%99%9A%E6%8B%9F%E5%8C%96/e6.png" alt="?"></p>
+<p>16KB等于16,384字节。<br>在这个例子中，应用程序调用 free(16500)，归还了中间的一块已分配空间（内存块的起始地址 16384 加上前一块的 108，和这一块的头块的 8 字节，就得到了 16500）。这个值在前图中用 sptr 指向。</p>
+<p><img src="/2023/06/16/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%AF%BC%E8%AE%BA-%E5%86%85%E5%AD%98%E8%99%9A%E6%8B%9F%E5%8C%96/e7.png" alt="?"><br>现在的空闲列表包括一个小空闲块（100 字节，由列表的头指向）和一个大空闲块（3764字节）。</p>
+<p>最后一个例子：现在假设剩余的两块已分配的空间也被释放。没有合并，空闲列表将非常破碎，如图:<br><img src="/2023/06/16/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%AF%BC%E8%AE%BA-%E5%86%85%E5%AD%98%E8%99%9A%E6%8B%9F%E5%8C%96/e8.png" alt="?"><br>解决方案很简单：遍历列表，合并（merge）相邻块。完成之后，堆又成了一个整体。</p>
+<h3 id="让堆增长"><a href="#让堆增长" class="headerlink" title="让堆增长"></a>让堆增长</h3><p>大多数传统的分配程序会从很小的堆开始，当空间耗尽时，再向操作系统申请更大的空间。通常，这意味着它们进行了某种系统调用（例如，大多数 UNIX 系统中的 sbrk），让堆增长。操作系统在执行 sbrk 系统调用时，会找到空闲的物理内存页，将它们映射到请求进程的地址空间中去，并返回新的堆的末尾地址。这时，就有了更大的堆，请求就可以成功满足。</p>
+<h2 id="基本策略"><a href="#基本策略" class="headerlink" title="基本策略"></a>基本策略</h2><h3 id="最优匹配"><a href="#最优匹配" class="headerlink" title="最优匹配"></a>最优匹配</h3><p>首先遍历整个空闲列表，找到和请求大小一样或更大的空闲块，然后返回这组候选者中最小的一块。这就是所谓的最优匹配（也可以称为最小匹配）。只需要遍历一次空闲列表，就足以找到正确的块并返回。</p>
+<h3 id="最差匹配"><a href="#最差匹配" class="headerlink" title="最差匹配"></a>最差匹配</h3><p>最差匹配（worst fit）方法与最优匹配相反，它尝试找最大的空闲块，分割并满足用户需求后，将剩余的块（很大）加入空闲列表。最差匹配尝试在空闲列表中保留较大的块，而不是向最优匹配那样可能剩下很多难以利用的小块。但是，最差匹配同样需要遍历整个空闲列表。更糟糕的是，大多数研究表明它的表现非常差，导致过量的碎片，同时还有很高的开销。</p>
+<h3 id="首次匹配"><a href="#首次匹配" class="headerlink" title="首次匹配"></a>首次匹配</h3><p>首次匹配（first fit）策略就是找到第一个足够大的块，将请求的空间返回给用户。同样，剩余的空闲空间留给后续请求。<br>首次匹配有速度优势（不需要遍历所有空闲块），但有时会让空闲列表开头的部分有很多小块。因此，分配程序如何管理空闲列表的顺序就变得很重要。一种方式是基于地址排序（address-based ordering）。通过保持空闲块按内存地址有序，合并操作会很容易，从而减少了内存碎片。</p>
+<h3 id="下次匹配"><a href="#下次匹配" class="headerlink" title="下次匹配"></a>下次匹配</h3><p>不同于首次匹配每次都从列表的开始查找，下次匹配（next fit）算法多维护一个指针，指向上一次查找结束的位置。其想法是将对空闲空间的查找操作扩散到整个列表中去，避免对列表开头频繁的分割。这种策略的性能与首次匹配很接它，同样避免了遍历查找。</p>
+<h3 id="例子"><a href="#例子" class="headerlink" title="例子"></a>例子</h3><p>设想一个空闲列表包含 3 个元素，长度依次为 10、30、20<br><img src="/2023/06/16/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%AF%BC%E8%AE%BA-%E5%86%85%E5%AD%98%E8%99%9A%E6%8B%9F%E5%8C%96/r1.png" alt="?"><br>假设有一个 15 字节的内存请求。最优匹配会遍历整个空闲列表，发现 20 字节是最优匹配，因为它是满足请求的最小空闲块。结果空闲列表变为：<br><img src="/2023/06/16/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%AF%BC%E8%AE%BA-%E5%86%85%E5%AD%98%E8%99%9A%E6%8B%9F%E5%8C%96/r2.png" alt="?"></p>
+<p>本例中发生的情况，在最优匹配中常常发生，现在留下了一个小空闲块。最差匹配类似，但会选择最大的空闲块进行分割，在本例中是 30。结果空闲列表变为：<br><img src="/2023/06/16/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%AF%BC%E8%AE%BA-%E5%86%85%E5%AD%98%E8%99%9A%E6%8B%9F%E5%8C%96/r3.png" alt="?"></p>
+<p>在这个例子中，首次匹配会和最差匹配一样，也发现满足请求的第一个空闲块。不同的是查找开销，最优匹配和最差匹配都需要遍历整个列表，而首次匹配只找到第一个满足需求的块即可，因此减少了查找开销。</p>
+<h2 id="其他方式"><a href="#其他方式" class="headerlink" title="其他方式"></a>其他方式</h2><h3 id="分离空闲列表"><a href="#分离空闲列表" class="headerlink" title="分离空闲列表"></a>分离空闲列表</h3><p>如果某个应用程序经常申请一种（或几种）大小的内存空间，那就用一个独立的列表，只管理这样大小的对象。其他大小的请求都一给更通用的内存分配程序。</p>
+<p>应该拿出多少内存来专门为某种大小的请求服务，而将剩余的用来满足一般请求？</p>
+<p>具体来说，在内核启动时，它为可能频繁请求的内核对象创建一些对象缓存（object cache），如锁和文件系统 inode 等。这些的对象缓存每个分离了特定大小的空闲列表，因此能够很快地响应内存请求和释放。如果某个缓存中的空闲空间快耗尽时，它就向通用内存分配程序申请一些内存厚块（slab）（总量是页大小和对象大小的公倍数）。相反，如果给定厚块中对象的引用计数变为 0，通用的内存分配程序可以从专门的分配程序中回收这些空间，这通常发生在虚拟内存系统需要更多的空间的时候。</p>
+<h3 id="伙伴系统"><a href="#伙伴系统" class="headerlink" title="伙伴系统"></a>伙伴系统</h3><p>在这种系统中，空闲空间首先从概念上被看成大小为 2^N 的大空间。当有一个内存分配请求时，空闲空间被递归地一分为二，直到刚好可以满足请求的大小（再一分为二就无法满足）。这时，请求的块被返回给用户。</p>
+<p>在下面的例子中，一个 64KB 大小的空闲空间被切分，以便提供 7KB 的块：<br><img src="/2023/06/16/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%AF%BC%E8%AE%BA-%E5%86%85%E5%AD%98%E8%99%9A%E6%8B%9F%E5%8C%96/r4.png" alt="?"><br>这种分配策略只允许分配2的整数次幂大小的空闲块，因此会有内部碎片（internal fragment）的麻烦。</p>
+<p>伙伴系统的漂亮之处在于块被释放时。如果将这个 8KB 的块归还给空闲列表，分配程序会检查“伙伴”8KB 是否空闲。如果是，就合二为一，变成 16KB 的块。然后会检查这个 16KB 块的伙伴是否空闲，如果是，就合并这两块。这个递归合并过程继续上溯，直到合并整个内存区域，或者某一个块的伙伴还没有被释放。</p>
 ]]></content>
       <tags>
         <tag>os</tag>
