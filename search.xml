@@ -314,8 +314,174 @@
 <blockquote>
 <p>页表是一个数据结构，用于管理虚拟内存中的页。它存储了每个虚拟页号与其对应的物理页框地址的映射关系。页表通常是一个二维数组，其中每个元素对应一个虚拟页号，并存储了与之对应的物理页框地址。</p>
 </blockquote>
-<h1 id="分页：更小的表"><a href="#分页：更小的表" class="headerlink" title="分页：更小的表"></a>分页：更小的表</h1><p>假设一个 32 位地址空间（2^32 字节），4KB大小（2^12 字节）的页和4 字节大小的页表项。一个地址空间中大约有一百万个虚拟页面（2^32/2^12）。乘以页表项的大小，你会发现页表大小为 4MB。</p>
+<h1 id="分页：更小的表"><a href="#分页：更小的表" class="headerlink" title="分页：更小的表"></a>分页：更小的表</h1><p><strong>记住目的：他想要更小的页表❗❗❗</strong></p>
+<p>假设一个 32 位地址空间（2^32 字节），4KB大小（2^12 字节）的页和4 字节大小的页表项。一个地址空间中大约有一百万个虚拟页面（2^32/2^12）。乘以页表项的大小，你会发现页表大小为 4MB。</p>
 <h2 id="简单的解决方案：更大的页"><a href="#简单的解决方案：更大的页" class="headerlink" title="简单的解决方案：更大的页"></a>简单的解决方案：更大的页</h2><p>再以 32 位地址空间为例，但这次假设用 16KB （2^14）的页。因此，会有 18 位的 VPN 加上 14 位的偏移量。假设每个页表项（4字节）的大小相同，现在线性页表中有 2^18 个项，因此每个页表的总大小为 1MB，页表缩到四分之一。</p>
+<p>然而，大内存页会导致每页内的浪费，这被称为内部碎片（internal fragmentation）问题（因为浪费在分配单元内部）。因此，结果是应用程序会分配页，但只用每页的一小部分，而内存很快就会充满这些过大的页。因此，大多数系统在常见的情况下使用相对较小的页大小：4KB（如 x86）或 8KB（如 SPARCv9）。</p>
+<h2 id="混合方法：分页和分段"><a href="#混合方法：分页和分段" class="headerlink" title="混合方法：分页和分段"></a>混合方法：分页和分段</h2><p>我们的杂合方法不是为进程的整个地址空间提供单个页表（不然中间有很多没用到的无效项，白白占空间），而是为每个逻辑分段提供一个。我们可能有 3 个页表，地址空间的代码、堆和栈部分各有一个。</p>
+<p>假设 32 位虚拟地址空间包含 4KB 页面，并且地址空间分为 4 个段。在这个例子中，我们只使用 3 个段：一个用于代码，另一个用于堆，还有一个用于栈。<br>要确定地址引用哪个段，我们会用地址空间的前两位。假设 00 是未使用的段，01 是代码段，10 是堆段，11 是栈段。</p>
+<p><img src="/2023/06/16/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%AF%BC%E8%AE%BA-%E5%86%85%E5%AD%98%E8%99%9A%E6%8B%9F%E5%8C%96/t6.png" alt="?"><br>在硬件中，假设有 3 个基本/界限对，代码、堆和栈各一个。在上下文切换时，必须更改这些寄存器，以反映新运行进程的页表的位置。</p>
+<p>在 TLB 未命中时（假设硬件管理的 TLB，即硬件负责处理 TLB 未命中），硬件使用分段位（SN）来确定要用哪个基址和界限对。然后硬件将其中的物理地址与 VPN 结合起来，形成页表项（PTE）的地址：</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line">SN = (VirtualAddress &amp; SEG_MASK) &gt;&gt; SN_SHIFT</span><br><span class="line">VPN = (VirtualAddress &amp; VPN_MASK) &gt;&gt; VPN_SHIFT</span><br><span class="line">AddressOfPTE = Base[SN] + (VPN * <span class="keyword">sizeof</span>(PTE))</span><br></pre></td></tr></table></figure>
+<p>杂合方案的关键区别在于，每个分段都有界限寄存器，每个界限寄存器保存了段中最大有效页的值。例如，如果代码段使用它的前 3 个页（0、1 和 2），则代码段页表将只有 3个项分配给它，并且界限寄存器将被设置为 3。内存访问超出段的末尾将产生一个异常，并可能导致进程终止。<br>栈和堆之间未分配的页不再占用页表中的空间（仅将其标记为无效）。(页表中有一项记忆该项是否有效)</p>
+<p><strong>记住目的：他想要更小的页表❗❗❗</strong></p>
+<h2 id="多级页表"><a href="#多级页表" class="headerlink" title="多级页表"></a>多级页表</h2><p>另一种方法并不依赖于分段，但也试图解决相同的问题：<strong>如何去掉页表中的所有无效区域，而不是将它们全部保留在内存中？</strong> 我们将这种方法称为多级页表（multi-level page table），因为它将线性页表变成了类似树的东西。这种方法非常有效，许多现代系统都用它（例如 x86 ）。</p>
+<p>多级页表的基本思想很简单。<strong>首先，将页表分成页大小的单元。然后，如果整页的页表项（PTE）无效，就完全不分配该页的页表。为了追踪页表的页是否有效（以及如果有效，它在内存中的位置），使用了名为页目录（page directory）的新结构。页目录因此可以告诉你页表的页在哪里，或者页表的整个页不包含有效页。</strong><br><img src="/2023/06/16/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%AF%BC%E8%AE%BA-%E5%86%85%E5%AD%98%E8%99%9A%E6%8B%9F%E5%8C%96/t7.png" alt="?"></p>
+<blockquote>
+<p>理解时空折中<br>在构建数据结构时，应始终考虑时间和空间的折中（time-space trade-off）。通常，如果你希望更快地访问特定的数据结构，就必须为该结构付出空间的代价。</p>
+</blockquote>
+<p>应该指出，多级页表是有成本的。在 TLB 未命中时，需要从内存加载两次，才能从页表中获取正确的地址转换信息（一次用于页目录，另一次用于 PTE 本身），而用线性页表只需要一次加载。<br>在多级表的情况下，为了节省宝贵的内存，我们使页表查找更加复杂。</p>
+<h3 id="详细的多级示例"><a href="#详细的多级示例" class="headerlink" title="详细的多级示例"></a>详细的多级示例</h3><p>设想一个大小为 16KB 的小地址空间，其中包含 64 个字节的页。因此，我们有一个 14 位的虚拟地址空间，VPN 有 8位，偏移量有 6 位。即使只有一小部分地址空间正在使用，线性页表也会有 28（256）个项。<br><img src="/2023/06/16/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%AF%BC%E8%AE%BA-%E5%86%85%E5%AD%98%E8%99%9A%E6%8B%9F%E5%8C%96/t8.png" alt="?"><br>在这个例子中，虚拟页 0 和 1 用于代码，虚拟页 4 和 5 用于堆，虚拟页 254 和 255 用于栈。地址空间的其余页未被使用。</p>
+<p>要为这个地址空间构建一个两级页表，我们从完整的线性页表开始，将它分解成页大小的单元。回想一下我们的完整页表（在这个例子中）有 256 个项；假设每个 PTE 的大小是 4个字节。因此，我们的页表大小为 1KB（256×4 字节）。鉴于我们有 64 字节的页，1KB 页表可以分为 16 个 64 字节的页，每个页可以容纳 16 个 PTE。</p>
+<p>我们首先索引到页目录。这个例子中的页表很小：256 个项，分布在 16 个页上。页目录需要为页表的每页提供一个项。因此，它有 16 个项。结果，我们需要 4 位 VPN 来索引目录。我们使用 VPN 的前 4 位，如下所示：<br><img src="/2023/06/16/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%AF%BC%E8%AE%BA-%E5%86%85%E5%AD%98%E8%99%9A%E6%8B%9F%E5%8C%96/t9.png" alt="?"></p>
+<p>一旦从 VPN 中提取了页目录索引（简称 PDIndex），我们就可以通过简单的计算来找到页目录项（PDE）的地址：PDEAddr = PageDirBase +（PDIndex×sizeof（PDE））。这就得到了页目录，现在我们来看它，在地址转换上取得进一步进展。</p>
+<p>如果页目录项标记为无效，则我们知道访问无效，从而引发异常。但是，如果 PDE 有效，我们还有更多工作要做。具体来说，我们现在必须从页目录项指向的页表的页中获取页表项（PTE）。要找到这个 PTE，我们必须使用 VPN 的剩余位索引到页表的部分：<br><img src="/2023/06/16/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%AF%BC%E8%AE%BA-%E5%86%85%E5%AD%98%E8%99%9A%E6%8B%9F%E5%8C%96/y1.png" alt="?"></p>
+<p>这个页表索引（Page-Table Index，PTIndex）可以用来索引页表本身，给出 PTE 的地址：<br>PTEAddr = (PDE.PFN &lt;&lt; SHIFT) + (PTIndex * sizeof(PTE))<br>请注意，从页目录项获得的页帧号（PFN）必须左移到位，然后再与页表索引组合，才能形成 PTE 的地址。</p>
+<p>在物理页 100（页表的第 0 页的物理帧号）中，我们有 1 页，包含 16 个页表项，记录了地址空间中的前 16 个 VPN。请参见表 20.2（中间部分）。<br>页表的另一个有效页在 PFN 101 中。该页包含地址空间的最后 16 个 VPN 的映射。具体见表 20.2（右侧）。<br><img src="/2023/06/16/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%AF%BC%E8%AE%BA-%E5%86%85%E5%AD%98%E8%99%9A%E6%8B%9F%E5%8C%96/y2.png" alt="?"></p>
+<p>在这个例子中，我们不是为一个线性页表分配完整的 16页，而是分配 3 页：一个用于页目录，两个用于页表的具有有效映射的块。</p>
+<h3 id="实例"><a href="#实例" class="headerlink" title="实例"></a>实例</h3><p>最后，让我们用这些信息来进行地址转换。这里是一个地址，指向 VPN 254 的第 0 个字节：0x3F80，或二进制的 11 1111 1000 0000。</p>
+<p>我们将使用 VPN 的前 4 位来索引页目录。因此，1111 会从上面的页目录中选择最后一个（第 15 个，如果你从第 0 个开始）。这就指向了位于地址 101 的页表的有效页。然后，我们使用 VPN 的下 4 位（1110）来索引页表的那一页并找到所需的 PTE。1110 是页面中的倒数第二（第 14 个）条，并告诉我们虚拟地址空间的页 254 映射到物理页 55。通过连接 PFN = 55（或十六进制 0x37）和 offset = 000000，可以形成我们想要的物理地址，并向内存系统发出请求：PhysAddr =（PTE.PFN &lt;&lt; SHIFT）+ offset = 00 1101 1100 0000 = 0x0DC0。</p>
+<h2 id="超过两级"><a href="#超过两级" class="headerlink" title="超过两级"></a>超过两级</h2><p>在至今为止的例子中，我们假定多级页表只有两个级别：一个页目录和几页页表。在某些情况下，更深的树是可能的。</p>
+<p>假设我们有一个 30 位的虚拟地址空间和一个小的（512 字节）页。因此我们的虚拟地址有一个 21 位的虚拟页号和一个 9 位偏移量。</p>
+<p><strong>构建多级页表的目标：使页表的每一部分都能放入一个页。到目前为止，<br>我们只考虑了页表本身。但是，如果页目录太大，该怎么办？</strong></p>
+<p>首先要确定多少页表项可以放入一页。鉴于页大小为 512 字节，并且假设 PTE 大小为 4 字节，你应该看到，可以在单个页上放入 128 个 PTE。当我们索引页表时，我们可以得出结论，我们需要 VPN的最低有效位 7 位（log2128）作为索引：<br><img src="/2023/06/16/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%AF%BC%E8%AE%BA-%E5%86%85%E5%AD%98%E8%99%9A%E6%8B%9F%E5%8C%96/y3.png" alt="?"></p>
+<p>如果我们的页目录有 214个项，那么它不是一个页，而是 128 个，因此我们让多级页表的每一个部分放入一页目标失败了。</p>
+<p>为了解决这个问题，我们为树再加一层，将页目录本身拆成多个页，然后在其上添加另一个页目录，指向页目录的页。我们可以按如下方式分割虚拟地址：<br><img src="/2023/06/16/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%AF%BC%E8%AE%BA-%E5%86%85%E5%AD%98%E8%99%9A%E6%8B%9F%E5%8C%96/y4.png" alt="?"><br>现在，当索引上层页目录时，我们使用虚拟地址的最高几位（图中的 PD 索引 0）。该索引用于从顶级页目录中获取页目录项。如果有效，则通过组合来自顶级 PDE 的物理帧号和 VPN 的下一部分（PD 索引 1）来查阅页目录的第二级。最后，如果有效，则可以通过使用与第二级 PDE 的地址组合的页表索引来形成 PTE 地址。</p>
+<h3 id="地址转换过程：记住-TLB"><a href="#地址转换过程：记住-TLB" class="headerlink" title="地址转换过程：记住 TLB"></a>地址转换过程：记住 TLB</h3><p>在任何复杂的多级页表访问发生之前，硬件首先检查 TLB。在命中时，物理地址直接形成，而不像之前一样访问页表。只有在 TLB 未命中时，硬件才需要执行完整的多级查找。</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line">VPN = (VirtualAddress &amp; VPN_MASK) &gt;&gt; SHIFT</span><br><span class="line">(Success, TlbEntry) = TLB_Lookup(VPN)</span><br><span class="line"><span class="keyword">if</span> (Success == True) <span class="comment">// TLB Hit</span></span><br><span class="line">    <span class="keyword">if</span> (CanAccess(TlbEntry.ProtectBits) == True)</span><br><span class="line">        Offset = VirtualAddress &amp; OFFSET_MASK</span><br><span class="line">        PhysAddr = (TlbEntry.PFN &lt;&lt; SHIFT) | Offset</span><br><span class="line">        Register = AccessMemory(PhysAddr)</span><br><span class="line">    <span class="keyword">else</span></span><br><span class="line">        RaiseException(PROTECTION_FAULT)</span><br><span class="line"><span class="keyword">else</span> <span class="comment">// TLB Miss</span></span><br><span class="line"><span class="comment">// first, get page directory entry</span></span><br><span class="line">    PDIndex = (VPN &amp; PD_MASK) &gt;&gt; PD_SHIFT</span><br><span class="line">    PDEAddr = PDBR + (PDIndex * <span class="keyword">sizeof</span>(PDE))</span><br><span class="line">    PDE = AccessMemory(PDEAddr)</span><br><span class="line">    <span class="keyword">if</span> (PDE.Valid == False)</span><br><span class="line">        RaiseException(SEGMENTATION_FAULT)</span><br><span class="line">    <span class="keyword">else</span></span><br><span class="line"><span class="comment">// PDE is valid: now fetch PTE from page table</span></span><br><span class="line">        PTIndex = (VPN &amp; PT_MASK) &gt;&gt; PT_SHIFT</span><br><span class="line">        PTEAddr = (PDE.PFN &lt;&lt; SHIFT) + (PTIndex * <span class="keyword">sizeof</span>(PTE))</span><br><span class="line">        PTE = AccessMemory(PTEAddr)</span><br><span class="line">        <span class="keyword">if</span> (PTE.Valid == False)</span><br><span class="line">            RaiseException(SEGMENTATION_FAULT)</span><br><span class="line">        <span class="keyword">else</span> <span class="keyword">if</span> (CanAccess(PTE.ProtectBits) == False)</span><br><span class="line">            RaiseException(PROTECTION_FAULT)</span><br><span class="line">        <span class="keyword">else</span></span><br><span class="line">            TLB_Insert(VPN, PTE.PFN, PTE.ProtectBits)</span><br><span class="line">            RetryInstruction()</span><br></pre></td></tr></table></figure>
+<h2 id="反向页表"><a href="#反向页表" class="headerlink" title="反向页表"></a>反向页表</h2><p>在反向页表（inverted page table）中，可以看到页表世界中更极端的空间节省。在反向页表中，只保留了一个全局的页表。这个全局页表中的每一项代表系统的一个物理页，而不是一个进程的内存映射。每个页表项包含了两个重要的信息：哪个进程正在使用该物理页，以及该进程的哪个虚拟页映射到该物理页。</p>
+<p>现在，要找到正确的项，就是要搜索这个数据结构。线性扫描是昂贵的，因此通常在此基础结构上建立散列表，以加速查找。PowerPC 就是这种架构的一个例子</p>
+<h2 id="作业"><a href="#作业" class="headerlink" title="作业"></a>作业</h2><p>1.对于线性页表，假设硬件在 TLB 未命中时进行查找，则需要一个寄存器来定位页表。 您需要多少个寄存器才能找到两级页表？ 三级页表？</p>
+<blockquote>
+<p>对于线性页表，每个页表级别都需要一个寄存器来定位页表。<br>对于两级页表，需要2个寄存器来找到页表。第一个寄存器用于找到一级页表，第二个寄存器用于找到二级页表。<br>对于三级页表，需要3个寄存器来找到页表。第一个寄存器用于找到一级页表，第二个寄存器用于找到二级页表，第三个寄存器用于找到三级页表。</p>
+</blockquote>
+<p>3．根据你对缓存内存的工作原理的理解，你认为对页表的内存引用如何在缓存中工作？它们是否会导致大量的缓存命中（并导致快速访问）或者很多未命中（并导致访问缓慢）？</p>
+<blockquote>
+<p>缓存置换算法也会影响缓存的命中率。常见的缓存置换算法如LRU（Least Recently Used）、LFU（Least Frequently Used）和随机置换等。这些算法决定了哪些页表项会被保留在TLB中，哪些会被替换出去。</p>
+</blockquote>
+<h1 id="内存虚拟化名词解释"><a href="#内存虚拟化名词解释" class="headerlink" title="内存虚拟化名词解释"></a>内存虚拟化名词解释</h1><table>
+<thead>
+<tr>
+<th>英文缩写</th>
+<th>英文全称</th>
+<th>中文名称</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>VPN</td>
+<td>Virtual Page Number</td>
+<td>虚拟页号</td>
+</tr>
+<tr>
+<td>MMU</td>
+<td>Memory Management Unit</td>
+<td>内存管理单元</td>
+</tr>
+<tr>
+<td>PCB</td>
+<td>Process Control Block</td>
+<td>进程控制块</td>
+</tr>
+<tr>
+<td>PFN</td>
+<td>Page Frame Number</td>
+<td>页帧号</td>
+</tr>
+<tr>
+<td>PTE</td>
+<td>Page Table Entry</td>
+<td>页表项</td>
+</tr>
+<tr>
+<td>PTBR</td>
+<td>page-table base register</td>
+<td>页表基址寄存器</td>
+</tr>
+<tr>
+<td>TLB</td>
+<td>translation-lookaside buffer</td>
+<td>地址转换旁路缓冲存储器</td>
+</tr>
+<tr>
+<td>PDE</td>
+<td>Page Directory Entries</td>
+<td>页目录项</td>
+</tr>
+</tbody></table>
+<h1 id="超越物理内存-机制"><a href="#超越物理内存-机制" class="headerlink" title="超越物理内存:机制"></a>超越物理内存:机制</h1><p>到目前为止，我们一直假设所有页都常驻在物理内存中。但是，为了支持更大的地址空间，操作系统需要把当前没有在用的那部分地址空间找个地方存储起来。<br>在现代系统中，硬盘（hard disk drive）通常能够满足这个需求。</p>
+<blockquote>
+<p>为什么我们要为进程支持巨大的地址空间？<br>可以提供更多的内存使用空间、支持更多的并发性、实现动态内存分配和支持虚拟内存技术等重要功能。</p>
+</blockquote>
+<p>不仅是一个进程，增加交换空间让操作系统为多个并发运行的进程都提供巨大地址空间的假象。</p>
+<h2 id="交换空间"><a href="#交换空间" class="headerlink" title="交换空间"></a>交换空间</h2><p>第一件事情就是，在硬盘上开辟一部分空间用于物理页的移入和移出。这样的空间称为交换空间（swap space）<br>我们将内存中的页交换到其中，并在需要的时候又交换回去。因此，我们会假设操作系统能够以页大小为单元读取或者写入交换空间。操作系统需要记住给定页的硬盘地址（disk address）。</p>
+<p>交换空间的大小是非常重要的，它决定了系统在某一时刻能够使用的最大内存页数。</p>
+<p>在这个例子中，3 个进程（进程 0、进程 1 和进程 2）主动共享物理内存。但 3 个中的每一个，都只有一部分有效页在内存中，剩下的在硬盘的交换空间中。第 4 个进程（进程 3）的所有页都被交换到硬盘上，因此很清楚它目前没有运行。有一块交换空间是空闲的。</p>
+<p>要么在程序开始运行时全部加载，要么在现代操作系统中，按需要一页一页加载<br><img src="/2023/06/16/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%AF%BC%E8%AE%BA-%E5%86%85%E5%AD%98%E8%99%9A%E6%8B%9F%E5%8C%96/y5.png" alt="?"></p>
+<h2 id="存在位"><a href="#存在位" class="headerlink" title="存在位"></a>存在位</h2><p>内存引用发生了什么?<br>正在运行的进程生成虚拟内存引用（用于获取指令或访问数据），在这种情况下，硬件将其转换为物理地址，再从内存中获取所需数据。</p>
+<p>硬件首先从虚拟地址获得 VPN，检查 TLB 是否匹配（TLB 命中），如果命中，则获得最终的物理地址并从内存中取回。这希望是常见情形，因为它很快（不需要额外的内存访问）。<br>如果在 TLB 中找不到 VPN（即 TLB 未命中），则硬件在内存中查找页表（使用页表基址寄存器），并使用 VPN 查找该页的页表项（PTE）作为索引。如果页有效且存在于物理内存中，则硬件从 PTE 中获得 PFN，将其插入 TLB，并重试该指令，这次产生 TLB 命中。到现在为止还挺好。</p>
+<p>如果希望允许页交换到硬盘，必须添加更多的机制。具体来说，当硬件在 PTE中查找时，可能发现页不在物理内存中。硬件（或操作系统，在软件管理 TLB 时）判断是否在内存中的方法，是通过页表项中的一条新信息，即存在位（present bit）。如果存在位设置为 1，则表示该页存在于物理内存中，并且所有内容都如上所述进行。如果存在位设置为零，则页不在内存中，而在硬盘上。访问不在物理内存中的页，这种行为通常被称为页错误（page fault）。</p>
+<blockquote>
+<p>一个程序“页错误”时，意味着它正在访问的虚拟地址空间的一部分，被操作系统交换到了硬盘上。</p>
+</blockquote>
+<p>在页错误时，操作系统被唤起来处理页错误。一段称为“页错误处理程序（page-fault handler）”的代码会执行，来处理页错误。</p>
+<h2 id="页错误"><a href="#页错误" class="headerlink" title="页错误"></a>页错误</h2><p>在 TLB 未命中的情况下，我们有两种类型的系统：<strong>硬件管理的 TLB</strong>（硬件在页表中找到需要的转换映射）和<strong>软件管理的 TLB</strong>（操作系统执行查找过程）。不论在哪种系统中，如果页不存在，都由操作系统负责处理页错误。操作系统的页错误处理程序（page-fault handler）确定要做什么。几乎所有的系统都在软件中处理页错误。即使是硬件管理的 TLB，硬件也信任操作系统来管理这个重要的任务。</p>
+<p>操作系统如何知道所需的页在哪儿？</p>
+<p>在许多系统中，页表是存储这些信息最自然的地方。因此，操作系统可以用 PTE 中的某些位来存储硬盘地址，这些位通常用来存储像页的 PFN 这样的数据。当操作系统接收到页错误时，它会在 PTE 中查找地址，并将请求发送到硬盘，将页读取到内存中。</p>
+<p>当硬盘 I/O 完成时，操作系统会更新页表，将此页标记为存在，更新页表项（PTE）的PFN 字段以记录新获取页的内存位置，并重试指令。下一次重新访问 TLB 还是未命中，然而这次因为页在内存中，因此会将页表中的地址更新到 TLB 中（也可以在处理页错误时更新 TLB 以避免此步骤）。最后的重试操作会在 TLB 中找到转换映射，从已转换的内存物理地址，获取所需的数据或指令。</p>
+<p>请注意，当 I/O 在运行时，进程将处于阻塞（blocked）状态。因此，当页错误正常处理时，操作系统可以自由地运行其他可执行的进程。因为 I/O 操作是昂贵的，一个进程进行I/O（页错误）时会执行另一个进程，这种交叠（overlap）是多道程序系统充分利用硬件的一种方式。</p>
+<h2 id="内存满了怎么办"><a href="#内存满了怎么办" class="headerlink" title="内存满了怎么办"></a>内存满了怎么办</h2><p>操作系统可能希望先交换出（page out）一个或多个页，以便为操作系统即将交换入的新页留出空间。选择哪些页被交换出或被替换（replace）的过程，被称为页交换策略（page-replacementpolicy）。</p>
+<h2 id="页错误处理流程"><a href="#页错误处理流程" class="headerlink" title="页错误处理流程"></a>页错误处理流程</h2><figure class="highlight c"><table><tr><td class="code"><pre><span class="line">VPN = (VirtualAddress &amp; VPN_MASK) &gt;&gt; SHIFT</span><br><span class="line">(Success, TlbEntry) = TLB_Lookup(VPN)</span><br><span class="line">    <span class="keyword">if</span> (Success == True) <span class="comment">// TLB Hit</span></span><br><span class="line">        <span class="keyword">if</span> (CanAccess(TlbEntry.ProtectBits) == True)</span><br><span class="line">            Offset = VirtualAddress &amp; OFFSET_MASK</span><br><span class="line">            PhysAddr = (TlbEntry.PFN &lt;&lt; SHIFT) | Offset</span><br><span class="line">            Register = AccessMemory(PhysAddr)</span><br><span class="line">        <span class="keyword">else</span></span><br><span class="line">            RaiseException(PROTECTION_FAULT)</span><br><span class="line">    <span class="keyword">else</span> <span class="comment">// TLB Miss</span></span><br><span class="line">        PTEAddr = PTBR + (VPN * <span class="keyword">sizeof</span>(PTE))</span><br><span class="line">        PTE = AccessMemory(PTEAddr)</span><br><span class="line">    <span class="keyword">if</span> (PTE.Valid == False)</span><br><span class="line">        RaiseException(SEGMENTATION_FAULT)</span><br><span class="line">    <span class="keyword">else</span></span><br><span class="line">        <span class="keyword">if</span> (CanAccess(PTE.ProtectBits) == False)</span><br><span class="line">            RaiseException(PROTECTION_FAULT)</span><br><span class="line">        <span class="keyword">else</span> <span class="keyword">if</span> (PTE.Present == True)</span><br><span class="line"><span class="comment">// assuming hardware-managed TLB</span></span><br><span class="line">            TLB_Insert(VPN, PTE.PFN, PTE.ProtectBits)</span><br><span class="line">            RetryInstruction()</span><br><span class="line">        <span class="keyword">else</span> <span class="keyword">if</span> (PTE.Present == False)</span><br><span class="line">            RaiseException(PAGE_FAULT)</span><br></pre></td></tr></table></figure>
+<p><strong>当 TLB 未命中发生的时候有 3 种重要情景。</strong><br>第一种情况，该页存在（present）且有效（valid）（第 18～21 行）。在这种情况下，TLB 未命中处理程序可以简单地从 PTE 中获取 PFN，然后重试指令（这次 TLB 会命中），并因此继续前面描述的流程。</p>
+<p>第二种情况（第 22～23 行），页错误处理程序需要运行。虽然这是进程可以访问的合法页（毕竟是有效的），但它并不在物理内存中。</p>
+<p>第三种情况，访问的是一个无效页，可能由于程序中的错误（第 13～14 行）。在这种情况下，PTE 中的其他位都不重要了。硬件捕获这个非法访问，操作系统陷阱处理程序运行，可能会杀死非法进程。</p>
+<p><strong>为了处理页错误，操作系统大致做了什么?</strong><br>首先，操作系统必须为将要换入的页找到一个物理帧，如果没有这样的物理帧，我们将不得不等待交换算法运行，并从内存中踢出一些页，释放帧供这里使用。在获得物理帧后，处理程序发出 I/O 请求从交换空间读取页。最后，当这个慢操作完成时，操作系统更新页表并重试指令。重试将导致 TLB 未命中，然后再一次重试时，TLB 命中，此时硬件将能够访问所需的值。</p>
+<h2 id="交换何时真正发生"><a href="#交换何时真正发生" class="headerlink" title="交换何时真正发生"></a>交换何时真正发生</h2><p>为了保证有少量的空闲内存，大多数操作系统会设置高水位线（High Watermark，HW）和低水位线（Low Watermark，LW），来帮助决定何时从内存中清除页。原理是这样：当操作系统发现有少于 LW 个页可用时，后台负责释放内存的线程会开始运行，直到有 HW 个可用的物理页。这个后台线程有时称为交换守护进程（swap daemon）或页守护进程（page daemon），它然后会很开心地进入休眠状态，因为它毕竟为操作系统释放了一些内存。</p>
+<p>通过同时执行多个交换过程，我们可以进行一些性能优化。例如，许多系统会把多个要写入的页聚集（cluster）或分组（group），同时写入到交换区间，从而提高硬盘的效率。</p>
+<h1 id="超越物理内存-策略"><a href="#超越物理内存-策略" class="headerlink" title="超越物理内存:策略"></a>超越物理内存:策略</h1><p>由于内存压力（memory pressure）迫使操作系统换出（paging out）一些页，为常用的页腾出空间。确定要踢出（evict）哪个页（或哪些页）封装在操作系统的替换策略（replacement policy）中。</p>
+<h2 id="缓存管理"><a href="#缓存管理" class="headerlink" title="缓存管理"></a>缓存管理</h2><p>由于内存只包含系统中所有页的子集，因此可以将其视为系统中虚拟内存页的缓存（cache）。因此，在为这个缓存选择替换策略时，我们的目标是让缓存未命中（cache miss）最少，即使得从磁盘获取页的次数最少。或者，可以将目标看成让缓存命中（cache hit）最多，即在内存中找到待访问页的次数最多。</p>
+<p><strong>知道了缓存命中和未命中的次数，就可以计算程序的平均内存访问时间（Average Memory Access Time，AMAT，计算机架构师衡量硬件缓存的指标 ）<br>AMAT = (PHit·TM) + (PMiss·TD)<br>其中 TM 表示访问内存的成本，TD 表示访问磁盘的成本，PHit 表示在缓存中找到数据的概率（命中），PMiss表示在缓存中找不到数据的概率（未命中）。PHit和 PMiss从 0.0 变化到 1.0，并且 PMiss + PHit = 1.0。</strong></p>
+<h2 id="最优替换策略（无法实现）"><a href="#最优替换策略（无法实现）" class="headerlink" title="最优替换策略（无法实现）"></a>最优替换策略（无法实现）</h2><p><strong>替换内存中在最远将来才会被访问到的页，可以达到缓存未命中率最低。</strong></p>
+<p><strong>根据即将执行的队列元素顺序进行踢出，缓存里的元素在后续队列中谁离得远踢谁</strong></p>
+<h3 id="举例"><a href="#举例" class="headerlink" title="举例"></a>举例</h3><p>假设一个程序按照以下顺序访问<br>虚拟页：0，1，2，0，1，3，0，3，1，2，1。<br><img src="/2023/06/16/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%AF%BC%E8%AE%BA-%E5%86%85%E5%AD%98%E8%99%9A%E6%8B%9F%E5%8C%96/u1.png" alt="?"><br>前 3 个访问是未命中，因为缓存开始是空的。这种未命中有时也称作冷启动未命中（cold-start miss，或强制未命中，compulsory miss）。<br>然后我们再次引用页 0 和 1，它们都在缓存中。<br>最后，我们又有一个缓存未命中（页3），但这时缓存已满，必须进行替换！<br><strong>使用最优策略，我们检查当前缓存中每个页（0、1 和 2）未来访问情况，可以看到页 0 马上被访问，页 1 稍后被访问，页 2 在最远的将来被访问。</strong></p>
+<p><strong>未来的访问是无法知道的，你无法为通用操作系统实现最优策略。</strong></p>
+<blockquote>
+<p>补充：缓存未命中的类型<br>在计算机体系结构世界中，架构师有时会将未命中分为 3 类：强制性、容量和冲突未命中，有时称为3C [H87]。发生强制性（compulsory miss）未命中（或冷启动未命中，cold-start miss [EF78]）是因为缓存开始是空的，而这是对项目的第一次引用。与此不同，由于缓存的空间不足而不得不踢出一个项目以将新项目引入缓存，就发生了容量未命中（capacity miss）。第三种类型的未命中（冲突未命中，conflict miss）出现在硬件中，因为硬件缓存中对项的放置位置有限制，这是由于所谓的集合关联性（set-associativity）。它不会出现在操作系统页面缓存中，因为这样的缓存总是完全关联的（fully-associative），即对页面可以放置的内存位置没有限制。详情请见 H＆P [HP06]。</p>
+</blockquote>
+<h2 id="简单策略：FIFO"><a href="#简单策略：FIFO" class="headerlink" title="简单策略：FIFO"></a>简单策略：FIFO</h2><p>页在进入系统时，简单地放入一个队列。当发生替换时，最先进入的被踢出。FIFO 有一个很大的优势：实现相当简单。<br><img src="/2023/06/16/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%AF%BC%E8%AE%BA-%E5%86%85%E5%AD%98%E8%99%9A%E6%8B%9F%E5%8C%96/u2.png" alt="?"></p>
+<p>一般来说，<strong>当缓存变大时</strong>，缓存命中率是会提高的。但<strong>在这个例子</strong>，<strong>采用 FIFO，命中率反而下降了！</strong> 这种奇怪的现象被称为 Belady 的异常（Belady’s Anomaly）。</p>
+<blockquote>
+<p>其他一些策略，比如 LRU，不会遇到这个问题。可以猜猜为什么？<br>LRU 具有所谓的栈特性（stack property）。对于具有这个性质的算法，大小为 N + 1 的缓存自然包括大小为 N 的缓存的内容。因此，当增加缓存大小时，缓存命中率至少保证不变，有可能提高。先进先出（FIFO）和随机（Random）等显然没有栈特性，因此容易出现异常行为。</p>
+</blockquote>
+<h2 id="另一简单策略：随机"><a href="#另一简单策略：随机" class="headerlink" title="另一简单策略：随机"></a>另一简单策略：随机</h2><p>另一个类似的替换策略是随机，在内存满的时候它随机选择一个页进行替换。随机具有类似于 FIFO 的属性。实现我来很简单，但是它在挑选替换哪个页时不够智能。<br><img src="/2023/06/16/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%AF%BC%E8%AE%BA-%E5%86%85%E5%AD%98%E8%99%9A%E6%8B%9F%E5%8C%96/u3.png" alt="?"></p>
+<p>随机策略取决于当时的运气。</p>
+<h2 id="利用历史数据：LRU"><a href="#利用历史数据：LRU" class="headerlink" title="利用历史数据：LRU"></a>利用历史数据：LRU</h2><p>为了提高后续的命中率，我们再次通过历史的访问情况作为参考。例如，如果某个程序在过去访问过某个页，则很有可能在不久的将来会再次访问该页。<br>页更常用的属性是访问的近期性（recency），越近被访问过的页，也许再次访问的可能性也就越大。</p>
+<p>一系列简单的基于历史的算法诞生了。“最不经常使用”（Least-Frequently-Used，LFU）策略会替换最不经常使用的页。</p>
+<p>同样，“最少最近使用”（Least-Recently-Used，LRU）策略替换最近最少使用的页面。</p>
+<blockquote>
+<p>补充：<strong>局部性类型</strong><br><strong>程序倾向于表现出两种类型的局部。第一种是空间局部性（spatial locality），它指出如果页 P 被访问，可能围绕它的页（比如 P−1 或 P + 1）也会被访问。<br>第二种是时间局部性（temporal locality），它指出近期访问过的页面很可能在不久的将来再次访问。<br>假设存在这些类型的局部性，对硬件系统的缓存层次结构起着重要作用，硬件系统部署了许多级别的指令、数据和地址转换缓存，以便在存在此类局部性时，能帮助程序快速运行。</strong></p>
+</blockquote>
+<p>在这个例子中，当第一次需要替换页时，LRU 会踢出页 2，因为 0 和 1 的访问时间更近。然后它替换页 0，因为 1 和 3 最近被访问过。<br><img src="/2023/06/16/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%AF%BC%E8%AE%BA-%E5%86%85%E5%AD%98%E8%99%9A%E6%8B%9F%E5%8C%96/u4.png" alt="?"></p>
+<p><strong>从当前位置往前看，缓存中谁在最前面就踢谁。</strong></p>
+<p>与这些算法完全相反的算法也是存在：最经常使用策略（Most-Frequently-Used，MFU）和最近使用策略（Most-Recently-Used，MRU）。在大多数情况下（不是全部！），这些策略效果都不好，因为它们忽视了大多数程序都具有的局部性特点。</p>
+<h2 id="工作负载示例"><a href="#工作负载示例" class="headerlink" title="工作负载示例"></a>工作负载示例</h2><p><img src="/2023/06/16/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%AF%BC%E8%AE%BA-%E5%86%85%E5%AD%98%E8%99%9A%E6%8B%9F%E5%8C%96/u5.png" alt="?"><br>当工作负载不存在局部性时，使用的策略区别不大。LRU、FIFO 和随机都执行相同的操作，命中率完全由缓存的大小决定。其次，当缓存足够大到可以容纳所有的数据时，使用哪种策略也无关紧要，所有的策略（甚至是随机的）都有 100%的命中率。</p>
+<p>我们下一个工作负载就是所谓的“80—20”负载场景，它表现出局部性：80%的引用是访问 20%的页（“热门”页）。剩下的 20%是对剩余的 80%的页（“冷门”页）访问。<br><img src="/2023/06/16/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%AF%BC%E8%AE%BA-%E5%86%85%E5%AD%98%E8%99%9A%E6%8B%9F%E5%8C%96/u6.png" alt="?"><br>尽管随机和 FIFO 都很好地运行，但 LRU 更好，因为它更可能保持热门页。由于这些页面过去经常被提及，它们很可能在不久的将来再次被提及。优化再次表现得更好，表明 LRU 的历史信息并不完美。</p>
+<p>我们称之为“循环顺序”工作负载，其中依次引用 50个页，从 0 开始，然后是 1，…，49，然后循环，重复访问，总共有 10000 次访问 50 个单独页。<br><img src="/2023/06/16/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%AF%BC%E8%AE%BA-%E5%86%85%E5%AD%98%E8%99%9A%E6%8B%9F%E5%8C%96/u7.png" alt="?"><br>展示了 LRU 或者 FIFO 的最差情况。</p>
+<h2 id="实现基于历史信息的算法"><a href="#实现基于历史信息的算法" class="headerlink" title="实现基于历史信息的算法"></a>实现基于历史信息的算法</h2><p>以 LRU 为例。具体地说，在每次页访问（即每次内存访问，不管是取指令还是加载指令还是存储指令）时，我们都必须更新一些数据，从而将该页移动到列表的前面（即 MRU 侧）。与 FIFO 相比，FIFO 的页列表仅在页被踢出（通过移除最先进入的页）或者当新页添加到列表（已到列表尾部）时才被访问。为了记录哪些页是最少和最近被使用，系统必须对每次内存引用做一些记录工作。</p>
+<p>有一种方法有助于加快速度，就是增加一点硬件支持。例如，硬件可以在每个页访问时更新内存中的时间字段（时间字段可以在每个进程的页表中，或者在内存的某个单独的数组中，每个物理页有一个）。因此，当页被访问时，时间字段将被硬件设置为当前时间。然后，在需要替换页时，操作系统可以简单地扫描系统中所有页的时间字段以找到最近最<br>少使用的页。</p>
+<p><strong>随着系统中页数量的增长，扫描所有页的时间字段只是为了找到最精确最<br>少使用的页，这个代价太昂贵。</strong></p>
+<p>由于实现完美的 LRU 代价非常昂贵，我们能否实现一个近似的 LRU 算法，并且依然能够获得预期的效果？</p>
+<h2 id="近似-LRU"><a href="#近似-LRU" class="headerlink" title="近似 LRU"></a>近似 LRU</h2><p>系统的每个页有一个使用位，然后这些使用位存储在某个地方（例如，它们可能在每个进程的页表中，或者只在某个数组中）。每当页被引用（即读或写）时，硬件将使用位设置为 1。但是，硬件不会清除该位（即将其设置为 0），这由操作系统负责。</p>
+<p>系统中的所有页都放在一个循环列表中。时钟指针（clock hand）开始时指向某个特定的页（哪个页不重要）。当必须进行页替换时，操作系统检查当前指向的页 P 的使用位是 1 还是 0。如果是 1，则意味着页面 P 最近被使用，因此不适合被替换。然后，P 的使用位设置为 0，时钟指针递增到下一页（P + 1）。该算法一直持续到找到一个使用位为 0 的页，使用位为 0 意味着这个页最近没有被使用过（在最坏的情况下，所有的页都已经被使用了，那么就将所有页的使用位都设置为 0）。</p>
+<p><strong>时钟算法:该变种在需要进行页替换时随机扫描各页，如果遇到一个页的引用位为 1，就清除该位（即将它设置为 0）。直到找到一个使用位为 0的页，将这个页进行替换。</strong><br><img src="/2023/06/16/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%AF%BC%E8%AE%BA-%E5%86%85%E5%AD%98%E8%99%9A%E6%8B%9F%E5%8C%96/u8.png" alt="?"></p>
+<h2 id="考虑脏页"><a href="#考虑脏页" class="headerlink" title="考虑脏页"></a>考虑脏页</h2><p>如果页已被修改（modified）并因此变脏（dirty），则踢出它就必须将它写回磁盘，这很昂贵。如果它没有被修改（因此是干净的，clean），踢出就没成本。物理帧可以简单地重用于其他目的而无须额外的 I/O。因此，一些虚拟机系统更倾向于踢出干净页，而不是脏页。</p>
+<h2 id="其他虚拟内存策略"><a href="#其他虚拟内存策略" class="headerlink" title="其他虚拟内存策略"></a>其他虚拟内存策略</h2><p>页面替换不是虚拟内存子系统采用的唯一策略（尽管它可能是最重要的）。例如，操作系统还必须决定何时将页载入内存。该策略有时称为页选择（page selection）策略。<br>另一个策略决定了操作系统如何将页面写入磁盘。许多系统会在内存中收集一些待完成写入，并以一种（更高效）的写入方式将它们写入硬盘。这种行为通常称为聚集（clustering）写入，或者就是分组写入（grouping），这样做有效是因为硬盘驱动器的性质，执行单次大的写操作，比许多小的写操作更有效。</p>
+<h2 id="抖动"><a href="#抖动" class="headerlink" title="抖动"></a>抖动</h2><p>当内存就是被超额请求时，在这种情况下，系统将不断地进行换页，这种情况有时被称为抖动（thrashing）。</p>
+<blockquote>
+<p>当内存被超额请求时，系统内存不足以容纳所有需要运行的进程和数据，因此系统需要不断进行换页操作。换页是指将内存中的某些页面（页框）置换到磁盘上，以释放内存空间给新的页面使用。</p>
+</blockquote>
+<hr>
+<h1 id="VAX-VVM虚拟内存系统"><a href="#VAX-VVM虚拟内存系统" class="headerlink" title="VAX//VVM虚拟内存系统"></a>VAX//VVM虚拟内存系统</h1><h2 id="内存管理硬件"><a href="#内存管理硬件" class="headerlink" title="内存管理硬件"></a>内存管理硬件</h2><p>VAX-11 为每个进程提供了一个 32 位的虚拟地址空间，分为 512 字节的页。因此，虚拟地址由 23 位 VPN 和 9 位偏移组成。此外，VPN 的高两位用于区分页所在的段。因此，如前所述，该系统是分页和分段的混合体。</p>
+<p>地址空间的下半部分称为“进程空间”，对于每个进程都是唯一的。在进程空间的前半部分（称为 P0）中，有用户程序和一个向下增长的堆。在进程空间的后半部分（P1），有向上增长的栈。地址空间的上半部分称为系统空间（S），尽管只有一半被使用。受保护的操作系统代码和数据驻留在此处，操作系统以这种方式跨进程共享。</p>
 ]]></content>
       <tags>
         <tag>os</tag>
