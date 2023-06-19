@@ -18,15 +18,24 @@
   
   
   <title>操作系统导论-并发 | Sunny&#39;s Blog</title>
-  <meta property="og:type" content="article">
+  <meta name="description" content="并发:介绍经典观点是一个程序只有一个执行点（一个程序计数器，用来存放要执行的指令），但多线程（multi-threaded）程序会有多个执行点（多个程序计数器，每个都用于取指令和执行）。每个线程类似于独立的进程，只有一点区别：它们共享地址空间，从而能够访问相同的数据。 单个线程的状态与进程状态非常类似。线程有一个程序计数器（PC），记录程序从哪里获取指令。每个线程有自己的一组用于计算的寄存器。所以">
+<meta property="og:type" content="article">
 <meta property="og:title" content="操作系统导论-并发">
 <meta property="og:url" content="https://codecodegogogo.github.io/2023/06/19/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%AF%BC%E8%AE%BA-%E5%B9%B6%E5%8F%91/index.html">
 <meta property="og:site_name" content="Sunny">
+<meta property="og:description" content="并发:介绍经典观点是一个程序只有一个执行点（一个程序计数器，用来存放要执行的指令），但多线程（multi-threaded）程序会有多个执行点（多个程序计数器，每个都用于取指令和执行）。每个线程类似于独立的进程，只有一点区别：它们共享地址空间，从而能够访问相同的数据。 单个线程的状态与进程状态非常类似。线程有一个程序计数器（PC），记录程序从哪里获取指令。每个线程有自己的一组用于计算的寄存器。所以">
 <meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://codecodegogogo.github.io/2023/06/19/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%AF%BC%E8%AE%BA-%E5%B9%B6%E5%8F%91/q1.png">
+<meta property="og:image" content="https://codecodegogogo.github.io/2023/06/19/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%AF%BC%E8%AE%BA-%E5%B9%B6%E5%8F%91/q2.png">
+<meta property="og:image" content="https://codecodegogogo.github.io/2023/06/19/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%AF%BC%E8%AE%BA-%E5%B9%B6%E5%8F%91/q3.png">
+<meta property="og:image" content="https://codecodegogogo.github.io/2023/06/19/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%AF%BC%E8%AE%BA-%E5%B9%B6%E5%8F%91/q4.png">
+<meta property="og:image" content="https://codecodegogogo.github.io/2023/06/19/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%AF%BC%E8%AE%BA-%E5%B9%B6%E5%8F%91/q6.png">
 <meta property="article:published_time" content="2023-06-19T02:28:05.000Z">
-<meta property="article:modified_time" content="2023-06-19T02:28:05.339Z">
+<meta property="article:modified_time" content="2023-06-19T08:46:57.165Z">
 <meta property="article:author" content="Sunny">
+<meta property="article:tag" content="os">
 <meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://codecodegogogo.github.io/2023/06/19/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%AF%BC%E8%AE%BA-%E5%B9%B6%E5%8F%91/q1.png">
   <!-- Canonical links -->
   <link rel="canonical" href="https://codecodegogogo.github.io/2023/06/19/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%AF%BC%E8%AE%BA-%E5%B9%B6%E5%8F%91/index.html">
   
@@ -170,7 +179,7 @@
   <div class="widget">
     <h3 class="widget-title">标签</h3>
     <div class="widget-body">
-      <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/c/" rel="tag">c++</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/code/" rel="tag">code</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/linux/" rel="tag">linux</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/os/" rel="tag">os</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%9D%82%E8%B0%88/" rel="tag">杂谈</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%9F%BA%E7%A1%80/" rel="tag">计算机基础</a><span class="tag-list-count">6</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%B7%A5%E5%85%B7/" rel="tag">计算机工具</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/" rel="tag">计算机网络</a><span class="tag-list-count">9</span></li></ul>
+      <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/c/" rel="tag">c++</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/code/" rel="tag">code</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/linux/" rel="tag">linux</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/os/" rel="tag">os</a><span class="tag-list-count">5</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%9D%82%E8%B0%88/" rel="tag">杂谈</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%9F%BA%E7%A1%80/" rel="tag">计算机基础</a><span class="tag-list-count">6</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%B7%A5%E5%85%B7/" rel="tag">计算机工具</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/" rel="tag">计算机网络</a><span class="tag-list-count">9</span></li></ul>
     </div>
   </div>
 
@@ -268,6 +277,15 @@
 
   
   
+  <aside class="sidebar sidebar-toc collapse   in  " id="collapseToc" itemscope itemtype="http://schema.org/WPSideBar">
+  <div class="slimContent">
+    <nav id="toc" class="article-toc">
+      <h3 class="toc-title">文章目录</h3>
+      <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%B9%B6%E5%8F%91-%E4%BB%8B%E7%BB%8D"><span class="toc-number">1.</span> <span class="toc-text">并发:介绍</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%AE%9E%E4%BE%8B%EF%BC%9A%E7%BA%BF%E7%A8%8B%E5%88%9B%E5%BB%BA"><span class="toc-number">1.1.</span> <span class="toc-text">实例：线程创建</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%A0%B8%E5%BF%83%E9%97%AE%E9%A2%98%EF%BC%9A%E4%B8%8D%E5%8F%AF%E6%8E%A7%E7%9A%84%E8%B0%83%E5%BA%A6"><span class="toc-number">1.2.</span> <span class="toc-text">核心问题：不可控的调度</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%8E%9F%E5%AD%90%E6%80%A7%E6%84%BF%E6%9C%9B"><span class="toc-number">1.3.</span> <span class="toc-text">原子性愿望</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%A1%A5%E5%85%85%EF%BC%9A%E5%85%B3%E9%94%AE%E5%B9%B6%E5%8F%91%E6%9C%AF%E8%AF%AD"><span class="toc-number">1.3.1.</span> <span class="toc-text">补充：关键并发术语</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%BF%98%E6%9C%89%E4%B8%80%E4%B8%AA%E9%97%AE%E9%A2%98%EF%BC%9A%E7%AD%89%E5%BE%85%E5%8F%A6%E4%B8%80%E4%B8%AA%E7%BA%BF%E7%A8%8B"><span class="toc-number">1.4.</span> <span class="toc-text">还有一个问题：等待另一个线程</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E6%8F%92%E5%8F%99%EF%BC%9A%E7%BA%BF%E7%A8%8BAPI"><span class="toc-number">2.</span> <span class="toc-text">插叙：线程API</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%BA%BF%E7%A8%8B%E5%88%9B%E5%BB%BA"><span class="toc-number">2.1.</span> <span class="toc-text">线程创建</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%BA%BF%E7%A8%8B%E5%AE%8C%E6%88%90"><span class="toc-number">2.2.</span> <span class="toc-text">线程完成</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%94%81"><span class="toc-number">2.3.</span> <span class="toc-text">锁</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%9D%A1%E4%BB%B6%E5%8F%98%E9%87%8F"><span class="toc-number">2.4.</span> <span class="toc-text">条件变量</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%BC%96%E8%AF%91%E5%92%8C%E8%BF%90%E8%A1%8C"><span class="toc-number">2.5.</span> <span class="toc-text">编译和运行</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E9%94%81-1"><span class="toc-number">3.</span> <span class="toc-text">锁</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%94%81%E7%9A%84%E5%9F%BA%E6%9C%AC%E6%80%9D%E6%83%B3"><span class="toc-number">3.1.</span> <span class="toc-text">锁的基本思想</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Pthread-%E9%94%81"><span class="toc-number">3.2.</span> <span class="toc-text">Pthread 锁</span></a></li></ol></li></ol>
+    </nav>
+  </div>
+</aside>
+
 <main class="main" role="main">
   <div class="content">
   <article id="post-操作系统导论-并发" class="article article-type-post" itemscope itemtype="http://schema.org/BlogPosting">
@@ -291,6 +309,11 @@
 </span>
         
         
+  <span class="article-tag">
+    <i class="icon icon-tags"></i>
+	<a class="article-tag-link-link" href="/tags/os/" rel="tag">os</a>
+  </span>
+
 
         
 	<span class="article-read hidden-xs">
@@ -304,7 +327,7 @@
         <span class="post-comment"><i class="icon icon-comment"></i> <a href="/2023/06/19/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%AF%BC%E8%AE%BA-%E5%B9%B6%E5%8F%91/#comments" class="article-comment-link">评论</a></span>
         
 	
-		<span class="post-wordcount hidden-xs" itemprop="wordCount">字数统计: 0(字)</span>
+		<span class="post-wordcount hidden-xs" itemprop="wordCount">字数统计: 4.8k(字)</span>
 	
 	
 
@@ -312,7 +335,135 @@
     </div>
     <div class="article-entry marked-body" itemprop="articleBody">
       
-        
+        <h1 id="并发-介绍"><a href="#并发-介绍" class="headerlink" title="并发:介绍"></a>并发:介绍</h1><p>经典观点是一个程序只有一个执行点（一个程序计数器，用来存放要执行的指令），但多线程（multi-threaded）程序会有多个执行点（多个程序计数器，每个都用于取指令和执行）。<strong>每个线程类似于独立的进程，只有一点区别：它们共享地址空间，从而能够访问相同的数据。</strong></p>
+<p>单个线程的状态与进程状态非常类似。线程有一个程序计数器（PC），记录程序从哪里获取指令。每个线程有自己的一组用于计算的寄存器。所以，如果有两个线程运行在一个处理器上，<strong>从运行一个线程（T1）切换到另一个线程（T2）时，必定发生上下文切换（context switch）</strong>。线程之间的上下文切换类似于进程间的上下文切换。<strong>对于进程，我们将状态保存到进程控制块（Process Control Block，PCB）。现在，我们需要一个或多个线程控制块（Thread Control Block，TCB）</strong>，保存每个线程的状态。但是，<strong>与进程相比，线程之间的上下文切换有一点主要区别：地址空间保持不变（即不需要切换当前使用的页表</strong>）。</p>
+<p>线程和进程之间的另一个主要区别在于栈。在简单的传统进程地址空间模型 [我们现在可以称之为单线程（single-threaded）进程] 中，只有一个栈，通常位于地址空间的底部。<br><img src="/2023/06/19/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%AF%BC%E8%AE%BA-%E5%B9%B6%E5%8F%91/q1.png" alt="?"><br>然而，在多线程的进程中，每个线程独立运行，当然可以调用各种例程来完成正在执行的任何工作。不是地址空间中只有一个栈，而是每个线程都有一个栈。</p>
+<h2 id="实例：线程创建"><a href="#实例：线程创建" class="headerlink" title="实例：线程创建"></a>实例：线程创建</h2><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;assert.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;pthread.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="type">void</span> *<span class="title function_">mythread</span><span class="params">(<span class="type">void</span> *arg)</span> &#123;</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;%s\n&quot;</span>, (<span class="type">char</span> *) arg);</span><br><span class="line">    <span class="keyword">return</span> <span class="literal">NULL</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="type">int</span></span><br><span class="line"><span class="title function_">main</span><span class="params">(<span class="type">int</span> argc, <span class="type">char</span> *argv[])</span> &#123;</span><br><span class="line"><span class="type">pthread_t</span> p1, p2;</span><br><span class="line">    <span class="type">int</span> rc;</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;main: begin\n&quot;</span>);</span><br><span class="line">    rc = pthread_create(&amp;p1, <span class="literal">NULL</span>, mythread, <span class="string">&quot;A&quot;</span>); assert(rc == <span class="number">0</span>);</span><br><span class="line">    rc = pthread_create(&amp;p2, <span class="literal">NULL</span>, mythread, <span class="string">&quot;B&quot;</span>); assert(rc == <span class="number">0</span>);</span><br><span class="line">    <span class="comment">// join waits for the threads to finish</span></span><br><span class="line">    rc = pthread_join(p1, <span class="literal">NULL</span>); assert(rc == <span class="number">0</span>);</span><br><span class="line">    rc = pthread_join(p2, <span class="literal">NULL</span>); assert(rc == <span class="number">0</span>);</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;main: end\n&quot;</span>);</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><img src="/2023/06/19/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%AF%BC%E8%AE%BA-%E5%B9%B6%E5%8F%91/q2.png" alt="?"><br><strong>这种排序不是唯一可能的顺序。实际上，给定一系列指令，有很多可能的<br>顺序，这取决于调度程序决定在给定时刻运行哪个线程。</strong><br><img src="/2023/06/19/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%AF%BC%E8%AE%BA-%E5%B9%B6%E5%8F%91/q3.png" alt="?"></p>
+<p><strong>即使先前创建了线程 1，如果调度程序决定先运行线程 2，没有理由认为先创建的线程先运行。</strong><br><img src="/2023/06/19/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%AF%BC%E8%AE%BA-%E5%B9%B6%E5%8F%91/q4.png" alt="?"></p>
+<h2 id="核心问题：不可控的调度"><a href="#核心问题：不可控的调度" class="headerlink" title="核心问题：不可控的调度"></a>核心问题：不可控的调度</h2><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">mov 0x8049a1c, %eax</span><br><span class="line">add $0x1, %eax</span><br><span class="line">mov %eax, 0x8049a1c</span><br></pre></td></tr></table></figure>
+<p>变量 counter 位于地址 0x8049a1c。在这 3 条指令中，先用 x86 的 mov指令，从内存地址处取出值，放入 eax。然后，给 eax 寄存器的值加 1（0x1）。最后，eax的值被存回内存中相同的地址。</p>
+<p>设想我们的两个线程之一（线程 1）进入这个代码区域，并且因此将要增加一个计数器。它将 counter 的值（假设它这时是 50）加载到它的寄存器 eax 中。因此，线程 1 的 eax = 50。然后它向寄存器加 1，因此 eax = 51。现在，一件不幸的事情发生了：<strong>时钟中断发生。因此，操作系统将当前正在运行的线程（它的程序计数器、寄存器，包括 eax 等）的状态保存到线程的 TCB。</strong></p>
+<p>现在更糟的事发生了：线程 2 被选中运行，并进入同一段代码。它也执行了第一条指令，获取计数器的值并将其放入其 eax 中 [<strong>请记住：运行时每个线程都有自己的专用寄存器。上下文切换代码将寄存器虚拟化（virtualized），保存并恢复它们的值</strong>]。此时 counter 的值仍为 50，因此线程 2 的 eax = 50。假设线程 2 执行接下来的两条指令，将 eax 递增 1（因此 eax= 51），然后将 eax 的内容保存到 counter（地址 0x8049a1c）中。因此，全局变量 counter 现在的值是 51。</p>
+<p>最后，又发生一次上下文切换，线程 1 恢复运行。还记得它已经执行过 mov 和 add 指令，现在准备执行最后一条 mov 指令。回忆一下，eax=51。因此，最后的 mov 指令执行，将值保存到内存，counter 再次被设置为 51。</p>
+<p>简单来说，发生的情况是：增加 counter 的代码被执行两次，初始值为 50，但是结果为51。这个程序的“正确”版本应该导致变量 counter 等于 52。</p>
+<p><strong>由于执行这段代码的多个线程可能导致竞争状态，因此我们将此段代码称为临界区（critical section）。临界区是访问共享变量（或更一般地说，共享资源）的代码片段，一定不能由多个线程同时执行。</strong><br><img src="/2023/06/19/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%AF%BC%E8%AE%BA-%E5%B9%B6%E5%8F%91/q6.png" alt="?"></p>
+<p><strong>我们真正想要的代码就是所谓的互斥（mutual exclusion）。这个属性保证了如果一个线程在临界区内执行，其他线程将被阻止进入临界区。</strong></p>
+<h2 id="原子性愿望"><a href="#原子性愿望" class="headerlink" title="原子性愿望"></a>原子性愿望</h2><p>原子方式的意思是“作为一个单元”,当指令执行时，它会像期望那样执行更新。它不能在指令中间中断，因为这正是我们从硬件获得的保证：发生中断时，指令根本没有运行，或者运行完成，没有中间状态。</p>
+<p>如果有一条指令来做到这一点，我们可以发出这条指令然后完事。但在一般情况下，不会有这样的指令。</p>
+<p>因此，我们要做的是要求硬件提供一些有用的指令，可以在这些指令上构建一个通用的集合，即所谓的同步原语（synchronization primitive）。通过使用这些硬件同步原语，加上操作系统的一些帮助，我们将能够构建多线程代码，以同步和受控的方式访问临界区，从而可靠地产生正确的结果</p>
+<h3 id="补充：关键并发术语"><a href="#补充：关键并发术语" class="headerlink" title="补充：关键并发术语"></a>补充：关键并发术语</h3><blockquote>
+<p><strong>临界区、竞态条件、不确定性、互斥执行</strong></p>
+</blockquote>
+<blockquote>
+<p><strong>临界区（critical section）是访问共享资源的一段代码，资源通常是一个变量或数据结构。</strong></p>
+</blockquote>
+<blockquote>
+<p><strong>竞态条件（race condition）出现在多个执行线程大致同时进入临界区时，它们都试图更新共享的数据结构，导致了令人惊讶的（也许是不希望的）结果。</strong></p>
+</blockquote>
+<blockquote>
+<p><strong>不确定性（indeterminate）程序由一个或多个竞态条件组成，程序的输出因运行而异，具体取决于哪些线程在何时运行。这导致结果不是确定的（deterministic），而我们通常期望计算机系统给出确定的结果。</strong></p>
+</blockquote>
+<blockquote>
+<p><strong>为了避免这些问题，线程应该使用某种互斥（mutual exclusion）原语。这样做可以保证只有一个线程进入临界区，从而避免出现竞态，并产生确定的程序输出。</strong></p>
+</blockquote>
+<h2 id="还有一个问题：等待另一个线程"><a href="#还有一个问题：等待另一个线程" class="headerlink" title="还有一个问题：等待另一个线程"></a>还有一个问题：等待另一个线程</h2><p>线程之间有一种交互，即<strong>访问共享变量</strong>，因此需要为临界区支持原子性。事实证明，还有另一种常见的交互，即<strong>一个线程在继续之前必须等待另一个线程完成某些操作</strong>。例如，当进程执行磁盘 I/O 并进入睡眠状态时，会产生这种交互。当 I/O 完成时，该进程需要从睡眠中唤醒，以便继续进行。</p>
+<hr>
+<h1 id="插叙：线程API"><a href="#插叙：线程API" class="headerlink" title="插叙：线程API"></a>插叙：线程API</h1><h2 id="线程创建"><a href="#线程创建" class="headerlink" title="线程创建"></a>线程创建</h2><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;pthread.h&gt;</span></span></span><br><span class="line"><span class="type">int</span></span><br><span class="line"><span class="title function_">pthread_create</span><span class="params">( </span></span><br><span class="line"><span class="params">    <span class="type">pthread_t</span> * thread,</span></span><br><span class="line"><span class="params">    <span class="type">const</span> <span class="type">pthread_attr_t</span> * attr,</span></span><br><span class="line"><span class="params">    <span class="type">void</span> * (*start_routine)(<span class="type">void</span>*),</span></span><br><span class="line"><span class="params">    <span class="type">void</span> * arg</span></span><br><span class="line"><span class="params">)</span>;</span><br></pre></td></tr></table></figure>
+<p>第一个参数 thread 是指向 pthread_t 结构类型的指针，我们将利用这个结构与该线程交互，因此需要将它传入pthread_create()，以便将它初始化。</p>
+<p>第二个参数 attr 用于指定该线程可能具有的任何属性。一些例子包括设置栈大小，或关于该线程调度优先级的信息。一个属性通过单独调用 pthread_attr_init()来初始化。在大多数情况下，默认值就行。在这个例子中，我们只需传入 NULL。</p>
+<p>第三个参数最复杂，但它实际上只是问：这个线程应该在哪个函数中运行？在 C 中，我们把它称为一个函数指针（function pointer），这个指针告诉我们需要以下内容：一个函数名称（start_routine），它被传入一个类型为 void *的参数（start_routine 后面的括号表明了这一点），并且它返回一个 void *类型的值（即一个 void 指针）。</p>
+<p>最后，第四个参数 arg 就是要传递给线程开始执行的函数的参数。你可能会问：为什么我们需要这些 void 指针？好吧，答案很简单：将 void 指针作为函数的参数 start_routine，允许我们传入任何类型的参数，将它作为返回值，允许线程返回任何类型的结果。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;pthread.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="keyword">typedef</span> <span class="class"><span class="keyword">struct</span> <span class="title">myarg_t</span> &#123;</span></span><br><span class="line">    <span class="type">int</span> a;</span><br><span class="line">    <span class="type">int</span> b;</span><br><span class="line">&#125; <span class="type">myarg_t</span>;</span><br><span class="line"></span><br><span class="line"><span class="type">void</span> *<span class="title function_">mythread</span><span class="params">(<span class="type">void</span> *arg)</span> &#123;</span><br><span class="line">    <span class="type">myarg_t</span> *m = (<span class="type">myarg_t</span> *) arg;</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;%d %d\n&quot;</span>, m-&gt;a, m-&gt;b);</span><br><span class="line">    <span class="keyword">return</span> <span class="literal">NULL</span>;</span><br><span class="line"> &#125;</span><br><span class="line"></span><br><span class="line"> <span class="type">int</span></span><br><span class="line"> <span class="title function_">main</span><span class="params">(<span class="type">int</span> argc, <span class="type">char</span> *argv[])</span> &#123;</span><br><span class="line">    <span class="type">pthread_t</span> p;</span><br><span class="line">    <span class="type">int</span> rc;</span><br><span class="line">    <span class="type">myarg_t</span> args;</span><br><span class="line">    args.a = <span class="number">10</span>;</span><br><span class="line">    args.b = <span class="number">20</span>;</span><br><span class="line">    rc = pthread_create(&amp;p, <span class="literal">NULL</span>, mythread, &amp;args);</span><br><span class="line">    ...</span><br><span class="line"> &#125;</span><br></pre></td></tr></table></figure>
+<h2 id="线程完成"><a href="#线程完成" class="headerlink" title="线程完成"></a>线程完成</h2><p>如果你想等待线程完成,你必须调用函数 pthread_join()。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">int</span> <span class="title function_">pthread_join</span><span class="params">(<span class="type">pthread_t</span> thread, <span class="type">void</span> ** retval)</span>;</span><br></pre></td></tr></table></figure>
+
+<p>该函数有两个参数。第一个是 pthread_t 类型，用于指定要等待的线程。这个变量是由线程创建函数初始化的（当你将一个指针作为参数传递给 pthread_create()时）。如果你保留了它，就可以用它来等待该线程终止。</p>
+<p>第二个参数是一个指针，指向你希望得到的返回值。因为函数可以返回任何东西，所以它被定义为返回一个指向 void 的指针。因为 pthread_join()函数改变了传入参数的值，所以你需要传入一个指向该值的指针，而不只是该值本身。</p>
+<p><strong>gcc -o test1 test1.c  -pthread</strong></p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;pthread.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;assert.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;stdlib.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="keyword">typedef</span> <span class="class"><span class="keyword">struct</span> <span class="title">myarg_t</span> &#123;</span></span><br><span class="line"><span class="type">int</span> a;</span><br><span class="line"><span class="type">int</span> b;</span><br><span class="line">&#125; <span class="type">myarg_t</span>;</span><br><span class="line"></span><br><span class="line"> <span class="keyword">typedef</span> <span class="class"><span class="keyword">struct</span> <span class="title">myret_t</span> &#123;</span></span><br><span class="line"> <span class="type">int</span> x;</span><br><span class="line"> <span class="type">int</span> y;</span><br><span class="line"> &#125; <span class="type">myret_t</span>;</span><br><span class="line"></span><br><span class="line"> <span class="type">void</span> *<span class="title function_">mythread</span><span class="params">(<span class="type">void</span> *arg)</span> &#123;</span><br><span class="line"> <span class="type">myarg_t</span> *m = (<span class="type">myarg_t</span> *) arg;</span><br><span class="line"> <span class="built_in">printf</span>(<span class="string">&quot;%d %d\n&quot;</span>, m-&gt;a, m-&gt;b);</span><br><span class="line"> <span class="type">myret_t</span> *r = Malloc(<span class="keyword">sizeof</span>(<span class="type">myret_t</span>));</span><br><span class="line"> r-&gt;x = <span class="number">1</span>;</span><br><span class="line"> r-&gt;y = <span class="number">2</span>;</span><br><span class="line"> <span class="keyword">return</span> (<span class="type">void</span> *) r;</span><br><span class="line"> &#125;</span><br><span class="line"></span><br><span class="line"> <span class="type">int</span></span><br><span class="line"> <span class="title function_">main</span><span class="params">(<span class="type">int</span> argc, <span class="type">char</span> *argv[])</span> &#123;</span><br><span class="line"> <span class="type">int</span> rc;</span><br><span class="line"> <span class="type">pthread_t</span> p;</span><br><span class="line"> <span class="type">myret_t</span> *m;</span><br><span class="line"></span><br><span class="line"> <span class="type">myarg_t</span> args;</span><br><span class="line"> args.a = <span class="number">10</span>;</span><br><span class="line"> args.b = <span class="number">20</span>;</span><br><span class="line"> Pthread_create(&amp;p, <span class="literal">NULL</span>, mythread, &amp;args);</span><br><span class="line"> Pthread_join(p, (<span class="type">void</span> **) &amp;m);</span><br><span class="line"> <span class="built_in">printf</span>(<span class="string">&quot;returned %d %d\n&quot;</span>, m-&gt;x, m-&gt;y);</span><br><span class="line"> <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line"> &#125;</span><br></pre></td></tr></table></figure>
+
+<p>我们应该注注，并非所有多线程代码都使用 join 函数。例如，多线程 Web 服务器可能会创建大量工作线程，然后使用主线程接受请求，并将其无限期地传递给工作线程。因此这样的长期程序可能不需要 join。然而，创建线程来（并行）执行特定任务的并行程序，很可能会使用 join 来确保在退出或进入下一阶段计算之前完成所有这些工作。</p>
+<h2 id="锁"><a href="#锁" class="headerlink" title="锁"></a>锁</h2><p>除了线程创建和 join 之外，POSIX 线程库提供的最有用的函数集，可能是通过锁（lock）来提供互斥进入临界区的那些函数。这方面最基本的一对函数是：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">int</span> <span class="title function_">pthread_mutex_lock</span><span class="params">(<span class="type">pthread_mutex_t</span> *mutex)</span>;</span><br><span class="line"><span class="type">int</span> <span class="title function_">pthread_mutex_unlock</span><span class="params">(<span class="type">pthread_mutex_t</span> *mutex)</span>;</span><br></pre></td></tr></table></figure>
+
+<p>有一段代码是一个临界区，就需要通过锁来保护，以便像需要的那样运行。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">pthread_mutex_t</span> lock;</span><br><span class="line">pthread_mutex_lock(&amp;lock);</span><br><span class="line">x = x + <span class="number">1</span>; <span class="comment">// or whatever your critical section is</span></span><br><span class="line">pthread_mutex_unlock(&amp;lock);</span><br></pre></td></tr></table></figure>
+<ol>
+<li><strong>第一个问题是缺乏正确的初始化（lack of proper initialization）。所有锁必须正确初始化，以确保它们具有正确的值，并在锁和解锁被调用时按照需要工作。</strong></li>
+</ol>
+<p>对于 POSIX 线程，有两种方法来初始化锁。一种方法是使用 PTHREAD_MUTEX_INITIALIZER，如下所示：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">pthread_mutex_t</span> lock = PTHREAD_MUTEX_INITIALIZER;</span><br></pre></td></tr></table></figure>
+
+<p>这样做会将锁设置为默认值，从而使锁可用。初始化的动态方法（即在运行时）是调用 pthread_mutex_init()，如下所示：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">int</span> rc = pthread_mutex_init(&amp;lock, <span class="literal">NULL</span>);</span><br><span class="line">assert(rc == <span class="number">0</span>); <span class="comment">// always check success!</span></span><br></pre></td></tr></table></figure>
+<p>用完锁时，还应该相应地调用 pthread_mutex_destroy()</p>
+<ol start="2">
+<li><strong>上述代码的第二个问题是在调用获取锁和释放锁时没有检查错误代码。</strong></li>
+</ol>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// Use this to keep your code clean but check for failures</span></span><br><span class="line"><span class="comment">// Only use if exiting program is OK upon failure</span></span><br><span class="line"><span class="type">void</span> <span class="title function_">Pthread_mutex_lock</span><span class="params">(<span class="type">pthread_mutex_t</span> *mutex)</span> &#123;</span><br><span class="line"><span class="type">int</span> rc = pthread_mutex_lock(mutex);</span><br><span class="line">assert(rc == <span class="number">0</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>获取锁和释放锁函数不是 pthread 与锁进行交互的仅有的函数。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">int</span> <span class="title function_">pthread_mutex_trylock</span><span class="params">(<span class="type">pthread_mutex_t</span> *mutex)</span>;</span><br><span class="line"><span class="type">int</span> <span class="title function_">pthread_mutex_timedlock</span><span class="params">(<span class="type">pthread_mutex_t</span> *mutex,</span></span><br><span class="line"><span class="params"><span class="keyword">struct</span> timespec *abs_timeout)</span>;</span><br></pre></td></tr></table></figure>
+<p>这两个调用用于获取锁。如果锁已被占用，则 trylock 版本将失败。获取锁的 timedlock定版本会在超时或获取锁后返回，以先发生者为准。因此，具有零超时的 timedlock 退化为trylock 的情况。通常应避免使用这两种版本，但有些情况下，避免卡在（可能无限期的）获取锁的函数中会很有用。</p>
+<h2 id="条件变量"><a href="#条件变量" class="headerlink" title="条件变量"></a>条件变量</h2><p>当线程之间必须发生某种信号时，如果一个线程在等待另一个线程继续执行某些操作，条件变量就很有用。希望以这种方式进行交互的程序使用两个主要函数：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">int</span> <span class="title function_">pthread_cond_wait</span><span class="params">(<span class="type">pthread_cond_t</span> *cond, <span class="type">pthread_mutex_t</span> *mutex)</span>;</span><br><span class="line"><span class="type">int</span> <span class="title function_">pthread_cond_signal</span><span class="params">(<span class="type">pthread_cond_t</span> *cond)</span>;</span><br></pre></td></tr></table></figure>
+
+<p>要使用条件变量，必须另外有一个与此条件相关的锁。在调用上述任何一个函数时，应该持有这个锁。</p>
+<p>第一个函数 pthread_cond_wait()使调用线程进入休眠状态，因此等待其他线程发出信号，通常当程序中的某些内容发生变化时，现在正在休眠的线程可能会关心它。典型的用法如下所示</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">pthread_mutex_t</span> lock = PTHREAD_MUTEX_INITIALIZER;</span><br><span class="line"><span class="type">pthread_cond_t</span> cond = PTHREAD_COND_INITIALIZER;</span><br><span class="line">Pthread_mutex_lock(&amp;lock);</span><br><span class="line"><span class="keyword">while</span> (ready == <span class="number">0</span>)</span><br><span class="line">    Pthread_cond_wait(&amp;cond, &amp;lock);</span><br><span class="line">Pthread_mutex_unlock(&amp;lock);</span><br></pre></td></tr></table></figure>
+<p>在这段代码中，在初始化相关的锁和条件之后，一个线程检查变量 ready 是否已经被设置为零以外的值。如果没有，那么线程只是简单地调用等待函数以便休眠，直到其他线程唤醒它。</p>
+<p>唤醒线程的代码运行在另外某个线程中，像下面这样：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">Pthread_mutex_lock(&amp;lock);</span><br><span class="line">ready = <span class="number">1</span>;</span><br><span class="line">Pthread_cond_signal(&amp;cond);</span><br><span class="line">Pthread_mutex_unlock(&amp;lock);</span><br></pre></td></tr></table></figure>
+
+<p>首先，在发出信号时（以及修改全局变量 ready 时），我们始终确保持有锁。这确保我们不会在代码中注外引入竞态条件。</p>
+<p>等待调用将锁作为其第二个参数，而信号调用仅需要一个条件。造成这种差异的原因在于，<strong>等待调用除了使调用线程进入睡眠状态外，还会让调用者睡眠时释放锁</strong>。想象一下，如果不是这样：其他线程如何获得锁并将其唤醒？但是，在被唤醒之后返回之前，pthread_cond_wait()会重新获取该锁，从而确保等待线程在等待序列开始时获取锁与结束时释放锁之间运行的任何时间，它持有锁。</p>
+<h2 id="编译和运行"><a href="#编译和运行" class="headerlink" title="编译和运行"></a>编译和运行</h2><p>本章所有代码很容易运行。代码需要包括头文件 pthread.h 才能编译。链接时需要 pthread库，增加-pthread 标记。<br>例如，要编译一个简单的多线程程序，只需像下面这样做：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">gcc -o main main.c -Wall -pthread</span><br></pre></td></tr></table></figure>
+
+
+<blockquote>
+<p>补充：线程 API 指导<br>当你使用 POSIX 线程库（或者实际上，任何线程库）来构建多线程程序时，需要记住一些小而重要的事情：</p>
+</blockquote>
+<blockquote>
+<p>保持简洁。最重要的一点，线程之间的锁和信号的代码应该尽可能简洁。复杂的线程交互容易产生缺陷。</p>
+</blockquote>
+<blockquote>
+<p>让线程交互减到最少。尽量减少线程之间的交互。每次交互都应该想清楚，并用验证过的、正确的方法来实现（很多方法会在后续章节中学习）。</p>
+</blockquote>
+<blockquote>
+<p>初始化锁和条件变量。未初始化的代码有时工作正常，有时失败，会产生奇怪的结果。</p>
+</blockquote>
+<blockquote>
+<p>检查返回值。当然，任何 C 和 UNIX 的程序，都应该检查返回值，这里也是一样。否则会导致古怪而难以理解的行为，让你尖叫，或者痛苦地揪自己的头发。</p>
+</blockquote>
+<blockquote>
+<p>注意传给线程的参数和返回值。具体来说，如果传递在栈上分配的变量的引用，可能就是在犯错误。</p>
+</blockquote>
+<blockquote>
+<p>每个线程都有自己的栈。类似于上一条，记住每一个线程都有自己的栈。因此，线程局部变量应该是线程私有的，其他线程不应该访问。线程之间共享数据，值要在堆（heap）或者其他全局可访问的位置。</p>
+</blockquote>
+<blockquote>
+<p>线程之间总是通过条件变量发送信号。切记不要用标记变量来同步。</p>
+</blockquote>
+<hr>
+<h1 id="锁-1"><a href="#锁-1" class="headerlink" title="锁"></a>锁</h1><p>我们希望原子式执行一系列指令，但由于单处理器上的中断（或者多个线程在多处理器上并发执行），我们做不到。</p>
+<p>程序员在源代码中加锁，放在临界区周围，保证临界区能够像单条原子指令一样执行。</p>
+<h2 id="锁的基本思想"><a href="#锁的基本思想" class="headerlink" title="锁的基本思想"></a>锁的基本思想</h2><p>多个线程同时共享的资源——临界区:</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">balance = balance + <span class="number">1</span>;</span><br></pre></td></tr></table></figure>
+
+<p>加锁:</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">lock_t</span> mutex; <span class="comment">// some globally-allocated lock &#x27;mutex&#x27;</span></span><br><span class="line">...</span><br><span class="line">lock(&amp;mutex);</span><br><span class="line">balance = balance + <span class="number">1</span>;</span><br><span class="line">unlock(&amp;mutex);</span><br></pre></td></tr></table></figure>
+<p>锁就是一个变量，因此我们需要声明一个某种类型的锁变量,才能使用。这个锁变量（简称锁）保存了锁在某一时刻的状态。它要么是可用的（available，或 unlocked，或 free），表示没有线程持有锁，要么是被占用的（acquired，或 locked，或 held），表示有一个线程持有锁，正处于临界区。</p>
+<p>ock()和 unlock()函数的语义很简单。调用 lock()尝试获取锁，如果没有其他线程持有锁（即它是可用的），该线程会获得锁，进入临界区。这个线程有时被称为锁的持有者（owner）。</p>
+<p>如果另外一个线程对相同的锁变量（本例中的 mutex）调用 lock()，因为锁被另一线程持有，该调用不会返回。这样，当持有锁的线程在临界区时，其他线程就无法进入临界区。</p>
+<p>锁的持有者一旦调用 unlock()，锁就变成可用了。如果没有其他等待线程（即没有其他线程调用过 lock()并卡在那里），锁的状态就变成可用了。如果有等待线程（卡在 lock()里），其中一个会（最终）注意到（或收到通知）锁状态的变化，获取该锁，进入临界区。</p>
+<h2 id="Pthread-锁"><a href="#Pthread-锁" class="headerlink" title="Pthread 锁"></a>Pthread 锁</h2><p>POSIX 库将锁称为互斥量（mutex），因为它被用来提供线程之间的互斥。</p>
+<p>下面的POSIX 线程代码，应该理解它和上面的代码段执行相同的任务</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="number">1</span> <span class="type">pthread_mutex_t</span> lock = PTHREAD_MUTEX_INITIALIZER;</span><br><span class="line"><span class="number">2</span></span><br><span class="line"><span class="number">3</span> Pthread_mutex_lock(&amp;lock); <span class="comment">// wrapper for pthread_mutex_lock()</span></span><br><span class="line"><span class="number">4</span> balance = balance + <span class="number">1</span>;</span><br><span class="line"><span class="number">5</span> Pthread_mutex_unlock(&amp;lock);</span><br></pre></td></tr></table></figure>
+
+<p>POSIX 的 lock 和 unlock 函数会传入一个变量，因为我们可能用不<br>同的锁来保护不同的变量。这样可以增加并发。</p>
+
       
     </div>
     <div class="article-footer">
@@ -355,6 +506,14 @@
       <a href="/2023/06/16/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%AF%BC%E8%AE%BA-%E5%86%85%E5%AD%98%E8%99%9A%E6%8B%9F%E5%8C%96/" title="操作系统导论-内存虚拟化"><span>下一篇&nbsp;&nbsp;</span><i class="icon icon-angle-right" aria-hidden="true"></i></a>
     </li>
     
+    
+    <li class="toggle-toc">
+      <a class="toggle-btn " data-toggle="collapse" href="#collapseToc" aria-expanded="false" title="文章目录" role="button">    <span>[&nbsp;</span><span>文章目录</span>
+        <i class="text-collapsed icon icon-anchor"></i>
+        <i class="text-in icon icon-close"></i>
+        <span>]</span>
+      </a>
+    </li>
     
   </ul>
   
