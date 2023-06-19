@@ -31,6 +31,11 @@
       </tags>
   </entry>
   <entry>
+    <title>操作系统导论-并发</title>
+    <url>/2023/06/19/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%AF%BC%E8%AE%BA-%E5%B9%B6%E5%8F%91/</url>
+    <content><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="\assets\css\APlayer.min.css"><script src="\assets\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script><script class="meting-secondary-script-marker" src="\assets\js\Meting.min.js"></script>]]></content>
+  </entry>
+  <entry>
     <title>操作系统导论-内存虚拟化</title>
     <url>/2023/06/16/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%AF%BC%E8%AE%BA-%E5%86%85%E5%AD%98%E8%99%9A%E6%8B%9F%E5%8C%96/</url>
     <content><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="\assets\css\APlayer.min.css"><script src="\assets\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script><script class="meting-secondary-script-marker" src="\assets\js\Meting.min.js"></script><h1 id="抽象-地址空间"><a href="#抽象-地址空间" class="headerlink" title="抽象:地址空间"></a>抽象:地址空间</h1><h2 id="早期系统"><a href="#早期系统" class="headerlink" title="早期系统"></a>早期系统</h2><p>从内存来看，早期的机器并没有提供多少抽象给用户。</p>
@@ -482,6 +487,15 @@
 <hr>
 <h1 id="VAX-VVM虚拟内存系统"><a href="#VAX-VVM虚拟内存系统" class="headerlink" title="VAX//VVM虚拟内存系统"></a>VAX//VVM虚拟内存系统</h1><h2 id="内存管理硬件"><a href="#内存管理硬件" class="headerlink" title="内存管理硬件"></a>内存管理硬件</h2><p>VAX-11 为每个进程提供了一个 32 位的虚拟地址空间，分为 512 字节的页。因此，虚拟地址由 23 位 VPN 和 9 位偏移组成。此外，VPN 的高两位用于区分页所在的段。因此，如前所述，该系统是分页和分段的混合体。</p>
 <p>地址空间的下半部分称为“进程空间”，对于每个进程都是唯一的。在进程空间的前半部分（称为 P0）中，有用户程序和一个向下增长的堆。在进程空间的后半部分（P1），有向上增长的栈。地址空间的上半部分称为系统空间（S），尽管只有一半被使用。受保护的操作系统代码和数据驻留在此处，操作系统以这种方式跨进程共享。</p>
+<h2 id="一个真实的地址空间"><a href="#一个真实的地址空间" class="headerlink" title="一个真实的地址空间"></a>一个真实的地址空间</h2><blockquote>
+<p>补充：为什么空指针访问会导致段错误<br>你现在应该很好地理解一个空指针引用会发生什么。通过这样做，进程生成了一个虚拟地址 0：<br>int *p = NULL; // set p = 0<br>*p = 10; // try to store value 10 to virtual address 0<br>硬件试图在 TLB 中查找 VPN（这里也是 0），遇到 TLB 未命中。查询页表，并且发现 VPN 0 的条目被标记为无效。因此，我们遇到无效的访问，将控制权交给操作系统，这可能会终止进程（在 UNIX 系统上，会向进程发出一个信号，让它们对这样的错误做出反应。但是如果信号未被捕获，则会终止进程）。</p>
+</blockquote>
+<p>代码段永远不会从第 0 页开始。相反，该页被标记为不可访问，以便为检测空指针（null-pointer）访问提供一些支持。</p>
+<h2 id="页替换"><a href="#页替换" class="headerlink" title="页替换"></a>页替换</h2><p>VAX 中的页表项（PTE）包含以下位：一个有效位，一个保护字段（4 位），一个修改（或脏位）位，为 OS 使用保留的字段（5 位），最后是一个物理帧号码（PFN）将页面的位置存储在物理内存中。</p>
+<h3 id="分段的-FIFO"><a href="#分段的-FIFO" class="headerlink" title="分段的 FIFO"></a>分段的 FIFO</h3><p>每个进程都有一个可以保存在内存中的最大页数，称为驻留集大小（Resident Set Size，RSS）。每个页都保存在 FIFO 列表中。当一个进程超过其 RSS 时，“先入”的页被驱逐。FIFO 显然不需要硬件的任何支持，因此很容易实现。</p>
+<h2 id="其他漂亮的虚拟内存技巧"><a href="#其他漂亮的虚拟内存技巧" class="headerlink" title="其他漂亮的虚拟内存技巧"></a>其他漂亮的虚拟内存技巧</h2><p>按需置零和写入时复制。<br>在一个初级实现中，操作系统响应一个请求，在物理内存中找到页，将该页添加到你的堆中，并将其置零（安全起见，这是必需的。否则，你可以看到其他进程使用该页时的内容。），然后将其映射到你的地址空间（设置页表以根据需要引用该物理页）。但是初级实现可能是昂贵的，特别是如果页没有被进程使用.</p>
+<p>利用按需置零，当页添加到你的地址空间时，操作系统的工作很少。它会在页表中放入一个标记页不可访问的条目。如果进程读取或写入页，则会向操作系统发送陷阱。在处理陷阱时，操作系统注意到（通常通过页表项中“保留的操作系统字段”部分标记的一些位），这实际上是一个按需置零页。此时，操作系统会完成寻找物理页的必要工作，将它置零，并映射到进程的地址空间。如果该进程从不访问该页，则所有这些工作都可以避免，从而体现按需置零的好处。</p>
+<p>如果操作系统需要将一个页面从一个地址空间复制到另一个地址空间，不是实际复制它，而是将其映射到目标地址空间，并在两个地址空间中将其标记为只读。如果两个地址空间都只读取页面，则不会采取进一步的操作，因此操作系统已经实现了快速复制而不实际移动任何数据。但是，如果其中一个地址空间确实尝试写入页面，就会陷入操作系统。操作系统会注意到该页面是一个 COW 页面，因此（惰性地）分配一个新页，填充数据，并将这个新页映射到错误处理的地址空间。该进程然后继续，现在有了该页的私人副本。</p>
 ]]></content>
       <tags>
         <tag>os</tag>
