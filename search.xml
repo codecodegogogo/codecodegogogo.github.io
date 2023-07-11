@@ -107,6 +107,182 @@
 <p>因此SPTF是有用的，它提高了性能。然而，它在操作系统中实现起来更加困难，操作系统通常不太清楚磁道边界在哪，也不知道磁头当前的位置（旋转到了哪里）。因此，SPTF通常在驱动器内部执行.</p>
 <h3 id="其他调度问题"><a href="#其他调度问题" class="headerlink" title="其他调度问题"></a>其他调度问题</h3><p>磁盘可以接受多个分离的请求，它们本身具有复杂的内部调度程序（它们可以准确地实现SPTF。在磁盘控制器内部，所有相关细节都可以得到，包括精确的磁头位置）。因此，操作系统调度程序通常会选择它认为最好的几个请求（如16），并将它们全部发送到磁盘。磁盘然后利用其磁头位置和详细的磁道布局信息等内部知识，以最佳可能（SPTF）顺序服务于这些请求。</p>
 <p>磁盘调度程序执行的另一个重要相关任务是I/O合并（I/O merging）。例如，设想一系列请求读取块33，然后是8，然后是34，如图37.8所示。在这种情况下，调度程序应该将块33和34的请求合并（merge）为单个两块请求。调度程序执行的所有请求都基于合并后的请求。合并在操作系统级别尤其重要，因为它减少了发送到磁盘的请求数量，从而降低了开销。</p>
+<hr>
+<h1 id="廉价冗余磁盘阵列-RAID"><a href="#廉价冗余磁盘阵列-RAID" class="headerlink" title="廉价冗余磁盘阵列(RAID)"></a>廉价冗余磁盘阵列(RAID)</h1><p>如何得到大型、快速、可靠的磁盘?</p>
+<p><strong>廉价冗余磁盘阵列(RAID)这种技术使用多个磁盘一起构建更快、更大、更可靠的磁盘系统。</strong></p>
+<p>在内部，RAID是一个复杂的庞然大物，由多个磁盘、内存（包括易失性和非易失性）以及一个或多个处理器来管理系统。硬件RAID非常像一个计算机系统，专门用于管理一组磁盘。</p>
+<h2 id="接口和-RAID-内部"><a href="#接口和-RAID-内部" class="headerlink" title="接口和 RAID 内部"></a>接口和 RAID 内部</h2><p>当文件系统向RAID发出逻辑I/O请求时，RAID内部必须计算要访问的磁盘（或多个磁盘）以完成请求，然后发出一个或多个物理I/O来执行此操作。这些物理I/O的确切性质取决于RAID级别。</p>
+<p>考虑一个RAID，它保留每个块的两个副本（每个都在一个单独的磁盘上）。当写入这种镜像（mirrored）RAID系统时，RAID必须为它发出的每一个逻辑I/O执行两个物理I/O。</p>
+<p>RAID系统通常构建为单独的硬件盒，并通过标准连接（例如，SCSI或SATA）接入主机。然而，在内部，RAID相当复杂。它包括一个微控制器，运行固件以指导RAID的操作。它还包括DRAM这样的易失性存储器，在读取和写入时缓冲数据块。在某些情况下，还包括非易失性存储器，安全地缓冲写入。它甚至可能包含专用的逻辑电路，来执行奇偶校验计算（在某些RAID级别中非常有用，下面会提到）。在很高的层面上，RAID是一个非常专业的计算机系统：它有一个处理器，内存和磁盘。然而，它不是运行应用程序，而是运行专门用于操作RAID的软件。</p>
+<h2 id="故障模型"><a href="#故障模型" class="headerlink" title="故障模型"></a>故障模型</h2><p>故障—停止（fail-stop）故障模型</p>
+<p>磁盘可以处于两种状态之一：工作状态或故障状态。使用工作状态的磁盘时，所有块都可以读取或写入。相反，当磁盘出现故障时，我们认为它永久丢失。</p>
+<h2 id="如何评估-RAID"><a href="#如何评估-RAID" class="headerlink" title="如何评估 RAID"></a>如何评估 RAID</h2><p>第一个方面是容量（capacity）。在给定一组N个磁盘的情况下，RAID的客户端可用的容量有多少？没有冗余，答案显然是N。不同的是，如果有一个系统保存每个块的两个副本，我们将获得N/2的有用容量。不同的方案（例如，基于校验的方案）通常介于两者之间。</p>
+<p>第二个方面是可靠性（reliability）。给定设计允许有多少磁盘故障？根据我们的故障模型，我们只假设整个磁盘可能会故障。在后面的章节（例如，关于数据完整性的第44章）中，我们将考虑如何处理更复杂的故障模式。</p>
+<p>最后，第三个方面是性能（performance）。性能有点难以评估，因为它在很大程度上取决于磁盘阵列提供的工作负载。因此，在评估性能之前，我们将首先提出一组应该考虑的典型工作负载。</p>
+<h2 id="RAID-0-级：条带化"><a href="#RAID-0-级：条带化" class="headerlink" title="RAID 0 级：条带化"></a>RAID 0 级：条带化</h2><p>第一个RAID级别实际上不是RAID级别，因为没有冗余。</p>
+<p><img src="/2023/07/06/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%AF%BC%E8%AE%BA-%E6%8C%81%E4%B9%85%E6%80%A7/w8.png" alt="?"></p>
+<p>以轮转方式将磁盘阵列的块分布在磁盘上。这种方法的目的是在对数组的连续块进行请求时，从阵列中获取最大的并行性（例如，在一个大的顺序读取中）。我们将同一行中的块称为条带，因此，上面的块0、1、2和3在相同的条带中。</p>
+<blockquote>
+<p>补充：RAID映射问题<br><strong>简单地说，给定一个逻辑块来读或写，RAID如何确切地知道要访问哪个物理磁盘和偏移量？</strong></p>
+</blockquote>
+<blockquote>
+<p>以上面的第一个条带为例（大块大小=  1块=  4KB）。在这种情况下，给定逻辑块地址A，RAID可以使用两个简单的公式轻松计算要访问的磁盘和偏移量：<br><strong>磁盘= A % 磁盘数<br>偏移量  =  A  /  磁盘数</strong></p>
+</blockquote>
+<blockquote>
+<p>假设在上面的第一个RAID中，对块15的请求到达。鉴于有4个磁盘，这意味着我们感兴趣的磁盘是（14 % 4 = 2）：磁盘2。确切的块计算为（14 / 4 = 3）：块3。因此，应在第三个磁盘（磁盘2，从0开始）的第四个块（块3，从0开始）处找到块14，该块恰好位于该位置</p>
+</blockquote>
+<h3 id="大块大小"><a href="#大块大小" class="headerlink" title="大块大小"></a>大块大小</h3><p>一方面，大块大小主要影响阵列的性能。例如，大小较小的大块意味着许多文件将跨多个磁盘进行条带化，从而增加了对单个文件的读取和写入的并行性。但是，跨多个磁盘访问块的定位时间会增加，因为整个请求的定位时间由所有驱动器上请求的最大定位时间决定。</p>
+<p>另一方面，较大的大块大小减少了这种文件内的并行性，因此依靠多个并发请求来实现高吞吐量。但是，较大的大块大小减少了定位时间。例如，如果一个文件放在一个块中并放置在单个磁盘上，则访问它时发生的定位时间将只是单个磁盘的定位时间。</p>
+<h3 id="RAID-0-分析"><a href="#RAID-0-分析" class="headerlink" title="RAID-0 分析"></a>RAID-0 分析</h3><p>从容量的角度来看，它是顶级的：给定N个磁盘，条件化提供N个磁盘的有用容量。从可靠性的角度来看，条带化也是顶级的，但是最糟糕：任何磁盘故障都会导致数据丢失。最后，性能非常好：通常并行使用所有磁盘来为用户I/O请求提供服务。</p>
+<h2 id="RAID-1-级：镜像"><a href="#RAID-1-级：镜像" class="headerlink" title="RAID 1 级：镜像"></a>RAID 1 级：镜像</h2><p>第一个超越条带化的RAID级别称为RAID 1级，即镜像。对于镜像系统，我们只需生成系统中每个块的多个副本。当然，每个副本应该放在一个单独的磁盘上。通过这样做，我们可以容许磁盘故障。</p>
+<p>在一个典型的镜像系统中，我们将假设对于每个逻辑块，RAID保留两个物理副本。<br><img src="/2023/07/06/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%AF%BC%E8%AE%BA-%E6%8C%81%E4%B9%85%E6%80%A7/e1.png" alt="?"></p>
+<p>从镜像阵列读取块时，RAID有一个选择：它可以读取任一副本。例如，如果对RAID发出对逻辑块5的读取，则可以自由地从磁盘2或磁盘3读取它。但是，在写入块时，不存在这样的选择：RAID必须更新两个副本的数据，以保持可靠性。但请注意，这些写入可以并行进行。例如，对逻辑块5的写入可以同时在磁盘2和3上进行。</p>
+<h3 id="RAID-1-分析"><a href="#RAID-1-分析" class="headerlink" title="RAID-1 分析"></a>RAID-1 分析</h3><p>从容量的角度来看，RAID-1价格昂贵。在镜像级别=2的情况下，我们只能获得峰值有用容量的一半。因此，对于N个磁盘，镜像的有用容量为N/2。</p>
+<p>从可靠性的角度来看，RAID-1表现良好。它可以容许任何一个磁盘的故障。</p>
+<p>最后，我们分析性能。从单个读取请求的延迟角度来看，我们可以看到它与单个磁盘上的延迟相同。所有RAID-1都会将读取导向一个副本。写入有点不同：在完成写入之前，需要完成两次物理写入。这两个写入并行发生，因此时间大致等于单次写入的时间。然而，因为逻辑写入必须等待两个物理写入完成，所以它遭遇到两个请求中最差的寻道和旋转延迟，因此（平均而言）比写入单个磁盘略高。</p>
+<blockquote>
+<p>补充：RAID一致更新问题</p>
+</blockquote>
+<blockquote>
+<p>我们假设对磁盘0的请求已完成（但对磁盘1的请求显然没有完成，因为它从未发出）。</p>
+</blockquote>
+<blockquote>
+<p>这种不合时宜的掉电，导致现在数据块的两个副本不一致（inconsistent）。磁盘0上的副本是新版本，而磁盘1上的副本是旧的。我们希望的是两个磁盘的状态都原子地（atomically）改变，也就是说，两者都应该最终成为新版本或者两者都不是。</p>
+</blockquote>
+<blockquote>
+<p>解决此问题的一般方法，是使用某种预写日志（write-ahead log），在做之前首先记录RAID将要执行的操作（即用某个数据更新两个磁盘）。通过采取这种方法，我们可以确保在发生崩溃时，会发生正确的事情。通过运行一个恢复（recovery）过程，将所有未完成的事务重新在RAID上执行，我们可以确保两个镜像副本（在RAID-1情况下）同步。</p>
+</blockquote>
+<blockquote>
+<p>最后一个注意事项：每次写入都在磁盘上记录日志，这个代价昂贵得不行，因此大多数RAID硬件都包含少量非易失性RAM（例如电池有备份的），用于执行此类记录。因此，既提供了一致的更新，又不需要花费高昂的代价，将日志记录到磁盘。</p>
+</blockquote>
+<h2 id="RAID-4-级：通过奇偶校验节省空间"><a href="#RAID-4-级：通过奇偶校验节省空间" class="headerlink" title="RAID 4 级：通过奇偶校验节省空间"></a>RAID 4 级：通过奇偶校验节省空间</h2><p>我们现在展示一种向磁盘阵列添加冗余的不同方法，称为奇偶校验（parity）。基于奇偶校验的方法试图使用较少的容量，从而克服由镜像系统付出的巨大空间损失。不过，这样做的代价是——性能。</p>
+<p>这是5个磁盘的RAID-4系统的例子（见表38.4）。对于每一条数据，我们都添加了一个奇偶校验（parity）块，用于存储该条块的冗余信息。例如，奇偶校验块P1具有从块4、5、6和7计算出的冗余信息。<br><img src="/2023/07/06/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%AF%BC%E8%AE%BA-%E6%8C%81%E4%B9%85%E6%80%A7/e2.png" alt="?"><br><img src="/2023/07/06/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%AF%BC%E8%AE%BA-%E6%8C%81%E4%B9%85%E6%80%A7/w9.png" alt="?"></p>
+<p><strong>任何一行中的1的数量必须是偶数（而不是奇数）。这是RAID必须保持的不变性（invariant），以便奇偶校验正确。</strong></p>
+<p><strong>如何利用奇偶校验信息从故障中恢复?</strong></p>
+<p>标为C2的列丢失了。要找出该列中肯定存在的值，我们只需读取该行中的所有其他值（包括XOR的奇偶校验位）并重构（reconstruct）正确的答案。</p>
+<p>假设C2列中第一行的值丢失（它是1）。通过读取该行中的其他值（C0中的0，C1中的0，C3中的1以及奇偶校验列P中的0），我们得到值0、0、1和0。因为我们知道XOR保持每行有偶数个1，所以就知道丢失的数据肯定是什么——1。这就是重构在基于异或的方案中的工作方式！还要注意如何计算重构值：只要将数据位和奇偶校验位异或，就像开始计算奇偶校验一样。</p>
+<p><img src="/2023/07/06/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%AF%BC%E8%AE%BA-%E6%8C%81%E4%B9%85%E6%80%A7/e3.png" alt="?"></p>
+<p><strong>可以看出，每个块的每个比特计算奇偶校验，结果放在奇偶校验块中。</strong></p>
+<h3 id="RAID-4-分析"><a href="#RAID-4-分析" class="headerlink" title="RAID-4 分析"></a>RAID-4 分析</h3><p>RAID-4使用1个磁盘作为它所保护的每组磁盘的奇偶校验信息。因此，RAID组的有用容量是（N−1）。</p>
+<p>可靠性也很容易理解：RAID-4容许1个磁盘故障，不容许更多。如果丢失多个磁盘，则无法重建丢失的数据。</p>
+<p>改写数据？</p>
+<p>存在两种方法。第一种称为加法奇偶校验（additive  parity），要求我们做以下工作。为了计算新奇偶校验块的值，并行读取条带中所有其他数据块（在本例中为块0、2和3），并与新块（1）进行异或。结果是新的校验块。为了完成写操作，你可以将新数据和新奇偶校验写入其各自的磁盘，也是并行写入。</p>
+<p>这种技术的问题在于它随磁盘数量而变化，因此在较大的RAID中，需要大量的读取来计算奇偶校验。因此，导致了减法奇偶校验（subtractive parity）方法。</p>
+<p><img src="/2023/07/06/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%AF%BC%E8%AE%BA-%E6%8C%81%E4%B9%85%E6%80%A7/e4.png" alt="?"></p>
+<p>想象一下，我们希望用一个新值来覆盖C2位，称之为C2new。减法方法分三步工作。首先，我们读入C2（C2old = 1）和旧数据（Pold = 0）的旧数据。然后，比较旧数据和新数据。如果它们相同（例如，C2new  =  C2old），那么我们知道奇偶校验位也将保持相同（即Pnew  =  Pold）。但是，如果它们不同，那么我们必须将旧的奇偶校验位翻转到其当前状态的相反位置，也就是说，如果（Pold == 0），Pnew将被设置为0。如果（Pold == 0），Pnew将被设置为1。我们可以用XOR（⊕是XOR运算符）漂亮地表达完整的复杂情况：</p>
+<p><strong>Pnew = (Cold⊕ Cnew) ⊕ Pold</strong></p>
+<p>对于每次写入，RAID必须执行4次物理I/O（两次读取和两次写入）</p>
+<p><img src="/2023/07/06/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%AF%BC%E8%AE%BA-%E6%8C%81%E4%B9%85%E6%80%A7/e6.png" alt="?"><br>现在想象几乎同时向RAID-4提交2个小的请求，写入块4和块13（在表38.8中标出）。这些磁盘的数据位于磁盘0和1上，因此对数据的读写操作可以并行进行，这很好。出现的问题是奇偶校验磁盘。这两个请求都必须读取4和13的奇偶校验块，即奇偶校验块1和3（用+标记）。估计你已明白了这个问题：在这种类型的工作负载下，奇偶校验磁盘是瓶颈。因此我们有时将它称为基于奇偶校验的RAID的小写入问题（small-write problem）。</p>
+<h2 id="RAID-5-级：旋转奇偶校验"><a href="#RAID-5-级：旋转奇偶校验" class="headerlink" title="RAID 5 级：旋转奇偶校验"></a>RAID 5 级：旋转奇偶校验</h2><p><img src="/2023/07/06/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%AF%BC%E8%AE%BA-%E6%8C%81%E4%B9%85%E6%80%A7/e5.png" alt="?"></p>
+<p>每个条带的奇偶校验块现在都在磁盘上旋转，以消除RAID-4的奇偶校验磁盘瓶颈。</p>
+<h2 id="RAID-比较：总结"><a href="#RAID-比较：总结" class="headerlink" title="RAID 比较：总结"></a>RAID 比较：总结</h2><p><img src="/2023/07/06/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%AF%BC%E8%AE%BA-%E6%8C%81%E4%B9%85%E6%80%A7/e8.png" alt="?"><br><img src="/2023/07/06/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%AF%BC%E8%AE%BA-%E6%8C%81%E4%B9%85%E6%80%A7/r1.png" alt="?"></p>
+<hr>
+<h1 id="插叙：文件和目录"><a href="#插叙：文件和目录" class="headerlink" title="插叙：文件和目录"></a>插叙：文件和目录</h1><p>到目前为止，我们看到了两项关键操作系统技术的发展：<br><strong>进程，它是虚拟化的CPU；地址空间，它是虚拟化的内存。</strong></p>
+<p>在这两种抽象共同作用下，程序运行时就好像它在自己的私有独立世界中一样，好像它有自己的处理器（或多处理器），好像它有自己的内存。</p>
+<p>持久存储（persistent storage）。永久存储设备永久地（或至少长时间地）存储信息，如传统硬盘驱动器（hard  disk  drive）或更现代的固态存储设备（solid-state storage device）。持久存储设备与内存不同。内存在断电时，其内容会丢失，而持久存储设备会保持这些数据不变。因此，操作系统必须特别注意这样的设备：用户用它们保存真正关心的数据。</p>
+<h2 id="文件和目录"><a href="#文件和目录" class="headerlink" title="文件和目录"></a>文件和目录</h2><p>随着时间的推移，存储虚拟化形成了两个关键的抽象。第一个是文件（file）。文件就是一个线性字节数组，每个字节都可以读取或写入。每个文件都有某种低级名称（low-level name），通常是某种数字。用户通常不知道这个名字（我们稍后会看到）。由于历史原因，文件的低级名称通常称为inode号（inode  number）。</p>
+<p>第二个抽象是目录（directory）。一个目录，像一个文件一样，也有一个低级名字（即inode号），但是它的内容非常具体：它包含一个（用户可读名字，低级名字）对的列表。例如，假设存在一个低级别名称为“10”的文件，它的用户可读的名称为“foo”。“foo”所在的目录因此会有条目（“foo”，“10”），将用户可读名称映射到低级名称。目录中的每个条目都指向文件或其他目录。通过将目录放入其他目录中，用户可以构建任意的目录树（directory tree，或目录层次结构，directory hierarchy），在该目录树下存储所有文件和目录。</p>
+<p><img src="/2023/07/06/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%AF%BC%E8%AE%BA-%E6%8C%81%E4%B9%85%E6%80%A7/r2.png" alt="?"></p>
+<h2 id="创建文件"><a href="#创建文件" class="headerlink" title="创建文件"></a>创建文件</h2><p>通过调用open()并传入O_CREAT标志，程序可以创建一个新文件。</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="type">int</span> fd = open(<span class="string">&quot;foo&quot;</span>, O_CREAT | O_WRONLY | O_TRUNC);</span><br></pre></td></tr></table></figure>
+
+<p>open()的一个重要方面是它的返回值：文件描述符（file descriptor）。文件描述符只是一个整数，是每个进程私有的，在UNIX系统中用于访问文件。因此，一旦文件被打开，你就可以使用文件描述符来读取或写入文件，假定你有权这样做。这样，一个文件描述符就是一种权限（capability）[L84]，即一个不透明的句柄，它可以让你执行某些操作。另一种看待文件描述符的方法，是将它作为指向文件类型对象的指针。一旦你有这样的对象，就可以调用其他“方法”来访问文件，如read()和write()。</p>
+<blockquote>
+<p>句柄（Handle）是计算机科学中的一个术语，用于表示对资源或对象的引用。在操作系统中，句柄通常是一个整数或指针，用于标识和跟踪分配给进程的资源，例如文件、内存、设备或其他系统对象。</p>
+</blockquote>
+<blockquote>
+<p>句柄可以看作是对实际对象的间接引用，类似于人们使用门牌号码来访问房屋。通过使用句柄，程序可以在需要的时候引用和操作特定的资源，而不需要了解其具体的内部表示或实现细节。</p>
+</blockquote>
+<blockquote>
+<p>句柄在编程中非常常见，特别是在底层操作系统编程、图形用户界面(GUI)开发和资源管理方面。通过使用句柄，程序可以更有效地管理和控制系统资源，并提高代码的可读性和维护性。</p>
+</blockquote>
+<h2 id="读写文件"><a href="#读写文件" class="headerlink" title="读写文件"></a>读写文件</h2><blockquote>
+<p>使用strace（和类似工具）strace工具提供了一种非常棒的方式，来查看程序在做什么。通过运行它，你可以跟踪程序生成的系统调用，查看参数和返回代码，通常可以很好地了解正在发生的事情。</p>
+</blockquote>
+<p>下面是一个例子，使用strace来找出cat在做什么（为了可读性删除了一些调用）</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line">prompt&gt; strace cat foo</span><br><span class="line">...</span><br><span class="line">open(<span class="string">&quot;foo&quot;</span>, O_RDONLY|O_LARGEFILE)</span><br><span class="line">= <span class="number">3</span></span><br><span class="line">read(<span class="number">3</span>, <span class="string">&quot;hello\n&quot;</span>, <span class="number">4096</span>)</span><br><span class="line">= <span class="number">6</span></span><br><span class="line">write(<span class="number">1</span>, <span class="string">&quot;hello\n&quot;</span>, <span class="number">6</span>)</span><br><span class="line">= <span class="number">6</span></span><br><span class="line">hello</span><br><span class="line">read(<span class="number">3</span>, <span class="string">&quot;&quot;</span>, <span class="number">4096</span>) = <span class="number">0</span></span><br><span class="line">close(<span class="number">3</span>) = <span class="number">0</span></span><br><span class="line">...</span><br><span class="line">prompt&gt;</span><br></pre></td></tr></table></figure>
+
+<p>cat做的第一件事是打开文件准备读取。我们应该注意几件事情。首先，该文件仅为读取而打开（不写入），如O_RDONLY标志所示。其次，使用64位偏移量（O_LARGEFILE）。最后，open()调用成功并返回一个文件描述符，其值为3。</p>
+<p><strong>为什么第一次调用open()会返回3，而不是0或1？</strong></p>
+<p>每个正在运行的进程已经打开了3个文件：标准输入（进程可以读取以接收输入），标准输出（进程可以写入以便将信息显示到屏幕），以及标准错误（进程可以写入错误消息）。这些分别由文件描述符0、1和2表示。因此，当你第一次打开另一个文件时（如上例所示），它几乎肯定是文件描述符3。</p>
+<p>打开成功后，cat使用read()系统调用重复读取文件中的一些字节。read()的第一个参数是文件描述符，从而告诉文件系统读取哪个文件。一个进程当然可以同时打开多个文件，因此描述符使操作系统能够知道某个特定的读取引用了哪个文件。第二个参数指向一个用于放置read()结果的缓冲区。在上面的系统调用跟踪中，strace显示了这时的读取结果（“hello”）。第三个参数是缓冲区的大小，在这个例子中是4KB。对read()的调用也成功返回，这里返回它读取的字节数（6，其中包括“hello”中的5个字母和一个行尾标记）。</p>
+<p>write()系统调用的一次调用，针对文件描述符1。如上所述，此描述符被称为标准输出，因此用于将单词“Hello”写到屏幕上，这正是cat程序要做的事。但是它直接调用write()吗？也许（如果它是高度优化的）。但是，如果不是，那么可能会调用库例程printf()。在内部，printf()会计算出传递给它的所有格式化细节，并最终对标准输出调用write，将结果显示到屏幕上。</p>
+<p>然后，cat程序试图从文件中读取更多内容，但由于文件中没有剩余字节，read()返回0，程序知道这意味着它已经读取了整个文件。因此，程序调用close()，传入相应的文件描述符，表明它已用完文件“foo”。该文件因此被关闭，对它的读取完成了。</p>
+<h2 id="读取和写入，但不按顺序"><a href="#读取和写入，但不按顺序" class="headerlink" title="读取和写入，但不按顺序"></a>读取和写入，但不按顺序</h2><p>有时能够读取或写入文件中的特定偏移量是有用的。例如，如果你在文本文件上构建了索引并利用它来查找特定单词，最终可能会从文件中的某些随机（random）偏移量中读取数据。为此，我们将使用lseek()系统调用。下面是函数原型：</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="type">off_t</span> <span class="title function_">lseek</span><span class="params">(<span class="type">int</span> fildes, <span class="type">off_t</span> offset, <span class="type">int</span> whence)</span>;</span><br></pre></td></tr></table></figure>
+
+<p>第一个参数是熟悉的（一个文件描述符）。第二个参数是偏移量，它将文件偏移量定位到文件中的特定位置。第三个参数，由于历史原因而被称为whence，明确地指定了搜索的执行方式。</p>
+<p>从这段描述中可见，对于每个进程打开的文件，操作系统都会跟踪一个“当前”偏移量，这将决定在文件中读取或写入时，下一次读取或写入开始的位置。因此，打开文件的抽象包括它具有当前偏移量，偏移量的更新有两种方式。第一种是当发生N个字节的读或写时，N被添加到当前偏移。因此，每次读取或写入都会隐式更新偏移量。第二种是明确的lseek，它改变了上面指定的偏移量。</p>
+<blockquote>
+<p>调用lseek()不会执行磁盘寻道<br>lseek()调用只是在OS内存中更改一个变量，该变量跟踪特定进程的下一个读取或写入开始的偏移量。如果发送到磁盘的读取或写入与最后一次读取或写入不在同一磁道上，就会发生磁盘寻道，因此需要磁头移动。</p>
+</blockquote>
+<h2 id="用-fsync-立即写入"><a href="#用-fsync-立即写入" class="headerlink" title="用 fsync()立即写入"></a>用 fsync()立即写入</h2><p>大多数情况下，当程序调用write()时，它只是告诉文件系统：请在将来的某个时刻，将此数据写入持久存储。出于性能的原因，文件系统会将这些写入在内存中缓冲（buffer）一段时间（例如5s或30s）。在稍后的时间点，写入将实际发送到存储设备。从调用应用程序的角度来看，写入似乎很快完成，并且只有在极少数情况下（例如，在write()调用之后但写入磁盘之前，机器崩溃）数据会丢失。</p>
+<p><strong>在数据库管理系统（DBMS）中，开发正确的恢复协议要求能够经常强制写入磁盘。</strong></p>
+<p>当进程针对特定文件描述符调用fsync()时，文件系统通过强制将所有脏（dirty）数据（即尚未写入的）写入磁盘来响应，针对指定文件描述符引用的文件。一旦所有这些写入完成，fsync()例程就会返回。</p>
+<p>以下是如何使用fsync()的简单示例。代码打开文件foo，向它写入一个数据块，然后调用fsync()以确保立即强制写入磁盘。一旦fsync()返回，应用程序就可以安全地继续前进，知道数据已被保存（如果fsync()实现正确，那就是了）。</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="type">int</span> fd = open(<span class="string">&quot;foo&quot;</span>, O_CREAT | O_WRONLY | O_TRUNC);</span><br><span class="line">assert(fd &gt; <span class="number">-1</span>);</span><br><span class="line"><span class="type">int</span> rc = write(fd, buffer, size);</span><br><span class="line">assert(rc == size);</span><br><span class="line">rc = fsync(fd);</span><br><span class="line">assert(rc == <span class="number">0</span>);</span><br></pre></td></tr></table></figure>
+
+<p>在某些情况下，还需要fsync()包含foo文件的目录。添加此步骤不仅可以确保文件本身位于磁盘上，而且可以确保文件（如果新创建）也是目录的一部分。</p>
+<h2 id="文件重命名"><a href="#文件重命名" class="headerlink" title="文件重命名"></a>文件重命名</h2><p>有时需要给一个文件一个不同的名字。在命令行键入时，这是通过mv命令完成的。</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line">prompt&gt; mv foo bar</span><br></pre></td></tr></table></figure>
+<p>利用strace，我们可以看到mv使用了系统调用rename(char  *  old,  char  *  new)，它只需要两个参数：文件的原来名称（old）和新名称（new）。</p>
+<p>rename()调用提供了一个有趣的保证：它（通常）是一个原子（atomic）调用，不论系统是否崩溃。如果系统在重命名期间崩溃，文件将被命名为旧名称或新名称，不会出现奇怪的中间状态。因此，对于支持某些需要对文件状态进行原子更新的应用程序，rename()非常重要。</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="type">int</span> fd = open(<span class="string">&quot;foo.txt.tmp&quot;</span>, O_WRONLY|O_CREAT|O_TRUNC);</span><br><span class="line">write(fd, buffer, size); <span class="comment">// write out new version of file</span></span><br><span class="line">fsync(fd);</span><br><span class="line">close(fd);</span><br><span class="line">rename(<span class="string">&quot;foo.txt.tmp&quot;</span>, <span class="string">&quot;foo.txt&quot;</span>);</span><br></pre></td></tr></table></figure>
+
+<p><strong>编辑器做的事很简单：将文件的新版本写入临时名称（foot.txt.tmp），使用fsync()将其强制写入磁盘。然后，当应用程序确定新文件的元数据和内容在磁盘上，就将临时文件重命名为原有文件的名称。最后一步自动将新文件交换到位，同时删除旧版本的文件，从而实现原子文件更新。</strong></p>
+<h2 id="获取文件信息"><a href="#获取文件信息" class="headerlink" title="获取文件信息"></a>获取文件信息</h2><p>除了文件访问之外，我们还希望文件系统能够保存关于它正在存储的每个文件的大量信息。我们通常将这些数据称为文件元数据（metadata）。要查看特定文件的元数据，我们可以使用stat()或fstat()系统调用。这些调用将一个路径名（或文件描述符）添加到一个文件中，并填充一个stat结构，如下所示：</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">stat</span> &#123;</span></span><br><span class="line"><span class="type">dev_t</span> st_dev; <span class="comment">/* ID of device containing file */</span></span><br><span class="line"><span class="type">ino_t</span> st_ino; <span class="comment">/* inode number */</span></span><br><span class="line"><span class="type">mode_t</span> st_mode; <span class="comment">/* protection */</span></span><br><span class="line"><span class="type">nlink_t</span> st_nlink; <span class="comment">/* number of hard links */</span></span><br><span class="line"><span class="type">uid_t</span> st_uid; <span class="comment">/* user ID of owner */</span></span><br><span class="line"><span class="type">gid_t</span> st_gid; <span class="comment">/* group ID of owner */</span></span><br><span class="line"><span class="type">dev_t</span> st_rdev; <span class="comment">/* device ID (if special file) */</span></span><br><span class="line"><span class="type">off_t</span> st_size; <span class="comment">/* total size, in bytes */</span></span><br><span class="line"><span class="type">blksize_t</span> st_blksize; <span class="comment">/* blocksize for filesystem I/O */</span></span><br><span class="line"><span class="type">blkcnt_t</span> st_blocks; <span class="comment">/* number of blocks allocated */</span></span><br><span class="line"><span class="type">time_t</span> st_atime; <span class="comment">/* time of last access */</span></span><br><span class="line"><span class="type">time_t</span> st_mtime; <span class="comment">/* time of last modification */</span></span><br><span class="line"><span class="type">time_t</span> st_ctime; <span class="comment">/* time of last status change */</span></span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<p>要查看此信息，可以使用命令行工具stat：</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line">prompt&gt; echo hello &gt; file</span><br><span class="line">prompt&gt; stat file</span><br><span class="line">File: <span class="string">&#x27;file&#x27;</span></span><br><span class="line">Size: <span class="number">6</span> Blocks: <span class="number">8</span> IO Block: <span class="number">4096</span> regular file</span><br><span class="line">Device: <span class="number">811</span>h/<span class="number">2065</span>d Inode: <span class="number">67158084</span> Links: <span class="number">1</span></span><br><span class="line">Access: (<span class="number">0640</span>/-rw-r-----) Uid: (<span class="number">30686</span>/ remzi) Gid: (<span class="number">30686</span>/ remzi)</span><br><span class="line">Access: <span class="number">2011</span><span class="number">-05</span><span class="number">-03</span> <span class="number">15</span>:<span class="number">50</span>:<span class="number">20.157594748</span> <span class="number">-0500</span></span><br><span class="line">Modify: <span class="number">2011</span><span class="number">-05</span><span class="number">-03</span> <span class="number">15</span>:<span class="number">50</span>:<span class="number">20.157594748</span> <span class="number">-0500</span></span><br><span class="line">Change: <span class="number">2011</span><span class="number">-05</span><span class="number">-03</span> <span class="number">15</span>:<span class="number">50</span>:<span class="number">20.157594748</span> <span class="number">-0500</span></span><br></pre></td></tr></table></figure>
+
+<p>事实表明，每个文件系统通常将这种类型的信息保存在一个名为 inode<br>①的结构中。应该将 inode看作是由文件系统保存的持久数据结构，包含上述信息。</p>
+<h2 id="删除文件"><a href="#删除文件" class="headerlink" title="删除文件"></a>删除文件</h2><figure class="highlight c"><table><tr><td class="code"><pre><span class="line">prompt&gt; strace rm foo</span><br><span class="line">...</span><br><span class="line">unlink(<span class="string">&quot;foo&quot;</span>) = <span class="number">0</span></span><br><span class="line">...</span><br></pre></td></tr></table></figure>
+
+<p>unlink()只需要待删除文件的名称，并在成功时返回零。</p>
+<h2 id="创建目录"><a href="#创建目录" class="headerlink" title="创建目录"></a>创建目录</h2><p>除了文件外，还可以使用一组与目录相关的系统调用来创建、读取和删除目录。永远不能直接写入目录。因为目录的格式被视为文件系统元数据，所以你只能间接更新目录，例如，通过在其中创建文件、目录或其他对象类型。通过这种方式，文件系统可以确保目录的内容始终符合预期。</p>
+<p>要创建目录，可以用系统调用mkdir()。同名的mkdir程序可以用来创建这样一个目录。</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line">prompt&gt; strace mkdir foo</span><br><span class="line">...</span><br><span class="line">mkdir(<span class="string">&quot;foo&quot;</span>, <span class="number">0777</span>) = <span class="number">0</span></span><br><span class="line">...</span><br><span class="line">prompt&gt;</span><br></pre></td></tr></table></figure>
+
+<p>这样的目录创建时，它被认为是“空的”，尽管它实际上包含最少的内容。具体来说，空目录有两个条目：一个引用自身的条目，一个引用其父目录的条目。前者称为“.”（点）目录，后者称为“..”（点-点）目录。你可以通过向程序ls传递一个标志（-a）来查看这些目录：</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line">prompt&gt; ls -a</span><br><span class="line">./ ../</span><br><span class="line">prompt&gt; ls -al</span><br><span class="line">total <span class="number">8</span></span><br><span class="line">drwxr-x--- <span class="number">2</span> remzi remzi <span class="number">6</span> Apr <span class="number">30</span> <span class="number">16</span>:<span class="number">17</span> ./</span><br><span class="line">drwxr-x--- <span class="number">26</span> remzi remzi <span class="number">4096</span> Apr <span class="number">30</span> <span class="number">16</span>:<span class="number">17</span> ../</span><br></pre></td></tr></table></figure>
+
+<h2 id="读取目录"><a href="#读取目录" class="headerlink" title="读取目录"></a>读取目录</h2><p>创建了目录，也可能希望读取目录。实际上，这正是ls程序做的事。</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="type">int</span> <span class="title function_">main</span><span class="params">(<span class="type">int</span> argc, <span class="type">char</span> *argv[])</span> &#123;</span><br><span class="line">DIR *dp = opendir(<span class="string">&quot;.&quot;</span>);</span><br><span class="line">assert(dp != <span class="literal">NULL</span>);</span><br><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">dirent</span> *<span class="title">d</span>;</span></span><br><span class="line"><span class="keyword">while</span> ((d = readdir(dp)) != <span class="literal">NULL</span>) &#123;</span><br><span class="line"><span class="built_in">printf</span>(<span class="string">&quot;%d %s\n&quot;</span>, (<span class="type">int</span>) d-&gt;d_ino, d-&gt;d_name);</span><br><span class="line">&#125;</span><br><span class="line">closedir(dp);</span><br><span class="line"><span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="删除目录"><a href="#删除目录" class="headerlink" title="删除目录"></a>删除目录</h2><p>可以通过调用rmdir()来删除目录（它由相同名称的程序rmdir使用）。然而，与删除文件不同，删除目录更加危险，因为你可以使用单个命令删除大量数据。因此，rmdir()要求该目录在被删除之前是空的（只有“.”和“..”条目）。如果你试图删除一个非空目录，那么对rmdir()的调用就会失败。</p>
+<h2 id="硬链接"><a href="#硬链接" class="headerlink" title="硬链接"></a>硬链接</h2><p><strong>理解在文件系统树中创建条目的新方法，即通过所谓的link()系统调用。</strong></p>
+<p>link()系统调用有两个参数：一个旧路径名和一个新路径名。当你将一个新的文件名“链接”到一个旧的文件名时，你实际上创建了另一种引用同一个文件的方法。</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line">prompt&gt; echo hello &gt; file</span><br><span class="line">prompt&gt; cat file</span><br><span class="line">hello</span><br><span class="line">prompt&gt; ln file file2</span><br><span class="line">prompt&gt; cat file2</span><br><span class="line">hello</span><br></pre></td></tr></table></figure>
+<p>link只是在要创建链接的目录中创建了另一个名称，并将其指向原有文件的相同inode号（即低级别名称）。该文件不以任何方式复制。相反，你现在就有了两个人类可读的名称（file和file2），都指向同一个文件。通过打印每个文件的inode号，我们甚至可以在目录中看到这一点：</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line">prompt&gt; ls -i file file2</span><br><span class="line"><span class="number">67158084</span> file</span><br><span class="line"><span class="number">67158084</span> file2</span><br><span class="line">prompt&gt;</span><br></pre></td></tr></table></figure>
+
+<p>创建一个文件时，实际上做了两件事。首先，要构建一个结构（inode），它将跟踪几乎所有关于文件的信息，包括其大小、文件块在磁盘上的位置等等。其次，将人类可读的名称链接到该文件，并将该链接放入目录中。</p>
+<p>在创建文件的硬链接之后，在文件系统中，原有文件名（file）和新创建的文件名（file2）之间没有区别。实际上，它们都只是指向文件底层元数据的链接，可以在inode编号67158084中找到。</p>
+<p>这样的结果是因为当文件系统取消链接文件时，它检查inode号中的引用计数（reference count）。该引用计数（有时称为链接计数，link count）允许文件系统跟踪有多少不同的文件名已链接到这个inode。调用unlink()时，会删除人类可读的名称（正在删除的文件）与给定inode号之间的“链接”，并减少引用计数。只有当引用计数达到零时，文件系统才会释放inode和相关数据块，从而真正“删除”该文件。</p>
+<p>可以使用stat()来查看文件的引用计数。让我们看看创建和删除文件的硬链接时，引用计数是什么。在这个例子中，我们将为同一个文件创建 3 个链接，然后删除它们。仔细看链接计数！</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line">prompt&gt; echo hello &gt; file</span><br><span class="line">prompt&gt; stat file</span><br><span class="line">... Inode: <span class="number">67158084</span> Links: <span class="number">1</span> ...</span><br><span class="line">prompt&gt; ln file file2</span><br><span class="line">prompt&gt; stat file</span><br><span class="line">... Inode: <span class="number">67158084</span> Links: <span class="number">2</span> ...</span><br><span class="line">prompt&gt; stat file2</span><br><span class="line">... Inode: <span class="number">67158084</span> Links: <span class="number">2</span> ...</span><br><span class="line">prompt&gt; ln file2 file3</span><br><span class="line">prompt&gt; stat file</span><br><span class="line">... Inode: <span class="number">67158084</span> Links: <span class="number">3</span> ...</span><br><span class="line">prompt&gt; rm file</span><br><span class="line">prompt&gt; stat file2</span><br><span class="line">... Inode: <span class="number">67158084</span> Links: <span class="number">2</span> ...</span><br><span class="line">prompt&gt; rm file2</span><br><span class="line">prompt&gt; stat file3</span><br><span class="line">... Inode: <span class="number">67158084</span> Links: <span class="number">1</span> ...</span><br><span class="line">prompt&gt; rm file3</span><br></pre></td></tr></table></figure>
+
+<h2 id="符号链接"><a href="#符号链接" class="headerlink" title="符号链接"></a>符号链接</h2><p>还有一种非常有用的链接类型，称为符号链接（symbolic link），有时称为软链接（soft link）。事实表明，硬链接有点局限：你不能创建目录的硬链接（因为担心会在目录树中创建一个环）。你不能硬链接到其他磁盘分区中的文件（因为inode号在特定文件系统中是唯一的，而不是跨文件系统），等等。因此，人们创建了一种称为符号链接的新型链接。</p>
+<p>要创建这样的链接，可以使用相同的程序ln，但使用-s标志。</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line">prompt&gt; echo hello &gt; file</span><br><span class="line">prompt&gt; ln -s file file2</span><br><span class="line">prompt&gt; cat file2</span><br><span class="line">hello</span><br></pre></td></tr></table></figure>
+
+<p>如你所见，创建软链接看起来几乎相同，现在可以通过文件名称file以及符号链接名称file2来访问原始文件。但是，除了表面相似之外，符号链接实际上与硬链接完全不同。第一个区别是符号链接本身实际上是一个不同类型的文件。我们已经讨论过常规文件和目录。符号链接是文件系统知道的第三种类型。</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line">prompt&gt; stat file</span><br><span class="line">... regular file ...</span><br><span class="line">prompt&gt; stat file2</span><br><span class="line">... symbolic link ...</span><br></pre></td></tr></table></figure>
+
+<p>如果仔细观察 ls 输出的长格式的第一个字符，可以看到常规文件最左列中的第一个字符是“-”，目录是“d”，软链接是“l”。你还可以看到符号链接的大小（本例中为 4 个字节），以及链接指向的内容（名为 file 的文件）。</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line">prompt&gt; ls -al</span><br><span class="line">drwxr-x--- <span class="number">2</span> remzi remzi <span class="number">29</span> May <span class="number">3</span> <span class="number">19</span>:<span class="number">10</span> ./</span><br><span class="line">drwxr-x--- <span class="number">27</span> remzi remzi <span class="number">4096</span> May <span class="number">3</span> <span class="number">15</span>:<span class="number">14</span> ../</span><br><span class="line">-rw-r----- <span class="number">1</span> remzi remzi <span class="number">6</span> May <span class="number">3</span> <span class="number">19</span>:<span class="number">10</span> file</span><br><span class="line">lrwxrwxrwx <span class="number">1</span> remzi remzi <span class="number">4</span> May <span class="number">3</span> <span class="number">19</span>:<span class="number">10</span> file2 -&gt; file</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line">prompt&gt; echo hello &gt; file</span><br><span class="line">prompt&gt; ln -s file file2</span><br><span class="line">prompt&gt; cat file2</span><br><span class="line">hello</span><br><span class="line">prompt&gt; rm file</span><br><span class="line">prompt&gt; cat file2</span><br><span class="line">cat: file2: No such file or directory</span><br></pre></td></tr></table></figure>
+
+<p>符号链接与硬链接完全不同，删除名为file的原始文件会导致符号链接指向不再存在的路径名。</p>
+<h2 id="创建并挂载文件系统"><a href="#创建并挂载文件系统" class="headerlink" title="创建并挂载文件系统"></a>创建并挂载文件系统</h2><p>如何从许多底层文件系统组建完整的目录树。这项任务的实现是先制作文件系统，然后挂载它们，使其内容可以访问。</p>
+<p>为了创建一个文件系统，大多数文件系统提供了一个工具，通常名为mkfs（发音为“make fs”），它就是完成这个任务的。思路如下：作为输入，为该工具提供一个设备（例如磁盘分区，例如/dev/sda1），一种文件系统类型（例如ext3），它就在该磁盘分区上写入一个空文件系统，从根目录开始。mkfs说，要有文件系统！</p>
+<p>但是，一旦创建了这样的文件系统，就需要在统一的文件系统树中进行访问。这个任务是通过mount程序实现的（它使底层系统调用mount()完成实际工作）。mount的作用很简单：以现有目录作为目标挂载点（mount  point），本质上是将新的文件系统粘贴到目录树的这个点上。</p>
+<p>因此mount的美妙之处在于：它将所有文件系统统一到一棵树中，而不是拥有多个独立的文件系统，这让命名统一而且方便。</p>
+<p>要查看系统上挂载的内容，以及在哪些位置挂载，只要运行mount程序。你会看到类似下面的内容：</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line">/dev/sda1 on / type <span class="title function_">ext3</span> <span class="params">(rw)</span></span><br><span class="line">proc on /proc type <span class="title function_">proc</span> <span class="params">(rw)</span></span><br><span class="line">sysfs on /sys type <span class="title function_">sysfs</span> <span class="params">(rw)</span></span><br><span class="line">/dev/sda5 on /tmp type <span class="title function_">ext3</span> <span class="params">(rw)</span></span><br><span class="line">/dev/sda7 on /var/vice/cache type <span class="title function_">ext3</span> <span class="params">(rw)</span></span><br><span class="line">tmpfs on /dev/shm type <span class="title function_">tmpfs</span> <span class="params">(rw)</span></span><br><span class="line">AFS on /afs type <span class="title function_">afs</span> <span class="params">(rw)</span></span><br></pre></td></tr></table></figure>
+
 ]]></content>
       <tags>
         <tag>os</tag>
