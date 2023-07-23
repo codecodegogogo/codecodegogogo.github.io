@@ -31,6 +31,11 @@
       </tags>
   </entry>
   <entry>
+    <title>操作系统导论-分布式</title>
+    <url>/2023/07/23/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%AF%BC%E8%AE%BA-%E5%88%86%E5%B8%83%E5%BC%8F/</url>
+    <content><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="\assets\css\APlayer.min.css"><script src="\assets\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script><script class="meting-secondary-script-marker" src="\assets\js\Meting.min.js"></script>]]></content>
+  </entry>
+  <entry>
     <title>操作系统导论-持久性</title>
     <url>/2023/07/06/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%AF%BC%E8%AE%BA-%E6%8C%81%E4%B9%85%E6%80%A7/</url>
     <content><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="\assets\css\APlayer.min.css"><script src="\assets\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script><script class="meting-secondary-script-marker" src="\assets\js\Meting.min.js"></script><h1 id="IO设备"><a href="#IO设备" class="headerlink" title="IO设备"></a>IO设备</h1><h2 id="系统架构"><a href="#系统架构" class="headerlink" title="系统架构"></a>系统架构</h2><p>CPU通过某种内存总线（memory bus）或互连电缆连接到系统内存。图像或者其他高性能I/O设备通过常规的I/O总线（I/O bus）连接到系统，在许多现代系统中会是PCI或它的衍生形式。最后，更下面是外围总线（peripheral bus），比如SCSI、SATA或者USB。它们将最慢的设备连接到系统，包括磁盘、鼠标及其他类似设备。<br><img src="/2023/07/06/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%AF%BC%E8%AE%BA-%E6%8C%81%E4%B9%85%E6%80%A7/q1.png" alt="?"></p>
@@ -473,10 +478,14 @@
 <p>LFS清理程序定期读入许多旧的（部分使用的）段，确定哪些块在这些段中存在，然后写出一组新的段，只包含其中活着的块，从而释放旧块用于写入。具体来说，我们预期清理程序读取M个现有段，将其内容打包（compact）到N个新段（其中N  &lt;  M），然后将N段写入磁盘的新位置。然后释放旧的M段，文件系统可以使用它们进行后续写入。</p>
 <h2 id="确定块的死活"><a href="#确定块的死活" class="headerlink" title="确定块的死活"></a>确定块的死活</h2><p>对于每个数据块D，LFS包括其inode号（它属于哪个文件）及其偏移量（这是该文件的哪一块）。该信息记录在一个数据结构中，位于段头部，称为段摘要块（segment summary block）。</p>
 <p>对于位于地址A的磁盘上的块D，查看段摘要块并很到其inode号N和偏移量T。接下来，查看imap以很到N所在的位置，并从磁盘读取N（可能它已经在内存中，这更好）。最后，利用偏移量T，查看inode（或某个间接块），看看inode认为此文件的第T个块在磁盘上的位置。如果它刚好指向磁盘地址A，则LFS可以断定块D是活的。如果它指向其他地方，LFS可以断定D未被使用（即它已经死了），因此知道不再需要该版本。</p>
-<p><img src="/2023/07/06/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%AF%BC%E8%AE%BA-%E6%8C%81%E4%B9%85%E6%80%A7/%E5%9C%A8.png" alt="?"></p>
+<p><img src="/2023/07/06/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%AF%BC%E8%AE%BA-%E6%8C%81%E4%B9%85%E6%80%A7/z9.png" alt="?"></p>
 <h2 id="策略问题：要清理哪些块，何时清理"><a href="#策略问题：要清理哪些块，何时清理" class="headerlink" title="策略问题：要清理哪些块，何时清理"></a>策略问题：要清理哪些块，何时清理</h2><h2 id="崩溃恢复和日志"><a href="#崩溃恢复和日志" class="headerlink" title="崩溃恢复和日志"></a>崩溃恢复和日志</h2><p>为了确保CR更新以原子方式发生，LFS实际上保留了两个CR，每个位于磁盘的一端，并交替写入它们。当使用最新的指向inode映射和其他信息的指针更新CR时，LFS还实现了一个谨慎的协议。具体来说，它首先写出一个头（带有时间戳），然后写出CR的主体，然后最后写出最后一部分（也带有时间戳）。如果系统在CR更新期间崩溃，LFS可以通过查看一对不一致的时间戳来检测到这一点。LFS将始终选择使用具有一致时间戳的最新CR，从而实现CR的一致更新。</p>
 <p>我们现在关注第一种情况。由于LFS每隔30s左右写入一次CR，因此文件系统的最后一致快照可能很旧。因此，在重新启动时，LFS可以通过简单地读取检查点区域、它指向的imap片段以及后续文件和目录，从而轻松地恢复。但是，最后许多秒的更新将会丢失。</p>
-]]></content>
+<hr>
+<h1 id="数据完整性和保护"><a href="#数据完整性和保护" class="headerlink" title="数据完整性和保护"></a>数据完整性和保护</h1><h2 id="磁盘故障模式"><a href="#磁盘故障模式" class="headerlink" title="磁盘故障模式"></a>磁盘故障模式</h2><p>在早期的RAID系统中，故障模型非常简单：要么整个磁盘都在工作，要么完全失败，而且检测到这种故障很简单。</p>
+<p>具体来说，两种类型的单块故障是常见的，值得考虑：潜在扇区错误（Latent-Sector Errors，LSE）和块讹误（block corruption）</p>
+<p>当磁盘扇区（或扇区组）以某种方式讹误时，会出现LSE。例如，如果磁头由于某种原因接触到表面（磁头碰撞，head crash，在正常操作期间不应发生的情况），则可能会讹误表面，使得数据位不可读。宇宙射线也会导致数据位翻转，使内容不正确。幸运的是，驱动器使用磁盘内纠错码（Error Correcting Code，ECC）来确定块中的磁盘位是否良好，并且在某些情况下，修复它们。如果它们不好，并且驱动器没有足够的信息来修复错误，则在发出请求读取它们时，磁盘会返回错误。</p>
+<h2 id="处理潜在的扇区错误"><a href="#处理潜在的扇区错误" class="headerlink" title="处理潜在的扇区错误"></a>处理潜在的扇区错误</h2>]]></content>
       <tags>
         <tag>os</tag>
       </tags>
