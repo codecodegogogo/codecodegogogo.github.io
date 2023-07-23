@@ -17,21 +17,24 @@
   <meta http-equiv="window-target" content="_top" />
   
   
-  <title>多线程,多进程,并发,并行,cpu | Sunny&#39;s Blog</title>
-  <meta name="description" content="基本首先，要先了解几个概念： 1、进程是程序的一次执行。 2、进程是资源分配的基本单位（调度单位）。 3、一个进程可以包括多个线程。 4、在单CPU计算机中，有一个资源是无法被多个程序并行使用的：CPU。 5、操作系统调度器：拆分CPU为一段段时间的运行片，轮流分配给不同的程序。 6、操作系统内存管理模块：管理物理内存、虚拟内存相关的事务。 　　 由于CPU同时刻只能执行一个进程，如果我们不加以控">
+  <title>操作系统导论-虚拟机 | Sunny&#39;s Blog</title>
+  <meta name="description" content="虚拟机监视器希望同时在机器上运行不同的操作系统，该怎么办？ IBM以虚拟机监视器（Virtual Machine Monitor，VMM）（也称为管理程序，hypervisor）[G74]的形式，引入了另一个间接层。 监视器位于一个或多个操作系统和硬件之间，并为每个运行的操作系统提供控制机器的假象。然而，在幕后，实际上是监视器在控制硬件，并必须在机器的物理资源上为运行的OS提供多路复用。实际上，V">
 <meta property="og:type" content="article">
-<meta property="og:title" content="多线程,多进程,并发,并行,cpu">
-<meta property="og:url" content="https://codecodegogogo.github.io/2023/07/05/%E5%A4%9A%E7%BA%BF%E7%A8%8B-%E5%A4%9A%E8%BF%9B%E7%A8%8B-%E5%B9%B6%E5%8F%91-%E5%B9%B6%E8%A1%8C-cpu/index.html">
+<meta property="og:title" content="操作系统导论-虚拟机">
+<meta property="og:url" content="https://codecodegogogo.github.io/2023/07/23/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%AF%BC%E8%AE%BA-%E8%99%9A%E6%8B%9F%E6%9C%BA/index.html">
 <meta property="og:site_name" content="Sunny">
-<meta property="og:description" content="基本首先，要先了解几个概念： 1、进程是程序的一次执行。 2、进程是资源分配的基本单位（调度单位）。 3、一个进程可以包括多个线程。 4、在单CPU计算机中，有一个资源是无法被多个程序并行使用的：CPU。 5、操作系统调度器：拆分CPU为一段段时间的运行片，轮流分配给不同的程序。 6、操作系统内存管理模块：管理物理内存、虚拟内存相关的事务。 　　 由于CPU同时刻只能执行一个进程，如果我们不加以控">
+<meta property="og:description" content="虚拟机监视器希望同时在机器上运行不同的操作系统，该怎么办？ IBM以虚拟机监视器（Virtual Machine Monitor，VMM）（也称为管理程序，hypervisor）[G74]的形式，引入了另一个间接层。 监视器位于一个或多个操作系统和硬件之间，并为每个运行的操作系统提供控制机器的假象。然而，在幕后，实际上是监视器在控制硬件，并必须在机器的物理资源上为运行的OS提供多路复用。实际上，V">
 <meta property="og:locale" content="zh_CN">
-<meta property="article:published_time" content="2023-07-05T06:22:24.000Z">
-<meta property="article:modified_time" content="2023-07-05T06:29:06.759Z">
+<meta property="og:image" content="https://codecodegogogo.github.io/2023/07/23/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%AF%BC%E8%AE%BA-%E8%99%9A%E6%8B%9F%E6%9C%BA/q1.png">
+<meta property="og:image" content="https://codecodegogogo.github.io/2023/07/23/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%AF%BC%E8%AE%BA-%E8%99%9A%E6%8B%9F%E6%9C%BA/q2.png">
+<meta property="article:published_time" content="2023-07-23T14:10:24.000Z">
+<meta property="article:modified_time" content="2023-07-23T14:20:57.278Z">
 <meta property="article:author" content="Sunny">
 <meta property="article:tag" content="os">
 <meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://codecodegogogo.github.io/2023/07/23/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%AF%BC%E8%AE%BA-%E8%99%9A%E6%8B%9F%E6%9C%BA/q1.png">
   <!-- Canonical links -->
-  <link rel="canonical" href="https://codecodegogogo.github.io/2023/07/05/%E5%A4%9A%E7%BA%BF%E7%A8%8B-%E5%A4%9A%E8%BF%9B%E7%A8%8B-%E5%B9%B6%E5%8F%91-%E5%B9%B6%E8%A1%8C-cpu/index.html">
+  <link rel="canonical" href="https://codecodegogogo.github.io/2023/07/23/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%AF%BC%E8%AE%BA-%E8%99%9A%E6%8B%9F%E6%9C%BA/index.html">
   
     <link rel="alternate" href="/atom.xml" title="Sunny" type="application/atom+xml">
   
@@ -275,21 +278,21 @@
   <div class="slimContent">
     <nav id="toc" class="article-toc">
       <h3 class="toc-title">文章目录</h3>
-      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%9F%BA%E6%9C%AC"><span class="toc-number">1.</span> <span class="toc-text">基本</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#CPU%E8%BF%9B%E7%A8%8B%E6%97%A0%E6%B3%95%E5%90%8C%E6%97%B6%E5%88%BB%E5%85%B1%E4%BA%AB%EF%BC%8C%E4%BD%86%E6%98%AF%E5%87%BA%E7%8E%B0%E4%B8%80%E5%AE%9A%E8%A6%81%E5%85%B1%E4%BA%ABCPU%E7%9A%84%E9%9C%80%E6%B1%82%E5%91%A2%EF%BC%9F"><span class="toc-number">2.</span> <span class="toc-text">CPU进程无法同时刻共享，但是出现一定要共享CPU的需求呢？</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#CPU%E7%9A%84%E5%87%A0%E6%A0%B8%E5%87%A0%E7%BA%BF%E7%A8%8B%E6%98%AF%E4%BB%80%E4%B9%88%E6%84%8F%E6%80%9D%EF%BC%9F"><span class="toc-number">3.</span> <span class="toc-text">CPU的几核几线程是什么意思？</span></a></li></ol>
+      <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E8%99%9A%E6%8B%9F%E6%9C%BA%E7%9B%91%E8%A7%86%E5%99%A8"><span class="toc-number">1.</span> <span class="toc-text">虚拟机监视器</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%99%9A%E6%8B%9F%E5%8C%96-CPU"><span class="toc-number">1.1.</span> <span class="toc-text">虚拟化 CPU</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%99%9A%E6%8B%9F%E5%8C%96%E5%86%85%E5%AD%98"><span class="toc-number">1.2.</span> <span class="toc-text">虚拟化内存</span></a></li></ol></li></ol>
     </nav>
   </div>
 </aside>
 
 <main class="main" role="main">
   <div class="content">
-  <article id="post-多线程-多进程-并发-并行-cpu" class="article article-type-post" itemscope itemtype="http://schema.org/BlogPosting">
+  <article id="post-操作系统导论-虚拟机" class="article article-type-post" itemscope itemtype="http://schema.org/BlogPosting">
     
     <div class="article-header">
       
         
   
     <h1 class="article-title" itemprop="name">
-      多线程,多进程,并发,并行,cpu
+      操作系统导论-虚拟机
     </h1>
   
 
@@ -297,8 +300,8 @@
       <div class="article-meta">
         <span class="article-date">
     <i class="icon icon-calendar-check"></i>
-	<a href="/2023/07/05/%E5%A4%9A%E7%BA%BF%E7%A8%8B-%E5%A4%9A%E8%BF%9B%E7%A8%8B-%E5%B9%B6%E5%8F%91-%E5%B9%B6%E8%A1%8C-cpu/" class="article-date">
-	  <time datetime="2023-07-05T06:22:24.000Z" itemprop="datePublished">2023-07-05</time>
+	<a href="/2023/07/23/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%AF%BC%E8%AE%BA-%E8%99%9A%E6%8B%9F%E6%9C%BA/" class="article-date">
+	  <time datetime="2023-07-23T14:10:24.000Z" itemprop="datePublished">2023-07-23</time>
 	</a>
 </span>
         
@@ -318,10 +321,10 @@
 	</span>
 
 
-        <span class="post-comment"><i class="icon icon-comment"></i> <a href="/2023/07/05/%E5%A4%9A%E7%BA%BF%E7%A8%8B-%E5%A4%9A%E8%BF%9B%E7%A8%8B-%E5%B9%B6%E5%8F%91-%E5%B9%B6%E8%A1%8C-cpu/#comments" class="article-comment-link">评论</a></span>
+        <span class="post-comment"><i class="icon icon-comment"></i> <a href="/2023/07/23/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%AF%BC%E8%AE%BA-%E8%99%9A%E6%8B%9F%E6%9C%BA/#comments" class="article-comment-link">评论</a></span>
         
 	
-		<span class="post-wordcount hidden-xs" itemprop="wordCount">字数统计: 972(字)</span>
+		<span class="post-wordcount hidden-xs" itemprop="wordCount">字数统计: 735(字)</span>
 	
 	
 
@@ -329,31 +332,15 @@
     </div>
     <div class="article-entry marked-body" itemprop="articleBody">
       
-        <h2 id="基本"><a href="#基本" class="headerlink" title="基本"></a>基本</h2><p>首先，要先了解几个概念：</p>
-<p>1、进程是程序的一次执行。</p>
-<p>2、进程是资源分配的基本单位（调度单位）。</p>
-<p>3、一个进程可以包括多个线程。</p>
-<p>4、在单CPU计算机中，有一个资源是无法被多个程序并行使用的：CPU。</p>
-<p>5、操作系统调度器：拆分CPU为一段段时间的运行片，轮流分配给不同的程序。</p>
-<p>6、操作系统内存管理模块：管理物理内存、虚拟内存相关的事务。
-　　</p>
-<p><strong>由于CPU同时刻只能执行一个进程，如果我们不加以控制的话，一个进程可能使用CPU直到运行结束，于是出现了操作系统调度器，而进程也成为了调度单位。</strong> 进程的运行不仅仅需要CPU，还需要很多其他资源，如内存啊，显卡啊，GPS啊，磁盘啊等等，统称为程序的执行环境，也就是程序上下文。</p>
-<p>在这里就出现了并发的概念，调度器切换CPU给不同进程使用的速度非常快，于是在使用者看来程序是在同时运行，<strong>这就是并发，而实际上CPU在同一时刻只在运行一个进程。</strong></p>
-<h2 id="CPU进程无法同时刻共享，但是出现一定要共享CPU的需求呢？"><a href="#CPU进程无法同时刻共享，但是出现一定要共享CPU的需求呢？" class="headerlink" title="CPU进程无法同时刻共享，但是出现一定要共享CPU的需求呢？"></a>CPU进程无法同时刻共享，但是出现一定要共享CPU的需求呢？</h2><p>此时线程的概念就出现了。线程被包含在进程当中，进程的不同线程间共享CPU和程序上下文。（共享进程分配到的资源）</p>
-<p><strong>单CPU进行进程调度的时候，</strong> 需要读取上下文+执行程序+保存上下文，即进程切换。如果这个CPU是单核的话，那么在进程中的不同线程为了使用CPU核心，则会进行线程切换，但是由于共享了程序执行环境，这个线程切换比进程切换开销少了很多。<strong>在这里依然是并发，唯一核心同时刻只能执行一个线程。</strong></p>
-<p><strong>如果这个CPU是多核的话，那么进程中的不同线程可以使用不同核心，真正的并行出现了。</strong></p>
-<p><strong>线程是CPU调度和分配的基本单位，进程是操作系统进行资源分配（包括cpu、内存、磁盘IO等）的最小单位。</strong></p>
-<p>CPU只能看到线程</p>
-<p>另外在有的操作系统里，进程不是调度单位，线程是最基本的调度单位，调度器只调度线程，不调度进程，如VxWorks。</p>
-<p>总结：</p>
-<p>1、单CPU中进程只能是并发，多CPU计算机中进程可以并行。</p>
-<p>2、单CPU单核中线程只能并发，单CPU多核中线程可以并行。</p>
-<p>3、无论是并发还是并行，使用者来看，看到的是多进程，多线程。</p>
-<h2 id="CPU的几核几线程是什么意思？"><a href="#CPU的几核几线程是什么意思？" class="headerlink" title="CPU的几核几线程是什么意思？"></a>CPU的几核几线程是什么意思？</h2><p>“8核16线程”是指一款处理器的核心数和线程数配置。在这种情况下，该处理器有8个物理核心和16个逻辑线程。</p>
-<p>具体解释如下：</p>
-<p>核心数：指处理器内部的物理核心数量。每个物理核心都可以独立地执行指令和运算操作。<br>线程数：指处理器能够同时处理的线程数量。</p>
-<p>逻辑线程是通过超线程（Hyper-Threading）技术实现的。在超线程中，每个物理核心被模拟成两个逻辑核心，使得处理器可以同时执行两个线程。</p>
-<p>因此，对于一个有8核16线程的处理器，它具有8个物理核心和每个核心能够模拟出2个逻辑核心，总共能够同时处理16个线程。这样的配置可以提高处理器的并发性和多任务处理能力，增加系统的整体性能表现。</p>
+        <h1 id="虚拟机监视器"><a href="#虚拟机监视器" class="headerlink" title="虚拟机监视器"></a>虚拟机监视器</h1><p><strong>希望同时在机器上运行不同的操作系统，该怎么办？</strong></p>
+<p>IBM以虚拟机监视器（Virtual Machine Monitor，VMM）（也称为管理程序，hypervisor）[G74]的形式，引入了另一个间接层。</p>
+<p>监视器位于一个或多个操作系统和硬件之间，并为每个运行的操作系统提供控制机器的假象。然而，在幕后，实际上是监视器在控制硬件，并必须在机器的物理资源上为运行的OS提供多路复用。实际上，VMM作为操作系统的操作系统，但在低得多层次上。操作系统仍然认为它与物理硬件交互。因此，透明度（transparency）是VMM的主要目标。</p>
+<h2 id="虚拟化-CPU"><a href="#虚拟化-CPU" class="headerlink" title="虚拟化 CPU"></a>虚拟化 CPU</h2><p>如果想在VMM之上“启动”新操作系统，只需跳转到第一条指令的地址，并让操作系统开始运行，就这么简单。</p>
+<p>假设我们在单个处理器上运行，并且希望在两个虚拟机之间进行多路复用，即在两个操作系统和它们各自的应用程序之间进行多路复用。非常类似于操作系统在运行进程之间切换的方式（上下文切换，context  switch），虚拟机监视器必须在运行的虚拟机之间执行机器切换（machine  switch）。因此，当执行这样的切换时，VMM必须保存一个OS的整个机器状态（包括寄存器，PC，并且与上下文切换不同，包括所有特权硬件状态），恢复待运行虚拟机的机器状态，然后跳转到待运行虚拟机的PC，完成切换。注意，待运行VM的PC可能在OS本身内（系统正在执行系统调用），或可能就在该OS上运行的进程内（用户模式应用程序）。</p>
+<p><img src="/2023/07/23/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%AF%BC%E8%AE%BA-%E8%99%9A%E6%8B%9F%E6%9C%BA/q1.png" alt="?"></p>
+<h2 id="虚拟化内存"><a href="#虚拟化内存" class="headerlink" title="虚拟化内存"></a>虚拟化内存</h2><p>每个操作系统通常将物理内存视为一个线性的页面数组，并将每个页面分配给自己或用户进程。当然，操作系统本身已经为其运行的进程虚拟化了内存，因此每个进程都有自己的私有地址空间的假象。现在我们必须添加另一层虚拟化，以便多个操作系统可以共享机器的实际物理内存，我们必须透明地这样做。</p>
+<p>这个额外的虚拟化层使“物理”内存成为一个虚拟化层，在VMM所谓的机器内存（machine  memory）之上，机器内存是系统的真实物理内存。因此，我们现在有一个额外的间接层：每个操作系统通过其每个进程的页表映射虚拟到物理地址，VMM通过它的每个OS页面表，将生成的物理地址映射到底层机器地址。图B.1描述了这种额外的间接层。</p>
+<p><img src="/2023/07/23/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%AF%BC%E8%AE%BA-%E8%99%9A%E6%8B%9F%E6%9C%BA/q2.png" alt="?"></p>
 
       
     </div>
@@ -365,7 +352,7 @@
     
     <li class="post-copyright-link hidden-xs">
       <strong>本文链接：</strong>
-      <a href="https://codecodegogogo.github.io/2023/07/05/%E5%A4%9A%E7%BA%BF%E7%A8%8B-%E5%A4%9A%E8%BF%9B%E7%A8%8B-%E5%B9%B6%E5%8F%91-%E5%B9%B6%E8%A1%8C-cpu/" title="多线程,多进程,并发,并行,cpu" target="_blank" rel="external">https://codecodegogogo.github.io/2023/07/05/多线程-多进程-并发-并行-cpu/</a>
+      <a href="https://codecodegogogo.github.io/2023/07/23/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%AF%BC%E8%AE%BA-%E8%99%9A%E6%8B%9F%E6%9C%BA/" title="操作系统导论-虚拟机" target="_blank" rel="external">https://codecodegogogo.github.io/2023/07/23/操作系统导论-虚拟机/</a>
     </li>
     
     <li class="post-copyright-license">
@@ -392,13 +379,9 @@
   
   <ul class="pager pull-left">
     
-    <li class="prev">
-      <a href="/2023/07/06/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%AF%BC%E8%AE%BA-%E6%8C%81%E4%B9%85%E6%80%A7/" title="操作系统导论-持久性"><i class="icon icon-angle-left" aria-hidden="true"></i><span>&nbsp;&nbsp;上一篇</span></a>
-    </li>
-    
     
     <li class="next">
-      <a href="/2023/07/02/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%AF%BC%E8%AE%BA-%E8%BF%9B%E9%98%B6/" title="操作系统导论-进阶"><span>下一篇&nbsp;&nbsp;</span><i class="icon icon-angle-right" aria-hidden="true"></i></a>
+      <a href="/2023/07/23/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%AF%BC%E8%AE%BA-%E5%88%86%E5%B8%83%E5%BC%8F/" title="操作系统导论-分布式"><span>下一篇&nbsp;&nbsp;</span><i class="icon icon-angle-right" aria-hidden="true"></i></a>
     </li>
     
     
