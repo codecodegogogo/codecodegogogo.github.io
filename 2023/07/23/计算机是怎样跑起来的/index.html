@@ -1,0 +1,625 @@
+<!DOCTYPE html>
+<html lang=zh>
+<head>
+  <meta charset="utf-8">
+  
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, minimal-ui">
+  <meta name="renderer" content="webkit">
+  <meta http-equiv="Cache-Control" content="no-transform" />
+  <meta http-equiv="Cache-Control" content="no-siteapp" />
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <meta name="format-detection" content="telephone=no,email=no,adress=no">
+  <!-- Color theme for statusbar -->
+  <meta name="theme-color" content="#000000" />
+  <!-- 强制页面在当前窗口以独立页面显示,防止别人在框架里调用页面 -->
+  <meta http-equiv="window-target" content="_top" />
+  
+  
+  <title>计算机是怎样跑起来的 | Sunny&#39;s Blog</title>
+  <meta name="description" content="计算机的三大原则硬件和软件的区别是什么？  硬件是看得见摸得着的设备，比如计算机主机、显示器、键盘等。而软件是计算机所执行的程序，即指令和数据。软件本身是看不见的。  存储字符串“中国”需要几个字节？  在GBK字符编码下，一个汉字占用2个字节。而在UTF-8字符编码下，一个汉字占用3个字节。  什么是编码（Code）？  通常将为了便于计算机处理而经过数字化处理的信息称作编码。  输入、运算、输">
+<meta property="og:type" content="article">
+<meta property="og:title" content="计算机是怎样跑起来的">
+<meta property="og:url" content="https://codecodegogogo.github.io/2023/07/23/%E8%AE%A1%E7%AE%97%E6%9C%BA%E6%98%AF%E6%80%8E%E6%A0%B7%E8%B7%91%E8%B5%B7%E6%9D%A5%E7%9A%84/index.html">
+<meta property="og:site_name" content="Sunny">
+<meta property="og:description" content="计算机的三大原则硬件和软件的区别是什么？  硬件是看得见摸得着的设备，比如计算机主机、显示器、键盘等。而软件是计算机所执行的程序，即指令和数据。软件本身是看不见的。  存储字符串“中国”需要几个字节？  在GBK字符编码下，一个汉字占用2个字节。而在UTF-8字符编码下，一个汉字占用3个字节。  什么是编码（Code）？  通常将为了便于计算机处理而经过数字化处理的信息称作编码。  输入、运算、输">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://codecodegogogo.github.io/2023/07/23/%E8%AE%A1%E7%AE%97%E6%9C%BA%E6%98%AF%E6%80%8E%E6%A0%B7%E8%B7%91%E8%B5%B7%E6%9D%A5%E7%9A%84/q1.png">
+<meta property="og:image" content="https://codecodegogogo.github.io/2023/07/23/%E8%AE%A1%E7%AE%97%E6%9C%BA%E6%98%AF%E6%80%8E%E6%A0%B7%E8%B7%91%E8%B5%B7%E6%9D%A5%E7%9A%84/q2.png">
+<meta property="og:image" content="https://codecodegogogo.github.io/2023/07/23/%E8%AE%A1%E7%AE%97%E6%9C%BA%E6%98%AF%E6%80%8E%E6%A0%B7%E8%B7%91%E8%B5%B7%E6%9D%A5%E7%9A%84/q3.png">
+<meta property="og:image" content="https://codecodegogogo.github.io/2023/07/23/%E8%AE%A1%E7%AE%97%E6%9C%BA%E6%98%AF%E6%80%8E%E6%A0%B7%E8%B7%91%E8%B5%B7%E6%9D%A5%E7%9A%84/q4.png">
+<meta property="og:image" content="https://codecodegogogo.github.io/2023/07/23/%E8%AE%A1%E7%AE%97%E6%9C%BA%E6%98%AF%E6%80%8E%E6%A0%B7%E8%B7%91%E8%B5%B7%E6%9D%A5%E7%9A%84/q5.png">
+<meta property="og:image" content="https://codecodegogogo.github.io/2023/07/23/%E8%AE%A1%E7%AE%97%E6%9C%BA%E6%98%AF%E6%80%8E%E6%A0%B7%E8%B7%91%E8%B5%B7%E6%9D%A5%E7%9A%84/q6.png">
+<meta property="og:image" content="https://codecodegogogo.github.io/2023/07/23/%E8%AE%A1%E7%AE%97%E6%9C%BA%E6%98%AF%E6%80%8E%E6%A0%B7%E8%B7%91%E8%B5%B7%E6%9D%A5%E7%9A%84/q7.png">
+<meta property="og:image" content="https://codecodegogogo.github.io/2023/07/23/%E8%AE%A1%E7%AE%97%E6%9C%BA%E6%98%AF%E6%80%8E%E6%A0%B7%E8%B7%91%E8%B5%B7%E6%9D%A5%E7%9A%84/1.png">
+<meta property="og:image" content="https://codecodegogogo.github.io/2023/07/23/%E8%AE%A1%E7%AE%97%E6%9C%BA%E6%98%AF%E6%80%8E%E6%A0%B7%E8%B7%91%E8%B5%B7%E6%9D%A5%E7%9A%84/q8.png">
+<meta property="og:image" content="https://codecodegogogo.github.io/2023/07/23/%E8%AE%A1%E7%AE%97%E6%9C%BA%E6%98%AF%E6%80%8E%E6%A0%B7%E8%B7%91%E8%B5%B7%E6%9D%A5%E7%9A%84/w1.png">
+<meta property="og:image" content="https://codecodegogogo.github.io/2023/07/23/%E8%AE%A1%E7%AE%97%E6%9C%BA%E6%98%AF%E6%80%8E%E6%A0%B7%E8%B7%91%E8%B5%B7%E6%9D%A5%E7%9A%84/w2.png">
+<meta property="og:image" content="https://codecodegogogo.github.io/2023/07/23/%E8%AE%A1%E7%AE%97%E6%9C%BA%E6%98%AF%E6%80%8E%E6%A0%B7%E8%B7%91%E8%B5%B7%E6%9D%A5%E7%9A%84/w3.png">
+<meta property="og:image" content="https://codecodegogogo.github.io/2023/07/23/%E8%AE%A1%E7%AE%97%E6%9C%BA%E6%98%AF%E6%80%8E%E6%A0%B7%E8%B7%91%E8%B5%B7%E6%9D%A5%E7%9A%84/w5.png">
+<meta property="og:image" content="https://codecodegogogo.github.io/2023/07/23/%E8%AE%A1%E7%AE%97%E6%9C%BA%E6%98%AF%E6%80%8E%E6%A0%B7%E8%B7%91%E8%B5%B7%E6%9D%A5%E7%9A%84/w6.png">
+<meta property="og:image" content="https://codecodegogogo.github.io/2023/07/23/%E8%AE%A1%E7%AE%97%E6%9C%BA%E6%98%AF%E6%80%8E%E6%A0%B7%E8%B7%91%E8%B5%B7%E6%9D%A5%E7%9A%84/w7.png">
+<meta property="og:image" content="https://codecodegogogo.github.io/2023/07/23/%E8%AE%A1%E7%AE%97%E6%9C%BA%E6%98%AF%E6%80%8E%E6%A0%B7%E8%B7%91%E8%B5%B7%E6%9D%A5%E7%9A%84/w8.png">
+<meta property="og:image" content="https://codecodegogogo.github.io/2023/07/23/%E8%AE%A1%E7%AE%97%E6%9C%BA%E6%98%AF%E6%80%8E%E6%A0%B7%E8%B7%91%E8%B5%B7%E6%9D%A5%E7%9A%84/e1.png">
+<meta property="og:image" content="https://codecodegogogo.github.io/2023/07/23/%E8%AE%A1%E7%AE%97%E6%9C%BA%E6%98%AF%E6%80%8E%E6%A0%B7%E8%B7%91%E8%B5%B7%E6%9D%A5%E7%9A%84/e2.png">
+<meta property="article:published_time" content="2023-07-23T14:22:08.000Z">
+<meta property="article:modified_time" content="2023-07-25T15:14:11.791Z">
+<meta property="article:author" content="Sunny">
+<meta property="article:tag" content="计算机基础">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://codecodegogogo.github.io/2023/07/23/%E8%AE%A1%E7%AE%97%E6%9C%BA%E6%98%AF%E6%80%8E%E6%A0%B7%E8%B7%91%E8%B5%B7%E6%9D%A5%E7%9A%84/q1.png">
+  <!-- Canonical links -->
+  <link rel="canonical" href="https://codecodegogogo.github.io/2023/07/23/%E8%AE%A1%E7%AE%97%E6%9C%BA%E6%98%AF%E6%80%8E%E6%A0%B7%E8%B7%91%E8%B5%B7%E6%9D%A5%E7%9A%84/index.html">
+  
+    <link rel="alternate" href="/atom.xml" title="Sunny" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/images/favicon.png" type="image/x-icon">
+  
+  <!-- <link rel="icon" href="/images/favicon.png" type="image/x-icon"> -->
+
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  
+  
+  
+  
+<meta name="generator" content="Hexo 5.4.2"></head>
+
+
+<body class="main-center theme-purple" itemscope itemtype="http://schema.org/WebPage">
+  <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+  <div class="slimContent">
+    <div class="navbar-header">
+      
+      
+      <div class="profile-block text-center">
+        <a id="avatar" href="https://github.com/codecodegogogo" target="_blank">
+          <img class="img-circle img-rotate" src="/images/avatar.jpg" width="200" height="200">
+        </a>
+        <h2 id="name" class="hidden-xs hidden-sm">Sunny</h2>
+        <h3 id="title" class="hidden-xs hidden-sm hidden-md"></h3>
+        <small id="location" class="text-muted hidden-xs hidden-sm"><i class="icon icon-map-marker"></i> China</small>
+      </div>
+      
+      <div class="search" id="search-form-wrap">
+
+    <form class="search-form sidebar-form">
+        <div class="input-group">
+            <input type="text" class="search-form-input form-control" placeholder="搜索" />
+            <span class="input-group-btn">
+                <button type="submit" class="search-form-submit btn btn-flat" onclick="return false;"><i class="icon icon-search"></i></button>
+            </span>
+        </div>
+    </form>
+    <div class="ins-search">
+  <div class="ins-search-mask"></div>
+  <div class="ins-search-container">
+    <div class="ins-input-wrapper">
+      <input type="text" class="ins-search-input" placeholder="想要查找什么..." x-webkit-speech />
+      <button type="button" class="close ins-close ins-selectable" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+    </div>
+    <div class="ins-section-wrapper">
+      <div class="ins-section-container"></div>
+    </div>
+  </div>
+</div>
+
+
+</div>
+      <button class="navbar-toggle collapsed" type="button" data-toggle="collapse" data-target="#main-navbar" aria-controls="main-navbar" aria-expanded="false">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+    </div>
+    <nav id="main-navbar" class="collapse navbar-collapse" itemscope itemtype="http://schema.org/SiteNavigationElement" role="navigation">
+      <ul class="nav navbar-nav main-nav menu-highlight">
+        
+        
+        <li class="menu-item menu-item-home">
+          <a href="/.">
+            
+            <i class="icon icon-home-fill"></i>
+            
+            <span class="menu-title">首页</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags">
+            
+            <i class="icon icon-tags"></i>
+            
+            <span class="menu-title">标签</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-repository">
+          <a target="_blank" rel="noopener" href="https://github.com/codecodegogogo">
+            
+            <i class="icon icon-project"></i>
+            
+            <span class="menu-title">项目</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about">
+            
+            <i class="icon icon-cup-fill"></i>
+            
+            <span class="menu-title">关于</span>
+          </a>
+        </li>
+        
+      </ul>
+      
+	
+    <ul class="social-links">
+    	
+        <li><a href="https://github.com/codecodegogogo" target="_blank" title="Github" data-toggle=tooltip data-placement=top><i class="icon icon-github"></i></a></li>
+        
+    </ul>
+
+    </nav>
+  </div>
+</header>
+
+  
+    <aside class="sidebar" itemscope itemtype="http://schema.org/WPSideBar">
+  <div class="slimContent">
+    
+      <div class="widget">
+    <h3 class="widget-title">公告</h3>
+    <div class="widget-body">
+        <div id="board">
+            <div class="content">
+                <p>今天网站换了个新皮肤~</p> <p align="right">2023.4.14</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">标签</h3>
+    <div class="widget-body">
+      <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/c/" rel="tag">c++</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/code/" rel="tag">code</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/linux/" rel="tag">linux</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/os/" rel="tag">os</a><span class="tag-list-count">10</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%9D%82%E8%B0%88/" rel="tag">杂谈</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%9F%BA%E7%A1%80/" rel="tag">计算机基础</a><span class="tag-list-count">7</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%B7%A5%E5%85%B7/" rel="tag">计算机工具</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/" rel="tag">计算机网络</a><span class="tag-list-count">9</span></li></ul>
+    </div>
+  </div>
+
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">最新文章</h3>
+    <div class="widget-body">
+      <ul class="recent-post-list list-unstyled no-thumbnail">
+        
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                
+              </p>
+              <p class="item-title">
+                <a href="/2023/07/23/%E8%AE%A1%E7%AE%97%E6%9C%BA%E6%98%AF%E6%80%8E%E6%A0%B7%E8%B7%91%E8%B5%B7%E6%9D%A5%E7%9A%84/" class="title">计算机是怎样跑起来的</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2023-07-23T14:22:08.000Z" itemprop="datePublished">2023-07-23</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                
+              </p>
+              <p class="item-title">
+                <a href="/2023/07/23/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%AF%BC%E8%AE%BA-%E8%99%9A%E6%8B%9F%E6%9C%BA/" class="title">操作系统导论-虚拟机</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2023-07-23T14:10:24.000Z" itemprop="datePublished">2023-07-23</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                
+              </p>
+              <p class="item-title">
+                <a href="/2023/07/23/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%AF%BC%E8%AE%BA-%E5%88%86%E5%B8%83%E5%BC%8F/" class="title">操作系统导论-分布式</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2023-07-23T13:48:26.000Z" itemprop="datePublished">2023-07-23</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                
+              </p>
+              <p class="item-title">
+                <a href="/2023/07/06/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%AF%BC%E8%AE%BA-%E6%8C%81%E4%B9%85%E6%80%A7/" class="title">操作系统导论-持久性</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2023-07-06T09:28:10.000Z" itemprop="datePublished">2023-07-06</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                
+              </p>
+              <p class="item-title">
+                <a href="/2023/07/05/%E5%A4%9A%E7%BA%BF%E7%A8%8B-%E5%A4%9A%E8%BF%9B%E7%A8%8B-%E5%B9%B6%E5%8F%91-%E5%B9%B6%E8%A1%8C-cpu/" class="title">多线程,多进程,并发,并行,cpu</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2023-07-05T06:22:24.000Z" itemprop="datePublished">2023-07-05</time>
+              </p>
+            </div>
+          </li>
+          
+      </ul>
+    </div>
+  </div>
+  
+
+    
+  </div>
+</aside>
+
+  
+  
+  <aside class="sidebar sidebar-toc collapse   in  " id="collapseToc" itemscope itemtype="http://schema.org/WPSideBar">
+  <div class="slimContent">
+    <nav id="toc" class="article-toc">
+      <h3 class="toc-title">文章目录</h3>
+      <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%9A%84%E4%B8%89%E5%A4%A7%E5%8E%9F%E5%88%99"><span class="toc-number">1.</span> <span class="toc-text">计算机的三大原则</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%BE%93%E5%85%A5%E3%80%81%E8%BF%90%E7%AE%97%E3%80%81%E8%BE%93%E5%87%BA%E6%98%AF%E7%A1%AC%E4%BB%B6%E7%9A%84%E5%9F%BA%E7%A1%80"><span class="toc-number">1.1.</span> <span class="toc-text">输入、运算、输出是硬件的基础</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%BD%AF%E4%BB%B6%E6%98%AF%E6%8C%87%E4%BB%A4%E5%92%8C%E6%95%B0%E6%8D%AE%E7%9A%84%E9%9B%86%E5%90%88"><span class="toc-number">1.2.</span> <span class="toc-text">软件是指令和数据的集合</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E8%AF%95%E7%9D%80%E5%88%B6%E9%80%A0%E4%B8%80%E5%8F%B0%E8%AE%A1%E7%AE%97%E6%9C%BA"><span class="toc-number">2.</span> <span class="toc-text">试着制造一台计算机</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%88%B6%E4%BD%9C%E5%BE%AE%E5%9E%8B%E8%AE%A1%E7%AE%97%E6%9C%BA%E6%89%80%E5%BF%85%E9%9C%80%E7%9A%84%E5%85%83%E4%BB%B6"><span class="toc-number">2.1.</span> <span class="toc-text">制作微型计算机所必需的元件</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%94%B5%E8%B7%AF%E5%9B%BE%E7%9A%84%E8%AF%BB%E6%B3%95"><span class="toc-number">2.2.</span> <span class="toc-text">电路图的读法</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%BF%9E%E6%8E%A5%E7%94%B5%E6%BA%90%E3%80%81%E6%95%B0%E6%8D%AE%E5%92%8C%E5%9C%B0%E5%9D%80%E6%80%BB%E7%BA%BF"><span class="toc-number">2.3.</span> <span class="toc-text">连接电源、数据和地址总线</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%9C%B0%E5%9D%80%E6%80%BB%E7%BA%BF%E5%BC%95%E8%84%9A"><span class="toc-number">2.3.1.</span> <span class="toc-text">地址总线引脚</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%95%B0%E6%8D%AE%E6%80%BB%E7%BA%BF%E5%BC%95%E8%84%9A"><span class="toc-number">2.3.2.</span> <span class="toc-text">数据总线引脚</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%BF%9E%E6%8E%A5-I-O"><span class="toc-number">2.4.</span> <span class="toc-text">连接 I&#x2F;O</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%BF%9E%E6%8E%A5%E6%97%B6%E9%92%9F%E4%BF%A1%E5%8F%B7"><span class="toc-number">2.5.</span> <span class="toc-text">连接时钟信号</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%BF%9E%E6%8E%A5%E7%94%A8%E4%BA%8E%E5%8C%BA%E5%88%86%E8%AF%BB%E5%86%99%E5%AF%B9%E8%B1%A1%E6%98%AF%E5%86%85%E5%AD%98%E8%BF%98%E6%98%AF-I-O-%E7%9A%84%E5%BC%95%E8%84%9A"><span class="toc-number">2.6.</span> <span class="toc-text">连接用于区分读写对象是内存还是 I&#x2F;O 的引脚</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%BF%9E%E6%8E%A5%E5%89%A9%E4%BD%99%E7%9A%84%E6%8E%A7%E5%88%B6%E5%BC%95%E8%84%9A"><span class="toc-number">2.7.</span> <span class="toc-text">连接剩余的控制引脚</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%BF%9E%E6%8E%A5%E5%A4%96%E9%83%A8%E8%AE%BE%E5%A4%87%EF%BC%8C%E9%80%9A%E8%BF%87-DMA-%E8%BE%93%E5%85%A5%E7%A8%8B%E5%BA%8F"><span class="toc-number">2.8.</span> <span class="toc-text">连接外部设备，通过 DMA 输入程序</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E6%89%8B%E5%B7%A5%E6%B1%87%E7%BC%96"><span class="toc-number">3.</span> <span class="toc-text">手工汇编</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BB%8E%E7%A8%8B%E5%BA%8F%E5%91%98%E7%9A%84%E8%A7%92%E5%BA%A6%E7%9C%8B%E7%A1%AC%E4%BB%B6"><span class="toc-number">3.1.</span> <span class="toc-text">从程序员的角度看硬件</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%9C%BA%E5%99%A8%E8%AF%AD%E8%A8%80%E5%92%8C%E6%B1%87%E7%BC%96%E8%AF%AD%E8%A8%80"><span class="toc-number">3.2.</span> <span class="toc-text">机器语言和汇编语言</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Z80-CPU-%E7%9A%84%E5%AF%84%E5%AD%98%E5%99%A8%E7%BB%93%E6%9E%84"><span class="toc-number">3.3.</span> <span class="toc-text">Z80 CPU 的寄存器结构</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%BF%BD%E8%B8%AA%E7%A8%8B%E5%BA%8F%E7%9A%84%E8%BF%90%E8%A1%8C%E8%BF%87%E7%A8%8B"><span class="toc-number">3.4.</span> <span class="toc-text">追踪程序的运行过程</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%B0%9D%E8%AF%95%E6%89%8B%E5%B7%A5%E6%B1%87%E7%BC%96"><span class="toc-number">3.5.</span> <span class="toc-text">尝试手工汇编</span></a></li></ol></li></ol>
+    </nav>
+  </div>
+</aside>
+
+<main class="main" role="main">
+  <div class="content">
+  <article id="post-计算机是怎样跑起来的" class="article article-type-post" itemscope itemtype="http://schema.org/BlogPosting">
+    
+    <div class="article-header">
+      
+        
+  
+    <h1 class="article-title" itemprop="name">
+      计算机是怎样跑起来的
+    </h1>
+  
+
+      
+      <div class="article-meta">
+        <span class="article-date">
+    <i class="icon icon-calendar-check"></i>
+	<a href="/2023/07/23/%E8%AE%A1%E7%AE%97%E6%9C%BA%E6%98%AF%E6%80%8E%E6%A0%B7%E8%B7%91%E8%B5%B7%E6%9D%A5%E7%9A%84/" class="article-date">
+	  <time datetime="2023-07-23T14:22:08.000Z" itemprop="datePublished">2023-07-23</time>
+	</a>
+</span>
+        
+        
+  <span class="article-tag">
+    <i class="icon icon-tags"></i>
+	<a class="article-tag-link-link" href="/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%9F%BA%E7%A1%80/" rel="tag">计算机基础</a>
+  </span>
+
+
+        
+	<span class="article-read hidden-xs">
+	    <i class="icon icon-eye-fill" aria-hidden="true"></i>
+	    <span id="busuanzi_container_page_pv">
+			<span id="busuanzi_value_page_pv">0</span>
+		</span>
+	</span>
+
+
+        <span class="post-comment"><i class="icon icon-comment"></i> <a href="/2023/07/23/%E8%AE%A1%E7%AE%97%E6%9C%BA%E6%98%AF%E6%80%8E%E6%A0%B7%E8%B7%91%E8%B5%B7%E6%9D%A5%E7%9A%84/#comments" class="article-comment-link">评论</a></span>
+        
+	
+		<span class="post-wordcount hidden-xs" itemprop="wordCount">字数统计: 5.4k(字)</span>
+	
+	
+
+      </div>
+    </div>
+    <div class="article-entry marked-body" itemprop="articleBody">
+      
+        <h1 id="计算机的三大原则"><a href="#计算机的三大原则" class="headerlink" title="计算机的三大原则"></a>计算机的三大原则</h1><p>硬件和软件的区别是什么？</p>
+<blockquote>
+<p>硬件是看得见摸得着的设备，比如计算机主机、显示器、键盘等。而软件是计算机所执行的程序，即指令和数据。软件本身是看不见的。</p>
+</blockquote>
+<p>存储字符串“中国”需要几个字节？</p>
+<blockquote>
+<p>在GBK字符编码下，一个汉字占用2个字节。而在UTF-8字符编码下，一个汉字占用3个字节。</p>
+</blockquote>
+<p>什么是编码（Code）？</p>
+<blockquote>
+<p>通常将为了便于计算机处理而经过数字化处理的信息称作编码。</p>
+</blockquote>
+<h2 id="输入、运算、输出是硬件的基础"><a href="#输入、运算、输出是硬件的基础" class="headerlink" title="输入、运算、输出是硬件的基础"></a>输入、运算、输出是硬件的基础</h2><p>计算机的硬件由大量的IC（Integrated Circuit，集成电路）组成（如 图1.1所示）。每块IC上都带有许多引脚。这些引脚有的用于输入，有的用于输出。IC会在其内部对外部输入的信息进行运算，并把运算结果输出到外部。<br><img src="/2023/07/23/%E8%AE%A1%E7%AE%97%E6%9C%BA%E6%98%AF%E6%80%8E%E6%A0%B7%E8%B7%91%E8%B5%B7%E6%9D%A5%E7%9A%84/q1.png" alt="?"></p>
+<p><strong>计算机只会输入、运算、输出</strong></p>
+<h2 id="软件是指令和数据的集合"><a href="#软件是指令和数据的集合" class="headerlink" title="软件是指令和数据的集合"></a>软件是指令和数据的集合</h2><p>所谓指令，就是控制计算机进行输入、运算、输出的命令。把向计算机发出的指令一条条列出来，就得到了程序。</p>
+<hr>
+<h1 id="试着制造一台计算机"><a href="#试着制造一台计算机" class="headerlink" title="试着制造一台计算机"></a>试着制造一台计算机</h1><p>CPU 是 Central Processing Unit（中央处理器）的缩写。<br>Hz（赫兹）是频率的单位<br>Z80 CPU 是 8 比特的 CPU</p>
+<h2 id="制作微型计算机所必需的元件"><a href="#制作微型计算机所必需的元件" class="headerlink" title="制作微型计算机所必需的元件"></a>制作微型计算机所必需的元件</h2><p>首先让我们来收集元件吧。制作微型计算机所需的基础元件只有3个，CPU、内存和I/O。CPU是计算机的大脑，负责解释、执行程序。内存负责存储程序和数据。I/O是Input/Output（输入／输出）的缩写，负责将计算机和外部设备（周边设备）连接在一起。</p>
+<p>为了驱动CPU运转，称为“时 钟信号”的电信号必不可少。这种电信号就好像带有一个时钟，滴答滴答地每隔一定时间就变换一次电压的高低（如 图2.2所示）。输出时钟信号的元件叫作“时 钟发生器”。时钟发生器中带有晶振，根据其自身的频率（振 动的次数）产生时钟信号。时钟信号的频率可以衡量CPU的运转速度。这里使用的是2.5MHz（兆赫兹）的时钟发生器。</p>
+<p><img src="/2023/07/23/%E8%AE%A1%E7%AE%97%E6%9C%BA%E6%98%AF%E6%80%8E%E6%A0%B7%E8%B7%91%E8%B5%B7%E6%9D%A5%E7%9A%84/q2.png" alt="?"></p>
+<p>用于输入程序的装置也是必不可少的。在这里我们通过拨动指拨开关来输入程序，指拨开关是一种由8个开关并排连在一起构成的元件（如 照片2.1(a)所示）。输出程序执行结果的装置是8个LED（发   光二极管）</p>
+<h2 id="电路图的读法"><a href="#电路图的读法" class="headerlink" title="电路图的读法"></a>电路图的读法</h2><p>在电路图中，用连接着各种元件符号的直线表示如何布线。电路中有些地方有交叉，但若只是交叉在一起的话，并不表示电路在交叉处构成通路。只有在交叉处再画上一个小黑点才表示构成通路。</p>
+<p><img src="/2023/07/23/%E8%AE%A1%E7%AE%97%E6%9C%BA%E6%98%AF%E6%80%8E%E6%A0%B7%E8%B7%91%E8%B5%B7%E6%9D%A5%E7%9A%84/q3.png" alt="?"></p>
+<p><img src="/2023/07/23/%E8%AE%A1%E7%AE%97%E6%9C%BA%E6%98%AF%E6%80%8E%E6%A0%B7%E8%B7%91%E8%B5%B7%E6%9D%A5%E7%9A%84/q4.png" alt="?"><br>IC的引脚（所 谓引脚就是IC边缘露出的像蜈蚣腿一样的部分）按照逆时针方向依次带有一个从1开始递增的序号。数引脚序号时，要先把表示正方向的标志，比如半圆形的缺口，朝向左侧。举例来说，带有14个引脚的7404，其引脚序号就如图2.5所示。<br><img src="/2023/07/23/%E8%AE%A1%E7%AE%97%E6%9C%BA%E6%98%AF%E6%80%8E%E6%A0%B7%E8%B7%91%E8%B5%B7%E6%9D%A5%E7%9A%84/q5.png" alt="?"></p>
+<h2 id="连接电源、数据和地址总线"><a href="#连接电源、数据和地址总线" class="headerlink" title="连接电源、数据和地址总线"></a>连接电源、数据和地址总线</h2><p>首先连接电源。IC与普通的电器一样，只有接通了电源才能工作。Z80    CPU、TC5517和Z80    PIO上都分别带有Vcc引脚和GND引脚。Vcc和GND这一对儿引脚用于为IC供电。</p>
+<p>将+5V电源连接到各个IC的Vcc引脚上，然后将0V电源连接到各个IC的GND引脚上。接下来还需要将+5V和0V连接到时钟发生器上。接通电源后这些IC和时钟发生器就可以工作了。</p>
+<p>微型计算机所使用的IC属于数字IC。在数字IC中，每个引脚上的电压要么是0V、要么是+5V，通过这两个电压与其他的IC进行电信号的收发。用于给IC供电的Vcc引脚和GND引脚上的电压是恒定不变的+5V和0V，但是其他引脚上的电压，会随着计算机的操作在+5V和0V之间不断地变化。</p>
+<p><strong>只要想成0V表示数字0、+5V表示数字1，那么数字IC就是在用二进制数的形式收发信息。</strong></p>
+<h3 id="地址总线引脚"><a href="#地址总线引脚" class="headerlink" title="地址总线引脚"></a>地址总线引脚</h3><p>CPU可以与内存或I/O进行数据的输入输出。为了指定输入输出数据时的源头或目的地，CPU上备有“地址总线引脚”。Z80 CPU的地址总线引脚共有16个，用代号A0～A15表示，其中的A表示Address（地址）。后面的数字0～15表示一个16位的二进制数中各个数字的位置，0对应最后一位、15对应第一位。16个地址总线引脚所能指定的地址共有65536个，用二进制数表示的话就是0000000000000000～1111111111111111。因此Z80    CPU可以指定65536个数据存取单元（内 存存储单元或I/O地址），进行信息的输入输出。</p>
+<h3 id="数据总线引脚"><a href="#数据总线引脚" class="headerlink" title="数据总线引脚"></a>数据总线引脚</h3><p>一旦指定了存取数据的地址，就可以使用数据总线引脚进行数据的输入输出了。Z80 CPU的数据总线引脚共有8个，用代号D0～D7表示。其中的D表示Data（数据），后面的数字0～7与地址总线引脚代号的规则相同，也表示二进制数中各个数字的位置。Z80 CPU可以一次性地输入输出8比特的数据，这就意味着如果想要输入输出位数（比特数）大于8比特的数据，就要以8比特为单位切分这个数据。</p>
+<p>作为内存的TC5517上也有地址总线引脚（A0～A10）和数据总线引脚（D0～D7） 。这些引脚需要同Z80    CPU上带有相同代号的引脚相连。<br><img src="/2023/07/23/%E8%AE%A1%E7%AE%97%E6%9C%BA%E6%98%AF%E6%80%8E%E6%A0%B7%E8%B7%91%E8%B5%B7%E6%9D%A5%E7%9A%84/q6.png" alt="?"></p>
+<h2 id="连接-I-O"><a href="#连接-I-O" class="headerlink" title="连接 I/O"></a>连接 I/O</h2><p>寄存器是位于CPU和I/O中的数据存储器。Z80 PIO上共有4个寄存器。2个用于设定PIO本身的功能，2个用于存储与外部设备进行输入输出的数据。</p>
+<p>这4个寄存器分别叫作端口A控制、端口A数据、端口B控制和端口B数据。所谓端口就是I/O与外部设备之间输入输出数据的场所，可以把端口（Port）想象成是轮船装卸货物的港口。Z80 PIO有2个端口，端口A和端口B，最多可以连接2个用于输入输出8比特数据的外部设备（如图2.7所示）</p>
+<p><img src="/2023/07/23/%E8%AE%A1%E7%AE%97%E6%9C%BA%E6%98%AF%E6%80%8E%E6%A0%B7%E8%B7%91%E8%B5%B7%E6%9D%A5%E7%9A%84/q7.png" alt="?"></p>
+<p>下面就开始布线吧。因为Z80    PIO上也有D0～D7的数据总线引脚，所以先把它们和Z80 CPU中带有同样代号的引脚连接起来。这样CPU和PIO就能使用这8个引脚交换数据了。</p>
+<h2 id="连接时钟信号"><a href="#连接时钟信号" class="headerlink" title="连接时钟信号"></a>连接时钟信号</h2><p>Z80 CPU和Z80    PIO的运转离不开时钟信号。为了传输时钟信号，就需要把时钟发生器的8号引脚和Z80    CPU的CLK（CLK即Clock，时钟）引脚、Z80 PIO的CLK引脚分别连接起来。时钟发生器的8号引脚与+5V之间的电阻用于清理时钟信号。</p>
+<p><img src="/2023/07/23/%E8%AE%A1%E7%AE%97%E6%9C%BA%E6%98%AF%E6%80%8E%E6%A0%B7%E8%B7%91%E8%B5%B7%E6%9D%A5%E7%9A%84/1.png" alt="?"></p>
+<h2 id="连接用于区分读写对象是内存还是-I-O-的引脚"><a href="#连接用于区分读写对象是内存还是-I-O-的引脚" class="headerlink" title="连接用于区分读写对象是内存还是 I/O 的引脚"></a>连接用于区分读写对象是内存还是 I/O 的引脚</h2><p>至此，我们已经先后把Z80 CPU连接到了TC5517和Z80 PIO上，这两次连接都使用了地址总线引脚A0和A1。如果仅仅这样连接，就会导致一个问题，当地址的最后两位是00、01、10和11时，CPU就无法区分访问的是TC5517中的存储单元，还是Z80 PIO中的寄存器了。</p>
+<p>Z80    CPU上的MREQ（即Memory Request，内存请求）引脚和IORQ（即I/O Request，I/O请求）引脚解决了这个问题。当Z80 CPU和内存之间有数据输入输出时，MREQ引脚上的值是0，反之则是1。当Z80 CPU和I/O之间有数据输入输出时，IORQ引脚上的值是0，反之则是1。</p>
+<p>对内存和I/O而言，还必须要分清CPU是要输入数据还是输出数据。为此就要用到Z80    CPU的RD引脚（即Read，表示输入，为0时执行输入操作）和WR引脚（即Write，表示输出，为0时执行输出操作）了。请把这两个引脚与TC5517上同名的引脚连接起来。Z80 PIO虽然只有RD引脚，但由于数字IC引脚上的值要么是0要么是1，所以只用1个RD引脚也能区分是输入还是输出，0的话是输入，1的话就是输出<br><img src="/2023/07/23/%E8%AE%A1%E7%AE%97%E6%9C%BA%E6%98%AF%E6%80%8E%E6%A0%B7%E8%B7%91%E8%B5%B7%E6%9D%A5%E7%9A%84/q8.png" alt="?"></p>
+<h2 id="连接剩余的控制引脚"><a href="#连接剩余的控制引脚" class="headerlink" title="连接剩余的控制引脚"></a>连接剩余的控制引脚</h2><p>CPU、内存、I/O中不但有地址总线引脚、数据总线引脚，还有其他引脚，通常把这些引脚统称为“控 制引脚”。之所以这样命名是因为这些引脚上输入输出的电信号具有控制IC的功能。</p>
+<p>首先把Z80    CPU的M1引脚（即Machine Cycle 1，机器周期1）和INT引脚（即Interrupt，中断）与Z80    PIO上标有相同代号的引脚连接起来。M1是用于同步的引脚，INT引脚是用于从Z80    PIO向Z80    CPU发出中断请求的引脚。所谓中断就是让CPU根据外部输入的数据执行特定的程序。</p>
+<p>一旦把Z80    CPU的RESET引脚（即Reset，重置）上的值先设成0再还原成1，CPU就会被重置，重新从内存0号地址上的指令开始顺序往下执行。重置CPU可以通过按键开关完成。</p>
+<p><img src="/2023/07/23/%E8%AE%A1%E7%AE%97%E6%9C%BA%E6%98%AF%E6%80%8E%E6%A0%B7%E8%B7%91%E8%B5%B7%E6%9D%A5%E7%9A%84/w1.png" alt="?"></p>
+<p>总线是连接到CPU中数据引脚、地址引脚、控制引脚上的电路的统称。使用快动开关可以使Z80    CPU的BUSRQ引脚（即Bus    Request，总线请求）上的值在0和1之间切换。若将BUSRQ引脚的值设为0，则Z80    CPU从电路中隔离。当处于这种隔离状态时，就可以不通过CPU，手动地向内存写入程序了。像这样不经过CPU而直接从外部设备读写内存的行为叫作DMA（Direct Memory Access，直接存储器访问）。在个人计算机里，硬盘等设备要读写内存时使用的就是DMA。</p>
+<p>当Z80    CPU从电路中隔离后，BUSAK引脚（即Bus    Acknowledge，响应总线请求）上的值就会变成0。也就是说，把BUSRQ引脚上的值设成0以后，还要确认BUSAK引脚上的值已经变成了0，然后才能进行DMA。</p>
+<h2 id="连接外部设备，通过-DMA-输入程序"><a href="#连接外部设备，通过-DMA-输入程序" class="headerlink" title="连接外部设备，通过 DMA 输入程序"></a>连接外部设备，通过 DMA 输入程序</h2><p>这次将计算机主机系统和外部设备连接起来。我们要使用2个指拨开关和1个按键开关，向地址总线引脚和数据总线引脚发送电信号，然后通过DMA将数据总线上的数据存储到内存。</p>
+<hr>
+<h1 id="手工汇编"><a href="#手工汇编" class="headerlink" title="手工汇编"></a>手工汇编</h1><p>什么是机器语言？</p>
+<blockquote>
+<p>由二进制数字构成的程序，CPU 可以直接对其解释、执行。</p>
+</blockquote>
+<p>通常把标识内存或 I/O 中存储单元的数字称作什么？</p>
+<blockquote>
+<p>标识内存或 I/O 中存储单元的数字叫作“地址”。</p>
+</blockquote>
+<p>CPU 中的标志寄存器（Flags Register）有什么作用？</p>
+<blockquote>
+<p>用于在运算指令执行后，存储运算结果的某些状态。</p>
+</blockquote>
+<h2 id="从程序员的角度看硬件"><a href="#从程序员的角度看硬件" class="headerlink" title="从程序员的角度看硬件"></a>从程序员的角度看硬件</h2><p><img src="/2023/07/23/%E8%AE%A1%E7%AE%97%E6%9C%BA%E6%98%AF%E6%80%8E%E6%A0%B7%E8%B7%91%E8%B5%B7%E6%9D%A5%E7%9A%84/w2.png" alt="?"><br>即便是相同的机器语言，例如01010011，只要CPU的种类不同，对它的解释也就不同。有的CPU会把它解释成是执行加法运算，有的CPU会把它解释成是向I/O输出。</p>
+<p>所谓时钟信号的频率，就是由时钟发生器发送给CPU的电信号的频率。表示时钟信号频率的单位是MHz（兆赫兹= 100万回／秒）。微型计算机使用的是2.5MHz的时钟信号。时钟信号是在0和1两个数之间反复变换的电信号，就像滴答滴答左右摆动的钟摆一样。通常把发出一次滴答的时间称作一个时钟周期。</p>
+<p>所谓I/O的地址空间，是指用于指定I/O寄存器的地址范围。在Z80 PIO上，地址空间为0～3，每一个地址对应一个寄存器。</p>
+<p>在内存中，每个地址的功能都一样，既可用于存储指令又可用于存储数据。而I/O则不同，地址编号不同（即 寄存器的类型不同），功能也就不同。在微型计算机中，是这样分配Z80 PIO上的寄存器的：端口A数据寄存器对应0号地址，端口B数据寄存器对应1号地址，端口A控制寄存器对应2号地址，端口B控制寄存器对应3号地址。端口A数据寄存器和端口B数据寄存器存储的是与周边设备进行输入输出时所需的数据。其中，端口A连接用于输入数据的指拨开关，端口B连接用于输出数据的LED。而端口A控制寄存器和端口B控制寄存器则存储的是用于设定Z80 PIO功能的参数。</p>
+<h2 id="机器语言和汇编语言"><a href="#机器语言和汇编语言" class="headerlink" title="机器语言和汇编语言"></a>机器语言和汇编语言</h2><p><img src="/2023/07/23/%E8%AE%A1%E7%AE%97%E6%9C%BA%E6%98%AF%E6%80%8E%E6%A0%B7%E8%B7%91%E8%B5%B7%E6%9D%A5%E7%9A%84/w3.png" alt="?"><br>标签的作用是为该行代码对应的内存地址起一个名字。<br>操作码就是表示“做什么”的指令,比如LD是Load（加载）的缩写。<br>操作数表示的是指令执行的对象。CPU的寄存器、内存地址、I/O地址或者直接给出的数字都可以作为操作数。</p>
+<p>Z80    CPU的MREQ引脚和IORQ引脚实现了一种能区分输入输出对象的机制，可以区分出使用着相同内存地址的内存和I/O。在汇编语言中，读写内存的指令不同于读写I/O的指令。一旦执行了读写内存的指令，比如LD指令，MREQ引脚上的值就会变为0，于是内存被选为输入输出的对象；而一旦执行了读写I/O的指令，比如IN或OUT指令，IORQ引脚上的值就会变为0，于是I/O（这  里用的是Z80    PIO）被选为输入输出的对象。</p>
+<p><img src="/2023/07/23/%E8%AE%A1%E7%AE%97%E6%9C%BA%E6%98%AF%E6%80%8E%E6%A0%B7%E8%B7%91%E8%B5%B7%E6%9D%A5%E7%9A%84/w5.png" alt="?"><br>num：表示1个数值，(num)：表示值为num的地址reg、reg1、reg2：名为reg、reg1、reg2的寄存器，(reg)：存储在名为reg的寄存器中的地址</p>
+<h2 id="Z80-CPU-的寄存器结构"><a href="#Z80-CPU-的寄存器结构" class="headerlink" title="Z80 CPU 的寄存器结构"></a>Z80 CPU 的寄存器结构</h2><p>既然数据的运算是在CPU中进行的，那么在CPU内部就应该有存储数据的地方。这种存储数据的地方叫作“寄 存器”。虽然也叫寄存器，但是与I/O的寄存器不同，CPU的寄存器不仅能存储数据，还具备对数据进行运算的能力。CPU带有什么样的寄存器取决于CPU的种类。Z80 CPU所带有的寄存器如图3.2所示A。A、B、C、D等字母是寄存器的名字。在汇编语言当中，可以将寄存器的名字指定为操作数。</p>
+<p><img src="/2023/07/23/%E8%AE%A1%E7%AE%97%E6%9C%BA%E6%98%AF%E6%80%8E%E6%A0%B7%E8%B7%91%E8%B5%B7%E6%9D%A5%E7%9A%84/w6.png" alt="?"></p>
+<p>A、B、C、D、E、F、H、L每个寄存器都带有一个辅助寄存器<br>IX、IY、SP、PC这4个寄存器的大小是16比特，其余寄存器的大小都是8比特。寄存器的用途取决于它的类型。有的指令只能将特定的寄存器指定为操作数。</p>
+<p>A寄存器也叫作“累 加器”，是运算的核心。所以连接到它上面的导线也一定会比其他寄存器的多。F寄存器也叫作“标 志寄存器”，用于存储运算结果的状态，比如是否发生了进位，数字大小的比较结果等。PC寄存器也叫作“程 序指针”，存储着指向CPU接下来要执行的指令的地址。PC寄存器的值会随着滴答滴答的时钟信号自动更新，可以说程序就是依靠不断变化的PC寄存器的值运行起来的。SP寄存器也叫作“栈 顶指针”，用于在内存中创建出一块称为“栈”的临时数据存储区域。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">LD  A, <span class="number">207</span></span><br><span class="line">OUT (<span class="number">2</span>),A</span><br><span class="line">LD  A,<span class="number">255</span> </span><br><span class="line"> OUT (<span class="number">2</span>), A</span><br></pre></td></tr></table></figure>
+<p>这里的207和255是连续向Z80    PIO的端口A控制寄存器（对 应该I/O的地址编号为2）写入的两个数据。虽然使用OUT指令可以向I/O写入数据，但是不能直接把207、255这样的数字作为OUT指令的操作数。<strong>操作数必须是已存储在CPU寄存器中的数字，这是汇编语言的规定.</strong></p>
+<p>完成了Z80 PIO的设定后，就进入了一段死循环处理，用于把由指拨开关输入的数据输出到LED。为了实现这个功能，需要如下的代码。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">LOOP: </span><br><span class="line">IN  A, (<span class="number">0</span>)</span><br><span class="line"> OUT (<span class="number">1</span>), A</span><br><span class="line">  JP  LOOP</span><br></pre></td></tr></table></figure>
+<p>“IN   A,   (0)”的作用是把数据由端口A数据寄存器（连 接在指拨开关上，对应的I/O地址为0号）输入到CPU的寄存器A。“OUT    (1),    A的作用是把寄存器A的值输出到端口B数据寄存器上（连 接在LED上，对应的I/O地址为1号）</p>
+<p>“JP  LOOP”的作用是使程序的流程跳转到LOOP（笔者随意起的一个标签名）标签所标识的指令上。JP是Jump的缩写。   “IN   A,   (0)”所在行的开头有一个标签“LOOP:”  ，代表着这一行的内存地址。</p>
+<h2 id="追踪程序的运行过程"><a href="#追踪程序的运行过程" class="headerlink" title="追踪程序的运行过程"></a>追踪程序的运行过程</h2><p>用汇编语言编写的程序是不能直接运行的，必须先转换成机器语言。机器语言是唯一一种CPU能直接理解的编程语言。</p>
+<p><img src="/2023/07/23/%E8%AE%A1%E7%AE%97%E6%9C%BA%E6%98%AF%E6%80%8E%E6%A0%B7%E8%B7%91%E8%B5%B7%E6%9D%A5%E7%9A%84/w7.png" alt="?"><br>一旦重置了CPU，00000000就会被自动存储到PC寄存器中，这意味着接下来CPU将要从00000000号地址读出程序。首先CPU会从00000000号地址读出指令001  11110，判断出这是一条由2个字节构成的指令，于是接下来会从下一个地址（即00000001，1号地址，代码清单3.3中并没有标记出该地址本身）读出数据11001   111，把这两个数据汇集到一起解释、执行。执行的指令是把数值207写入到寄存器A，用汇编语言表示的话就是“LD   A,   207” 。这时，由于刚刚从内存读出了一条2字节的指令（占 用2个内存地址），所以PC寄存器的值要增加2，并接着从00000010号地址读出指令，解释并执行。</p>
+<p>接下来的流程与此类似，通过反复进行“读 取指令”“解 释、执行指令”“更 新PC寄存器的值”这3个操作，程序就能运行起来了。一旦执行完最后一行的JP  LOOP所对应的机器语言，PC寄存器的值就会被设为标签LOOP对应的地址00010000，这样就可以循环执行同样的操作。请诸位重点观察PC寄存器是如何控制程序流程的。</p>
+<h2 id="尝试手工汇编"><a href="#尝试手工汇编" class="headerlink" title="尝试手工汇编"></a>尝试手工汇编</h2><p><img src="/2023/07/23/%E8%AE%A1%E7%AE%97%E6%9C%BA%E6%98%AF%E6%80%8E%E6%A0%B7%E8%B7%91%E8%B5%B7%E6%9D%A5%E7%9A%84/w8.png" alt="?"><br>下面就从汇编语言的第1行开始转换。第一行的“LD   A,   207”匹配“LD   A,   num”这个模式，所以可以先转换成“00111110   num” 。然后将十进制数的207转换成8比特的二进制数，用这个二进制数替换num。<br><img src="/2023/07/23/%E8%AE%A1%E7%AE%97%E6%9C%BA%E6%98%AF%E6%80%8E%E6%A0%B7%E8%B7%91%E8%B5%B7%E6%9D%A5%E7%9A%84/e1.png" alt="?"></p>
+<p>第2条指令“OUT    (2),    A”匹配“OUT    (num), A”这个模式，所以可以先转换成“1  1010011  num” 。然后把num的部分替换成00000010，即用8比特的二进制数表示的十进制数2，最终就得到了机器语言“1  1010011  00000010”。因为内存中已经存储了2字节的机器语言，所以这条机器语言要从00000010号地址（用 十进制表示的话就是2号地址）开始记录。</p>
+<p><img src="/2023/07/23/%E8%AE%A1%E7%AE%97%E6%9C%BA%E6%98%AF%E6%80%8E%E6%A0%B7%E8%B7%91%E8%B5%B7%E6%9D%A5%E7%9A%84/e2.png" alt="?"></p>
+<p><strong>机器语言中每条语句的字节数是多少，内存地址就相应地增加多少。</strong></p>
+<p>接下来是“IN A, (0)”匹配“IN A, (num)”这个模式，所以可以先转换成“11011011 num”。然后把num替换成00000000，即用8比特的二进制数表示的十进制数0，最终就得到了机器语言“11011011 00000000”。对于接下来的“OUT (1), A”，也可以按照同样的方法转换</p>
+<p>最后一句的JP  LOOP匹配模式“JP  num” ，所以可以先转换成“1  1000011  num” 。请注意这里要用16比特的二进制数替代作为内存地址的num。在微型计算机中是以8比特为单位指定内存地址的，但在Z80    CPU中用于设定内存地址的引脚却有16个，所以在机器语言中也要用16比特的二进制数设定内存地址。JP指令跳转的目的地为00010000，即“LOOP:”标签所标示的语句“LD   A,   0”对应的内存地址。把这个地址扩充为16比特就是“00000000 00010000”。要扩充到16位，只需要把高8位全部设为0就可以了。</p>
+<p>在将一个2字节的数据存储到内存时，存储顺序是低8位在前、高8位在后（也 就是逆序存储）。这样的存储顺序叫作“小 端序”（Little Endian）  ，与此相反，将数据由高位到低位顺序地存储到内存的存储顺序则叫作“大 端序”（Big    Endian）  。根据CPU种类的不同，有的CPU使用大端序，有的CPU使用小端序。Z80 CPU使用的是小端序，因此JP  LOOP对应的机器语言为“1  1000011 00010000 00000000”。</p>
+
+      
+    </div>
+    <div class="article-footer">
+      <br>
+<br>
+<blockquote class="mt-2x">
+  <ul class="post-copyright list-unstyled">
+    
+    <li class="post-copyright-link hidden-xs">
+      <strong>本文链接：</strong>
+      <a href="https://codecodegogogo.github.io/2023/07/23/%E8%AE%A1%E7%AE%97%E6%9C%BA%E6%98%AF%E6%80%8E%E6%A0%B7%E8%B7%91%E8%B5%B7%E6%9D%A5%E7%9A%84/" title="计算机是怎样跑起来的" target="_blank" rel="external">https://codecodegogogo.github.io/2023/07/23/计算机是怎样跑起来的/</a>
+    </li>
+    
+    <li class="post-copyright-license">
+      <strong>集百家之长短，文章可随意转载，不需著名出处！</strong>
+      <!-- <strong>版权声明： </strong> 本博客所有文章除特别声明外，均采用 <a href="http://creativecommons.org/licenses/by/4.0/deed.zh" target="_blank" rel="external">CC BY 4.0 CN协议</a> 许可协议。转载请注明出处！ -->
+    </li>
+  </ul>
+</blockquote>
+
+    </div>
+  </article>
+  
+    
+  <section id="comments">
+  	
+  </section>
+
+
+  
+</div>
+
+  <nav class="bar bar-footer clearfix" data-stick-bottom>
+  <div class="bar-inner">
+  
+  <ul class="pager pull-left">
+    
+    
+    <li class="next">
+      <a href="/2023/07/23/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%AF%BC%E8%AE%BA-%E8%99%9A%E6%8B%9F%E6%9C%BA/" title="操作系统导论-虚拟机"><span>下一篇&nbsp;&nbsp;</span><i class="icon icon-angle-right" aria-hidden="true"></i></a>
+    </li>
+    
+    
+    <li class="toggle-toc">
+      <a class="toggle-btn " data-toggle="collapse" href="#collapseToc" aria-expanded="false" title="文章目录" role="button">    <span>[&nbsp;</span><span>文章目录</span>
+        <i class="text-collapsed icon icon-anchor"></i>
+        <i class="text-in icon icon-close"></i>
+        <span>]</span>
+      </a>
+    </li>
+    
+  </ul>
+  
+  
+  <!-- Button trigger modal -->
+  <button type="button" class="btn btn-fancy btn-donate pop-onhover bg-gradient-warning" data-toggle="modal" data-target="#donateModal"><span>赏</span></button>
+  <!-- <div class="wave-icon wave-icon-danger btn-donate" data-toggle="modal" data-target="#donateModal">
+    <div class="wave-circle"><span class="icon"><i class="icon icon-bill"></i></span></div>
+  </div> -->
+  
+  
+  <div class="bar-right">
+    
+    <div class="share-component" data-sites="weibo,qq,wechat,facebook,twitter" data-mobile-sites="weibo,qq,qzone"></div>
+    
+  </div>
+  </div>
+</nav>
+  
+<!-- Modal -->
+<div class="modal modal-center modal-small modal-xs-full fade" id="donateModal" tabindex="-1" role="dialog">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content donate">
+      <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+      <div class="modal-body">
+        <div class="donate-box">
+          <div class="donate-head">
+            <p>感谢您的支持，我会继续努力的!</p>
+          </div>
+          <div class="tab-content">
+            <div role="tabpanel" class="tab-pane fade active in" id="alipay">
+              <div class="donate-payimg">
+                <img src="/images/donate/alipayimg.png" alt="扫码支持" title="扫一扫" />
+              </div>
+              <p class="text-muted mv">扫码打赏，你说多少就多少</p>
+              <p class="text-grey">打开支付宝扫一扫，即可进行扫码打赏哦</p>
+            </div>
+            <div role="tabpanel" class="tab-pane fade" id="wechatpay">
+              <div class="donate-payimg">
+                <img src="/images/donate/wechatpayimg.png" alt="扫码支持" title="扫一扫" />
+              </div>
+              <p class="text-muted mv">扫码打赏，你说多少就多少</p>
+              <p class="text-grey">打开微信扫一扫，即可进行扫码打赏哦</p>
+            </div>
+          </div>
+          <div class="donate-footer">
+            <ul class="nav nav-tabs nav-justified" role="tablist">
+              <li role="presentation" class="active">
+                <a href="#alipay" id="alipay-tab" role="tab" data-toggle="tab" aria-controls="alipay" aria-expanded="true"><i class="icon icon-alipay"></i> 支付宝</a>
+              </li>
+              <li role="presentation" class="">
+                <a href="#wechatpay" role="tab" id="wechatpay-tab" data-toggle="tab" aria-controls="wechatpay" aria-expanded="false"><i class="icon icon-wepay"></i> 微信支付</a>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+
+
+
+</main>
+
+  <footer class="footer" itemscope itemtype="http://schema.org/WPFooter">
+	
+	
+    <ul class="social-links">
+    	
+        <li><a href="https://github.com/codecodegogogo" target="_blank" title="Github" data-toggle=tooltip data-placement=top><i class="icon icon-github"></i></a></li>
+        
+    </ul>
+
+    <div class="copyright">
+    	
+        联系邮箱：<br>codecodegogogo@163.com
+        <!-- 2023 Sunny -->
+        
+        <!--  -->
+    </div>
+</footer>
+  <script src="//cdn.jsdelivr.net/npm/jquery@1.12.4/dist/jquery.min.js"></script>
+<script>
+window.jQuery || document.write('<script src="js/jquery.min.js"><\/script>')
+</script>
+
+<script src="/js/plugin.min.js"></script>
+
+
+<script src="/js/application.js"></script>
+
+
+    <script>
+(function (window) {
+    var INSIGHT_CONFIG = {
+        TRANSLATION: {
+            POSTS: '文章',
+            PAGES: '页面',
+            CATEGORIES: '分类',
+            TAGS: '标签',
+            UNTITLED: '(未命名)',
+        },
+        ROOT_URL: '/',
+        CONTENT_URL: '/content.json',
+    };
+    window.INSIGHT_CONFIG = INSIGHT_CONFIG;
+})(window);
+</script>
+
+<script src="/js/insight.js"></script>
+
+
+
+
+
+
+   
+<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+
+   
+
+
+
+
+
+
+</body>
+
+</html>
