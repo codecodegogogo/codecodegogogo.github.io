@@ -31,6 +31,11 @@
       </tags>
   </entry>
   <entry>
+    <title>程序是怎么跑起来的</title>
+    <url>/2023/07/30/%E7%A8%8B%E5%BA%8F%E6%98%AF%E6%80%8E%E4%B9%88%E8%B7%91%E8%B5%B7%E6%9D%A5%E7%9A%84/</url>
+    <content><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="\assets\css\APlayer.min.css"><script src="\assets\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script><script class="meting-secondary-script-marker" src="\assets\js\Meting.min.js"></script>]]></content>
+  </entry>
+  <entry>
     <title>计算机是怎样跑起来的</title>
     <url>/2023/07/23/%E8%AE%A1%E7%AE%97%E6%9C%BA%E6%98%AF%E6%80%8E%E6%A0%B7%E8%B7%91%E8%B5%B7%E6%9D%A5%E7%9A%84/</url>
     <content><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="\assets\css\APlayer.min.css"><script src="\assets\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script><script class="meting-secondary-script-marker" src="\assets\js\Meting.min.js"></script><h1 id="计算机的三大原则"><a href="#计算机的三大原则" class="headerlink" title="计算机的三大原则"></a>计算机的三大原则</h1><p>硬件和软件的区别是什么？</p>
@@ -185,7 +190,28 @@
 <p>计算机都有一个主机名，每个LAN也都有一个域名。举例来说，笔者所使用的计算机的主机名是ma50j（源于这台计算机的型号），所在的LAN的域名是yzw  .co.jp。把主机名和域名组合起来所形成的ma50j.yze.co.jp，就是能够标识笔者这台计算机的一个世界范围内独一无二的名字，这个名字与IP地址的作用是等价的。通常把这种由主机名和域名组合起来形成的名字称作FQDN（Fully Qualified Domain Name，完整限定域名）。</p>
 <p>在互联网中，难以记忆的IP地址使用起来很麻烦。于是人们就发明出了DNS服务器，这样只需要使用FQDN，DNS服务器就可以自动地把它解析为IP地址了（这 个过程叫作“域 名解析”）。DNS服务器通常被部署在各个LAN中，里面记录着FQDN和IP地址的对应关系表。世界范围内的DNS服务器是通过相互合作运转起来的。如果一台DNS服务器无法解析域名，它就会去询问其他的DNS服务器。这套流程是自动进行的。</p>
 <h2 id="实验-7：查看-IP-地址和-MAC-地址的对应关系"><a href="#实验-7：查看-IP-地址和-MAC-地址的对应关系" class="headerlink" title="实验 7：查看 IP 地址和 MAC 地址的对应关系"></a>实验 7：查看 IP 地址和 MAC 地址的对应关系</h2><hr>
-<h1 id="加密数据"><a href="#加密数据" class="headerlink" title="加密数据"></a>加密数据</h1>]]></content>
+<h1 id="加密数据"><a href="#加密数据" class="headerlink" title="加密数据"></a>加密数据</h1><h2 id="什么是加密"><a href="#什么是加密" class="headerlink" title="什么是加密"></a>什么是加密</h2><p>文本数据可以由各种各样的字符构成。其中每个字符都被分配了一个数字，我们称之为“字 符编码”。定义了应该把哪个编码分配给哪个字符的字符编码体系叫作字符集。字符集分为ASCII字符集、JIS字符集、Shift-JIS字符集，EUC字符集、Unicode字符集等若干种。</p>
+<h2 id="错开字符编码的加密方式"><a href="#错开字符编码的加密方式" class="headerlink" title="错开字符编码的加密方式"></a>错开字符编码的加密方式</h2><p><img src="/2023/07/23/%E8%AE%A1%E7%AE%97%E6%9C%BA%E6%98%AF%E6%80%8E%E6%A0%B7%E8%B7%91%E8%B5%B7%E6%9D%A5%E7%9A%84/a5.png" alt="?"></p>
+<h2 id="密钥越长，解密越困难"><a href="#密钥越长，解密越困难" class="headerlink" title="密钥越长，解密越困难"></a>密钥越长，解密越困难</h2><h2 id="适用于互联网的公开密钥加密技术"><a href="#适用于互联网的公开密钥加密技术" class="headerlink" title="适用于互联网的公开密钥加密技术"></a>适用于互联网的公开密钥加密技术</h2><p><strong>对称密钥加密技</strong><br>这种加密技术的特征是在加密和解密的过程中使用数值相同的密钥。因此，要使用这种技术，就必须事先把密钥的值作为只有发送者和接收者才知道的秘密保护好。</p>
+<p>在公开密钥加密技术中，用于加密的密钥可以公开给全世界，因此称为“公 钥”，而用于解密的密钥是只有自己才知道的秘密，因此称为“私 钥”。</p>
+<p>1、消息接收方准备好公钥和私钥</p>
+<p>2、私钥接收方自己留存、公钥发布给消息发送方</p>
+<p>3、消息发送方使用接收方公钥对消息进行加密</p>
+<p>4、消息接收方用自己的私钥对消息解密</p>
+<h2 id="数字签名可以证明数据的发送者是谁"><a href="#数字签名可以证明数据的发送者是谁" class="headerlink" title="数字签名可以证明数据的发送者是谁"></a>数字签名可以证明数据的发送者是谁</h2><p>【文本数据的发送者】<br>（1）选取一段明文例：NIKKEI<br>（2）计算出明文内容的信息摘要例：(78＋73＋75＋75＋69＋73)÷100的余数= 43<br>（3）用私钥对计算出的信息摘要进行加密例：43→66（字母B的编码）<br>（4）把步骤（3）得出的值附加到明文后面再发送给接收者例：NIKKEI B</p>
+<p>【文本数据的接收者】<br>（1）用发送者的公钥对信息摘要进行解密例：B = 66→43<br>（2）计算出明文部分的信息摘要例：(78＋73＋75＋75＋69＋73)÷100的余数= 43<br>（3）比较在步骤（1）和（2）中求得的值，二者相同则证明接收的信息有效</p>
+<hr>
+<h1 id="XML"><a href="#XML" class="headerlink" title="XML"></a>XML</h1><h2 id="XML-是标记语言"><a href="#XML-是标记语言" class="headerlink" title="XML 是标记语言"></a>XML 是标记语言</h2><p>XML是eXtensible Markup Language的缩写，译为可扩展标记语言。</p>
+<p>&lt;html&gt;是用于表示这是HTML文件的标签。同样，其他标签也分别被赋予了意义.</p>
+<p>通常把通过添加标签为数据赋予意义的行为称为“标 记”。为这种给数据赋予意义的行为定义规则的语言就是“标 记语言”。HTML是用于编写网页的标记语言，更简单地说法就是HTML决定了可用于编写网页的标签。</p>
+<h2 id="XML-是可扩展的语言"><a href="#XML-是可扩展的语言" class="headerlink" title="XML 是可扩展的语言"></a>XML 是可扩展的语言</h2><p>在iuhist.xml中就有&lt;publisherName&gt;和&lt;processorArchitecture&gt;等标签，而且很有可能这两个标签表示的就是“发行者的名字”和“处理器的架构”</p>
+<p>那么是XML规定了这些标签吗？答案是否定的。XML本身并不会限定标签的种类，反倒是允许XML的使用者随心所欲地创建标签。也就是说，在“&lt;”和“&gt;”中的单词可以是任意的。这就是所谓的“可扩展”。在HTML中，我们只能使用由HTML定义出的那若干种标签，因此HTML是固定的标记语言。</p>
+<h2 id="XML-是元语言"><a href="#XML-是元语言" class="headerlink" title="XML 是元语言"></a>XML 是元语言</h2><p>通过定义要使用的标签种类，就可以创造出一门新的标记语言。通常把这种用于创造语言的语言称作“元 语言”。例如，我们可以使用&lt;dog&gt;和&lt;cat&gt;等标签，创造一种属于自己的标记语言——宠物语言。</p>
+<p>XML的数据是纯文本格式的，也就是说只包含字符。通常把遵循了XML的约束编写出的文档称为“XML文档”；把保存着XML文档的文件称为“XML文件”。可以使用记事本等文本编辑器编写XML文件。</p>
+<h2 id="XML-可以为信息赋予意义"><a href="#XML-可以为信息赋予意义" class="headerlink" title="XML 可以为信息赋予意义"></a>XML 可以为信息赋予意义</h2><p>如果网站只提供了HTML，那么这个程序几乎不可能完成。因为HTML中规定的各种标签只能用来指定信息的呈现样式，而不能表示信息的含义。</p>
+<h2 id="xML-是通用的数据交换格式"><a href="#xML-是通用的数据交换格式" class="headerlink" title="xML 是通用的数据交换格式"></a>xML 是通用的数据交换格式</h2><p>如果某家厂商的某个应用程序把数据保存到了XML文件中，那么其他厂商的另一个应用程序就应该可以通过加载这个XML文件来使用数据。</p>
+<h2 id="可以为-XML-标签设定命名空间"><a href="#可以为-XML-标签设定命名空间" class="headerlink" title="可以为 XML 标签设定命名空间"></a>可以为 XML 标签设定命名空间</h2><p>在XML文档中，通过把“xmlns=”命名空间的名字””作为标签的一个属性记述，就可以为标签设定命名空间。xmlns即XML    NameSpace（命名空间）的缩写。通常用全世界唯一的标识符作为命名空间的名称。</p>
+]]></content>
       <tags>
         <tag>计算机基础</tag>
       </tags>
