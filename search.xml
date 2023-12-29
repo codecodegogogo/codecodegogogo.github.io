@@ -1056,15 +1056,6 @@
       </tags>
   </entry>
   <entry>
-    <title>顺应历史</title>
-    <url>/2023/06/19/%E9%A1%BA%E5%BA%94%E5%8E%86%E5%8F%B2/</url>
-    <content><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="\assets\css\APlayer.min.css"><script src="\assets\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script><script class="meting-secondary-script-marker" src="\assets\js\Meting.min.js"></script><blockquote>
-<p>一段时间以来，出于某种原因，大家都热衷于研究不依赖硬件支持的锁机制。后来这些工作都没有太多意义，因为只需要很少的硬件支持，实现锁就会容易很多（实际在多处理器的早期，就有这些硬件支持）。而且上面提到的方法无法运行在现代硬件（应为松散内存一致性模型），导致它们更加没有用处。<br>更多的相关研究也湮没在历史中……</p>
-</blockquote>
-<p>逆历史而上真的费力不讨好，做的事情也没有了意义。</p>
-]]></content>
-  </entry>
-  <entry>
     <title>操作系统导论-并发</title>
     <url>/2023/06/19/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%AF%BC%E8%AE%BA-%E5%B9%B6%E5%8F%91/</url>
     <content><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="\assets\css\APlayer.min.css"><script src="\assets\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script><script class="meting-secondary-script-marker" src="\assets\js\Meting.min.js"></script><h1 id="并发-介绍"><a href="#并发-介绍" class="headerlink" title="并发:介绍"></a>并发:介绍</h1><p>经典观点是一个程序只有一个执行点（一个程序计数器，用来存放要执行的指令），但多线程（multi-threaded）程序会有多个执行点（多个程序计数器，每个都用于取指令和执行）。<strong>每个线程类似于独立的进程，只有一点区别：它们共享地址空间，从而能够访问相同的数据。</strong></p>

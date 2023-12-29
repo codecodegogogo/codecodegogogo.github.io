@@ -171,26 +171,6 @@
   </entry>
   
   <entry>
-    <title>顺应历史</title>
-    <link href="https://codecodegogogo.github.io/2023/06/19/%E9%A1%BA%E5%BA%94%E5%8E%86%E5%8F%B2/"/>
-    <id>https://codecodegogogo.github.io/2023/06/19/%E9%A1%BA%E5%BA%94%E5%8E%86%E5%8F%B2/</id>
-    <published>2023-06-19T14:26:42.000Z</published>
-    <updated>2023-06-19T14:30:41.723Z</updated>
-    
-    <content type="html"><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="\assets\css\APlayer.min.css"><script src="\assets\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script><script class="meting-secondary-script-marker" src="\assets\js\Meting.min.js"></script><blockquote><p>一段时间以来，出于某种原因，大家都热衷于研究不依赖硬件支持的锁机制。后来这些工作都没有太多意义，因为只需要很少的硬件支持，实现锁就会容易很多（实际在多处理器的早期，就有这些硬件支持）。而且上面提到的方法无法运行在现代硬件（应为松散内存一致性模型），导致它们更加没有用处。<br>更多的相关研究也湮没在历史中……</p></blockquote><p>逆历史而上真的费力不讨好，做的事情也没有了意义。</p>]]></content>
-    
-    
-      
-      
-    <summary type="html">&lt;link rel=&quot;stylesheet&quot; class=&quot;aplayer-secondary-style-marker&quot; href=&quot;\assets\css\APlayer.min.css&quot;&gt;&lt;script src=&quot;\assets\js\APlayer.min.js&quot; cla</summary>
-      
-    
-    
-    
-    
-  </entry>
-  
-  <entry>
     <title>操作系统导论-并发</title>
     <link href="https://codecodegogogo.github.io/2023/06/19/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%AF%BC%E8%AE%BA-%E5%B9%B6%E5%8F%91/"/>
     <id>https://codecodegogogo.github.io/2023/06/19/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%AF%BC%E8%AE%BA-%E5%B9%B6%E5%8F%91/</id>
@@ -435,6 +415,28 @@
     <updated>2023-06-02T15:54:49.669Z</updated>
     
     <content type="html"><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="\assets\css\APlayer.min.css"><script src="\assets\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script><script class="meting-secondary-script-marker" src="\assets\js\Meting.min.js"></script><h4 id="机器数："><a href="#机器数：" class="headerlink" title="机器数："></a>机器数：</h4><p>一个数在计算机的存储形式是二进制数，我们称这些二进制数为机器数，机器数是有符号，在计算机中用机器数的最高位存放符号位，0表示正数，1表示负数。</p><h4 id="机器数的真值："><a href="#机器数的真值：" class="headerlink" title="机器数的真值："></a>机器数的真值：</h4><p>因为带有符号位，所以机器数的形式值不等于其真值，以机器数1000 0110为例，其真正表示的值为-6，而形式值为134。将带符号的机器数的真正表示的值称为机器数的真值。<br><strong>0表示+，1表示-</strong></p><h4 id="原码："><a href="#原码：" class="headerlink" title="原码："></a>原码：</h4><p>原码的表示与机器数真值表示的一样，即用第一位表示符号，其余位表示数值，例如的十进制的的正负1，用8位二进制的原码表示如下：<br>+1= 0000 0001<br>-1= 1000 0001 </p><h4 id="反码："><a href="#反码：" class="headerlink" title="反码："></a>反码：</h4><p>反码的表示方法为：<br>正数的反码是其原码本身。<br>负数的反码是在其原码的基础上，符号位不变，其余各位取反。<br>+1= 原：0000 0001 = 反：0000 0001<br>-1= 原：1000 0001 = 反：1111 1110 </p><h4 id="补码："><a href="#补码：" class="headerlink" title="补码："></a>补码：</h4><p>补码的表示方法为：<br>正数的补码是其原码本身。<br>负数的补码是在其原码的基础上，符号位不变，其余各位取反后加1（即在反码的基础上加1）。<br>+1= 原：0000 0001 = 反：0000 0001 = 补：0000 0001 </p><p>-1= 原：1000 0001 = 反：1111 1110 = 补：1111 1111</p><p><strong>计算机只存储补码</strong></p><h2 id="为何使用原码、反码、补码"><a href="#为何使用原码、反码、补码" class="headerlink" title="为何使用原码、反码、补码"></a>为何使用原码、反码、补码</h2><p>1.使用原码运算</p><p>计算十进制表达式：1-1 = 0；<br>1 - 1 = 1 + (-1)<br>= 原：[ 0000 0001 ] + 原：[ 1000 0001 ]<br>= 原：[ 1000 0010 ] = -2<br>如果用原码表示，让符号位也参与计算，对于减法来说，结果是不正确的。这也是计算机内部在存储数据时不使用原码的原因，<strong>为了解决这一问题，出现了反码。</strong></p><p>2.使用反码运算<br>计算十进制表达式：1-1 = 0</p><p>1 - 1 = 1 + (-1)<br>= 原：[ 0000 0001 ] + 原：[ 1000 0001 ]<br>= 反：[ 0000 0001 ] + 反：[ 1111 1110 ]<br>= 反：[ 1111 1111 ] = 原： [ 1000 0000 ] = -0<br>通过计算我们发现用反码计算减法，结果的真值部分是正确的。而唯一的问题出现在”0”这个特殊的数值上，虽然人们理解上**+0和-0<strong>是一样的，但是0带符号是没有任何意义的，而且会有[0000 0000]原和[1000 0000]原两个编码表示0。</strong>为了解决-0这一问题，出现了补码。**</p><p>3.使用补码运算<br>1 - 1 = 1 + (-1)<br>= 原：[ 0000 0001 ] + 原：[ 1000 0001 ]<br>= 补：[ 0000 0001 ] + 补：[ 1111 1111 ]<br>= 补： [ 0000 0000 ] = 原： [ 0000 0000 ] = 0<br>这样0用[0000 0000]表示，而以前出现问题的-0则不存在了，而且人们还发现可以用[1000 0000]表示-128，-128的推算过程如下：<br>(-1) + (-127) = -128<br>= 原：[1000 0001] + 原：[ 1111 1111 ]<br>= 补：[ 1111 1111 ] + 补：[ 1000 0001 ]<br>= 补：[ 1000 0000 ]</p><p>注意：因为实际上是使用以前的-0的补码来表示-128，所以-128并没有原码和反码表示，只要补码是[1000 0000]，其十进制数值就为-128。</p>]]></content>
+    
+    
+      
+      
+    <summary type="html">&lt;link rel=&quot;stylesheet&quot; class=&quot;aplayer-secondary-style-marker&quot; href=&quot;\assets\css\APlayer.min.css&quot;&gt;&lt;script src=&quot;\assets\js\APlayer.min.js&quot; cla</summary>
+      
+    
+    
+    
+    
+    <category term="计算机基础" scheme="https://codecodegogogo.github.io/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%9F%BA%E7%A1%80/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>求余和取模</title>
+    <link href="https://codecodegogogo.github.io/2023/05/29/%E6%B1%82%E4%BD%99%E5%92%8C%E5%8F%96%E6%A8%A1/"/>
+    <id>https://codecodegogogo.github.io/2023/05/29/%E6%B1%82%E4%BD%99%E5%92%8C%E5%8F%96%E6%A8%A1/</id>
+    <published>2023-05-29T14:54:40.000Z</published>
+    <updated>2023-06-02T15:54:33.718Z</updated>
+    
+    <content type="html"><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="\assets\css\APlayer.min.css"><script src="\assets\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script><script class="meting-secondary-script-marker" src="\assets\js\Meting.min.js"></script><p>求余符号看分子（被除数）</p><p>取模符号看分母（除数）。</p><p>C/C++的%是求余运算，python的%是取模运算。</p><p>c++在计算-1%256时，结果应该是255，因为-1除以256的商为0，余数为-1，而取模运算会将余数调整到0~255之间，所以最终结果为255。</p>]]></content>
     
     
       
