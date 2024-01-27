@@ -7,6 +7,17 @@
 ]]></content>
   </entry>
   <entry>
+    <title>SnakeGame</title>
+    <url>/2024/01/27/SnakeGame/</url>
+    <content><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="\assets\css\APlayer.min.css"><script src="\assets\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script><script class="meting-secondary-script-marker" src="\assets\js\Meting.min.js"></script><p>java实现贪吃蛇</p>
+<p>闲来无事写了一个小游戏，具体代码参见：</p>
+<p><strong><a href="https://github.com/codecodegogogo/Snake_Game">https://github.com/codecodegogogo/Snake_Game</a></strong></p>
+]]></content>
+      <tags>
+        <tag>java</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>程序是怎么跑起来的</title>
     <url>/2023/07/30/%E7%A8%8B%E5%BA%8F%E6%98%AF%E6%80%8E%E4%B9%88%E8%B7%91%E8%B5%B7%E6%9D%A5%E7%9A%84/</url>
     <content><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="\assets\css\APlayer.min.css"><script src="\assets\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script><script class="meting-secondary-script-marker" src="\assets\js\Meting.min.js"></script><h1 id="cpu是什么"><a href="#cpu是什么" class="headerlink" title="cpu是什么"></a>cpu是什么</h1><p>CPU 是英文 Central Processing Unit( 中央处理器)的缩写，相当于计算机的大脑，它的内部由数百万至数亿个晶体管构成这些都是大家所熟知的。</p>
