@@ -7,6 +7,44 @@
 ]]></content>
   </entry>
   <entry>
+    <title>JVM</title>
+    <url>/2024/01/31/JVM/</url>
+    <content><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="\assets\css\APlayer.min.css"><script src="\assets\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script><script class="meting-secondary-script-marker" src="\assets\js\Meting.min.js"></script><h1 id="JVM"><a href="#JVM" class="headerlink" title="JVM"></a>JVM</h1><p>jvm实现一次编写，跨平台到处使用。它有各种指令集和运行时的内存区域。</p>
+<h2 id="JVM产品"><a href="#JVM产品" class="headerlink" title="JVM产品"></a>JVM产品</h2><p>Classic VM (早期 Sun 的 Java 虚拟机)<br>Exact VM (早期 Solaris 平台上)<br><strong>HotSpot(OracleDK与OpenJDK 默认)</strong><br>JRockit (BEA 的，被 Oracle 收购，并且整合到 HotSpot 里面)<br>J9 (IBM 商用)<br>Google Android Dalvik VM (Android 上的)<br>KVM、CDC、CLDC(嵌入式领域)<br>Microsof JVM(微软的)<br>Graal VM（跨语言全栈虚拟机 Run Programs Faster Anywhere）</p>
+<h1 id="Class"><a href="#Class" class="headerlink" title="Class"></a>Class</h1><p>jvm只和class文件相关，除了java外还有别的语言也可以产生class文件，如：kotlin,scala。他并不关心class文件是由什么语言产生的。</p>
+<p>内存大小端<br>大端存储：数据低位存在高地址（人类阅读方式）<br>小端存储：数据低位存在低地址</p>
+<p><strong>我们在存放的时候是以一个存储单元为单位来存放，存储单元内部不需要再转变顺序。</strong><br>例如：0001-0101存放在0号地址，不需要把它变成1010-1000！</p>
+<p><strong>class字节码按照大端存储</strong></p>
+<h2 id="class文件结构"><a href="#class文件结构" class="headerlink" title="class文件结构"></a>class文件结构</h2><p>Class文件数据结构采用一种类似于C语言结构体的伪结构来存储数据，这种伪结构中只有两种数据类型：“无符号数”和“表”.</p>
+<p><strong>无符号数</strong>：<br>定义了一组专用的数据类型来表示Class文件的内容，它们包括u1、u2、u4分别代表1、2和4个字节的无符号数。</p>
+<p>无符号数可以用来描述数字、索引引用、数量值或者按照UTF-8编码构成字符串值。</p>
+<p>每个无符号数严格按照顺序连续存放，它们之间没有用任何填充或对齐。</p>
+<p><strong>表</strong>：<br>表用于描述有层次关系的复合结构的数据。</p>
+<p>表是由多个无符号数或者其他表作为数据项构成的复合数据类型。</p>
+<p>表的命名都习惯性地以“_info”结尾。</p>
+<p>整个Class文件本质上也可以视作是一张表。<br><img src="/2024/01/31/JVM/2.2.png" alt="?"></p>
+<h2 id="魔数"><a href="#魔数" class="headerlink" title="魔数"></a>魔数</h2><p>文件内容起始几个字节使用固定的内容来描述该文件类型，因此这几个字节的内容称为魔数。</p>
+<p><strong>class文件魔数：cafe babe</strong></p>
+<h2 id="版本号"><a href="#版本号" class="headerlink" title="版本号"></a>版本号</h2><p>主版本（major version）记录每个大版本号，起始值为45.<br>次版本（minor version）记录每个小版本号，起始值为3.<br>jdk1.1.8=45.3<br>jdk8=52.0<br>jdk11=55.0</p>
+<p><strong>JVM高版本可以执行低版本class，反之异常java.lang.UnsupportedClassVersionError</strong></p>
+<h2 id="class文件数据结构"><a href="#class文件数据结构" class="headerlink" title="class文件数据结构"></a>class文件数据结构</h2><h2 id="class文件基本信息"><a href="#class文件基本信息" class="headerlink" title="class文件基本信息"></a>class文件基本信息</h2><h2 id="class文件常量池信息"><a href="#class文件常量池信息" class="headerlink" title="class文件常量池信息"></a>class文件常量池信息</h2><h2 id="class文件访问标志信息"><a href="#class文件访问标志信息" class="headerlink" title="class文件访问标志信息"></a>class文件访问标志信息</h2><h2 id="class文件类、接口信息"><a href="#class文件类、接口信息" class="headerlink" title="class文件类、接口信息"></a>class文件类、接口信息</h2><h2 id="class文件字段、属性、方法信息"><a href="#class文件字段、属性、方法信息" class="headerlink" title="class文件字段、属性、方法信息"></a>class文件字段、属性、方法信息</h2><h2 id="class文件字节码指令"><a href="#class文件字节码指令" class="headerlink" title="class文件字节码指令"></a>class文件字节码指令</h2>]]></content>
+      <tags>
+        <tag>java</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>js原型和构造方法</title>
+    <url>/2024/01/29/js%E5%8E%9F%E5%9E%8B%E5%92%8C%E6%9E%84%E9%80%A0%E6%96%B9%E6%B3%95/</url>
+    <content><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="\assets\css\APlayer.min.css"><script src="\assets\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script><script class="meting-secondary-script-marker" src="\assets\js\Meting.min.js"></script><p><em>1。定义在构造函数内部的方法和定义在原型上的方法有什么区别？</em></p>
+<p><strong>定义在构造函数内部的方法,会在它的每一个实例上都克隆这个方法;定义在构造函数的prototype属性上的方法会让它的所有示例都共享这个方法,但是不会在每个实例的内部重新定义这个方法.</strong> 如果我们的应用需要创建很多新的对象,并且这些对象还有许多的方法,为了节省内存,我们建议把这些方法都定义在构造函数的prototype属性上.</p>
+<p>2.<em>如何互相访问</em></p>
+<p>对象.<em>proto</em> 访问原型<br>构造方法.prototype 访问原型<br>原型.constructor 访问构造方法</p>
+]]></content>
+      <tags>
+        <tag>javascript</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>SnakeGame</title>
     <url>/2024/01/27/SnakeGame/</url>
     <content><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="\assets\css\APlayer.min.css"><script src="\assets\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script><script class="meting-secondary-script-marker" src="\assets\js\Meting.min.js"></script><p>java实现贪吃蛇</p>

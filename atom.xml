@@ -6,7 +6,7 @@
   <link href="https://codecodegogogo.github.io/atom.xml" rel="self"/>
   
   <link href="https://codecodegogogo.github.io/"/>
-  <updated>2024-01-27T12:59:00.011Z</updated>
+  <updated>2024-01-31T06:09:36.736Z</updated>
   <id>https://codecodegogogo.github.io/</id>
   
   <author>
@@ -15,6 +15,50 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>JVM</title>
+    <link href="https://codecodegogogo.github.io/2024/01/31/JVM/"/>
+    <id>https://codecodegogogo.github.io/2024/01/31/JVM/</id>
+    <published>2024-01-31T02:14:52.000Z</published>
+    <updated>2024-01-31T06:09:36.736Z</updated>
+    
+    <content type="html"><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="\assets\css\APlayer.min.css"><script src="\assets\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script><script class="meting-secondary-script-marker" src="\assets\js\Meting.min.js"></script><h1 id="JVM"><a href="#JVM" class="headerlink" title="JVM"></a>JVM</h1><p>jvm实现一次编写，跨平台到处使用。它有各种指令集和运行时的内存区域。</p><h2 id="JVM产品"><a href="#JVM产品" class="headerlink" title="JVM产品"></a>JVM产品</h2><p>Classic VM (早期 Sun 的 Java 虚拟机)<br>Exact VM (早期 Solaris 平台上)<br><strong>HotSpot(OracleDK与OpenJDK 默认)</strong><br>JRockit (BEA 的，被 Oracle 收购，并且整合到 HotSpot 里面)<br>J9 (IBM 商用)<br>Google Android Dalvik VM (Android 上的)<br>KVM、CDC、CLDC(嵌入式领域)<br>Microsof JVM(微软的)<br>Graal VM（跨语言全栈虚拟机 Run Programs Faster Anywhere）</p><h1 id="Class"><a href="#Class" class="headerlink" title="Class"></a>Class</h1><p>jvm只和class文件相关，除了java外还有别的语言也可以产生class文件，如：kotlin,scala。他并不关心class文件是由什么语言产生的。</p><p>内存大小端<br>大端存储：数据低位存在高地址（人类阅读方式）<br>小端存储：数据低位存在低地址</p><p><strong>我们在存放的时候是以一个存储单元为单位来存放，存储单元内部不需要再转变顺序。</strong><br>例如：0001-0101存放在0号地址，不需要把它变成1010-1000！</p><p><strong>class字节码按照大端存储</strong></p><h2 id="class文件结构"><a href="#class文件结构" class="headerlink" title="class文件结构"></a>class文件结构</h2><p>Class文件数据结构采用一种类似于C语言结构体的伪结构来存储数据，这种伪结构中只有两种数据类型：“无符号数”和“表”.</p><p><strong>无符号数</strong>：<br>定义了一组专用的数据类型来表示Class文件的内容，它们包括u1、u2、u4分别代表1、2和4个字节的无符号数。</p><p>无符号数可以用来描述数字、索引引用、数量值或者按照UTF-8编码构成字符串值。</p><p>每个无符号数严格按照顺序连续存放，它们之间没有用任何填充或对齐。</p><p><strong>表</strong>：<br>表用于描述有层次关系的复合结构的数据。</p><p>表是由多个无符号数或者其他表作为数据项构成的复合数据类型。</p><p>表的命名都习惯性地以“_info”结尾。</p><p>整个Class文件本质上也可以视作是一张表。<br><img src="/2024/01/31/JVM/2.2.png" alt="?"></p><h2 id="魔数"><a href="#魔数" class="headerlink" title="魔数"></a>魔数</h2><p>文件内容起始几个字节使用固定的内容来描述该文件类型，因此这几个字节的内容称为魔数。</p><p><strong>class文件魔数：cafe babe</strong></p><h2 id="版本号"><a href="#版本号" class="headerlink" title="版本号"></a>版本号</h2><p>主版本（major version）记录每个大版本号，起始值为45.<br>次版本（minor version）记录每个小版本号，起始值为3.<br>jdk1.1.8=45.3<br>jdk8=52.0<br>jdk11=55.0</p><p><strong>JVM高版本可以执行低版本class，反之异常java.lang.UnsupportedClassVersionError</strong></p><h2 id="class文件数据结构"><a href="#class文件数据结构" class="headerlink" title="class文件数据结构"></a>class文件数据结构</h2><h2 id="class文件基本信息"><a href="#class文件基本信息" class="headerlink" title="class文件基本信息"></a>class文件基本信息</h2><h2 id="class文件常量池信息"><a href="#class文件常量池信息" class="headerlink" title="class文件常量池信息"></a>class文件常量池信息</h2><h2 id="class文件访问标志信息"><a href="#class文件访问标志信息" class="headerlink" title="class文件访问标志信息"></a>class文件访问标志信息</h2><h2 id="class文件类、接口信息"><a href="#class文件类、接口信息" class="headerlink" title="class文件类、接口信息"></a>class文件类、接口信息</h2><h2 id="class文件字段、属性、方法信息"><a href="#class文件字段、属性、方法信息" class="headerlink" title="class文件字段、属性、方法信息"></a>class文件字段、属性、方法信息</h2><h2 id="class文件字节码指令"><a href="#class文件字节码指令" class="headerlink" title="class文件字节码指令"></a>class文件字节码指令</h2>]]></content>
+    
+    
+      
+      
+    <summary type="html">&lt;link rel=&quot;stylesheet&quot; class=&quot;aplayer-secondary-style-marker&quot; href=&quot;\assets\css\APlayer.min.css&quot;&gt;&lt;script src=&quot;\assets\js\APlayer.min.js&quot; cla</summary>
+      
+    
+    
+    
+    
+    <category term="java" scheme="https://codecodegogogo.github.io/tags/java/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>js原型和构造方法</title>
+    <link href="https://codecodegogogo.github.io/2024/01/29/js%E5%8E%9F%E5%9E%8B%E5%92%8C%E6%9E%84%E9%80%A0%E6%96%B9%E6%B3%95/"/>
+    <id>https://codecodegogogo.github.io/2024/01/29/js%E5%8E%9F%E5%9E%8B%E5%92%8C%E6%9E%84%E9%80%A0%E6%96%B9%E6%B3%95/</id>
+    <published>2024-01-29T07:17:55.000Z</published>
+    <updated>2024-01-31T03:07:03.508Z</updated>
+    
+    <content type="html"><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="\assets\css\APlayer.min.css"><script src="\assets\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script><script class="meting-secondary-script-marker" src="\assets\js\Meting.min.js"></script><p><em>1。定义在构造函数内部的方法和定义在原型上的方法有什么区别？</em></p><p><strong>定义在构造函数内部的方法,会在它的每一个实例上都克隆这个方法;定义在构造函数的prototype属性上的方法会让它的所有示例都共享这个方法,但是不会在每个实例的内部重新定义这个方法.</strong> 如果我们的应用需要创建很多新的对象,并且这些对象还有许多的方法,为了节省内存,我们建议把这些方法都定义在构造函数的prototype属性上.</p><p>2.<em>如何互相访问</em></p><p>对象.<em>proto</em> 访问原型<br>构造方法.prototype 访问原型<br>原型.constructor 访问构造方法</p>]]></content>
+    
+    
+      
+      
+    <summary type="html">&lt;link rel=&quot;stylesheet&quot; class=&quot;aplayer-secondary-style-marker&quot; href=&quot;\assets\css\APlayer.min.css&quot;&gt;&lt;script src=&quot;\assets\js\APlayer.min.js&quot; cla</summary>
+      
+    
+    
+    
+    
+    <category term="javascript" scheme="https://codecodegogogo.github.io/tags/javascript/"/>
+    
+  </entry>
   
   <entry>
     <title>SnakeGame</title>
@@ -404,50 +448,6 @@
     
     
     <category term="计算机网络" scheme="https://codecodegogogo.github.io/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>计网中的反码</title>
-    <link href="https://codecodegogogo.github.io/2023/06/01/%E8%AE%A1%E7%BD%91%E4%B8%AD%E7%9A%84%E5%8F%8D%E7%A0%81/"/>
-    <id>https://codecodegogogo.github.io/2023/06/01/%E8%AE%A1%E7%BD%91%E4%B8%AD%E7%9A%84%E5%8F%8D%E7%A0%81/</id>
-    <published>2023-06-01T08:55:45.000Z</published>
-    <updated>2023-06-02T15:54:02.891Z</updated>
-    
-    <content type="html"><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="\assets\css\APlayer.min.css"><script src="\assets\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script><script class="meting-secondary-script-marker" src="\assets\js\Meting.min.js"></script><p>计网中udp报文头部中有一项检验和，书中这么说：</p><blockquote><p>发送方的UDP对报文段中的<strong>所有16比特字的和进行反码运算，求和时遇到的任何溢出都被回卷</strong>。得到的结果被放在UDP报文段中的检验和字段。</p></blockquote><p>书中是这么算的：<br><img src="/2023/06/01/%E8%AE%A1%E7%BD%91%E4%B8%AD%E7%9A%84%E5%8F%8D%E7%A0%81/1.png" alt="?"></p><blockquote><p><strong>注意到最后一次加法有溢出，它要被回卷。</strong><br><strong>反码运算就是将所有的0换成1，所有的1转换成0。因此，该和0100101011000010的反码运算结果是1011010100111101</strong></p></blockquote><p>这个“反码”和我们理解的反码不太一样，我们理解的反码是：<br><strong>原码为正的数不变，原码为负的数除了符号位其他取反。</strong><br>在书中他把所有的数都取了反，其实这里是因为翻译问题。</p><blockquote><p>one’s complement该单词直译为一的补数，这样理解就会十份直观，这个词的意思就是不管正负都按位取反，但在中文资料里将其等价为了反码(ones’ complement system or ones’ complement arithmetic)（一补数系统或算数一的补数）,意思是负数用1补数来表示，而正数保持原样，这是规定。因此而书本上明显是混淆了这两个概念，导致了理解的困难</p></blockquote><p><strong>这里的反码叫做二进制反码</strong><br>定义:将一个二进制数中的1变为0、0变为1以后所得的数。例如，1101010的反码为0010101。<br><strong>这种反码无视正负号</strong></p>]]></content>
-    
-    
-      
-      
-    <summary type="html">&lt;link rel=&quot;stylesheet&quot; class=&quot;aplayer-secondary-style-marker&quot; href=&quot;\assets\css\APlayer.min.css&quot;&gt;&lt;script src=&quot;\assets\js\APlayer.min.js&quot; cla</summary>
-      
-    
-    
-    
-    
-    <category term="计算机网络" scheme="https://codecodegogogo.github.io/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>深入理解计算机中的原码、补码、反码</title>
-    <link href="https://codecodegogogo.github.io/2023/06/01/%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%B8%AD%E7%9A%84%E5%8E%9F%E7%A0%81%E3%80%81%E8%A1%A5%E7%A0%81%E3%80%81%E5%8F%8D%E7%A0%81/"/>
-    <id>https://codecodegogogo.github.io/2023/06/01/%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%B8%AD%E7%9A%84%E5%8E%9F%E7%A0%81%E3%80%81%E8%A1%A5%E7%A0%81%E3%80%81%E5%8F%8D%E7%A0%81/</id>
-    <published>2023-06-01T08:16:59.000Z</published>
-    <updated>2023-06-02T15:54:49.669Z</updated>
-    
-    <content type="html"><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="\assets\css\APlayer.min.css"><script src="\assets\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script><script class="meting-secondary-script-marker" src="\assets\js\Meting.min.js"></script><h4 id="机器数："><a href="#机器数：" class="headerlink" title="机器数："></a>机器数：</h4><p>一个数在计算机的存储形式是二进制数，我们称这些二进制数为机器数，机器数是有符号，在计算机中用机器数的最高位存放符号位，0表示正数，1表示负数。</p><h4 id="机器数的真值："><a href="#机器数的真值：" class="headerlink" title="机器数的真值："></a>机器数的真值：</h4><p>因为带有符号位，所以机器数的形式值不等于其真值，以机器数1000 0110为例，其真正表示的值为-6，而形式值为134。将带符号的机器数的真正表示的值称为机器数的真值。<br><strong>0表示+，1表示-</strong></p><h4 id="原码："><a href="#原码：" class="headerlink" title="原码："></a>原码：</h4><p>原码的表示与机器数真值表示的一样，即用第一位表示符号，其余位表示数值，例如的十进制的的正负1，用8位二进制的原码表示如下：<br>+1= 0000 0001<br>-1= 1000 0001 </p><h4 id="反码："><a href="#反码：" class="headerlink" title="反码："></a>反码：</h4><p>反码的表示方法为：<br>正数的反码是其原码本身。<br>负数的反码是在其原码的基础上，符号位不变，其余各位取反。<br>+1= 原：0000 0001 = 反：0000 0001<br>-1= 原：1000 0001 = 反：1111 1110 </p><h4 id="补码："><a href="#补码：" class="headerlink" title="补码："></a>补码：</h4><p>补码的表示方法为：<br>正数的补码是其原码本身。<br>负数的补码是在其原码的基础上，符号位不变，其余各位取反后加1（即在反码的基础上加1）。<br>+1= 原：0000 0001 = 反：0000 0001 = 补：0000 0001 </p><p>-1= 原：1000 0001 = 反：1111 1110 = 补：1111 1111</p><p><strong>计算机只存储补码</strong></p><h2 id="为何使用原码、反码、补码"><a href="#为何使用原码、反码、补码" class="headerlink" title="为何使用原码、反码、补码"></a>为何使用原码、反码、补码</h2><p>1.使用原码运算</p><p>计算十进制表达式：1-1 = 0；<br>1 - 1 = 1 + (-1)<br>= 原：[ 0000 0001 ] + 原：[ 1000 0001 ]<br>= 原：[ 1000 0010 ] = -2<br>如果用原码表示，让符号位也参与计算，对于减法来说，结果是不正确的。这也是计算机内部在存储数据时不使用原码的原因，<strong>为了解决这一问题，出现了反码。</strong></p><p>2.使用反码运算<br>计算十进制表达式：1-1 = 0</p><p>1 - 1 = 1 + (-1)<br>= 原：[ 0000 0001 ] + 原：[ 1000 0001 ]<br>= 反：[ 0000 0001 ] + 反：[ 1111 1110 ]<br>= 反：[ 1111 1111 ] = 原： [ 1000 0000 ] = -0<br>通过计算我们发现用反码计算减法，结果的真值部分是正确的。而唯一的问题出现在”0”这个特殊的数值上，虽然人们理解上**+0和-0<strong>是一样的，但是0带符号是没有任何意义的，而且会有[0000 0000]原和[1000 0000]原两个编码表示0。</strong>为了解决-0这一问题，出现了补码。**</p><p>3.使用补码运算<br>1 - 1 = 1 + (-1)<br>= 原：[ 0000 0001 ] + 原：[ 1000 0001 ]<br>= 补：[ 0000 0001 ] + 补：[ 1111 1111 ]<br>= 补： [ 0000 0000 ] = 原： [ 0000 0000 ] = 0<br>这样0用[0000 0000]表示，而以前出现问题的-0则不存在了，而且人们还发现可以用[1000 0000]表示-128，-128的推算过程如下：<br>(-1) + (-127) = -128<br>= 原：[1000 0001] + 原：[ 1111 1111 ]<br>= 补：[ 1111 1111 ] + 补：[ 1000 0001 ]<br>= 补：[ 1000 0000 ]</p><p>注意：因为实际上是使用以前的-0的补码来表示-128，所以-128并没有原码和反码表示，只要补码是[1000 0000]，其十进制数值就为-128。</p>]]></content>
-    
-    
-      
-      
-    <summary type="html">&lt;link rel=&quot;stylesheet&quot; class=&quot;aplayer-secondary-style-marker&quot; href=&quot;\assets\css\APlayer.min.css&quot;&gt;&lt;script src=&quot;\assets\js\APlayer.min.js&quot; cla</summary>
-      
-    
-    
-    
-    
-    <category term="计算机基础" scheme="https://codecodegogogo.github.io/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%9F%BA%E7%A1%80/"/>
     
   </entry>
   
