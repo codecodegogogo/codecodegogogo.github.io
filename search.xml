@@ -43,7 +43,7 @@
 <p>在本例子中，myFunc 是执行 makeFunc 时创建的 displayName 函数实例的引用。displayName 的实例维持了一个对它的词法环境（变量 name 存在于其中）的引用。因此，当 myFunc 被调用时，变量 name 仍然可用，其值 Mozilla 就被传递到alert中。</p>
 <h3 id="使用闭包返回不同值"><a href="#使用闭包返回不同值" class="headerlink" title="使用闭包返回不同值"></a>使用闭包返回不同值</h3><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">function makeAdder(x) &#123;</span><br><span class="line">  return function (y) &#123;</span><br><span class="line">    return x + y;</span><br><span class="line">  &#125;;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">var add5 = makeAdder(5);</span><br><span class="line">var add10 = makeAdder(10);</span><br><span class="line"></span><br><span class="line">console.log(add5(2)); // 7</span><br><span class="line">console.log(add10(2)); // 12</span><br></pre></td></tr></table></figure>]]></content>
       <tags>
-        <tag>JavaScript</tag>
+        <tag>javavascript</tag>
       </tags>
   </entry>
   <entry>

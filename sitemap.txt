@@ -56,4 +56,4 @@ https://codecodegogogo.github.io/tags/linux/
 https://codecodegogogo.github.io/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%9F%BA%E7%A1%80/
 https://codecodegogogo.github.io/tags/os/
 https://codecodegogogo.github.io/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/
-https://codecodegogogo.github.io/tags/JavaScript/
+https://codecodegogogo.github.io/tags/javavascript/
