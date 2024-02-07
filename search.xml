@@ -7,11 +7,56 @@
 ]]></content>
   </entry>
   <entry>
-    <title>filter</title>
+    <title>vue生命周期</title>
+    <url>/2024/02/07/vue%E7%94%9F%E5%91%BD%E5%91%A8%E6%9C%9F/</url>
+    <content><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="\assets\css\APlayer.min.css"><script src="\assets\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script><script class="meting-secondary-script-marker" src="\assets\js\Meting.min.js"></script><h2 id="初始阶段"><a href="#初始阶段" class="headerlink" title="初始阶段"></a>初始阶段</h2><p><img src="/2024/02/07/vue%E7%94%9F%E5%91%BD%E5%91%A8%E6%9C%9F/%E5%88%9D%E5%A7%8B%E9%98%B6%E6%AE%B5.png" alt="?"><br><em><strong>1.beforeCreate方法</strong></em><br>方法执行前，进行一些事件对象的初始化，此时还么有进行数据代理，使用方法会报错，方法完成后才可以进行方法调用</p>
+<figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line"><span class="attr">methods</span>:&#123;</span><br><span class="line">            <span class="title function_">say</span>(<span class="params"></span>)&#123;</span><br><span class="line">                <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&quot;hello&quot;</span>)</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;,</span><br><span class="line"><span class="title function_">beforeCreate</span>(<span class="params"></span>)&#123;</span><br><span class="line">        <span class="variable language_">this</span>.<span class="title function_">say</span>()</span><br><span class="line">        <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&quot;beforeCreate&quot;</span>)</span><br><span class="line">    &#125;,</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">vue.js:5108 [Vue warn]: Error in beforeCreate hook: &quot;TypeError: this.say is not a function&quot;</span><br></pre></td></tr></table></figure>
+
+
+<p><em><strong>2.created方法</strong></em><br>方法执行后，观察代码中是否有el配置项进行指定元素挂载，如果没有需要调用$mount(元素)进行挂载，如果没有报错。再查看template:&lt;标签&gt;&lt;/标签&gt;配置项是否存在，存在直接覆盖渲染，如果没有则使用元素本来的样式。</p>
+<h2 id="挂载阶段"><a href="#挂载阶段" class="headerlink" title="挂载阶段"></a>挂载阶段</h2><p><img src="/2024/02/07/vue%E7%94%9F%E5%91%BD%E5%91%A8%E6%9C%9F/%E6%8C%82%E8%BD%BD%E9%98%B6%E6%AE%B5.png" alt="?"><br><em><strong>3.beforeMount方法</strong></em><br>方法执行前，和上方法执行后没变化，但是如果此时修改html元素，短暂生效后立刻失效，以为此时要将虚拟dom映射为真实dom</p>
+<p><img src="/2024/02/07/vue%E7%94%9F%E5%91%BD%E5%91%A8%E6%9C%9F/%E6%8C%82%E8%BD%BD%E9%98%B6%E6%AE%B52.png" alt="?"><br><strong>点击下一步后立刻失效</strong></p>
+<p><img src="/2024/02/07/vue%E7%94%9F%E5%91%BD%E5%91%A8%E6%9C%9F/%E6%8C%82%E8%BD%BD%E9%98%B6%E6%AE%B53.png" alt="?"></p>
+<p><em><strong>4.Mount方法</strong></em><br>方法执行前，此时修改html元素生效，此时已经将虚拟dom映射为真实dom</p>
+<h2 id="更新阶段"><a href="#更新阶段" class="headerlink" title="更新阶段"></a>更新阶段</h2><p><img src="/2024/02/07/vue%E7%94%9F%E5%91%BD%E5%91%A8%E6%9C%9F/%E6%9B%B4%E6%96%B0%E9%98%B6%E6%AE%B5.png" alt="?"></p>
+<p><em><strong>beforeUpdata方法</strong></em><br>方法执行前数据发生变化，但页面没有变化。</p>
+<p><em><strong>updated方法</strong></em><br>方法执行前将进行页面重新渲染，此时diff算法有可能执行（根据组件key选择是否需要重新渲染）</p>
+<h2 id="销毁阶段"><a href="#销毁阶段" class="headerlink" title="销毁阶段"></a>销毁阶段</h2><p><img src="/2024/02/07/vue%E7%94%9F%E5%91%BD%E5%91%A8%E6%9C%9F/%E9%94%80%E6%AF%81%E9%98%B6%E6%AE%B5.png" alt="?"><br><em><strong>beforeDestroy()执行前</strong></em><br>虽然此时还没有进行销毁，但是一下监视器等也不能使用了</p>
+<p><em><strong>destroy()执行时</strong></em><br>此时一些监视器等不能用了，但是一些方法还可以用，因为并不是将vm的内存释放了<br><img src="/2024/02/07/vue%E7%94%9F%E5%91%BD%E5%91%A8%E6%9C%9F/%E9%94%80%E6%AF%81%E9%98%B6%E6%AE%B52.png" alt="?"></p>
+<p><strong>一图全览：</strong><br><img src="/2024/02/07/vue%E7%94%9F%E5%91%BD%E5%91%A8%E6%9C%9F/vue%E7%94%9F%E5%91%BD%E5%91%A8%E6%9C%9F.png" alt="?"></p>
+]]></content>
+      <tags>
+        <tag>vue</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>数组的一些方法</title>
     <url>/2024/02/05/filter/</url>
-    <content><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="\assets\css\APlayer.min.css"><script src="\assets\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script><script class="meting-secondary-script-marker" src="\assets\js\Meting.min.js"></script><p><strong>filter用于筛选数组中符合特定条件的元素，然后返回一个新的数组，包含符合条件的元素，他不会破坏原有的数组。</strong></p>
+    <content><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="\assets\css\APlayer.min.css"><script src="\assets\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script><script class="meting-secondary-script-marker" src="\assets\js\Meting.min.js"></script><p>0.filter()</p>
+<p><strong>filter用于筛选数组中符合特定条件的元素，然后返回一个新的数组，包含符合条件的元素，他不会破坏原有的数组。</strong></p>
 <p>filter 方法会对数组中的每个元素调用一次 callback 函数，并将返回值为 true 的元素添加到新数组中，最终返回这个新数组。</p>
-<figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line"><span class="keyword">const</span> numbers = [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>, <span class="number">5</span>];</span><br><span class="line"></span><br><span class="line"><span class="comment">// 过滤出大于等于3的元素</span></span><br><span class="line"><span class="keyword">const</span> filteredNumbers = numbers.<span class="title function_">filter</span>(<span class="function">(<span class="params">num</span>) =&gt;</span> num &gt;= <span class="number">3</span>);</span><br><span class="line"></span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(filteredNumbers); <span class="comment">// 输出: [3, 4, 5]</span></span><br></pre></td></tr></table></figure>]]></content>
+<figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line"><span class="keyword">const</span> numbers = [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>, <span class="number">5</span>];</span><br><span class="line"></span><br><span class="line"><span class="comment">// 过滤出大于等于3的元素</span></span><br><span class="line"><span class="keyword">const</span> filteredNumbers = numbers.<span class="title function_">filter</span>(<span class="function">(<span class="params">num</span>) =&gt;</span> num &gt;= <span class="number">3</span>);</span><br><span class="line"></span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(filteredNumbers); <span class="comment">// 输出: [3, 4, 5]</span></span><br></pre></td></tr></table></figure>
+
+
+<ol>
+<li><p><code>push()</code>: 这个方法用于在数组的末尾添加一个或多个元素，并返回修改后数组的新长度。</p>
+</li>
+<li><p><code>pop()</code>: <code>pop()</code> 方法用于删除并返回数组的最后一个元素。</p>
+</li>
+<li><p><code>reverse()</code>: <code>reverse()</code> 方法用于颠倒数组中元素的顺序，即将数组中的元素倒序排列。</p>
+</li>
+<li><p><code>splice()</code>: <code>splice()</code> 方法可以用来插入、删除或替换数组的元素。它接受多个参数，包括要操作的起始位置、要删除的元素个数以及要插入的新元素。</p>
+</li>
+<li><p><code>shift()</code>: <code>shift()</code> 方法用于删除并返回数组的第一个元素。</p>
+</li>
+<li><p><code>unshift()</code>: <code>unshift()</code> 方法用于在数组的开头添加一个或多个元素，并返回修改后数组的新长度。</p>
+</li>
+<li><p><code>sort()</code>: <code>sort()</code> 方法用于对数组的元素进行排序，默认按照字母顺序排序。可选参数可以指定排序规则。</p>
+</li>
+</ol>
+]]></content>
       <tags>
         <tag>javascript</tag>
       </tags>
