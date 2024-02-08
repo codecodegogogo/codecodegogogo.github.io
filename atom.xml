@@ -6,7 +6,7 @@
   <link href="https://codecodegogogo.github.io/atom.xml" rel="self"/>
   
   <link href="https://codecodegogogo.github.io/"/>
-  <updated>2024-02-07T05:02:22.931Z</updated>
+  <updated>2024-02-08T07:21:45.555Z</updated>
   <id>https://codecodegogogo.github.io/</id>
   
   <author>
@@ -15,6 +15,28 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>vue脚手架结构</title>
+    <link href="https://codecodegogogo.github.io/2024/02/08/vue%E8%84%9A%E6%89%8B%E6%9E%B6%E7%BB%93%E6%9E%84/"/>
+    <id>https://codecodegogogo.github.io/2024/02/08/vue%E8%84%9A%E6%89%8B%E6%9E%B6%E7%BB%93%E6%9E%84/</id>
+    <published>2024-02-08T07:20:10.000Z</published>
+    <updated>2024-02-08T07:21:45.555Z</updated>
+    
+    <content type="html"><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="\assets\css\APlayer.min.css"><script src="\assets\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script><script class="meting-secondary-script-marker" src="\assets\js\Meting.min.js"></script><p><img src="/2024/02/08/vue%E8%84%9A%E6%89%8B%E6%9E%B6%E7%BB%93%E6%9E%84/1.png" alt="?"></p>]]></content>
+    
+    
+      
+      
+    <summary type="html">&lt;link rel=&quot;stylesheet&quot; class=&quot;aplayer-secondary-style-marker&quot; href=&quot;\assets\css\APlayer.min.css&quot;&gt;&lt;script src=&quot;\assets\js\APlayer.min.js&quot; cla</summary>
+      
+    
+    
+    
+    
+    <category term="vue" scheme="https://codecodegogogo.github.io/tags/vue/"/>
+    
+  </entry>
   
   <entry>
     <title>vue生命周期</title>
@@ -431,28 +453,6 @@
     
     
     <category term="os" scheme="https://codecodegogogo.github.io/tags/os/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>计算机通信</title>
-    <link href="https://codecodegogogo.github.io/2023/06/12/%E8%AE%A1%E7%AE%97%E6%9C%BA%E9%80%9A%E4%BF%A1/"/>
-    <id>https://codecodegogogo.github.io/2023/06/12/%E8%AE%A1%E7%AE%97%E6%9C%BA%E9%80%9A%E4%BF%A1/</id>
-    <published>2023-06-12T02:25:24.000Z</published>
-    <updated>2023-06-12T06:11:21.703Z</updated>
-    
-    <content type="html"><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="\assets\css\APlayer.min.css"><script src="\assets\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script><script class="meting-secondary-script-marker" src="\assets\js\Meting.min.js"></script><h2 id="PC1和PC2二层互访通信过程详解"><a href="#PC1和PC2二层互访通信过程详解" class="headerlink" title="PC1和PC2二层互访通信过程详解"></a>PC1和PC2二层互访通信过程详解</h2><p><img src="/2023/06/12/%E8%AE%A1%E7%AE%97%E6%9C%BA%E9%80%9A%E4%BF%A1/1.png" alt="?"></p><p>PC1和PC2通过交换机SW1互联，PC1 的IP地址为192.168.1.1/24 ，PC2的IP地址为192.168.1.2/24 ，那么PC1和PC2的通信就是简单的二层通信（二层通信不涉及路由表）</p><ol><li><p>PC1要想访问PC2，除了需要知道目的IP 192.168.1.2 以外，还需要知道PC2 的mac地址，因为所有的数据通信都是基于TCP/IP参考模型的，需要对进行数据封装。</p><blockquote><p>首先PC1会查找自己的ARP表项看是否有目的IP 192.168.1.2 对应的MAC地址，查看发现是空的;</p></blockquote></li><li><p>如果不知道对方的mac地址，PC1会发送ARP广播报文，询问谁知道目的IP 192.168.1.2 对应的MAC地址。交换机转发到局域网后，PC2收到ARP广播报文会进行回应，告诉PC1他的MAC地址；</p><blockquote><p>在PC1发送ARP 广播报文的时候，交换机SW1收到该报文，会在MAC地址表中根据报文的源mac地址记录下PC1 的mac地址和GE0/0/1的映射关系；PC2发送回应报文的时候 交换机SW1也会记录下PC2 的mac地址和GE0/0/2的映射关系</p></blockquote></li><li><p>可以看到PC1的本地ARP表项中学习到了PC2的mac地址；</p></li><li><p>这样PC1就可以根据PC2的MAC地址封装数据发送给交换机SW1，交换机SW1会查找自己的MAC地址表，发现去往PC2的MAC地址的出接口为GE0/0/2，从而PC2就可以收到报文，并进行解封装；</p></li></ol><h2 id="PC3和PC4三层互访通信过程详解"><a href="#PC3和PC4三层互访通信过程详解" class="headerlink" title="PC3和PC4三层互访通信过程详解"></a>PC3和PC4三层互访通信过程详解</h2><p><img src="/2023/06/12/%E8%AE%A1%E7%AE%97%E6%9C%BA%E9%80%9A%E4%BF%A1/2.png" alt="?"><br>如上图的网络拓扑，PC3和PC4通过路由器R1、R2互联，PC3 的IP地址为192.168.1.2/24 网关192.168.1.1 ，PC4 的IP地址为192.168.2.2/24 网关192.168.2.1，那么PC1和PC2的通信就是跨网段三层通信，下面我们从ARP表、MAC地址表、路由表的角度详细解析下这个通信过程。</p><ol><li><p>PC3要想访问PC4，由于是跨网段通信(发送方通过子网掩码判断)，PC3需要首先把数据包发送给PC3的网关。PC3会查找自己的ARP表项看是否有网关IP192.168.1.1对应的MAC地址，查看发现是空的；</p></li><li><p>我们知道如果不知道对方的mac地址，PC3会发送ARP广播报文，询问谁知道目的IP 192.168.1.1 对应的MAC地址(如下图所示)。R1收到ARP广播报文会进行回应，告诉PC3 他的网关的MAC地址；</p></li><li><p>PC3的本地ARP表项中学习到了网关的mac地址；</p></li><li><p>这样PC3就可以根据网关MAC地址封装数据发送给R1，R1收到数据包会进行解封装，解封装发现目的IP是PC4，不是发给自己的，从而会查找自己的路由表，发现去往PC4的下一跳是10.1.1.2；</p></li><li><p>R1需要把数据进行封装发送给R2的10.1.1.2 ，因此需要请求10.1.1.2 对应的MAC地址用于封装（我们可以看到R1的ARP表中已经有10.1.1.2 对应的MAC地址，因此可以直接封装）；</p></li><li><p>R2收到R1的数据包，需要进行解封装，解封装发现目的IP是PC4，通过查找自己的路由表，发现去往PC4是自己的直连端口；</p></li><li><p>R2需要把数据进行封装发送给PC4 ，因此需要请求PC4 192.168.2.2 对应的MAC地址用于封装（我们可以看到R2的ARP表中已经有192.168.2.2对应的MAC地址，因此可以直接封装）；</p></li><li><p>最后PC4收到报文进行解封装发现就是发送给自己的，通信结束；</p></li></ol>]]></content>
-    
-    
-      
-      
-    <summary type="html">&lt;link rel=&quot;stylesheet&quot; class=&quot;aplayer-secondary-style-marker&quot; href=&quot;\assets\css\APlayer.min.css&quot;&gt;&lt;script src=&quot;\assets\js\APlayer.min.js&quot; cla</summary>
-      
-    
-    
-    
-    
-    <category term="计算机网络" scheme="https://codecodegogogo.github.io/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/"/>
     
   </entry>
   
