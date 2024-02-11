@@ -7,6 +7,19 @@
 ]]></content>
   </entry>
   <entry>
+    <title>javaweb</title>
+    <url>/2024/02/11/javaweb/</url>
+    <content><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="\assets\css\APlayer.min.css"><script src="\assets\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script><script class="meting-secondary-script-marker" src="\assets\js\Meting.min.js"></script><h2 id="serlet"><a href="#serlet" class="headerlink" title="serlet"></a>serlet</h2><h3 id="tomcat安装"><a href="#tomcat安装" class="headerlink" title="tomcat安装"></a>tomcat安装</h3><p>解压安装包后配置环境变量：<br>CATALINA_HOME：tomcat根地址<br>JAVA_HOME：java根地址<br>path：CATALINA_HOME/bin   JAVA_HOME/bin</p>
+<p><strong>配置成功后地址</strong>:<em><strong><a href="http://127.0.0.1:8080/">http://127.0.0.1:8080</a></strong></em><br>cmd命令开启关闭:<br>开启服务器:startup.bat<br>关闭服务器:shutdown.bat</p>
+<h3 id="协议规范"><a href="#协议规范" class="headerlink" title="协议规范"></a>协议规范</h3><p><img src="/2024/02/11/javaweb/%E5%8D%8F%E8%AE%AE.png" alt="?"></p>
+<h3 id="测识程序"><a href="#测识程序" class="headerlink" title="测识程序"></a>测识程序</h3><p>将程序放入tomcat根目录下webapps目录下某个程序名文件夹下:<br><em><strong>CATALINA_HOME/webapps/程序名/</strong></em></p>
+<p>测识程序地址：<em><strong><a href="https://github.com/codecodegogogo/javaweb/tree/main/hello">https://github.com/codecodegogogo/javaweb/tree/main/hello</a></strong></em></p>
+]]></content>
+      <tags>
+        <tag>java</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>vue脚手架结构</title>
     <url>/2024/02/08/vue%E8%84%9A%E6%89%8B%E6%9E%B6%E7%BB%93%E6%9E%84/</url>
     <content><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="\assets\css\APlayer.min.css"><script src="\assets\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script><script class="meting-secondary-script-marker" src="\assets\js\Meting.min.js"></script><p><img src="/2024/02/08/vue%E8%84%9A%E6%89%8B%E6%9E%B6%E7%BB%93%E6%9E%84/1.png" alt="?"></p>
@@ -79,6 +92,9 @@
 
 <p>如果箭头函数体内只包含一个表达式，它将自动将该表达式的值作为函数的返回值。<br>如果箭头函数体内包含了多个语句，就需要使用花括号 {} 包裹起来，并显式地使用 return 语句来返回值。</p>
 <p><strong>没有自己的this： 箭头函数不会创建自己的this，而是会继承外部作用域的this。这意味着箭头函数内部的this和外部的this是一致的。</strong></p>
+<p>箭头函数有几个使用注意点：</p>
+<p>函数体内的this对象，就是定义时所在的对象，而不是使用时所在的对象。<br>不可以当作构造函数，也就是说，不可以使用new命令，否则会抛出一个错误。<br>不可以使用arguments对象，该对象在函数体内不存在。如果要用，可以用rest参数代替。<br>不可以使用yield命令，因此箭头函数不能用作Generator函数。</p>
+<p><strong>普通函数的上下文是调用使用才能确定的，并且规则很多，但是箭头函数的上下文是定义时候确定的。<br>箭头函数的上下文依靠的是父作用域函数的上下文，获取箭头函数的上下文this就是，就需要获取定义时候所处的普通函数的作用域，该普通函数的上下文就是箭头函数的上下文，如果所处环境没有普通函数上下文就是window.</strong></p>
 <figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line"><span class="keyword">function</span> <span class="title function_">TraditionalFunction</span>(<span class="params"></span>) &#123;</span><br><span class="line">  <span class="variable language_">this</span>.<span class="property">value</span> = <span class="number">1</span>;</span><br><span class="line"><span class="comment">//setTimeout是由js引擎进行管理，他的this为window对象</span></span><br><span class="line">  <span class="comment">// 传统函数中的this</span></span><br><span class="line">  <span class="built_in">setTimeout</span>(<span class="keyword">function</span> (<span class="params"></span>) &#123;</span><br><span class="line">    <span class="variable language_">this</span>.<span class="property">value</span>++;</span><br><span class="line">    <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="variable language_">this</span>.<span class="property">value</span>); <span class="comment">// undefined，因为this指向了全局对象</span></span><br><span class="line">  &#125;, <span class="number">1000</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">function</span> <span class="title function_">ArrowFunction</span>(<span class="params"></span>) &#123;</span><br><span class="line">  <span class="variable language_">this</span>.<span class="property">value</span> = <span class="number">1</span>;</span><br><span class="line"></span><br><span class="line">  <span class="comment">// 箭头函数中的this，继承了外部作用域的this</span></span><br><span class="line">  <span class="built_in">setTimeout</span>(<span class="function">() =&gt;</span> &#123;</span><br><span class="line">    <span class="variable language_">this</span>.<span class="property">value</span>++;</span><br><span class="line">    <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="variable language_">this</span>.<span class="property">value</span>); <span class="comment">// 2，this指向了ArrowFunction的实例</span></span><br><span class="line">  &#125;, <span class="number">1000</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
 <p><strong>如果需要多个语句，可以使用花括号{}包裹起来。</strong></p>
