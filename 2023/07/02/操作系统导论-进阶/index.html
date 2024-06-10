@@ -1,0 +1,658 @@
+<!DOCTYPE html>
+<html lang=zh>
+<head>
+  <meta charset="utf-8">
+  
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, minimal-ui">
+  <meta name="renderer" content="webkit">
+  <meta http-equiv="Cache-Control" content="no-transform" />
+  <meta http-equiv="Cache-Control" content="no-siteapp" />
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <meta name="format-detection" content="telephone=no,email=no,adress=no">
+  <!-- Color theme for statusbar -->
+  <meta name="theme-color" content="#000000" />
+  <!-- 强制页面在当前窗口以独立页面显示,防止别人在框架里调用页面 -->
+  <meta http-equiv="window-target" content="_top" />
+  
+  
+  <title>操作系统导论-进阶 | yong&#39;s Blog</title>
+  <meta name="description" content="多处理器调度（高级）多核处理器（multicore）将多个CPU核组装在一块芯片上，是这种扩散的根源。多线程应用可以将工作分散到多个CPU上，因此CPU资源越多就运行越快。 背景：多处理器架构为了理解多处理器调度带来的新问题，必须先知道它与单CPU之间的基本区别。区别的核心在于对硬件缓存（cache）的使用，以及多处理器之间共享数据的方式。 在单CPU系统中，存在多级的硬件缓存（hardware">
+<meta property="og:type" content="article">
+<meta property="og:title" content="操作系统导论-进阶">
+<meta property="og:url" content="https://codecodegogogo.github.io/2023/07/02/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%AF%BC%E8%AE%BA-%E8%BF%9B%E9%98%B6/index.html">
+<meta property="og:site_name" content="Sunny">
+<meta property="og:description" content="多处理器调度（高级）多核处理器（multicore）将多个CPU核组装在一块芯片上，是这种扩散的根源。多线程应用可以将工作分散到多个CPU上，因此CPU资源越多就运行越快。 背景：多处理器架构为了理解多处理器调度带来的新问题，必须先知道它与单CPU之间的基本区别。区别的核心在于对硬件缓存（cache）的使用，以及多处理器之间共享数据的方式。 在单CPU系统中，存在多级的硬件缓存（hardware">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://codecodegogogo.github.io/2023/07/02/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%AF%BC%E8%AE%BA-%E8%BF%9B%E9%98%B6/q1.png">
+<meta property="og:image" content="https://codecodegogogo.github.io/2023/07/02/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%AF%BC%E8%AE%BA-%E8%BF%9B%E9%98%B6/q2.png">
+<meta property="og:image" content="https://codecodegogogo.github.io/2023/07/02/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%AF%BC%E8%AE%BA-%E8%BF%9B%E9%98%B6/w3.png">
+<meta property="og:image" content="https://codecodegogogo.github.io/2023/07/02/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%AF%BC%E8%AE%BA-%E8%BF%9B%E9%98%B6/q3.png">
+<meta property="og:image" content="https://codecodegogogo.github.io/2023/07/02/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%AF%BC%E8%AE%BA-%E8%BF%9B%E9%98%B6/q4.png">
+<meta property="og:image" content="https://codecodegogogo.github.io/2023/07/02/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%AF%BC%E8%AE%BA-%E8%BF%9B%E9%98%B6/q5.png">
+<meta property="og:image" content="https://codecodegogogo.github.io/2023/07/02/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%AF%BC%E8%AE%BA-%E8%BF%9B%E9%98%B6/w6.png">
+<meta property="og:image" content="https://codecodegogogo.github.io/2023/07/02/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%AF%BC%E8%AE%BA-%E8%BF%9B%E9%98%B6/w7.png">
+<meta property="og:image" content="https://codecodegogogo.github.io/2023/07/02/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%AF%BC%E8%AE%BA-%E8%BF%9B%E9%98%B6/w8.png">
+<meta property="og:image" content="https://codecodegogogo.github.io/2023/07/02/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%AF%BC%E8%AE%BA-%E8%BF%9B%E9%98%B6/e1.png">
+<meta property="og:image" content="https://codecodegogogo.github.io/2023/07/02/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%AF%BC%E8%AE%BA-%E8%BF%9B%E9%98%B6/e2.png">
+<meta property="article:published_time" content="2023-07-02T13:57:12.000Z">
+<meta property="article:modified_time" content="2023-07-05T06:56:20.724Z">
+<meta property="article:author" content="Sunny">
+<meta property="article:tag" content="os">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://codecodegogogo.github.io/2023/07/02/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%AF%BC%E8%AE%BA-%E8%BF%9B%E9%98%B6/q1.png">
+  <!-- Canonical links -->
+  <link rel="canonical" href="https://codecodegogogo.github.io/2023/07/02/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%AF%BC%E8%AE%BA-%E8%BF%9B%E9%98%B6/index.html">
+  
+    <link rel="alternate" href="/atom.xml" title="Sunny" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/images/favicon.png" type="image/x-icon">
+  
+  <!-- <link rel="icon" href="/images/favicon.png" type="image/x-icon"> -->
+
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  
+  
+  
+  
+<meta name="generator" content="Hexo 5.4.2"></head>
+
+
+<body class="main-center theme-purple" itemscope itemtype="http://schema.org/WebPage">
+  <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+  <div class="slimContent">
+    <div class="navbar-header">
+      
+      
+      <div class="profile-block text-center">
+        <a id="avatar" href="https://github.com/codecodegogogo" target="_blank">
+          <img class="img-circle img-rotate" src="/images/avatar.jpg" width="200" height="200">
+        </a>
+        <h2 id="name" class="hidden-xs hidden-sm">yong</h2>
+        <h3 id="title" class="hidden-xs hidden-sm hidden-md"></h3>
+        <small id="location" class="text-muted hidden-xs hidden-sm"><i class="icon icon-map-marker"></i> China</small>
+      </div>
+      
+      <div class="search" id="search-form-wrap">
+
+    <form class="search-form sidebar-form">
+        <div class="input-group">
+            <input type="text" class="search-form-input form-control" placeholder="搜索" />
+            <span class="input-group-btn">
+                <button type="submit" class="search-form-submit btn btn-flat" onclick="return false;"><i class="icon icon-search"></i></button>
+            </span>
+        </div>
+    </form>
+    <div class="ins-search">
+  <div class="ins-search-mask"></div>
+  <div class="ins-search-container">
+    <div class="ins-input-wrapper">
+      <input type="text" class="ins-search-input" placeholder="想要查找什么..." x-webkit-speech />
+      <button type="button" class="close ins-close ins-selectable" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+    </div>
+    <div class="ins-section-wrapper">
+      <div class="ins-section-container"></div>
+    </div>
+  </div>
+</div>
+
+
+</div>
+      <button class="navbar-toggle collapsed" type="button" data-toggle="collapse" data-target="#main-navbar" aria-controls="main-navbar" aria-expanded="false">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+    </div>
+    <nav id="main-navbar" class="collapse navbar-collapse" itemscope itemtype="http://schema.org/SiteNavigationElement" role="navigation">
+      <ul class="nav navbar-nav main-nav menu-highlight">
+        
+        
+        <li class="menu-item menu-item-home">
+          <a href="/.">
+            
+            <i class="icon icon-home-fill"></i>
+            
+            <span class="menu-title">首页</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags">
+            
+            <i class="icon icon-tags"></i>
+            
+            <span class="menu-title">标签</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-repository">
+          <a target="_blank" rel="noopener" href="https://github.com/codecodegogogo">
+            
+            <i class="icon icon-project"></i>
+            
+            <span class="menu-title">项目</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about">
+            
+            <i class="icon icon-cup-fill"></i>
+            
+            <span class="menu-title">关于</span>
+          </a>
+        </li>
+        
+      </ul>
+      
+	
+    <ul class="social-links">
+    	
+        <li><a href="https://github.com/codecodegogogo" target="_blank" title="Github" data-toggle=tooltip data-placement=top><i class="icon icon-github"></i></a></li>
+        
+    </ul>
+
+    </nav>
+  </div>
+</header>
+
+  
+    <aside class="sidebar" itemscope itemtype="http://schema.org/WPSideBar">
+  <div class="slimContent">
+    
+      <div class="widget">
+    <h3 class="widget-title">公告</h3>
+    <div class="widget-body">
+        <div id="board">
+            <div class="content">
+                <p>今天网站换了个新皮肤~</p> <p align="right">2023.4.14</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">标签</h3>
+    <div class="widget-body">
+      <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/c/" rel="tag">c++</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/code/" rel="tag">code</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/java/" rel="tag">java</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/javascript/" rel="tag">javascript</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/linux/" rel="tag">linux</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/os/" rel="tag">os</a><span class="tag-list-count">11</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/vue/" rel="tag">vue</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%9D%82%E8%B0%88/" rel="tag">杂谈</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%AE%97%E6%B3%95/" rel="tag">算法</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%9F%BA%E7%A1%80/" rel="tag">计算机基础</a><span class="tag-list-count">8</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%B7%A5%E5%85%B7/" rel="tag">计算机工具</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E6%96%87%E5%8C%96%E5%9F%BA%E7%A1%80/" rel="tag">计算机文化基础</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/" rel="tag">计算机网络</a><span class="tag-list-count">9</span></li></ul>
+    </div>
+  </div>
+
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">最新文章</h3>
+    <div class="widget-body">
+      <ul class="recent-post-list list-unstyled no-thumbnail">
+        
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                
+              </p>
+              <p class="item-title">
+                <a href="/2024/06/10/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E5%90%84%E5%B1%82%E7%BD%91%E7%BB%9C%E8%AE%BE%E5%A4%87/%E8%AE%A1%E7%AE%97%E6%9C%BA%E6%96%87%E5%8C%96%E5%9F%BA%E7%A1%80-ppt/" class="title">(no title)</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2024-06-10T02:05:08.833Z" itemprop="datePublished">2024-06-10</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                
+              </p>
+              <p class="item-title">
+                <a href="/2024/06/10/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E5%90%84%E5%B1%82%E7%BD%91%E7%BB%9C%E8%AE%BE%E5%A4%87/%E8%AE%A1%E7%AE%97%E6%9C%BA%E6%96%87%E5%8C%96%E5%9F%BA%E7%A1%80-%E6%95%B0%E6%8D%AE%E5%BA%93/" class="title">(no title)</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2024-06-10T02:05:08.833Z" itemprop="datePublished">2024-06-10</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                
+              </p>
+              <p class="item-title">
+                <a href="/2024/05/23/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E5%90%84%E5%B1%82%E7%BD%91%E7%BB%9C%E8%AE%BE%E5%A4%87/%E8%AE%A1%E7%AE%97%E6%9C%BA%E6%96%87%E5%8C%96%E5%9F%BA%E7%A1%80-excel/" class="title">计算机文化基础-excel</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2024-05-23T00:30:47.000Z" itemprop="datePublished">2024-05-23</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                
+              </p>
+              <p class="item-title">
+                <a href="/2024/05/14/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E5%90%84%E5%B1%82%E7%BD%91%E7%BB%9C%E8%AE%BE%E5%A4%87/%E8%AE%A1%E7%AE%97%E6%9C%BA%E6%96%87%E5%8C%96%E5%9F%BA%E7%A1%80/" class="title">计算机文化基础</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2024-05-14T01:41:05.000Z" itemprop="datePublished">2024-05-14</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                
+              </p>
+              <p class="item-title">
+                <a href="/2024/03/01/Algorithm/" class="title">Algorithm</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2024-03-01T07:52:28.000Z" itemprop="datePublished">2024-03-01</time>
+              </p>
+            </div>
+          </li>
+          
+      </ul>
+    </div>
+  </div>
+  
+
+    
+  </div>
+</aside>
+
+  
+  
+  <aside class="sidebar sidebar-toc collapse   in  " id="collapseToc" itemscope itemtype="http://schema.org/WPSideBar">
+  <div class="slimContent">
+    <nav id="toc" class="article-toc">
+      <h3 class="toc-title">文章目录</h3>
+      <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%A4%9A%E5%A4%84%E7%90%86%E5%99%A8%E8%B0%83%E5%BA%A6%EF%BC%88%E9%AB%98%E7%BA%A7%EF%BC%89"><span class="toc-number">1.</span> <span class="toc-text">多处理器调度（高级）</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%83%8C%E6%99%AF%EF%BC%9A%E5%A4%9A%E5%A4%84%E7%90%86%E5%99%A8%E6%9E%B6%E6%9E%84"><span class="toc-number">1.1.</span> <span class="toc-text">背景：多处理器架构</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%88%AB%E5%BF%98%E4%BA%86%E5%90%8C%E6%AD%A5"><span class="toc-number">1.2.</span> <span class="toc-text">别忘了同步</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%9C%80%E5%90%8E%E4%B8%80%E4%B8%AA%E9%97%AE%E9%A2%98%EF%BC%9A%E7%BC%93%E5%AD%98%E4%BA%B2%E5%92%8C%E5%BA%A6"><span class="toc-number">1.3.</span> <span class="toc-text">最后一个问题：缓存亲和度</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%8D%95%E9%98%9F%E5%88%97%E8%B0%83%E5%BA%A6"><span class="toc-number">1.4.</span> <span class="toc-text">单队列调度</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%A4%9A%E9%98%9F%E5%88%97%E8%B0%83%E5%BA%A6"><span class="toc-number">1.5.</span> <span class="toc-text">多队列调度</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Linux-%E5%A4%9A%E5%A4%84%E7%90%86%E5%99%A8%E8%B0%83%E5%BA%A6"><span class="toc-number">1.6.</span> <span class="toc-text">Linux 多处理器调度</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%9F%BA%E4%BA%8E%E4%BA%8B%E4%BB%B6%E7%9A%84%E5%B9%B6%E5%8F%91%EF%BC%88%E8%BF%9B%E9%98%B6%EF%BC%89"><span class="toc-number">2.</span> <span class="toc-text">基于事件的并发（进阶）</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%9F%BA%E6%9C%AC%E6%83%B3%E6%B3%95%EF%BC%9A%E4%BA%8B%E4%BB%B6%E5%BE%AA%E7%8E%AF"><span class="toc-number">2.1.</span> <span class="toc-text">基本想法：事件循环</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%87%8D%E8%A6%81-API%EF%BC%9Aselect-%EF%BC%88%E6%88%96-poll-%EF%BC%89"><span class="toc-number">2.2.</span> <span class="toc-text">重要 API：select()（或 poll()）</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BD%BF%E7%94%A8-select"><span class="toc-number">2.3.</span> <span class="toc-text">使用 select()</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%BA%E4%BD%95%E6%9B%B4%E7%AE%80%E5%8D%95%EF%BC%9F%E6%97%A0%E9%A1%BB%E9%94%81"><span class="toc-number">2.4.</span> <span class="toc-text">为何更简单？无须锁</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%80%E4%B8%AA%E9%97%AE%E9%A2%98%EF%BC%9A%E9%98%BB%E5%A1%9E%E7%B3%BB%E7%BB%9F%E8%B0%83%E7%94%A8"><span class="toc-number">2.5.</span> <span class="toc-text">一个问题：阻塞系统调用</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%A7%A3%E5%86%B3%E6%96%B9%E6%A1%88%EF%BC%9A%E5%BC%82%E6%AD%A5-I-O"><span class="toc-number">2.6.</span> <span class="toc-text">解决方案：异步 I&#x2F;O</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#macOS-X%E4%B8%8A%E6%8F%90%E4%BE%9B%E7%9A%84%E6%8E%A5%E5%8F%A3"><span class="toc-number">2.6.1.</span> <span class="toc-text">macOS  X上提供的接口</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%A6%82%E4%BD%95%E7%9F%A5%E9%81%93I-O%E4%BD%95%E6%97%B6%E5%AE%8C%E6%88%90%EF%BC%8C%E5%B9%B6%E4%B8%94%E7%BC%93%E5%86%B2%E5%8C%BA%EF%BC%88%E7%94%B1aio-buf%E6%8C%87%E5%90%91%EF%BC%89%E7%8E%B0%E5%9C%A8%E6%9C%89%E4%BA%86%E8%AF%B7%E6%B1%82%E7%9A%84%E6%95%B0%E6%8D%AE%EF%BC%9F"><span class="toc-number">2.6.2.</span> <span class="toc-text">如何知道I&#x2F;O何时完成，并且缓冲区（由aio buf指向）现在有了请求的数据？</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%8F%A6%E4%B8%80%E4%B8%AA%E9%97%AE%E9%A2%98%EF%BC%9A%E7%8A%B6%E6%80%81%E7%AE%A1%E7%90%86"><span class="toc-number">2.7.</span> <span class="toc-text">另一个问题：状态管理</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BB%80%E4%B9%88%E4%BA%8B%E6%83%85%E4%BB%8D%E7%84%B6%E5%BE%88%E9%9A%BE"><span class="toc-number">2.8.</span> <span class="toc-text">什么事情仍然很难</span></a></li></ol></li></ol>
+    </nav>
+  </div>
+</aside>
+
+<main class="main" role="main">
+  <div class="content">
+  <article id="post-操作系统导论-进阶" class="article article-type-post" itemscope itemtype="http://schema.org/BlogPosting">
+    
+    <div class="article-header">
+      
+        
+  
+    <h1 class="article-title" itemprop="name">
+      操作系统导论-进阶
+    </h1>
+  
+
+      
+      <div class="article-meta">
+        <span class="article-date">
+    <i class="icon icon-calendar-check"></i>
+	<a href="/2023/07/02/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%AF%BC%E8%AE%BA-%E8%BF%9B%E9%98%B6/" class="article-date">
+	  <time datetime="2023-07-02T13:57:12.000Z" itemprop="datePublished">2023-07-02</time>
+	</a>
+</span>
+        
+        
+  <span class="article-tag">
+    <i class="icon icon-tags"></i>
+	<a class="article-tag-link-link" href="/tags/os/" rel="tag">os</a>
+  </span>
+
+
+        
+	<span class="article-read hidden-xs">
+	    <i class="icon icon-eye-fill" aria-hidden="true"></i>
+	    <span id="busuanzi_container_page_pv">
+			<span id="busuanzi_value_page_pv">0</span>
+		</span>
+	</span>
+
+
+        <span class="post-comment"><i class="icon icon-comment"></i> <a href="/2023/07/02/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%AF%BC%E8%AE%BA-%E8%BF%9B%E9%98%B6/#comments" class="article-comment-link">评论</a></span>
+        
+	
+		<span class="post-wordcount hidden-xs" itemprop="wordCount">字数统计: 6.9k(字)</span>
+	
+	
+
+      </div>
+    </div>
+    <div class="article-entry marked-body" itemprop="articleBody">
+      
+        <h1 id="多处理器调度（高级）"><a href="#多处理器调度（高级）" class="headerlink" title="多处理器调度（高级）"></a>多处理器调度（高级）</h1><p>多核处理器（multicore）将多个CPU核组装在一块芯片上，是这种扩散的根源。<br>多线程应用可以将工作分散到多个CPU上，因此CPU资源越多就运行越快。</p>
+<h2 id="背景：多处理器架构"><a href="#背景：多处理器架构" class="headerlink" title="背景：多处理器架构"></a>背景：多处理器架构</h2><p>为了理解多处理器调度带来的新问题，必须先知道它与单CPU之间的基本区别。区别的核心在于对硬件缓存（cache）的使用，以及多处理器之间共享数据的方式。</p>
+<p>在单CPU系统中，存在多级的硬件缓存（hardware  cache），一般来说会让处理器更快地执行程序。缓存是很小但很快的存储设备，通常拥有内存中最热的数据的备份。相比之下，内存很大且拥有所有的数据，但访问速度较慢。通过将频繁访问的数据放在缓存中，系统似乎拥有又大又快的内存。</p>
+<p>假设一个程序需要从内存中加载指令并读取一个值，系统只有一个CPU，拥有较小的缓存（如64KB）和较大的内存。程序第一次读取数据时，数据在内存中，因此需要花费较长的时间（可能数十或数百纳秒）。处理器判断该数据很可能会被再次使用，因此将其放入CPU缓存中。如果之后程序再次需要使用同样的数据，CPU会先查找缓存。因为在缓存中找到了数据，所以取数据快得多（比如几纳秒），程序也就运行更快。</p>
+<blockquote>
+<p>缓存是基于局部性（locality）的概念，局部性有两种，即时间局部性和空间局部性。时间局部性是指当一个数据被访问后，它很有可能会在不久的将来被再次访问，比如循环代码中的数据或指令本身。而空间局部性指的是，当程序访问地址为x的数据时，很有可能会紧接着访问x周围的数据，比如遍历数组或指令的顺序执行。由于这两种局部性存在于大多数的程序中，硬件系统可以很好地预测哪些数据可以放入缓存，从而运行得很好。</p>
+</blockquote>
+<p><img src="/2023/07/02/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%AF%BC%E8%AE%BA-%E8%BF%9B%E9%98%B6/q1.png" alt="?"></p>
+<p><strong>缓存一致性（cache coherence）问题</strong></p>
+<p>事实证明，多CPU的情况下缓存要复杂得多。例如，假设一个运行在CPU 1上的程序从内存地址A读取数据。由于不在CPU  1的缓存中，所以系统直接访问内存，得到值D。程序然后修改了地址A处的值，只是将它的缓存更新为新值D’。将数据写回内存比较慢，因此系统（通常）会稍后再做。假设这时操作系统中断了该程序的运行，并将其交给CPU 2，重新读取地址A的数据，由于CPU 2的缓存中并没有该数据，所以会直接从内存中读取，得到了旧值D，而不是正确的值D’。</p>
+<p>硬件提供了这个问题的基本解决方案：通过监控内存访问，硬件可以保证获得正确的数据，并保证共享内存的唯一性。在基于总线的系统中，一种方式是使用总线窥探（bussnooping）[G83]。每个缓存都通过监听链接所有缓存和内存的总线，来发现内存访问。如果CPU发现对它放在缓存中的数据的更新，会作废（invalidate）本地副本（从缓存中移除），或更新（update）它（修改为新值）。</p>
+<h2 id="别忘了同步"><a href="#别忘了同步" class="headerlink" title="别忘了同步"></a>别忘了同步</h2><p>跨CPU访问（尤其是写入）共享数据或数据结构时，需要使用互斥原语（比如锁），才能保证正确性。</p>
+<p>为了更具体，我们设想这样的代码序列，用于删除共享链表的一个元素，如图10.3所示。假设两个CPU上的不同线程同时进入这个函数。如果线程1执行第一行，会将head的当前值存入它的tmp变量。如果线程2接着也执行第一行，它也会将同样的head值存入它自己的私有tmp变量（tmp在栈上分配，因此每个线程都有自己的私有存储）。因此，两个线程会尝试删除同一个链表头，而不是每个线程移除一个元素，这导致了各种问题（比如在第4行重复释放头元素，以及可能两次返回同一个数据）。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="number">1</span> <span class="keyword">typedef</span> <span class="class"><span class="keyword">struct</span> __<span class="title">Node_t</span> &#123;</span></span><br><span class="line"><span class="number">2</span> <span class="type">int</span> value;</span><br><span class="line"><span class="number">3</span> <span class="class"><span class="keyword">struct</span> __<span class="title">Node_t</span> *<span class="title">next</span>;</span></span><br><span class="line"><span class="number">4</span> &#125; Node_t;</span><br><span class="line"><span class="number">5</span></span><br><span class="line"><span class="number">6</span> <span class="type">int</span> <span class="title function_">List_Pop</span><span class="params">()</span> &#123;</span><br><span class="line"><span class="number">7</span> Node_t *tmp = head; <span class="comment">// remember old head ...</span></span><br><span class="line"><span class="number">8</span> <span class="type">int</span> value = head-&gt;value; <span class="comment">// ... and its value</span></span><br><span class="line"><span class="number">9</span> head = head-&gt;next; <span class="comment">// advance head to next pointer</span></span><br><span class="line"><span class="number">10</span> <span class="built_in">free</span>(tmp); <span class="comment">// free old head</span></span><br><span class="line"><span class="number">11</span> <span class="keyword">return</span> value; <span class="comment">// return value at head</span></span><br><span class="line"><span class="number">12</span> &#125;</span><br></pre></td></tr></table></figure>
+
+<p>当然，让这类函数正确工作的方法是加锁（locking）。这里只需要一个互斥锁（即pthread_mutex_t m;），然后在函数开始时调用lock(&amp;m)，在结束时调用unlock(&amp;m)，确保代码的执行如预期。这里依然有问题，尤其是性能方面。具体来说，<strong>随着CPU数量的增加，访问同步共享的数据结构会变得很慢。</strong></p>
+<h2 id="最后一个问题：缓存亲和度"><a href="#最后一个问题：缓存亲和度" class="headerlink" title="最后一个问题：缓存亲和度"></a>最后一个问题：缓存亲和度</h2><p>一个进程在某个CPU上运行时，会在该CPU的缓存中维护许多状态。下次该进程在相同CPU上运行时，由于缓存中的数据而执行得更快。相反，在不同的CPU上执行，会由于需要重新加载数据而很慢（好在硬件保证的缓存一致性可以保证正确执行）。因此多处理器调度应该考虑到这种缓存亲和性，并尽可能将进程保持在同一个CPU上。</p>
+<h2 id="单队列调度"><a href="#单队列调度" class="headerlink" title="单队列调度"></a>单队列调度</h2><p>最基本的方式是简单地复用单处理器调度的基本架构，将所有需要调度的工作放入一个单独的队列中，我们称之为单队列多处理器调度（Single Queue Multiprocessor Scheduling，SQMS）。这个方法最大的优点是简单。它不需要太多修改，就可以将原有的策略用于多个CPU，选择最适合的工作来运行（例如，如果有两个CPU，它可能选择两个最合适的工作）。</p>
+<p>SQMS有几个明显的短板。<br>第一个是缺乏可扩展性（scalability）。<br>通过加锁来确保原子性，就需要找到下一个将要执行的进程，并且加锁损失性能.</p>
+<p>第二个主要问题是缓存亲和性。比如，假设我们有5个工作（A、B、C、D、E）和4个处理器。调度队列如下：<br><img src="/2023/07/02/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%AF%BC%E8%AE%BA-%E8%BF%9B%E9%98%B6/q2.png" alt="?"></p>
+<p>一段时间后，假设每个工作依次执行一个时间片，然后选择另一个工作，下面是每个CPU可能的调度序列：<br><img src="/2023/07/02/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%AF%BC%E8%AE%BA-%E8%BF%9B%E9%98%B6/w3.png" alt="?"><br>由于每个CPU都简单地从全局共享的队列中选取下一个工作执行，因此每个工作都不断在不同CPU之间转移，这与缓存亲和的目标背道而驰。</p>
+<p>大多数SQMS调度程序都引入了一些亲和度机制，尽可能让进程在同一个CPU上运行。保持一些工作的亲和度的同时，可能需要牺牲其他工作的亲和度来实现负载均衡。例如，针对同样的5个工作的调度如下：<br><img src="/2023/07/02/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%AF%BC%E8%AE%BA-%E8%BF%9B%E9%98%B6/q3.png" alt="?"><br>这种调度中，A、B、C、D 这4个工作都保持在同一个CPU上，只有工作E不断地来回迁移（migrating），从而尽可能多地获得缓存亲和度。为了公平起见，之后我们可以选择不同的工作来迁移。</p>
+<h2 id="多队列调度"><a href="#多队列调度" class="headerlink" title="多队列调度"></a>多队列调度</h2><p>每个CPU一个队列。我们称之为多队列多处理器调度（Multi-Queue Multiprocessor Scheduling，MQMS）</p>
+<p>在MQMS中，基本调度框架包含多个调度队列，每个队列可以使用不同的调度规则，比如轮转或其他任何可能的算法。当一个工作进入系统后，系统会依照一些启发性规则（如随机或选择较空的队列）将其放入某个调度队列。这样一来，每个CPU调度之间相互独立，就避免了单队列的方式中由于数据共享及同步带来的问题。</p>
+<p>例如，假设系统中有两个CPU（CPU 0和CPU 1）。这时一些工作进入系统：A、B、C和D。由于每个CPU都有自己的调度队列，操作系统需要决定每个工作放入哪个队列。可能像下面这样做：<br><img src="/2023/07/02/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%AF%BC%E8%AE%BA-%E8%BF%9B%E9%98%B6/q4.png" alt="?"></p>
+<p>根据不同队列的调度策略，每个CPU从两个工作中选择，决定谁将运行。例如，利用轮转，调度结果可能如下所示：<br><img src="/2023/07/02/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%AF%BC%E8%AE%BA-%E8%BF%9B%E9%98%B6/q5.png" alt="?"></p>
+<p>MQMS比SQMS有明显的优势，它天生更具有可扩展性。队列的数量会随着CPU的增加而增加，因此锁和缓存争用的开销不是大问题。此外，MQMS天生具有良好的缓存亲和度。所有工作都保持在固定的CPU上，因而可以很好地利用缓存数据。</p>
+<p><strong>负载不均（load imbalance）</strong><br>假定和上面设定一样（4个工作，2个CPU），但假设一个工作（如C）这时执行完毕。现在调度队列如下：<br><img src="/2023/07/02/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%AF%BC%E8%AE%BA-%E8%BF%9B%E9%98%B6/w6.png" alt="?"><br>从图中可以看出，A获得了B和D两倍的CPU时间，这不是期望的结果。更糟的是，假设A和C都执行完毕，系统中只有B和D。调度队列看起来如下:<br><img src="/2023/07/02/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%AF%BC%E8%AE%BA-%E8%BF%9B%E9%98%B6/w7.png" alt="?"></p>
+<p><strong>通过工作的跨CPU迁移，可以真正实现负载均衡。</strong></p>
+<p>同样，有一个CPU空闲，另一个CPU有一些工作。<br><img src="/2023/07/02/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%AF%BC%E8%AE%BA-%E8%BF%9B%E9%98%B6/w8.png" alt="?"><br>在这种情况下，期望的迁移很容易理解：操作系统应该将B或D迁移到CPU0。这次工作迁移导致负载均衡，皆大欢喜。更棘手的情况是较早一些的例子，A独自留在CPU 0上，B和D在CPU 1上交替运行。<br><img src="/2023/07/02/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%AF%BC%E8%AE%BA-%E8%BF%9B%E9%98%B6/e1.png" alt="?"><br>在这种情况下，单次迁移并不能解决问题。应该怎么做呢？答案是不断地迁移一个或多个工作。一种可能的解决方案是不断切换工作，如下面的时间线所示。可以看到，开始的时候A独享CPU 0，B和D在CPU 1。一些时间片后，B迁移到CPU 0与A竞争，D则独享CPU 1一段时间。这样就实现了负载均衡。<br><img src="/2023/07/02/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%AF%BC%E8%AE%BA-%E8%BF%9B%E9%98%B6/e2.png" alt="?"></p>
+<p><strong>基本的方法是采用一种技术，名为工作窃取（work stealing）。</strong></p>
+<p>工作量较少的（源）队列不定期地“偷看”其他（目标）队列是不是比自己的工作多。如果目标队列比源队列（显著地）更满，就从目标队列“窃取”一个或多个工作，实现负载均衡。当然，这种方法也有让人抓狂的地方——如果太频繁地检查其他队列，就会带来较高的开销，可扩展性不好，而这是多队列调度最初的全部目标！相反，如果检查间隔太长，又可能会带来严重的负载不均。找到合适的阈值仍然是黑魔法，这在系统策略设计中很常见。</p>
+<h2 id="Linux-多处理器调度"><a href="#Linux-多处理器调度" class="headerlink" title="Linux 多处理器调度"></a>Linux 多处理器调度</h2><p>3种不同的调度程序：O(1)调度程序、完全公平调度程序（CFS）以及BF调度程序（BFS）。</p>
+<p>O(1) CFS采用多队列，而BFS采用单队列，这说明两种方法都可以成功。当然它们之间还有很多不同的细节。例如，O(1)调度程序是基于优先级的（类似于之前介绍的MLFQ），随时间推移改变进程的优先级，然后调度最高优先级进程，来实现各种调度目标。交互性得到了特别关注。与之不同，CFS是确定的比例调度方法（类似之前介绍的步长调度）。BFS作为三个算法中唯一采用单队列的算法，也基于比例调度，但采用了更复杂的方案，称为最早最合适虚拟截止时间优先算法（EEVEF）。</p>
+<hr>
+<h1 id="基于事件的并发（进阶）"><a href="#基于事件的并发（进阶）" class="headerlink" title="基于事件的并发（进阶）"></a>基于事件的并发（进阶）</h1><p>一些基于图形用户界面（GUI）的应用，或某些类型的网络服务器，常常采用另一种并发方式。这种方式称为基于事件的并发（event-based concurrency），在一些现代系统中较为流行，比如node.js，但它源自于C/UNIX系统。</p>
+<p>基于事件的并发针对两方面的问题。一方面是多线程应用中，正确处理并发很有难度。正如我们讨论的，忘加锁、死锁和其他烦人的问题会发生。另一方面，开发者无法控制多线程在某一时刻的调度。程序员只是创建了线程，然后就依赖操作系统能够合理地调度线程。要实现一个在各种不同负载下，都能够良好运行的通用调度程序，是极有难度的。因此，某些时候操作系统的调度并不是最优的。</p>
+<p><strong>不用线程，同时保证对并发的控制，避免多线程应用中出现的问题，我们应该如何构建一个并发服务器？</strong></p>
+<h2 id="基本想法：事件循环"><a href="#基本想法：事件循环" class="headerlink" title="基本想法：事件循环"></a>基本想法：事件循环</h2><p>基本方法就是基于事件的并发（event-based concurrency）。该方法很简单：我们等待某事（即“事件”）发生；当它发生时，检查事件类型，然后做少量的相应工作（可能是I/O请求，或者调度其他事件准备后续处理）。这就好了！</p>
+<p>一个典型的基于事件的服务器。这种应用都是基于一个简单的结构，称为事件循环（event loop）。事件循环的伪代码如下：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">while</span> (<span class="number">1</span>) &#123;</span><br><span class="line">events = getEvents();</span><br><span class="line"><span class="keyword">for</span> (e in events)</span><br><span class="line">processEvent(e);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>它确实如此简单。主循环等待某些事件发生（通过getEvents()调用），然后依次处理这些发生的事件。处理事件的代码叫作事件处理程序（event handler）。重要的是，处理程序在处理一个事件时，它是系统中发生的唯一活动。因此，调度就是决定接下来处理哪个事件。这种对调度的显式控制，是基于事件方法的一个重要优点。</p>
+<h2 id="重要-API：select-（或-poll-）"><a href="#重要-API：select-（或-poll-）" class="headerlink" title="重要 API：select()（或 poll()）"></a>重要 API：select()（或 poll()）</h2><p>这些接口对程序的支持很简单：检查是否有任何应该关注的进入I/O。例如，假定网络应用程序（如We b服务器）希望检查是否有网络数据包已到达，以便为它们提供服务。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">int</span> <span class="title function_">select</span><span class="params">(<span class="type">int</span> nfds,</span></span><br><span class="line"><span class="params">fd_set *<span class="keyword">restrict</span> readfds,</span></span><br><span class="line"><span class="params">fd_set *<span class="keyword">restrict</span> writefds,</span></span><br><span class="line"><span class="params">fd_set *<span class="keyword">restrict</span> errorfds,</span></span><br><span class="line"><span class="params"><span class="keyword">struct</span> timeval *<span class="keyword">restrict</span> timeout)</span>;</span><br></pre></td></tr></table></figure>
+
+<p>手册页中的实际描述：select()检查I/O描述符集合，它们的地址通过readfds、writefds和errorfds传入，分别查看它们中的某些描述符是否已准备好读取，是否准备好写入，或有异常情况待处理。在每个集合中检查前nfds个描述符，即检查描述符集合中从0到nfds-1的描述符。返回时，select()用给定请求操作准备好的描述符组成的子集替换给定的描述符集合。select()返回所有集合中就绪描述符的总数。</p>
+<blockquote>
+<p>补充：阻塞与非阻塞接口<br>阻塞（或同步，synchronous）接口在返回给调用者之前完成所有工作。</p>
+</blockquote>
+<blockquote>
+<p>非阻塞（或异步，asynchronous）接口开始一些工作，但立即返回，从而让所有需要完成的工作都在后台完成。</p>
+</blockquote>
+<blockquote>
+<p>通常阻塞调用的主犯是某种I/O。例如，如果一个调用必须从磁盘读取才能完成，它可能会阻塞，等待发送到磁盘的I / O请求返回。</p>
+</blockquote>
+<blockquote>
+<p>非阻塞接口可用于任何类型的编程（例如，使用线程），但在基于事件的方法中非常重要，因为阻塞的调用会阻止所有进展。</p>
+</blockquote>
+<p>关于select()有几点要注意。首先，请注意，它可以让你检查描述符是否可以读取和写入。前者让服务器确定新数据包已到达并且需要处理，而后者则让服务知道何时可以回复（即出站队列未满）。</p>
+<p>超时参数。这里的一个常见用法是将超时设置为NULL，这会导致select()无限期地阻塞，直到某个描述符准备就绪。但是，更健壮的服务器通常会指定某种超时。一种常见的技术是将超时设置为零，因此让调用select()立即返回。</p>
+<p>无论哪种方式，<strong>这些基本原语</strong>为我们提供了一种构建非阻塞事件循环的方法，它可以简单地检查传入数据包，从带有消息的套接字中读取数据，并根据需要进行回复。</p>
+<h2 id="使用-select"><a href="#使用-select" class="headerlink" title="使用 select()"></a>使用 select()</h2><p>如何使用select()来查看哪些网络描述符在它们上面有传入消息。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line"><span class="number">1</span> <span class="meta">#<span class="keyword">include</span> <span class="string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="number">2</span> <span class="meta">#<span class="keyword">include</span> <span class="string">&lt;stdlib.h&gt;</span></span></span><br><span class="line"><span class="number">3</span> <span class="meta">#<span class="keyword">include</span> <span class="string">&lt;sys/time.h&gt;</span></span></span><br><span class="line"><span class="number">4</span> <span class="meta">#<span class="keyword">include</span> <span class="string">&lt;sys/types.h&gt;</span></span></span><br><span class="line"><span class="number">5</span> <span class="meta">#<span class="keyword">include</span> <span class="string">&lt;unistd.h&gt;</span></span></span><br><span class="line"><span class="number">6</span></span><br><span class="line"><span class="number">7</span> <span class="type">int</span> <span class="title function_">main</span><span class="params">(<span class="type">void</span>)</span> &#123;</span><br><span class="line"><span class="number">8</span> <span class="comment">// open and set up a bunch of sockets (not shown)</span></span><br><span class="line"><span class="number">9</span> <span class="comment">// main loop</span></span><br><span class="line"><span class="number">10</span> <span class="keyword">while</span> (<span class="number">1</span>) &#123;</span><br><span class="line"><span class="number">11</span> <span class="comment">// initialize the fd_set to all zero</span></span><br><span class="line"><span class="number">12</span> fd_set readFDs;</span><br><span class="line"><span class="number">13</span> FD_ZERO(&amp;readFDs);</span><br><span class="line"><span class="number">14</span></span><br><span class="line"><span class="number">15</span> <span class="comment">// now set the bits for the descriptors</span></span><br><span class="line"><span class="number">16</span> <span class="comment">// this server is interested in</span></span><br><span class="line"><span class="number">17</span> <span class="comment">// (for simplicity, all of them from min to max)</span></span><br><span class="line"><span class="number">18</span> <span class="type">int</span> fd;</span><br><span class="line"><span class="number">19</span> <span class="keyword">for</span> (fd = minFD; fd &lt; maxFD; fd++)</span><br><span class="line"><span class="number">20</span> FD_SET(fd, &amp;readFDs);</span><br><span class="line"><span class="comment">//使用 FD_SET 宏后，它会将指定的文件描述符 fd 对应的位设置为 1，表示将该文件描述符添加到文件描述符集合中。这意味着程序对该文件描述符对应的资源感兴趣。</span></span><br><span class="line"><span class="comment">//通俗表示文件描述符就是人的身份证，除去默认输出默认输入默认错误等一些预定义的描述符外，可以使用open() socket()等函数为某个文件分配文件描述符。</span></span><br><span class="line"><span class="number">21</span></span><br><span class="line"><span class="number">22</span> <span class="comment">// do the select</span></span><br><span class="line"><span class="number">23</span> <span class="type">int</span> rc = select(maxFD+<span class="number">1</span>, &amp;readFDs, <span class="literal">NULL</span>, <span class="literal">NULL</span>, <span class="literal">NULL</span>);</span><br><span class="line"><span class="number">24</span></span><br><span class="line"><span class="number">25</span> <span class="comment">// check which actually have data using FD_ISSET()</span></span><br><span class="line"><span class="number">26</span> <span class="type">int</span> fd;</span><br><span class="line"><span class="number">27</span> <span class="keyword">for</span> (fd = minFD; fd &lt; maxFD; fd++)</span><br><span class="line"><span class="number">28</span> <span class="keyword">if</span> (FD_ISSET(fd, &amp;readFDs))</span><br><span class="line"><span class="number">29</span> processFD(fd);</span><br><span class="line"><span class="number">30</span> &#125;</span><br><span class="line"><span class="number">31</span> &#125;</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>“文件描述符”（file descriptor）是一个用于标识和操作文件或套接字的整数值。它是操作系统提供给应用程序的一种机制，用于表示打开的文件、网络套接字等。文件描述符在不同的操作系统和编程语言中有不同的表示方式，通常是一个非负整数。</p>
+</blockquote>
+<blockquote>
+<p>fd_set：是一个数据结构，用于表示一个文件描述符集合。它是一个位图，每个位（bit）对应一个文件描述符。</p>
+</blockquote>
+<blockquote>
+<p>FD_ZERO(&amp;readFDs)：该宏将一个文件描述符集合（如readFDs）清零，即将所有位都设置为0。</p>
+</blockquote>
+<blockquote>
+<p>FD_SET(fd, &amp;readFDs)：该宏将指定文件描述符（如fd）对应的位设置为1，表示对该文件描述符感兴趣。</p>
+</blockquote>
+<blockquote>
+<p>select(maxFD+1, &amp;readFDs, NULL, NULL, NULL)：调用select函数等待文件描述符上的事件。其中，maxFD+1表示需要监视的最大文件描述符值加1；readFDs是一个文件描述符集合，表示需要监视的读事件；后面三个参数分别表示对写事件、异常事件和超时时间的设置。</p>
+</blockquote>
+<blockquote>
+<p>FD_ISSET(fd, &amp;readFDs)：该宏检查指定文件描述符（如fd）对应位是否为1，即该文件描述符是否有数据到达，返回非零值表示有数据到达。</p>
+</blockquote>
+<p>这些函数和宏都是在C语言的 &lt;sys/select.h&gt; 头文件中定义的。</p>
+<h2 id="为何更简单？无须锁"><a href="#为何更简单？无须锁" class="headerlink" title="为何更简单？无须锁"></a>为何更简单？无须锁</h2><p>使用单个CPU和基于事件的应用程序，并发程序中发现的问题不再存在。具体来说，因为一次只处理一个事件，所以不需要获取或释放锁。基于事件的服务器不能被另一个线程中断，因为它确实是单线程的。因此，线程化程序中常见的并发性错误并没有出现在基本的基于事件的方法中。</p>
+<h2 id="一个问题：阻塞系统调用"><a href="#一个问题：阻塞系统调用" class="headerlink" title="一个问题：阻塞系统调用"></a>一个问题：阻塞系统调用</h2><p>例如，假定一个请求从客户端进入服务器，要从磁盘读取文件并将其内容返回给发出请求的客户端（很像简单的HTTP请求）。为了处理这样的请求，某些事件处理程序最终将不得不发出open()系统调用来打开文件，然后通过一系列read()调用来读取文件。当文件被读入内存时，服务器可能会开始将结果发送到客户端。open()和read()调用都可能向存储系统发出I/O请求（当所需的元数据或数据不在内存中时），因此可能需要很长时间才能提供服务。使用基于线程的服务器时，这不是问题：在发出I/O请求的线程挂起（等待I/O完成）时，其他线程可以运行，从而使服务器能够取得进展。事实上，I/O和其他计算的自然重叠（overlap）使得基于线程的编程非常自然和直接。但是，使用基于事件的方法时，没有其他线程可以运行：只是主事件循环。这意味着如果一个事件处理程序发出一个阻塞的调用，整个服务器就会这样做：阻塞直到调用完成。当事件循环阻塞时，系统处于闲置状态，因此是潜在的巨大资源浪费。因此，<strong>我们在基于事件的系统中必须遵守一条规则：不允许阻塞调用。</strong></p>
+<h2 id="解决方案：异步-I-O"><a href="#解决方案：异步-I-O" class="headerlink" title="解决方案：异步 I/O"></a>解决方案：异步 I/O</h2><p>许多现代操作系统已经引入了新的方法来向磁盘系统发出I/O请求，一般称为异步I/O（asynchronous I/O）。这些接口使应用程序能够发出I/O请求，并在I/O完成之前立即将控制权返回给调用者，另外的接口让应用程序能够确定各种I/O是否已完成。</p>
+<h3 id="macOS-X上提供的接口"><a href="#macOS-X上提供的接口" class="headerlink" title="macOS  X上提供的接口"></a>macOS  X上提供的接口</h3><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">aiocb</span> &#123;</span></span><br><span class="line"><span class="type">int</span> aio_fildes; <span class="comment">/* File descriptor */</span></span><br><span class="line"><span class="type">off_t</span> aio_offset; <span class="comment">/* File offset */</span></span><br><span class="line"><span class="keyword">volatile</span> <span class="type">void</span> *aio_buf; <span class="comment">/* Location of buffer */</span></span><br><span class="line"><span class="type">size_t</span> aio_nbytes; <span class="comment">/* Length of transfer */</span></span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<p>要向文件发出异步读取，应用程序应首先用相关信息填充此结构：要读取文件的文件描述符（aio_fildes），文件内的偏移量（ai_offset）以及长度的请求（aio_nbytes），最后是应该复制读取结果的目标内存位置（aio_buf）。</p>
+<p>在填充此结构后，应用程序必须发出异步调用来读取文件。在macOS X上，此API就是异步读取（asynchronous read）API：</p>
+<p><code>int aio_read(struct aiocb *aiocbp);</code></p>
+<p>该调用尝试发出I/O。如果成功，它会立即返回并且应用程序（即基于事件的服务器）可以继续其工作。</p>
+<h3 id="如何知道I-O何时完成，并且缓冲区（由aio-buf指向）现在有了请求的数据？"><a href="#如何知道I-O何时完成，并且缓冲区（由aio-buf指向）现在有了请求的数据？" class="headerlink" title="如何知道I/O何时完成，并且缓冲区（由aio buf指向）现在有了请求的数据？"></a>如何知道I/O何时完成，并且缓冲区（由aio buf指向）现在有了请求的数据？</h3><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">int</span> <span class="title function_">aio_error</span><span class="params">(<span class="type">const</span> <span class="keyword">struct</span> aiocb *aiocbp)</span>;</span><br></pre></td></tr></table></figure>
+<p>该系统调用检查aiocbp引用的请求是否已完成。如果有，则函数返回成功（用零表示）。如果不是，则返回EINPROGRESS。因此，对于每个未完成的异步I/O，应用程序可以通过调用aio_error()来周期性地轮询（poll）系统，以确定所述I/O是否尚未完成。</p>
+<p>检查一个I/O是否已经完成是很痛苦的。,一些系统提供了基于中断（interrupt）的方法。此方法使用UNIX信号（signal）在异步I/O完成时通知应用程序，从而消除了重复询问系统的需要。</p>
+<blockquote>
+<p>补充：UNIX信号</p>
+</blockquote>
+<blockquote>
+<p>所有现代UNIX变体都有一个称为信号（signal）的巨大而迷人的基础设施。最简单的信号提供了一种与进程进行通信的方式。具体来说，可以将信号传递给应用程序。这样做会让应用程序停止当前的任何工作，开始运行信号处理程序（signal handler），即应用程序中某些处理该信号的代码。完成后，该进程就恢复其先前的行为。</p>
+</blockquote>
+<blockquote>
+<p>每个信号都有一个名称，如HUP（挂断）、INT（中断）、SEGV（段违规）等。例如，当你的程序遇到段违规时，操作系统发送一个SIGSEGV（在信号名称之前加上SIG是很常见的）。如果你的程序配置为捕获该信号，则实际上可以运行一些代码来响应这种错误的程序行为（这可能对调试有用）。当一个信号被发送到一个没有配置处理该信号的进程时，一些默认行为就会生效。对于SEGV来说，这个进程会被杀死。</p>
+</blockquote>
+<blockquote>
+<p>下面一个进入无限循环的简单程序，但首先设置一个信号处理程序来捕捉SIGHUP：</p>
+</blockquote>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;signal.h&gt;</span></span></span><br><span class="line"><span class="type">void</span> <span class="title function_">handle</span><span class="params">(<span class="type">int</span> arg)</span> &#123;</span><br><span class="line"><span class="built_in">printf</span>(<span class="string">&quot;stop wakin&#x27; me up...\n&quot;</span>);</span><br><span class="line">&#125;</span><br><span class="line"><span class="type">int</span> <span class="title function_">main</span><span class="params">(<span class="type">int</span> argc, <span class="type">char</span> *argv[])</span> &#123;</span><br><span class="line">signal(SIGHUP, handle);</span><br><span class="line"><span class="keyword">while</span> (<span class="number">1</span>)</span><br><span class="line">; <span class="comment">// doin&#x27; nothin&#x27; except catchin&#x27; some sigs</span></span><br><span class="line"><span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>你可以用 kill 命令行工具向其发送信号（是的，这是一个奇怪而富有攻击性的名称）。这样做会中断程序中的主 while 循环并运行处理程序代码 handle()：</p>
+</blockquote>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">prompt&gt; ./main &amp;</span><br><span class="line">[<span class="number">3</span>] <span class="number">36705</span></span><br><span class="line">prompt&gt; kill -HUP <span class="number">36705</span></span><br><span class="line">stop wakin<span class="number">&#x27;</span> me up...</span><br><span class="line">prompt&gt; kill -HUP <span class="number">36705</span></span><br><span class="line">stop wakin<span class="number">&#x27;</span> me up...</span><br><span class="line">prompt&gt; kill -HUP <span class="number">36705</span></span><br><span class="line">stop wakin<span class="number">&#x27;</span> me up...</span><br></pre></td></tr></table></figure>
+
+<p>在没有异步 I/O 的系统中，纯基于事件的方法无法实现。</p>
+<p><strong>但是Pai等人使用事件处理网络数据包的混合方法，并且使用线程池来管理未完成的I/O。</strong></p>
+<h2 id="另一个问题：状态管理"><a href="#另一个问题：状态管理" class="headerlink" title="另一个问题：状态管理"></a>另一个问题：状态管理</h2><p>当事件处理程序发出异步I/O时，它必须打包一些程序状态，以便下一个事件处理程序在I/O最终完成时使用。这个额外的工作在基于线程的程序中是不需要的，因为程序需要的状态在线程栈中。</p>
+<p>在这个例子中，一个基于线程的服务器需要从文件描述符（fd）中读取数据，一旦完成，将从文件中读取的数据写入网络套接字描述符SD）。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">int</span> rc = read(fd, buffer, size);  </span><br><span class="line">rc = write(sd, buffer, size);</span><br></pre></td></tr></table></figure>
+<p>在一个多线程程序中，做这种工作很容易。当read()最终返回时，代码立即知道要写入哪个套接字，因为该信息位于线程堆栈中（在变量sd中）。</p>
+<p>在基于事件的系统中，,基本上，在某些数据结构中，记录完成处理该事件需要的信息。当事件发生时（即磁盘I/O完成时），查找所需信息并处理事件。在这个特定例子中，解决方案是将套接字描述符（sd）记录在由文件描述符（fd）索引的某种数据结构（例如，散列表）中。当磁盘I/O完成时，事件处理程序将使用文件描述符来查找延续，这会将套接字描述符的值返回给调用者。此时（最后），服务器可以完成最后的工作将数据写入套接字。</p>
+<h2 id="什么事情仍然很难"><a href="#什么事情仍然很难" class="headerlink" title="什么事情仍然很难"></a>什么事情仍然很难</h2><p>为了利用多个CPU，事件服务器必须并行运行多个事件处理程序。发生这种情况时，就会出现常见的同步问题（例如临界区），并且必须采用通常的解决方案（例如锁定）。因此，在现代多核系统上，无锁的简单事件处理已不再可能。</p>
+
+      
+    </div>
+    <div class="article-footer">
+      <br>
+<br>
+<blockquote class="mt-2x">
+  <ul class="post-copyright list-unstyled">
+    
+    <li class="post-copyright-link hidden-xs">
+      <strong>本文链接：</strong>
+      <a href="https://codecodegogogo.github.io/2023/07/02/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%AF%BC%E8%AE%BA-%E8%BF%9B%E9%98%B6/" title="操作系统导论-进阶" target="_blank" rel="external">https://codecodegogogo.github.io/2023/07/02/操作系统导论-进阶/</a>
+    </li>
+    
+    <li class="post-copyright-license">
+      <strong></strong>
+      <!-- <strong>版权声明： </strong> 本博客所有文章除特别声明外，均采用 <a href="http://creativecommons.org/licenses/by/4.0/deed.zh" target="_blank" rel="external">CC BY 4.0 CN协议</a> 许可协议。转载请注明出处！ -->
+    </li>
+  </ul>
+</blockquote>
+
+    </div>
+  </article>
+  
+    
+  <section id="comments">
+  	
+  </section>
+
+
+  
+</div>
+
+  <nav class="bar bar-footer clearfix" data-stick-bottom>
+  <div class="bar-inner">
+  
+  <ul class="pager pull-left">
+    
+    <li class="prev">
+      <a href="/2023/07/05/%E5%A4%9A%E7%BA%BF%E7%A8%8B-%E5%A4%9A%E8%BF%9B%E7%A8%8B-%E5%B9%B6%E5%8F%91-%E5%B9%B6%E8%A1%8C-cpu/" title="多线程,多进程,并发,并行,cpu"><i class="icon icon-angle-left" aria-hidden="true"></i><span>&nbsp;&nbsp;上一篇</span></a>
+    </li>
+    
+    
+    <li class="next">
+      <a href="/2023/06/19/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%AF%BC%E8%AE%BA-%E5%B9%B6%E5%8F%91/" title="操作系统导论-并发"><span>下一篇&nbsp;&nbsp;</span><i class="icon icon-angle-right" aria-hidden="true"></i></a>
+    </li>
+    
+    
+    <li class="toggle-toc">
+      <a class="toggle-btn " data-toggle="collapse" href="#collapseToc" aria-expanded="false" title="文章目录" role="button">    <span>[&nbsp;</span><span>文章目录</span>
+        <i class="text-collapsed icon icon-anchor"></i>
+        <i class="text-in icon icon-close"></i>
+        <span>]</span>
+      </a>
+    </li>
+    
+  </ul>
+  
+  
+  <!-- Button trigger modal -->
+  <button type="button" class="btn btn-fancy btn-donate pop-onhover bg-gradient-warning" data-toggle="modal" data-target="#donateModal"><span>赏</span></button>
+  <!-- <div class="wave-icon wave-icon-danger btn-donate" data-toggle="modal" data-target="#donateModal">
+    <div class="wave-circle"><span class="icon"><i class="icon icon-bill"></i></span></div>
+  </div> -->
+  
+  
+  <div class="bar-right">
+    
+    <div class="share-component" data-sites="weibo,qq,wechat,facebook,twitter" data-mobile-sites="weibo,qq,qzone"></div>
+    
+  </div>
+  </div>
+</nav>
+  
+<!-- Modal -->
+<div class="modal modal-center modal-small modal-xs-full fade" id="donateModal" tabindex="-1" role="dialog">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content donate">
+      <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+      <div class="modal-body">
+        <div class="donate-box">
+          <div class="donate-head">
+            <p>感谢您的支持，我会继续努力的!</p>
+          </div>
+          <div class="tab-content">
+            <div role="tabpanel" class="tab-pane fade active in" id="alipay">
+              <div class="donate-payimg">
+                <img src="/images/donate/alipayimg.png" alt="扫码支持" title="扫一扫" />
+              </div>
+              <p class="text-muted mv">扫码打赏，你说多少就多少</p>
+              <p class="text-grey">打开支付宝扫一扫，即可进行扫码打赏哦</p>
+            </div>
+            <div role="tabpanel" class="tab-pane fade" id="wechatpay">
+              <div class="donate-payimg">
+                <img src="/images/donate/wechatpayimg.png" alt="扫码支持" title="扫一扫" />
+              </div>
+              <p class="text-muted mv">扫码打赏，你说多少就多少</p>
+              <p class="text-grey">打开微信扫一扫，即可进行扫码打赏哦</p>
+            </div>
+          </div>
+          <div class="donate-footer">
+            <ul class="nav nav-tabs nav-justified" role="tablist">
+              <li role="presentation" class="active">
+                <a href="#alipay" id="alipay-tab" role="tab" data-toggle="tab" aria-controls="alipay" aria-expanded="true"><i class="icon icon-alipay"></i> 支付宝</a>
+              </li>
+              <li role="presentation" class="">
+                <a href="#wechatpay" role="tab" id="wechatpay-tab" data-toggle="tab" aria-controls="wechatpay" aria-expanded="false"><i class="icon icon-wepay"></i> 微信支付</a>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+
+
+
+</main>
+
+  <footer class="footer" itemscope itemtype="http://schema.org/WPFooter">
+	
+	
+    <ul class="social-links">
+    	
+        <li><a href="https://github.com/codecodegogogo" target="_blank" title="Github" data-toggle=tooltip data-placement=top><i class="icon icon-github"></i></a></li>
+        
+    </ul>
+
+    <div class="copyright">
+    	
+        联系邮箱：<br>codecodegogogo@163.com
+        <!-- 2024 Sunny -->
+        
+        <!--  -->
+    </div>
+</footer>
+  <script src="//cdn.jsdelivr.net/npm/jquery@1.12.4/dist/jquery.min.js"></script>
+<script>
+window.jQuery || document.write('<script src="js/jquery.min.js"><\/script>')
+</script>
+
+<script src="/js/plugin.min.js"></script>
+
+
+<script src="/js/application.js"></script>
+
+
+    <script>
+(function (window) {
+    var INSIGHT_CONFIG = {
+        TRANSLATION: {
+            POSTS: '文章',
+            PAGES: '页面',
+            CATEGORIES: '分类',
+            TAGS: '标签',
+            UNTITLED: '(未命名)',
+        },
+        ROOT_URL: '/',
+        CONTENT_URL: '/content.json',
+    };
+    window.INSIGHT_CONFIG = INSIGHT_CONFIG;
+})(window);
+</script>
+
+<script src="/js/insight.js"></script>
+
+
+
+
+
+
+   
+<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+
+   
+
+
+
+
+
+
+</body>
+
+</html>

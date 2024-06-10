@@ -1,0 +1,583 @@
+<!DOCTYPE html>
+<html lang=zh>
+<head>
+  <meta charset="utf-8">
+  
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, minimal-ui">
+  <meta name="renderer" content="webkit">
+  <meta http-equiv="Cache-Control" content="no-transform" />
+  <meta http-equiv="Cache-Control" content="no-siteapp" />
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <meta name="format-detection" content="telephone=no,email=no,adress=no">
+  <!-- Color theme for statusbar -->
+  <meta name="theme-color" content="#000000" />
+  <!-- 强制页面在当前窗口以独立页面显示,防止别人在框架里调用页面 -->
+  <meta http-equiv="window-target" content="_top" />
+  
+  
+  <title>客制化linux | yong&#39;s Blog</title>
+  <meta name="description" content="相关文章：  linux小题客制化linuxlinux_shell编程linux基础  客制化linux，将我们需要的功能保留，其他全部精简项目地址整体思路：首先新增一块硬盘挂载，历经分配分区大小、格式化、拷贝boot、修改grud文件（引导）中uuid后完成初始化，在新建虚拟机，导入我们客制化的硬盘（移除默认硬盘）  首先添加一块硬盘 格式化硬盘1.查看目前磁盘情况  lsblk   2.格式化">
+<meta property="og:type" content="article">
+<meta property="og:title" content="客制化linux">
+<meta property="og:url" content="https://codecodegogogo.github.io/2023/05/18/%E5%AE%A2%E5%88%B6%E5%8C%96linux/index.html">
+<meta property="og:site_name" content="Sunny">
+<meta property="og:description" content="相关文章：  linux小题客制化linuxlinux_shell编程linux基础  客制化linux，将我们需要的功能保留，其他全部精简项目地址整体思路：首先新增一块硬盘挂载，历经分配分区大小、格式化、拷贝boot、修改grud文件（引导）中uuid后完成初始化，在新建虚拟机，导入我们客制化的硬盘（移除默认硬盘）  首先添加一块硬盘 格式化硬盘1.查看目前磁盘情况  lsblk   2.格式化">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://codecodegogogo.github.io/2023/05/18/%E5%AE%A2%E5%88%B6%E5%8C%96linux/0.png">
+<meta property="og:image" content="https://codecodegogogo.github.io/2023/05/18/%E5%AE%A2%E5%88%B6%E5%8C%96linux/4.png">
+<meta property="og:image" content="https://codecodegogogo.github.io/2023/05/18/%E5%AE%A2%E5%88%B6%E5%8C%96linux/3.png">
+<meta property="og:image" content="https://codecodegogogo.github.io/2023/05/18/%E5%AE%A2%E5%88%B6%E5%8C%96linux/5.png">
+<meta property="og:image" content="https://codecodegogogo.github.io/2023/05/18/%E5%AE%A2%E5%88%B6%E5%8C%96linux/6.png">
+<meta property="og:image" content="https://codecodegogogo.github.io/2023/05/18/%E5%AE%A2%E5%88%B6%E5%8C%96linux/2.png">
+<meta property="og:image" content="https://codecodegogogo.github.io/2023/05/18/%E5%AE%A2%E5%88%B6%E5%8C%96linux/3.1.png">
+<meta property="og:image" content="https://codecodegogogo.github.io/2023/05/18/%E5%AE%A2%E5%88%B6%E5%8C%96linux/4.1.png">
+<meta property="og:image" content="https://codecodegogogo.github.io/2023/05/18/%E5%AE%A2%E5%88%B6%E5%8C%96linux/5.1.png">
+<meta property="og:image" content="https://codecodegogogo.github.io/2023/05/18/%E5%AE%A2%E5%88%B6%E5%8C%96linux/5.2.png">
+<meta property="og:image" content="https://codecodegogogo.github.io/2023/05/18/%E5%AE%A2%E5%88%B6%E5%8C%96linux/5.3.png">
+<meta property="og:image" content="https://codecodegogogo.github.io/2023/05/18/%E5%AE%A2%E5%88%B6%E5%8C%96linux/6.5.png">
+<meta property="og:image" content="https://codecodegogogo.github.io/2023/05/18/%E5%AE%A2%E5%88%B6%E5%8C%96linux/6.6.png">
+<meta property="og:image" content="https://codecodegogogo.github.io/2023/05/18/%E5%AE%A2%E5%88%B6%E5%8C%96linux/7.1.png">
+<meta property="og:image" content="https://codecodegogogo.github.io/2023/05/18/%E5%AE%A2%E5%88%B6%E5%8C%96linux/8.png">
+<meta property="og:image" content="https://codecodegogogo.github.io/2023/05/18/%E5%AE%A2%E5%88%B6%E5%8C%96linux/9.png">
+<meta property="article:published_time" content="2023-05-18T01:00:14.000Z">
+<meta property="article:modified_time" content="2023-06-02T15:54:12.165Z">
+<meta property="article:author" content="Sunny">
+<meta property="article:tag" content="linux">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://codecodegogogo.github.io/2023/05/18/%E5%AE%A2%E5%88%B6%E5%8C%96linux/0.png">
+  <!-- Canonical links -->
+  <link rel="canonical" href="https://codecodegogogo.github.io/2023/05/18/%E5%AE%A2%E5%88%B6%E5%8C%96linux/index.html">
+  
+    <link rel="alternate" href="/atom.xml" title="Sunny" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/images/favicon.png" type="image/x-icon">
+  
+  <!-- <link rel="icon" href="/images/favicon.png" type="image/x-icon"> -->
+
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  
+  
+  
+  
+<meta name="generator" content="Hexo 5.4.2"></head>
+
+
+<body class="main-center theme-purple" itemscope itemtype="http://schema.org/WebPage">
+  <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+  <div class="slimContent">
+    <div class="navbar-header">
+      
+      
+      <div class="profile-block text-center">
+        <a id="avatar" href="https://github.com/codecodegogogo" target="_blank">
+          <img class="img-circle img-rotate" src="/images/avatar.jpg" width="200" height="200">
+        </a>
+        <h2 id="name" class="hidden-xs hidden-sm">yong</h2>
+        <h3 id="title" class="hidden-xs hidden-sm hidden-md"></h3>
+        <small id="location" class="text-muted hidden-xs hidden-sm"><i class="icon icon-map-marker"></i> China</small>
+      </div>
+      
+      <div class="search" id="search-form-wrap">
+
+    <form class="search-form sidebar-form">
+        <div class="input-group">
+            <input type="text" class="search-form-input form-control" placeholder="搜索" />
+            <span class="input-group-btn">
+                <button type="submit" class="search-form-submit btn btn-flat" onclick="return false;"><i class="icon icon-search"></i></button>
+            </span>
+        </div>
+    </form>
+    <div class="ins-search">
+  <div class="ins-search-mask"></div>
+  <div class="ins-search-container">
+    <div class="ins-input-wrapper">
+      <input type="text" class="ins-search-input" placeholder="想要查找什么..." x-webkit-speech />
+      <button type="button" class="close ins-close ins-selectable" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+    </div>
+    <div class="ins-section-wrapper">
+      <div class="ins-section-container"></div>
+    </div>
+  </div>
+</div>
+
+
+</div>
+      <button class="navbar-toggle collapsed" type="button" data-toggle="collapse" data-target="#main-navbar" aria-controls="main-navbar" aria-expanded="false">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+    </div>
+    <nav id="main-navbar" class="collapse navbar-collapse" itemscope itemtype="http://schema.org/SiteNavigationElement" role="navigation">
+      <ul class="nav navbar-nav main-nav menu-highlight">
+        
+        
+        <li class="menu-item menu-item-home">
+          <a href="/.">
+            
+            <i class="icon icon-home-fill"></i>
+            
+            <span class="menu-title">首页</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags">
+            
+            <i class="icon icon-tags"></i>
+            
+            <span class="menu-title">标签</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-repository">
+          <a target="_blank" rel="noopener" href="https://github.com/codecodegogogo">
+            
+            <i class="icon icon-project"></i>
+            
+            <span class="menu-title">项目</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about">
+            
+            <i class="icon icon-cup-fill"></i>
+            
+            <span class="menu-title">关于</span>
+          </a>
+        </li>
+        
+      </ul>
+      
+	
+    <ul class="social-links">
+    	
+        <li><a href="https://github.com/codecodegogogo" target="_blank" title="Github" data-toggle=tooltip data-placement=top><i class="icon icon-github"></i></a></li>
+        
+    </ul>
+
+    </nav>
+  </div>
+</header>
+
+  
+    <aside class="sidebar" itemscope itemtype="http://schema.org/WPSideBar">
+  <div class="slimContent">
+    
+      <div class="widget">
+    <h3 class="widget-title">公告</h3>
+    <div class="widget-body">
+        <div id="board">
+            <div class="content">
+                <p>今天网站换了个新皮肤~</p> <p align="right">2023.4.14</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">标签</h3>
+    <div class="widget-body">
+      <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/c/" rel="tag">c++</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/code/" rel="tag">code</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/java/" rel="tag">java</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/javascript/" rel="tag">javascript</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/linux/" rel="tag">linux</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/os/" rel="tag">os</a><span class="tag-list-count">11</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/vue/" rel="tag">vue</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%9D%82%E8%B0%88/" rel="tag">杂谈</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%AE%97%E6%B3%95/" rel="tag">算法</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%9F%BA%E7%A1%80/" rel="tag">计算机基础</a><span class="tag-list-count">8</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%B7%A5%E5%85%B7/" rel="tag">计算机工具</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E6%96%87%E5%8C%96%E5%9F%BA%E7%A1%80/" rel="tag">计算机文化基础</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/" rel="tag">计算机网络</a><span class="tag-list-count">9</span></li></ul>
+    </div>
+  </div>
+
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">最新文章</h3>
+    <div class="widget-body">
+      <ul class="recent-post-list list-unstyled no-thumbnail">
+        
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                
+              </p>
+              <p class="item-title">
+                <a href="/2024/06/10/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E5%90%84%E5%B1%82%E7%BD%91%E7%BB%9C%E8%AE%BE%E5%A4%87/%E8%AE%A1%E7%AE%97%E6%9C%BA%E6%96%87%E5%8C%96%E5%9F%BA%E7%A1%80-ppt/" class="title">(no title)</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2024-06-10T02:05:08.833Z" itemprop="datePublished">2024-06-10</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                
+              </p>
+              <p class="item-title">
+                <a href="/2024/06/10/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E5%90%84%E5%B1%82%E7%BD%91%E7%BB%9C%E8%AE%BE%E5%A4%87/%E8%AE%A1%E7%AE%97%E6%9C%BA%E6%96%87%E5%8C%96%E5%9F%BA%E7%A1%80-%E6%95%B0%E6%8D%AE%E5%BA%93/" class="title">(no title)</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2024-06-10T02:05:08.833Z" itemprop="datePublished">2024-06-10</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                
+              </p>
+              <p class="item-title">
+                <a href="/2024/05/23/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E5%90%84%E5%B1%82%E7%BD%91%E7%BB%9C%E8%AE%BE%E5%A4%87/%E8%AE%A1%E7%AE%97%E6%9C%BA%E6%96%87%E5%8C%96%E5%9F%BA%E7%A1%80-excel/" class="title">计算机文化基础-excel</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2024-05-23T00:30:47.000Z" itemprop="datePublished">2024-05-23</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                
+              </p>
+              <p class="item-title">
+                <a href="/2024/05/14/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E5%90%84%E5%B1%82%E7%BD%91%E7%BB%9C%E8%AE%BE%E5%A4%87/%E8%AE%A1%E7%AE%97%E6%9C%BA%E6%96%87%E5%8C%96%E5%9F%BA%E7%A1%80/" class="title">计算机文化基础</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2024-05-14T01:41:05.000Z" itemprop="datePublished">2024-05-14</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                
+              </p>
+              <p class="item-title">
+                <a href="/2024/03/01/Algorithm/" class="title">Algorithm</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2024-03-01T07:52:28.000Z" itemprop="datePublished">2024-03-01</time>
+              </p>
+            </div>
+          </li>
+          
+      </ul>
+    </div>
+  </div>
+  
+
+    
+  </div>
+</aside>
+
+  
+  
+<main class="main" role="main">
+  <div class="content">
+  <article id="post-客制化linux" class="article article-type-post" itemscope itemtype="http://schema.org/BlogPosting">
+    
+    <div class="article-header">
+      
+        
+  
+    <h1 class="article-title" itemprop="name">
+      客制化linux
+    </h1>
+  
+
+      
+      <div class="article-meta">
+        <span class="article-date">
+    <i class="icon icon-calendar-check"></i>
+	<a href="/2023/05/18/%E5%AE%A2%E5%88%B6%E5%8C%96linux/" class="article-date">
+	  <time datetime="2023-05-18T01:00:14.000Z" itemprop="datePublished">2023-05-18</time>
+	</a>
+</span>
+        
+        
+  <span class="article-tag">
+    <i class="icon icon-tags"></i>
+	<a class="article-tag-link-link" href="/tags/linux/" rel="tag">linux</a>
+  </span>
+
+
+        
+	<span class="article-read hidden-xs">
+	    <i class="icon icon-eye-fill" aria-hidden="true"></i>
+	    <span id="busuanzi_container_page_pv">
+			<span id="busuanzi_value_page_pv">0</span>
+		</span>
+	</span>
+
+
+        <span class="post-comment"><i class="icon icon-comment"></i> <a href="/2023/05/18/%E5%AE%A2%E5%88%B6%E5%8C%96linux/#comments" class="article-comment-link">评论</a></span>
+        
+	
+		<span class="post-wordcount hidden-xs" itemprop="wordCount">字数统计: 2.4k(字)</span>
+	
+	
+
+      </div>
+    </div>
+    <div class="article-entry marked-body" itemprop="articleBody">
+      
+        <p>相关文章：</p>
+<blockquote>
+<p><a target="_blank" rel="noopener" href="https://sunnyli1024.github.io/2023/05/18/linux%E5%B0%8F%E9%A2%98/">linux小题</a><br><a target="_blank" rel="noopener" href="https://sunnyli1024.github.io/2023/05/18/%E5%AE%A2%E5%88%B6%E5%8C%96linux/">客制化linux</a><br><a target="_blank" rel="noopener" href="https://sunnyli1024.github.io/2023/05/17/linux-shell%E7%BC%96%E7%A8%8B/">linux_shell编程</a><br><a target="_blank" rel="noopener" href="https://sunnyli1024.github.io/2023/05/16/linux%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4/">linux基础</a></p>
+</blockquote>
+<p><strong>客制化linux，将我们需要的功能保留，其他全部精简</strong><br><a target="_blank" rel="noopener" href="https://github.com/sunnyli1024/mylinux_mini">项目地址</a><br>整体思路：<br>首先新增一块硬盘挂载，历经分配分区大小、格式化、拷贝boot、修改grud文件（引导）中uuid后完成初始化，在新建虚拟机，导入我们客制化的硬盘（移除默认硬盘）</p>
+<p><img src="/2023/05/18/%E5%AE%A2%E5%88%B6%E5%8C%96linux/0.png" alt="silu"></p>
+<p><strong>首先添加一块硬盘</strong><br><img src="/2023/05/18/%E5%AE%A2%E5%88%B6%E5%8C%96linux/4.png" alt="1"><br><img src="/2023/05/18/%E5%AE%A2%E5%88%B6%E5%8C%96linux/3.png" alt="1"><br><img src="/2023/05/18/%E5%AE%A2%E5%88%B6%E5%8C%96linux/5.png" alt="1"><br><img src="/2023/05/18/%E5%AE%A2%E5%88%B6%E5%8C%96linux/6.png" alt="1"></p>
+<p><strong>格式化硬盘</strong><br><strong>1.查看目前磁盘情况</strong></p>
+<blockquote>
+<p>lsblk</p>
+</blockquote>
+<p><img src="/2023/05/18/%E5%AE%A2%E5%88%B6%E5%8C%96linux/2.png" alt="lsblk"></p>
+<p><strong>2.格式化sdb</strong></p>
+<blockquote>
+<p>[sunnyli@sunnyli ~]$ <strong>su</strong><br>密码：<br>[root@sunnyli sunnyli]# <strong>fdisk /dev/sdb</strong> (格式化sdb)</p>
+</blockquote>
+<blockquote>
+<p><strong>分配boot分区大小</strong><br>欢迎使用 fdisk (util-linux 2.23.2)。<br>更改将停留在内存中，直到您决定将更改写入磁盘。<br>使用写入命令前请三思。<br>Device does not contain a recognized partition table<br>使用磁盘标识符 0xd7f12385 创建新的 DOS 磁盘标签。<br>命令(输入 m 获取帮助)：<strong>n</strong> （分配磁盘）<br>Partition type:<br>   p   primary (0 primary, 0 extended, 4 free)<br>   e   extended<br>Select (default p): <strong>p</strong><br>分区号 (1-4，默认 1)：<br>起始 扇区 (2048-20971519，默认为 2048)：<br>将使用默认值 2048<br>Last 扇区, +扇区 or +size{K,M,G} (2048-20971519，默认为 20971519)：**+500M**（分配500m）<br>分区 1 已设置为 Linux 类型，大小设为 500 MiB</p>
+</blockquote>
+<blockquote>
+<p><strong>分配主分区大小</strong><br>命令(输入 m 获取帮助)：<strong>n</strong><br>Partition type:<br>   p   primary (1 primary, 0 extended, 3 free)<br>   e   extended<br>Select (default p):<br>Using default response <strong>p</strong><br>分区号 (2-4，默认 2)：<br>起始 扇区 (1026048-20971519，默认为 1026048)：<br>将使用默认值 1026048<br>Last 扇区, +扇区 or +size{K,M,G} (1026048-20971519，默认为 20971519)：<br>将使用默认值 20971519<br>分区 2 已设置为 Linux 类型，大小设为 9.5 GiB<br>命令(输入 m 获取帮助)：<strong>w</strong> （写入退出）<br>The partition table has been altered!<br>Calling ioctl() to re-read partition table.<br>正在同步磁盘。</p>
+</blockquote>
+<p><strong>3.再次查看磁盘分配情况</strong><br><img src="/2023/05/18/%E5%AE%A2%E5%88%B6%E5%8C%96linux/3.1.png" alt="lsblk"><br><strong>4.格式化磁盘</strong></p>
+<blockquote>
+<p>[root@sunnyli sunnyli]# <strong>mkfs.ext4 /dev/sdb1</strong><br>mke2fs 1.42.9 (28-Dec-2013)<br>文件系统标签=<br>OS type: Linux<br>块大小=1024 (log=0)<br>分块大小=1024 (log=0)<br>Stride=0 blocks, Stripe width=0 blocks<br>128016 inodes, 512000 blocks<br>25600 blocks (5.00%) reserved for the super user<br>第一个数据块=1<br>Maximum filesystem blocks=34078720<br>63 block groups<br>8192 blocks per group, 8192 fragments per group<br>2032 inodes per group<br>Superblock backups stored on blocks:<br>    8193, 24577, 40961, 57345, 73729, 204801, 221185, 401409<br>Allocating group tables: 完成<br>正在写入inode表: 完成<br>Creating journal (8192 blocks): 完成<br>Writing superblocks and filesystem accounting information: 完成 </p>
+</blockquote>
+<blockquote>
+<p>[root@sunnyli sunnyli]  <strong>mkfs.ext4 /dev/sdb2</strong><br>mke2fs 1.42.9 (28-Dec-2013)<br>文件系统标签=<br>OS type: Linux<br>块大小=4096 (log=2)<br>分块大小=4096 (log=2)<br>Stride=0 blocks, Stripe width=0 blocks<br>623392 inodes, 2493184 blocks<br>124659 blocks (5.00%) reserved for the super user<br>第一个数据块=0<br>Maximum filesystem blocks=2151677952<br>77 block groups<br>32768 blocks per group, 32768 fragments per group<br>8096 inodes per group<br>Superblock backups stored on blocks:<br>    32768, 98304, 163840, 229376, 294912, 819200, 884736, 1605632<br>Allocating group tables: 完成<br>正在写入inode表: 完成<br>Creating journal (32768 blocks): 完成<br>Writing superblocks and filesystem accounting information: 完成</p>
+</blockquote>
+<p><strong>5.创建目录，并挂载新的磁盘</strong><br><strong>mount临时挂载，重启失效</strong><br><img src="/2023/05/18/%E5%AE%A2%E5%88%B6%E5%8C%96linux/4.1.png" alt="mount"></p>
+<p><strong>6.安装grub, 内核文件拷贝至目标磁盘</strong><br><img src="/2023/05/18/%E5%AE%A2%E5%88%B6%E5%8C%96linux/5.1.png" alt="5.1"><br><img src="/2023/05/18/%E5%AE%A2%E5%88%B6%E5%8C%96linux/5.2.png" alt="5.2"></p>
+<p>q:拷贝boot分区到新的硬盘时为什么用到了grub?<br>a:Linux GRUB是一个引导加载程序，用于启动并加载Linux操作系统。它的主要功能是在计算机启动时加载操作系统，并提供一个菜单，让用户选择要启动的操作系统或系统内核。此外，GRUB还提供了一些高级功能，例如在启动时设置内核参数、在多个硬盘之间切换等。它也可以用于修复系统启动问题，例如修复损坏的引导记录或修复损坏的文件系统。<br>在拷贝boot分区到新的硬盘时使用GRUB是因为GRUB是一个引导加载程序，可以帮助您在新的硬盘上启动操作系统。当您拷贝boot分区到新的硬盘时，您需要安装GRUB并将其配置为在新硬盘上启动操作系统。这通常包括将GRUB安装到新硬盘的MBR（主引导记录）或EFI系统分区，并在GRUB配置文件中指定要启动的操作系统或内核。通过使用GRUB，您可以确保新硬盘上的操作系统可以正确启动，并且可以避免出现启动问题。</p>
+<p><strong>拷贝boot分区</strong><br><img src="/2023/05/18/%E5%AE%A2%E5%88%B6%E5%8C%96linux/5.3.png" alt="5.3"></p>
+<p>7.修改/mnt/boot/grud2/grud.cfg文件<br><strong>lsblk -l 查看sdb分区uuid</strong><br><img src="/2023/05/18/%E5%AE%A2%E5%88%B6%E5%8C%96linux/6.5.png" alt="grud"><br><strong>修改文件</strong><br><img src="/2023/05/18/%E5%AE%A2%E5%88%B6%E5%8C%96linux/6.6.png" alt="grud"><br>将文件中的sdb /boot uuid替换sda /boot，主分区也替换。<br>可以使用vim查找  /关键字 按n下一个<br>在linux16开头的行最后添加selinux=0 init=/bin/bash</p>
+<p><img src="/2023/05/18/%E5%AE%A2%E5%88%B6%E5%8C%96linux/7.1.png" alt="7.1"></p>
+<p><strong>拷贝指令</strong></p>
+<blockquote>
+<p>mkdir -pv /mnt/sysroot/{etc/rc.d,usr,var,proc,sys,dev,lib,lib64,bin,sbin,boot,srv,mnt,media,home,root} </p>
+<blockquote>
+<p>这是一个Linux命令，意思是创建一个名为/sysroot的目录，并在其中创建多个子目录，包括/etc/rc.d、/usr、/var、/proc、/sys、/dev、/lib、/lib64、/bin、/sbin、/boot、/srv、/mnt、/media、/home和/root。选项-p表示如果目录不存在，则递归创建所有父目录，选项-v表示在创建目录时显示详细信息。<br>cp /lib64/<em>.</em> /mnt/sysroot/lib64/<br>cp /bin/bash /mnt/sysroot/bin/<br>拷贝其他指令<br>cp /bin/ls /mnt/sysroot/bin/<br>cp /bin/*  /mnt/sysroot/bin/<br>cp /sbin/* /mnt/sysroot/sbin/</p>
+</blockquote>
+</blockquote>
+<p><strong>新建虚拟机，替换磁盘为我们的sdb</strong><br><img src="/2023/05/18/%E5%AE%A2%E5%88%B6%E5%8C%96linux/8.png" alt="ls"> </p>
+<p>完成（没有配置环境变量用绝对路径）<br><img src="/2023/05/18/%E5%AE%A2%E5%88%B6%E5%8C%96linux/9.png" alt="done"></p>
+<p><strong>q</strong>:<br>我在移植linux时首先#mount /dev/sdb1 /mnt/boot #mount /dev/sdb2 /mnt/sysroot/<br>然后cp -rf /boot/* /mnt/boot/，最后修改/mnt/boot/grub2/grub.cfg文件中原来的uuid为sdb的uuid。这个过程中sdb2挂载的目录名称有要求吗？</p>
+<p><strong>a:</strong><br>在移植Linux时，挂载目录的名称没有特定要求。您可以自己定义一个有意义的名称。只需确保您在使用该目录时，使用正确的路径即可。在上述命令中，/mnt/sysroot/是一个常用的目录名称，但您可以使用其他名称，只要您在使用该目录时使用正确的路径即可。</p>
+<p><strong>q:</strong><br>他怎么不把boot目录识别为根目录，根目录识别为boot目录呢，是不是有什么文件</p>
+<p><strong>a:</strong><br>Linux系统中的根目录通常是由启动加载程序（如GRUB）指定的。在启动时，启动加载程序会读取指定的根文件系统，并将其挂载为根目录。通常情况下，根文件系统的指定是通过修改启动加载程序配置文件（如GRUB配置文件）中的参数来实现的。</p>
+<p>/boot目录通常包含启动加载程序和内核映像文件，但它不是根目录。根目录是Linux文件系统中的顶级目录，它包含了整个文件系统的层次结构。</p>
+<p>因此，即使您将/boot目录复制到新的磁盘分区上并将其挂载为/boot目录，Linux系统仍然会将/sysroot目录视为根目录，因为这是由启动加载程序指定的。如果您将/boot目录挂载为根目录，则该文件系统中的所有其他目录和文件都将被挂载为/boot目录的子目录，这可能会导致系统无法正常启动。</p>
+<p><strong>q:</strong><br>所以系统之所以可以识别是因为我修改了grud文件的uuid吗</p>
+<p><strong>a:</strong><br>是的，如果您在新系统中使用了原始系统的文件系统，并将其挂载到/sysroot目录下，那么您需要更新GRUB的配置文件（grub.cfg）以反映新的文件系统的UUID信息。因为GRUB启动加载程序会使用该UUID信息来找到并挂载根文件系统。</p>
+<p>如果您不更新GRUB的配置文件，则GRUB启动加载程序无法正确识别新的文件系统，并可能导致系统无法正常启动。所以，更新GRUB的配置文件以反映新的文件系统的UUID信息是非常必要的。</p>
+<p><strong>q:</strong><br>有个问题，根目录中包含了/boot，为什么还会有boot分区，难道有两个boot吗</p>
+<p><strong>a:</strong><br>在Linux系统中，/boot目录通常包含了启动加载程序和内核映像文件等文件。这些文件通常存储在根文件系统中的/boot目录中。但是，在某些情况下，/boot目录可能无法存放在根文件系统中，例如，如果根文件系统使用的是某些特殊的文件系统格式（如Btrfs），则/boot目录可能无法支持该格式，因此需要单独挂载为一个独立的分区。</p>
+<p>因此，/boot分区的作用就是为了存放/boot目录中的文件。这样做的好处是，它可以使/boot目录的文件系统格式与根文件系统的格式独立，从而提高了系统的灵活性和可靠性。同时，将/boot目录单独挂载为一个分区还可以提高系统的安全性，因为/boot分区可以进行单独的加密和保护，从而增加了系统的安全性。</p>
+<p><strong>q:</strong><br>那两个boot内容一样吗</p>
+<p><strong>a:</strong><br>在大多数情况下，/boot分区中的内容和根文件系统中的/boot目录中的内容是相同的。因为/boot分区通常是为了存放/boot目录中的文件而存在的，所以它们的内容应该是一致的。</p>
+<p>然而，在某些情况下，/boot分区中的内容可能会与根文件系统中的/boot目录中的内容不同。例如，如果您手动复制了一些文件到/boot分区中，而没有同步更新根文件系统中的/boot目录，则它们的内容将不同步。这种情况下，可能会导致系统无法正常启动或出现其他问题。</p>
+<p>因此，为了确保系统的正确性和稳定性，通常建议将/boot分区和根文件系统中的/boot目录保持同步，即它们的内容应该是一致的。</p>
+
+      
+    </div>
+    <div class="article-footer">
+      <br>
+<br>
+<blockquote class="mt-2x">
+  <ul class="post-copyright list-unstyled">
+    
+    <li class="post-copyright-link hidden-xs">
+      <strong>本文链接：</strong>
+      <a href="https://codecodegogogo.github.io/2023/05/18/%E5%AE%A2%E5%88%B6%E5%8C%96linux/" title="客制化linux" target="_blank" rel="external">https://codecodegogogo.github.io/2023/05/18/客制化linux/</a>
+    </li>
+    
+    <li class="post-copyright-license">
+      <strong></strong>
+      <!-- <strong>版权声明： </strong> 本博客所有文章除特别声明外，均采用 <a href="http://creativecommons.org/licenses/by/4.0/deed.zh" target="_blank" rel="external">CC BY 4.0 CN协议</a> 许可协议。转载请注明出处！ -->
+    </li>
+  </ul>
+</blockquote>
+
+    </div>
+  </article>
+  
+    
+  <section id="comments">
+  	
+  </section>
+
+
+  
+</div>
+
+  <nav class="bar bar-footer clearfix" data-stick-bottom>
+  <div class="bar-inner">
+  
+  <ul class="pager pull-left">
+    
+    <li class="prev">
+      <a href="/2023/05/18/linux%E5%B0%8F%E9%A2%98/" title="linux小题"><i class="icon icon-angle-left" aria-hidden="true"></i><span>&nbsp;&nbsp;上一篇</span></a>
+    </li>
+    
+    
+    <li class="next">
+      <a href="/2023/05/17/linux-shell%E7%BC%96%E7%A8%8B/" title="linux_shell编程"><span>下一篇&nbsp;&nbsp;</span><i class="icon icon-angle-right" aria-hidden="true"></i></a>
+    </li>
+    
+    
+  </ul>
+  
+  
+  <!-- Button trigger modal -->
+  <button type="button" class="btn btn-fancy btn-donate pop-onhover bg-gradient-warning" data-toggle="modal" data-target="#donateModal"><span>赏</span></button>
+  <!-- <div class="wave-icon wave-icon-danger btn-donate" data-toggle="modal" data-target="#donateModal">
+    <div class="wave-circle"><span class="icon"><i class="icon icon-bill"></i></span></div>
+  </div> -->
+  
+  
+  <div class="bar-right">
+    
+    <div class="share-component" data-sites="weibo,qq,wechat,facebook,twitter" data-mobile-sites="weibo,qq,qzone"></div>
+    
+  </div>
+  </div>
+</nav>
+  
+<!-- Modal -->
+<div class="modal modal-center modal-small modal-xs-full fade" id="donateModal" tabindex="-1" role="dialog">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content donate">
+      <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+      <div class="modal-body">
+        <div class="donate-box">
+          <div class="donate-head">
+            <p>感谢您的支持，我会继续努力的!</p>
+          </div>
+          <div class="tab-content">
+            <div role="tabpanel" class="tab-pane fade active in" id="alipay">
+              <div class="donate-payimg">
+                <img src="/images/donate/alipayimg.png" alt="扫码支持" title="扫一扫" />
+              </div>
+              <p class="text-muted mv">扫码打赏，你说多少就多少</p>
+              <p class="text-grey">打开支付宝扫一扫，即可进行扫码打赏哦</p>
+            </div>
+            <div role="tabpanel" class="tab-pane fade" id="wechatpay">
+              <div class="donate-payimg">
+                <img src="/images/donate/wechatpayimg.png" alt="扫码支持" title="扫一扫" />
+              </div>
+              <p class="text-muted mv">扫码打赏，你说多少就多少</p>
+              <p class="text-grey">打开微信扫一扫，即可进行扫码打赏哦</p>
+            </div>
+          </div>
+          <div class="donate-footer">
+            <ul class="nav nav-tabs nav-justified" role="tablist">
+              <li role="presentation" class="active">
+                <a href="#alipay" id="alipay-tab" role="tab" data-toggle="tab" aria-controls="alipay" aria-expanded="true"><i class="icon icon-alipay"></i> 支付宝</a>
+              </li>
+              <li role="presentation" class="">
+                <a href="#wechatpay" role="tab" id="wechatpay-tab" data-toggle="tab" aria-controls="wechatpay" aria-expanded="false"><i class="icon icon-wepay"></i> 微信支付</a>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+
+
+
+</main>
+
+  <footer class="footer" itemscope itemtype="http://schema.org/WPFooter">
+	
+	
+    <ul class="social-links">
+    	
+        <li><a href="https://github.com/codecodegogogo" target="_blank" title="Github" data-toggle=tooltip data-placement=top><i class="icon icon-github"></i></a></li>
+        
+    </ul>
+
+    <div class="copyright">
+    	
+        联系邮箱：<br>codecodegogogo@163.com
+        <!-- 2024 Sunny -->
+        
+        <!--  -->
+    </div>
+</footer>
+  <script src="//cdn.jsdelivr.net/npm/jquery@1.12.4/dist/jquery.min.js"></script>
+<script>
+window.jQuery || document.write('<script src="js/jquery.min.js"><\/script>')
+</script>
+
+<script src="/js/plugin.min.js"></script>
+
+
+<script src="/js/application.js"></script>
+
+
+    <script>
+(function (window) {
+    var INSIGHT_CONFIG = {
+        TRANSLATION: {
+            POSTS: '文章',
+            PAGES: '页面',
+            CATEGORIES: '分类',
+            TAGS: '标签',
+            UNTITLED: '(未命名)',
+        },
+        ROOT_URL: '/',
+        CONTENT_URL: '/content.json',
+    };
+    window.INSIGHT_CONFIG = INSIGHT_CONFIG;
+})(window);
+</script>
+
+<script src="/js/insight.js"></script>
+
+
+
+
+
+
+   
+<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+
+   
+
+
+
+
+
+
+</body>
+
+</html>

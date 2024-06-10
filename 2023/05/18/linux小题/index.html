@@ -1,0 +1,671 @@
+<!DOCTYPE html>
+<html lang=zh>
+<head>
+  <meta charset="utf-8">
+  
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, minimal-ui">
+  <meta name="renderer" content="webkit">
+  <meta http-equiv="Cache-Control" content="no-transform" />
+  <meta http-equiv="Cache-Control" content="no-siteapp" />
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <meta name="format-detection" content="telephone=no,email=no,adress=no">
+  <!-- Color theme for statusbar -->
+  <meta name="theme-color" content="#000000" />
+  <!-- 强制页面在当前窗口以独立页面显示,防止别人在框架里调用页面 -->
+  <meta http-equiv="window-target" content="_top" />
+  
+  
+  <title>linux小题 | yong&#39;s Blog</title>
+  <meta name="description" content="相关文章：  linux小题客制化linuxlinux_shell编程linux基础  1将t.txt打印出来通过管道往后传，cut以&#x2F;为间隔符取第三段，进行排序（uniq只能统计连续出现的次数，所以要把相同的先合在一起），通过uniq -c统计唯一值并在首显示出现次数，最后通过sort -n按照数值排序-r顺序取反   cat t.txt：将文件t.txt的内容输出到终端。cut -d ‘&#x2F;‘">
+<meta property="og:type" content="article">
+<meta property="og:title" content="linux小题">
+<meta property="og:url" content="https://codecodegogogo.github.io/2023/05/18/linux%E5%B0%8F%E9%A2%98/index.html">
+<meta property="og:site_name" content="Sunny">
+<meta property="og:description" content="相关文章：  linux小题客制化linuxlinux_shell编程linux基础  1将t.txt打印出来通过管道往后传，cut以&#x2F;为间隔符取第三段，进行排序（uniq只能统计连续出现的次数，所以要把相同的先合在一起），通过uniq -c统计唯一值并在首显示出现次数，最后通过sort -n按照数值排序-r顺序取反   cat t.txt：将文件t.txt的内容输出到终端。cut -d ‘&#x2F;‘">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://codecodegogogo.github.io/2023/05/18/linux%E5%B0%8F%E9%A2%98/1.png">
+<meta property="og:image" content="https://codecodegogogo.github.io/2023/05/18/linux%E5%B0%8F%E9%A2%98/2.png">
+<meta property="og:image" content="https://codecodegogogo.github.io/2023/05/18/linux%E5%B0%8F%E9%A2%98/2.1.png">
+<meta property="og:image" content="https://codecodegogogo.github.io/2023/05/18/linux%E5%B0%8F%E9%A2%98/4.png">
+<meta property="og:image" content="https://codecodegogogo.github.io/2023/05/18/linux%E5%B0%8F%E9%A2%98/5.png">
+<meta property="og:image" content="https://codecodegogogo.github.io/2023/05/18/linux%E5%B0%8F%E9%A2%98/6.png">
+<meta property="og:image" content="https://codecodegogogo.github.io/2023/05/18/linux%E5%B0%8F%E9%A2%98/7.1.png">
+<meta property="og:image" content="https://codecodegogogo.github.io/2023/05/18/linux%E5%B0%8F%E9%A2%98/7.png">
+<meta property="og:image" content="https://codecodegogogo.github.io/2023/05/18/linux%E5%B0%8F%E9%A2%98/7.2.png">
+<meta property="og:image" content="https://codecodegogogo.github.io/2023/05/18/linux%E5%B0%8F%E9%A2%98/8.png">
+<meta property="og:image" content="https://codecodegogogo.github.io/2023/05/18/linux%E5%B0%8F%E9%A2%98/10.png">
+<meta property="og:image" content="https://codecodegogogo.github.io/2023/05/18/linux%E5%B0%8F%E9%A2%98/11.png">
+<meta property="og:image" content="https://codecodegogogo.github.io/2023/05/18/linux%E5%B0%8F%E9%A2%98/13.png">
+<meta property="article:published_time" content="2023-05-18T13:07:19.000Z">
+<meta property="article:modified_time" content="2023-06-02T15:56:10.493Z">
+<meta property="article:author" content="Sunny">
+<meta property="article:tag" content="linux">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://codecodegogogo.github.io/2023/05/18/linux%E5%B0%8F%E9%A2%98/1.png">
+  <!-- Canonical links -->
+  <link rel="canonical" href="https://codecodegogogo.github.io/2023/05/18/linux%E5%B0%8F%E9%A2%98/index.html">
+  
+    <link rel="alternate" href="/atom.xml" title="Sunny" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/images/favicon.png" type="image/x-icon">
+  
+  <!-- <link rel="icon" href="/images/favicon.png" type="image/x-icon"> -->
+
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  
+  
+  
+  
+<meta name="generator" content="Hexo 5.4.2"></head>
+
+
+<body class="main-center theme-purple" itemscope itemtype="http://schema.org/WebPage">
+  <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+  <div class="slimContent">
+    <div class="navbar-header">
+      
+      
+      <div class="profile-block text-center">
+        <a id="avatar" href="https://github.com/codecodegogogo" target="_blank">
+          <img class="img-circle img-rotate" src="/images/avatar.jpg" width="200" height="200">
+        </a>
+        <h2 id="name" class="hidden-xs hidden-sm">yong</h2>
+        <h3 id="title" class="hidden-xs hidden-sm hidden-md"></h3>
+        <small id="location" class="text-muted hidden-xs hidden-sm"><i class="icon icon-map-marker"></i> China</small>
+      </div>
+      
+      <div class="search" id="search-form-wrap">
+
+    <form class="search-form sidebar-form">
+        <div class="input-group">
+            <input type="text" class="search-form-input form-control" placeholder="搜索" />
+            <span class="input-group-btn">
+                <button type="submit" class="search-form-submit btn btn-flat" onclick="return false;"><i class="icon icon-search"></i></button>
+            </span>
+        </div>
+    </form>
+    <div class="ins-search">
+  <div class="ins-search-mask"></div>
+  <div class="ins-search-container">
+    <div class="ins-input-wrapper">
+      <input type="text" class="ins-search-input" placeholder="想要查找什么..." x-webkit-speech />
+      <button type="button" class="close ins-close ins-selectable" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+    </div>
+    <div class="ins-section-wrapper">
+      <div class="ins-section-container"></div>
+    </div>
+  </div>
+</div>
+
+
+</div>
+      <button class="navbar-toggle collapsed" type="button" data-toggle="collapse" data-target="#main-navbar" aria-controls="main-navbar" aria-expanded="false">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+    </div>
+    <nav id="main-navbar" class="collapse navbar-collapse" itemscope itemtype="http://schema.org/SiteNavigationElement" role="navigation">
+      <ul class="nav navbar-nav main-nav menu-highlight">
+        
+        
+        <li class="menu-item menu-item-home">
+          <a href="/.">
+            
+            <i class="icon icon-home-fill"></i>
+            
+            <span class="menu-title">首页</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags">
+            
+            <i class="icon icon-tags"></i>
+            
+            <span class="menu-title">标签</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-repository">
+          <a target="_blank" rel="noopener" href="https://github.com/codecodegogogo">
+            
+            <i class="icon icon-project"></i>
+            
+            <span class="menu-title">项目</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about">
+            
+            <i class="icon icon-cup-fill"></i>
+            
+            <span class="menu-title">关于</span>
+          </a>
+        </li>
+        
+      </ul>
+      
+	
+    <ul class="social-links">
+    	
+        <li><a href="https://github.com/codecodegogogo" target="_blank" title="Github" data-toggle=tooltip data-placement=top><i class="icon icon-github"></i></a></li>
+        
+    </ul>
+
+    </nav>
+  </div>
+</header>
+
+  
+    <aside class="sidebar" itemscope itemtype="http://schema.org/WPSideBar">
+  <div class="slimContent">
+    
+      <div class="widget">
+    <h3 class="widget-title">公告</h3>
+    <div class="widget-body">
+        <div id="board">
+            <div class="content">
+                <p>今天网站换了个新皮肤~</p> <p align="right">2023.4.14</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">标签</h3>
+    <div class="widget-body">
+      <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/c/" rel="tag">c++</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/code/" rel="tag">code</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/java/" rel="tag">java</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/javascript/" rel="tag">javascript</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/linux/" rel="tag">linux</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/os/" rel="tag">os</a><span class="tag-list-count">11</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/vue/" rel="tag">vue</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%9D%82%E8%B0%88/" rel="tag">杂谈</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%AE%97%E6%B3%95/" rel="tag">算法</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%9F%BA%E7%A1%80/" rel="tag">计算机基础</a><span class="tag-list-count">8</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%B7%A5%E5%85%B7/" rel="tag">计算机工具</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E6%96%87%E5%8C%96%E5%9F%BA%E7%A1%80/" rel="tag">计算机文化基础</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/" rel="tag">计算机网络</a><span class="tag-list-count">9</span></li></ul>
+    </div>
+  </div>
+
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">最新文章</h3>
+    <div class="widget-body">
+      <ul class="recent-post-list list-unstyled no-thumbnail">
+        
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                
+              </p>
+              <p class="item-title">
+                <a href="/2024/06/10/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E5%90%84%E5%B1%82%E7%BD%91%E7%BB%9C%E8%AE%BE%E5%A4%87/%E8%AE%A1%E7%AE%97%E6%9C%BA%E6%96%87%E5%8C%96%E5%9F%BA%E7%A1%80-ppt/" class="title">(no title)</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2024-06-10T02:05:08.833Z" itemprop="datePublished">2024-06-10</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                
+              </p>
+              <p class="item-title">
+                <a href="/2024/06/10/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E5%90%84%E5%B1%82%E7%BD%91%E7%BB%9C%E8%AE%BE%E5%A4%87/%E8%AE%A1%E7%AE%97%E6%9C%BA%E6%96%87%E5%8C%96%E5%9F%BA%E7%A1%80-%E6%95%B0%E6%8D%AE%E5%BA%93/" class="title">(no title)</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2024-06-10T02:05:08.833Z" itemprop="datePublished">2024-06-10</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                
+              </p>
+              <p class="item-title">
+                <a href="/2024/05/23/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E5%90%84%E5%B1%82%E7%BD%91%E7%BB%9C%E8%AE%BE%E5%A4%87/%E8%AE%A1%E7%AE%97%E6%9C%BA%E6%96%87%E5%8C%96%E5%9F%BA%E7%A1%80-excel/" class="title">计算机文化基础-excel</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2024-05-23T00:30:47.000Z" itemprop="datePublished">2024-05-23</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                
+              </p>
+              <p class="item-title">
+                <a href="/2024/05/14/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E5%90%84%E5%B1%82%E7%BD%91%E7%BB%9C%E8%AE%BE%E5%A4%87/%E8%AE%A1%E7%AE%97%E6%9C%BA%E6%96%87%E5%8C%96%E5%9F%BA%E7%A1%80/" class="title">计算机文化基础</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2024-05-14T01:41:05.000Z" itemprop="datePublished">2024-05-14</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                
+              </p>
+              <p class="item-title">
+                <a href="/2024/03/01/Algorithm/" class="title">Algorithm</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2024-03-01T07:52:28.000Z" itemprop="datePublished">2024-03-01</time>
+              </p>
+            </div>
+          </li>
+          
+      </ul>
+    </div>
+  </div>
+  
+
+    
+  </div>
+</aside>
+
+  
+  
+<main class="main" role="main">
+  <div class="content">
+  <article id="post-linux小题" class="article article-type-post" itemscope itemtype="http://schema.org/BlogPosting">
+    
+    <div class="article-header">
+      
+        
+  
+    <h1 class="article-title" itemprop="name">
+      linux小题
+    </h1>
+  
+
+      
+      <div class="article-meta">
+        <span class="article-date">
+    <i class="icon icon-calendar-check"></i>
+	<a href="/2023/05/18/linux%E5%B0%8F%E9%A2%98/" class="article-date">
+	  <time datetime="2023-05-18T13:07:19.000Z" itemprop="datePublished">2023-05-18</time>
+	</a>
+</span>
+        
+        
+  <span class="article-tag">
+    <i class="icon icon-tags"></i>
+	<a class="article-tag-link-link" href="/tags/linux/" rel="tag">linux</a>
+  </span>
+
+
+        
+	<span class="article-read hidden-xs">
+	    <i class="icon icon-eye-fill" aria-hidden="true"></i>
+	    <span id="busuanzi_container_page_pv">
+			<span id="busuanzi_value_page_pv">0</span>
+		</span>
+	</span>
+
+
+        <span class="post-comment"><i class="icon icon-comment"></i> <a href="/2023/05/18/linux%E5%B0%8F%E9%A2%98/#comments" class="article-comment-link">评论</a></span>
+        
+	
+		<span class="post-wordcount hidden-xs" itemprop="wordCount">字数统计: 5.5k(字)</span>
+	
+	
+
+      </div>
+    </div>
+    <div class="article-entry marked-body" itemprop="articleBody">
+      
+        <p>相关文章：</p>
+<blockquote>
+<p><a target="_blank" rel="noopener" href="https://sunnyli1024.github.io/2023/05/18/linux%E5%B0%8F%E9%A2%98/">linux小题</a><br><a target="_blank" rel="noopener" href="https://sunnyli1024.github.io/2023/05/18/%E5%AE%A2%E5%88%B6%E5%8C%96linux/">客制化linux</a><br><a target="_blank" rel="noopener" href="https://sunnyli1024.github.io/2023/05/17/linux-shell%E7%BC%96%E7%A8%8B/">linux_shell编程</a><br><a target="_blank" rel="noopener" href="https://sunnyli1024.github.io/2023/05/16/linux%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4/">linux基础</a></p>
+</blockquote>
+<h4 id="1"><a href="#1" class="headerlink" title="1"></a>1</h4><p>将t.txt打印出来通过管道往后传，cut以/为间隔符取第三段，进行排序（uniq只能统计连续出现的次数，所以要把相同的先合在一起），通过uniq -c统计唯一值并在首显示出现次数，最后通过sort -n按照数值排序-r顺序取反</p>
+<p><img src="/2023/05/18/linux%E5%B0%8F%E9%A2%98/1.png" alt="1"></p>
+<blockquote>
+<p><strong>cat t.txt：将文件t.txt的内容输出到终端。<br>cut -d ‘/‘ -f 3：以“/”为分隔符，取每行的第三个字段。<br>sort：将每行的内容进行排序。<br>uniq -c：统计每个不同的字段出现的次数，并输出结果。<br>sort -nr：按照出现次数进行倒序排序。</strong></p>
+</blockquote>
+<blockquote>
+<p><strong>sort [-bcdfimMnr][-o&lt;输出文件&gt;][-t&lt;分隔字符&gt;]</strong><br>-b 忽略每行前面开始出的空格字符。<br>-c 检查文件是否已经按照顺序排序。<br>-d 排序时，处理英文字母、数字及空格字符外，忽略其他的字符。<br>-f 排序时，将小写字母视为大写字母。<br>-m 将几个排序好的文件进行合并。<br>-M 将前面3个字母依照月份的缩写进行排序。<br>-n 依照数值的大小排序。<br>-u 意味着是唯一的(unique)，输出的结果是去完重了的。<br>-o&lt;输出文件&gt; 将排序后的结果存入指定的文件。<br>-r 以相反的顺序来排序。<br>-t&lt;分隔字符&gt; 指定排序时所用的栏位分隔字符。</p>
+</blockquote>
+<blockquote>
+<p><strong>cut  [-bn] [file]<br>cut [-c] [file]<br>cut [-df] [file]</strong><br>-d ：自定义分隔符，默认为制表符。</p>
+</blockquote>
+<blockquote>
+<p><strong>uniq [-cdu]</strong><br>c或–count 在每列旁边显示该行重复出现的次数。<br>-d或–repeated 仅显示重复出现的行列。<br>-u或–unique 仅显示出一次的行列。</p>
+</blockquote>
+<h4 id="2"><a href="#2" class="headerlink" title="2"></a>2</h4><blockquote>
+<p><strong>netstat -an |grep ESTAB |awk -F “ “ ‘{print $5}’ |cut -d “:” -f 1 |sort |uniq -c</strong></p>
+</blockquote>
+<blockquote>
+<p>netstat -an：列出所有网络连接的状态。<br>grep ESTAB：过滤出状态为ESTABLISHED（已建立）的连接。<br>awk -F “ “ ‘{print $5}’：以空格为分隔符，取出每行的第五个字段，即连接的本地地址和端口号和远程地址和端口号。<br>cut -d “:” -f 1：以冒号为分隔符，取出每行的第一部分，即本地地址。<br>sort：将每行的内容进行排序。<br>uniq -c：统计每个不同的本地地址出现的次数，并输出结果。</p>
+</blockquote>
+<p><img src="/2023/05/18/linux%E5%B0%8F%E9%A2%98/2.png" alt="2"><br><img src="/2023/05/18/linux%E5%B0%8F%E9%A2%98/2.1.png" alt="2"><br>netstat命令用于显示网络连接、路由表和网络接口等相关的信息，包括网络连接的状态、本地和远程IP地址、端口号等。它可以帮助用户识别网络连接问题和网络瓶颈。</p>
+<p>ps命令用于显示当前正在运行的进程的信息，包括进程的PID、CPU和内存使用情况、运行时间等。它可以帮助用户了解系统中正在运行的进程，以便识别和解决系统性能问题。</p>
+<p>Netstat -a 显示全部 -n 显示数字地址<br>Awk作用同cut -F选择分隔符  ‘{print $n}’ 打印第n段<br>注意：awk支持空格，cut不支持<br>关于awk分段 用分隔符分开后，$0代表本身，$1代表分开的第一段，如果没分，$0$1均可以代表自身</p>
+<h4 id="4"><a href="#4" class="headerlink" title="4"></a>4</h4><p><img src="/2023/05/18/linux%E5%B0%8F%E9%A2%98/4.png" alt="4"></p>
+<h4 id="5"><a href="#5" class="headerlink" title="5"></a>5</h4><p><img src="/2023/05/18/linux%E5%B0%8F%E9%A2%98/5.png" alt="4"></p>
+<h4 id="6"><a href="#6" class="headerlink" title="6"></a>6</h4><p><img src="/2023/05/18/linux%E5%B0%8F%E9%A2%98/6.png" alt="6"></p>
+<h4 id="7-linux权限划分时应注意"><a href="#7-linux权限划分时应注意" class="headerlink" title="7 linux权限划分时应注意"></a>7 linux权限划分时应注意</h4><p><img src="/2023/05/18/linux%E5%B0%8F%E9%A2%98/7.1.png" alt="7"><br><img src="/2023/05/18/linux%E5%B0%8F%E9%A2%98/7.png" alt="7"><br><strong>文件：r读文件 w修改文件 x执行权限<br>目录：r读目录 w删除、添加、修改（不是内容，是改名等表面操作）文件 x进入目录</strong><br><img src="/2023/05/18/linux%E5%B0%8F%E9%A2%98/7.2.png" alt="7"></p>
+<h4 id="8-开机过程"><a href="#8-开机过程" class="headerlink" title="8 开机过程"></a>8 开机过程</h4><p><img src="/2023/05/18/linux%E5%B0%8F%E9%A2%98/8.png" alt="8"></p>
+<h4 id="9查看io占用"><a href="#9查看io占用" class="headerlink" title="9查看io占用"></a>9查看io占用</h4><blockquote>
+<p><strong>iotop</strong><br>-o：只显示有io操作的进程<br>-b：批量显示，无交互，主要用作记录到文件。<br>-n NUM：显示NUM次，主要用于非交互式模式。<br>-d SEC：间隔SEC秒显示一次。<br>-p PID：监控的进程pid。接进程号，监视指定进程，只会输出该进程的统计信息。<br>-u USER：监控的进程用户。<br>-k 使用千字节而不是人类友好单位</p>
+</blockquote>
+<h4 id="10-求和"><a href="#10-求和" class="headerlink" title="10 求和"></a>10 求和</h4><p><img src="/2023/05/18/linux%E5%B0%8F%E9%A2%98/10.png" alt="10"></p>
+<p><img src="/2023/05/18/linux%E5%B0%8F%E9%A2%98/11.png" alt="11"></p>
+<p>关于awk分段 用分隔符分开后，$0代表本身，$1代表分开的第一段，如果没分，$0$1均可以代表自身</p>
+<h4 id="优化"><a href="#优化" class="headerlink" title="优化"></a>优化</h4><p><img src="/2023/05/18/linux%E5%B0%8F%E9%A2%98/13.png" alt="13"></p>
+<h4 id="Linux面试基本100道题"><a href="#Linux面试基本100道题" class="headerlink" title="Linux面试基本100道题"></a>Linux面试基本100道题</h4><ol>
+<li><p>   cron 后台常驻程序 (daemon) 用于：<br>A. 负责文件在网络中的共享<br>B. 管理打印子系统<br>C. 跟踪管理系统信息和错误<br>D. 管理系统日常任务的调度<br>答案：D</p>
+</li>
+<li><p>在大多数Linux发行版本中，以下哪个属于块设备 (block devices) ？<br>A. 串行口<br>B. 硬盘<br>C. 虚拟终端<br>D. 打印机<br>答案：B</p>
+</li>
+<li><p>下面哪个Linux命令可以一次显示一页内容？<br>A. pause<br>B. cat<br>C. more<br>D. grep<br>答案：C</p>
+</li>
+<li><p>怎样了解您在当前目录下还有多大空间？<br>A. Use df<br>B. Use du /<br>C. Use du .<br>D. Use df .<br>答案：C</p>
+</li>
+<li><p>怎样更改一个文件的权限设置？<br>A. attrib<br>B. chmod<br>C. change<br>D. file<br>答案：B</p>
+</li>
+<li><p>假如您需要找出 /etc/my.conf 文件属于哪个包 (package) ，您可以执行：<br>A. rpm -q /etc/my.conf<br>B. rpm -requires /etc/my.conf<br>C. rpm -qf /etc/my.conf<br>D. rpm -q | grep /etc/my.conf<br>答案：C</p>
+</li>
+<li><p>假如当前系统是在 level 3 运行，怎样不重启系统就可转换到 level 5 运行？<br>A. Set level = 5<br>B. telinit 5<br>C. run 5<br>D. ALT-F7-5<br>答案：B</p>
+</li>
+<li><p>那个命令用于改变 IDE 硬盘的设置？<br>A. hdparam<br>B. ideconfig<br>C. hdparm<br>D. hddparm<br>答案：C</p>
+</li>
+<li><p>下面哪个命令可以列出定义在以后特定时间运行一次的所有任务？<br>A. atq<br>B. cron<br>C. batch<br>D. at<br>答案：A</p>
+</li>
+</ol>
+<p>10.下面命令的作用是：set PS1=”[\u\w\t]$“ ; export PS1<br>A. 改变错误信息提示<br>B. 改变命令提示符<br>C. 改变一些终端参数<br>D. 改变辅助命令提示符<br>答案：B</p>
+<p>11.作为一个管理员，你希望在每一个新用户的目录下放一个文件 .bashrc ，那么你应该在哪个目录下放这个文件，以便于新用户创建主目录时自动将这个文件复制到自己的目录下。<br>A. /etc/skel/<br>B. /etc/default/<br>C. /etc/defaults/<br>D. /etc/profile.d/<br>答案：A</p>
+<p>12.在bash中，export命令的作用是：<br>A. 在子shell中运行命令<br>B. 使在子shell中可以使用命令历史记录<br>C. 为其它应用程序设置环境变量<br>D. 提供NFS分区给网络中的其它系统使用<br>答案：C</p>
+<p>13.在使用了shadow口令的系统中，/etc/passwd和/etc/shadow两个文件的权限正确的是：<br>A. -rw-r—– , -r——–<br>B. -rw-r–r– , -r–r–r–<br>C. -rw-r–r– , -r——–<br>D. -rw-r–rw- , -r—–r–<br>答案：C</p>
+<p>14．下面哪个参数可以删除一个用户并同时删除用户的主目录？<br>A. rmuser -r<br>B. deluser -r<br>C. userdel -r<br>D. usermgr -r<br>答案：C</p>
+<p>15．有一个备份程序mybackup，需要在周一至周五下午1点和晚上8点各运行一次，下面哪条crontab的项可以完成这项工作？<br>A. 0 13,20 * * 1,5 mybackup<br>B. 0 13,20 * * 1,2,3,4,5 mybackup<br>C. * 13,20 * * 1,2,3,4,5 mybackup<br>D. 0 13,20 1,5 * * mybackup<br>答案：B</p>
+<p>16．如何从当前系统中卸载一个已装载的文件系统<br>A. umount<br>B. dismount<br>C. mount -u<br>D. 从 /etc/fstab 中删除这个文件系统项<br>答案：A</p>
+<p>17．如果你的umask设置为022，缺省的你创建的文件的权限为：<br>A. —-w–w-<br>B. -w–w—-<br>C. r-xr-x—<br>D. rw-r–r–<br>答案：D<br>umask是一种权限掩码，用于限制新创建的文件和目录的默认权限。它是一个三位八进制数字，表示要从新文件或目录的默认权限中去除的权限位。例如，如果umask设置为022，则新创建的文件将被授予644的权限（即所有者具有读写权限，其他用户只有读权限），新创建的目录将被授予755的权限（即所有用户都有读取和执行权限，但只有所有者可以写入目录）。<br>例如，要将umask设置为022，可以执行以下命令：<br>umask 022</p>
+<p>18．在一条命令中如何查找一个二进制命令 Xconfigurator 的路径？<br>A. apropos Xconfigurator<br>B. find Xconfigurator<br>C. where Xconfigurator<br>D. which Xconfigurator<br>答案：D</p>
+<p>19．哪一条命令用来装载所有在 /etc/fstab 中定义的文件系统？<br>A. amount<br>B. mount -a<br>C. fmount<br>D. mount -f<br>答案：B</p>
+<p>20．运行一个脚本，用户不需要什么样的权限？<br>A. read<br>B. write<br>C. execute<br>D. browse on the directory<br>答案：B</p>
+<p>21．在Linux中，如何标识接在IDE0上的slave硬盘的第2个扩展分区？<br>A. /dev/hdb2<br>B. /dev/hd1b2<br>C. /dev/hdb6<br>D. /dev/hd1b6<br>答案：C</p>
+<p>22．在应用程序起动时，如何设置进程的优先级？<br>A. priority<br>B. nice<br>C. renice<br>D. setpri<br>答案：B<br>在Linux系统中，可以使用nice和renice命令来设置进程的优先级。<br>nice命令<br>nice命令用于启动一个新的进程，并将其优先级降低（或提高）指定的优先级值。nice命令的语法如下：<br>nice [-n increment] command<br>其中，increment表示要增加（或减少）的优先级值。默认情况下，increment为10，表示将进程的优先级降低10个值。例如，要将进程的优先级降低为10，可以执行以下命令：<br>nice -n 10 command<br>renice命令<br>renice命令用于修改已经运行的进程的优先级。renice命令的语法如下：<br>renice [-n increment] pid<br>其中，pid表示要修改优先级的进程ID。例如，要将进程ID为1234的进程的优先级降低为10，可以执行以下命令：<br>renice -n 10 1234<br>注意，只有root用户才能将进程的优先级增加（即将increment值设为负数）。</p>
+<p>23．在 bash 中, 在一条命令后加入”1&gt;&amp;2” 意味着：<br>A. 标准错误输出重定向到标准输入<br>B. 标准输入重定向到标准错误输出<br>C. 标准输出重定向到标准错误输出<br>D. 标准输出重定向到标准输入<br>答案：C<br>在bash中，1表示标准输出（stdout），2表示标准错误输出（stderr），1&gt;&amp;2表示将标准输出重定向到标准错误输出，也就是将输出内容发送到标准错误输出流中。<br>例如，如果你执行以下命令：<br>ls /path/to/nonexistent/file 1&gt;&amp;2<br>这条命令将会把错误信息输出到标准错误输出流，而不是标准输出流。如果/path/to/nonexistent/file不存在，那么会输出类似于以下的错误信息到终端：<br>ls: cannot access ‘/path/to/nonexistent/file’: No such file or directory<br>这个技巧常用于将标准输出和标准错误输出合并为一个输出流，以便更好地处理程序的输出。<br>在上述命令中，1&gt;&amp;2表示将标准输出（文件描述符1）重定向到标准错误输出（文件描述符2）。这意味着，如果命令产生了标准输出，那么它将被发送到标准错误输出流中，而不是终端上。<br>例如，如果执行以下命令：<br>ls /path/to/nonexistent/file 1&gt;&amp;2<br>如果/path/to/nonexistent/file不存在，则会输出以下错误信息到终端上：</p>
+<p>ls: cannot access ‘/path/to/nonexistent/file’: No such file or directory<br>这是因为标准输出被重定向到了标准错误输出，而标准错误输出默认会输出到终端上。</p>
+<p>24．下面哪条命令可以把f1.txt复制为f2.txt?<br>A. cp f1.txt | f2.txt<br>B. cat f1.txt | f2.txt<br>C. cat f1.txt &gt; f2.txt<br>D. copy f1.txt | f2.txt<br>答案：C</p>
+<p>25．显示一个文件最后几行的命令是：<br>A. tac<br>B. tail<br>C. rear<br>D. last<br>答案：B</p>
+<p>26.如何快速切换到用户John的主目录下？<br>A. cd @John<br>B. cd #John<br>C. cd &amp;John<br>D. cd ~John<br>答案：D</p>
+<p>27.把一个流中所有字符转换成大写字符，可以使用下面哪个命令？<br>A. tr a-z A-Z<br>B. tac a-z A-Z<br>C.sed /a-z/A-Z<br>D. sed –toupper<br>答案：A<br>tr用于替换字符，可以删除字符</p>
+<p>28.使用什么命令可以查看Linux的启动信息？<br>A. mesg -d<br>B. dmesg<br>C. cat /etc/mesg<br>D. cat /var/mesg<br>答案：B</p>
+<p>29.运行级定义在：<br>A. in the kernel<br>B. in /etc/inittab<br>C. in /etc/runlevels<br>D. using the rl command<br>答案：B</p>
+<p>30.如何装载(mount)上在 /etc/fstab 文件中定义的所有文件系统？<br>A. mount -a<br>B. mount /mnt/*<br>C. mount<br>D. mount /etc/fstab<br>答案：A</p>
+<p>31.使用ln命令将生成了一个指向文件old的符号链接new，如果你将文件old删除，是否还能够访问文件中的数据？<br>A. 不可能再访问<br>B. 仍然可以访问<br>C. 能否访问取决于文件的所有者<br>D. 能否访问取决于文件的权限<br>答案：A</p>
+<p>32.xt2fs文件系统中，缺省的为root用户保留多大的空间？<br>A. 3%<br>B. 5%<br>C. 10%<br>D. 15%<br>答案：C</p>
+<p>33.哪个命令用来显示系统中各个分区中inode的使用情况？<br>A. df -i<br>B. df -H<br>C. free -b<br>D. du -a -c /<br>答案：A</p>
+<p>34.多数Linux发行版本中，图形方式的运行级定义为？<br>A. 1<br>B. 2<br>C. 3<br>D. 5<br>答案：D</p>
+<p>35.在系统文档中找到关于print这个单词的所有说明？<br>A. man print<br>B. which print<br>C. locate print<br>D. apropos print<br>答案：D<br>“which ls” 是一个命令，用于查找系统中可执行的指定命令的路径。例如，使用 “which ls” 命令可以找到系统中 ls 命令的路径。<br>“locate ls” 是另一个命令，用于在系统中查找包含指定字符串的文件。例如，使用 “locate ls” 命令可以列出所有包含 “ls” 字符串的文件路径。<br>这两个命令的作用不同，”which ls” 用于查找命令的路径，而 “locate ls” 用于查找文件路径。</p>
+<p>36.man 5 passwd 含义是？<br>A. 显示 passwd 命令的使用方法<br>B. 显示 passwd 文件的结构<br>C. 显示 passwd 命令的说明的前五行<br>D. 显示关于passwd的前五处说明文档。<br>答案：A</p>
+<p>37.如何在文件中查找显示所有以” * “打头的行？<br>A. find * file<br>B. wc -l * &lt; file<br>C. grep -n * file<br>D. grep ‘^*’ file<br>答案：D</p>
+<p>38.在ps命令中什么参数是用来显示所有用户的进程的？<br>A. a<br>B. b<br>C. u<br>D. x<br>答案：A</p>
+<p>39.显示二进制文件的命令是？<br>A. od<br>B. vil<br>C. view<br>D. binview<br>答案：A</p>
+<p>40.如何显示Linux系统中注册的用户数（包含系统用户）？<br>A. account -l<br>B. nl /etc/passwd |head<br>C. wc –users /etc/passwd<br>D. wc –lines /etc/passwd<br>答案：D</p>
+<p>41.在一行结束位置加上什么符号，表示未结束，下一行继续？<br>A. /<br>B. <br>C. ;<br>D. |<br>答案：B</p>
+<p>42.命令 kill 9 的含义是：<br>A. kills the process whose PID is 9.<br>B. kills all processes belonging to UID 9.<br>C. sends SIGKILL to the process whose PID is 9.<br>D. sends SIGTERM to the process whose PID IS 9.<br>答案：D</p>
+<p>43.如何删除一个非空子目录/tmp？<br>A. del /tmp/*<br>B. rm -rf /tmp<br>C. rm -Ra /tmp/*<br>D. rm -rf /tmp/*<br>答案：B</p>
+<p>44.使用什么命令可以在今天午夜运行命令 cmd1 ？<br>A. at midnight cmd1<br>B. cron -at “00:00” cmd1<br>C. batch -t “00:00” &lt; cmd1<br>D. echo “cmd1” | at midnight<br>答案：D</p>
+<p>45.你的系统使用增量备份策略，当需要恢复系统时，你需要按什么顺序恢复备份数据？<br>A. 最后一次全备份，然后从最早到最近的增量备份<br>B. 最后一次全备份，然后从最近到最早的增量备份<br>C. 最早到最近的增量备份，然后最后一次全备份<br>D. 最近到最早的增量备份，然后最后一次全备份<br>答案：B</p>
+<p>46.对所有用户的变量设置，应当放在哪个文件下？<br>A. /etc/bashrc<br>B. /etc/profile<br>C. ~/.bash_profile<br>D. /etc/skel/.bashrc<br>答案：B<br>47.Linux系统中，一般把命令 ls 定义为 ls –color 的别名，以便以不同颜色来标识不同类型的文件。但是，如何能够使用原先的ls命令？<br>A. \ls<br>B. ;ls<br>C. ls $$<br>D. ls –noalias<br>答案：A</p>
+<p>48.在Linux系统中的脚本文件一般以什么开头？<br>A. $/bin/sh<br>B. #!/bin/sh<br>C. use /bin/sh<br>D. set shell=/bin/sh<br>答案：B</p>
+<p>49.下面哪种写法表示如果cmd1成功执行，则执行cmd2命令？<br>A. cmd1&amp;&amp;cmd2<br>B. cmd1|cmd2<br>C. cmd1;cmd2<br>D. cmd1||cmd2<br>答案：A</p>
+<p>50.在哪个文件中定义网卡的I/O地址？<br>A. cat /proc/modules<br>B. cat /proc/devices<br>C. cat /proc/ioports<br>D. cat /io/dma<br>答案：C</p>
+<p>51.Linux中，提供TCP/IP包过滤功能的软件叫什么？<br>A. rarp<br>B. route<br>C. iptables<br>D. filter<br>答案：C</p>
+<p>52.如何暂停一个打印队列？<br>A. lpr<br>B. lpq<br>C. lpc<br>D. lpd<br>答案：C</p>
+<p>53.在vi中退出不保存的命令是？<br>A. :q<br>B. :w<br>C. :wq<br>D. :q!<br>答案：D</p>
+<p>54.在 XFree86 3.x 中, 缺省的字体服务器为：<br>A. xfs<br>B. xfserv<br>C. fonts<br>D. xfstt<br>答案：A</p>
+<p>55.使用什么命令检测基本网络连接？<br>A. ping<br>B. route<br>C. netstat<br>D. ifconfig<br>答案：A</p>
+<p>56.下面哪个协议使用了二个以上的端口？<br>A. telnet<br>B. FTP<br>C. rsh<br>D. HTTP<br>答案：B</p>
+<p>57.在PPP协议中，哪个认证协议不以明文传递密码？<br>A. PAM<br>B. PAP<br>C. PGP<br>D. CHAP<br>答案：D</p>
+<p>58.下面哪个文件系统应该分配最大的空间？<br>A. /usr<br>B. /lib<br>C. /root<br>D. /bin<br>答案：A</p>
+<p>59.如何在Debian系统中安装rpm包？<br>A. alien pkgname.rpm<br>B. dpkg –rpm pkgname.rpm<br>C. dpkg –alien pkgname.rpm<br>D. alien pkganme.rpm ; dpkg -i pkganme.deb<br>答案：D</p>
+<p>60.在安装软件时下面哪一步需要root权限？<br>A. make<br>B. make deps<br>C. make config<br>D. make install<br>答案：D</p>
+<p>61.什么命令用来只更新已经安装过的rpm软件包？<br>A. rpm -U * .rpm<br>B. rpm -F * .rpm<br>C. rpm -e * .rpm<br>D. rpm -q * .rpm<br>答案：B</p>
+<p>62.在 windows 与 Linux 双起动的系统中，如果要让LILO 管理引导，则 LILO 应该放在：<br>A. MBR<br>B. /<br>C. root分区的首扇区<br>D. /LILO<br>答案：D</p>
+<p>63.ldconfig的配置文件是<br>A. /lib/ld.so<br>B. /etc/ld.so.conf<br>C. /etc/ld.so.cache<br>D. /etc/modules.conf<br>答案：B<br>64.下面哪个命令可以压缩部分文件：<br>A. tar -dzvf filename.tgz *<br>B. tar -tzvf filename.tgz *<br>C. tar -czvf filename.tgz *<br>D. tar -xzvf filename.tgz *<br>答案：C</p>
+<p>65.网络服务的daemon是：<br>A. lpd<br>B. netd<br>C. httpd<br>D. inetd<br>答案：D</p>
+<p>66.Linux与windows 的网上领居互联，需要提供什么daemon?<br>A. bind<br>B. smbd<br>C. nmbd<br>D. shard<br>答案：B</p>
+<p>67.对于Apache服务器，提供的子进程的缺省的用户是：<br>A. root<br>B. apached<br>C. httpd<br>D. nobody<br>答案：D</p>
+<p>68.sendmail中缺省的未发出信件的存放位置是：<br>A. /var/mail/<br>B. /var/spool/mail/<br>C. /var/spool/mqueue/<br>D. /var/mail/deliver/<br>答案：C</p>
+<p>69.apache的主配置文件是：<br>A. httpd.conf<br>B. httpd.cfg<br>C. access.cfg<br>D. apache.conf<br>答案：A</p>
+<p>70.关于可装载的模块，装载时的参数，如I/O地址等的存放位置是：<br>A. /etc/conf.modules<br>B. /etc/lilo.conf<br>C. /boot/System.map<br>D. /etc/sysconfig<br>答案：A</p>
+<p>71.在 Linux 中，如何关闭邮件提示？<br>A. biff n<br>B. mesg n<br>C. notify off<br>D. set notify=off<br>答案：A</p>
+<p>72.在 bash shell 环境下，当一命令正在执行时，按下 control-Z 会：<br>A. 中止前台任务<br>B. 给当前文件加上 EOF.<br>C. 将前台任务转入后台<br>D. 注销当前用户<br>答案：C</p>
+<p>73.定义bash环境的用户文件是：<br>A. bash &amp; .bashrc<br>B. bashrc &amp; .bash_conf<br>C. bashrc &amp; bash_profile<br>D. .bashrc &amp; .bash_profile<br>答案：D</p>
+<p>74.下面哪条命令用来显示一个程序所使用的库文件？<br>A. ldd<br>B. ld so<br>C. modprobe<br>D. ldconfig<br>答案：B</p>
+<p>75.如何查看一个RPM软件的配置文件的存放位置？<br>A. rpm -qc rpm1<br>B. rpm -Vc rpm1<br>C. rpm –config rpm1<br>D. rpm -qa –config rpm1<br>答案：A</p>
+<p>76.如何查看一个RPM软件的修改记录？<br>A. rpm -Vc postfix<br>B. rpm -qpil postfix<br>C. rpm –changelog postfix<br>D. rpm -q –changelog postfix<br>答案：D</p>
+<p>77.通过Makefile来安装已编译过的代码的命令是：<br>A. make<br>B. install<br>C. make depend<br>D. make install<br>答案：D</p>
+<p>78.什么命令解压缩tar文件？<br>A. tar -czvf filename.tgz<br>B. tar -xzvf filename.tgz<br>C. tar -tzvf filename.tgz<br>D. tar -dzvf filename.tgz<br>答案：B</p>
+<p>79.在 XF86Config 配置文件中，哪个段用来设置字体文件？<br>A. The Fonts section.<br>B. The Files section.<br>C. The xfsCodes section.<br>D. The Graphics section.<br>答案：B</p>
+<p>80.8 bit color 指的是：<br>A. 64K colors<br>B. 16K colors<br>C. 256 colors<br>D. 16M colors<br>答案：C</p>
+<p>81.下面哪个文件用来设置 X window 的显示分辨率？<br>A. xinit<br>B. xinitrc<br>C. XF86Setup<br>D. XF86Config<br>答案：D</p>
+<p>82.哪个变量用来指定一个远程X应用程序将输出放到哪个X server上？<br>A. DISPLAY<br>B. TERM<br>C. ECHO<br>D. OUTPUT<br>答案：A</p>
+<p>83.在xdm的配置目录中，哪个文件用来设置在用户通过xdm登录后自动起动的应用程序？<br>A. The Xsession file<br>B. The Xsetup_0 file<br>C. The Xstart_up file<br>D. The GiveConsole file<br>答案：B</p>
+<p>84.命令 netstat -a 停了很长时间没有响应，这可能是哪里的问题？<br>A. NFS.<br>B. DNS.<br>C. NIS.<br>D. routing.<br>答案：B</p>
+<p>85.ping使用的协议是：<br>A. TCP<br>B. UDP<br>C. SMB<br>D. ICMP<br>答案：D</p>
+<p>86.下面哪个命令不是用来查看网络故障的？<br>A. ping<br>B. init<br>C. telnet<br>D. netstat<br>答案：B</p>
+<p>87.拨号上网使用的协议通常是：<br>A. PPP<br>B. UUCP<br>C. SLIP<br>D. Ethernet<br>答案：A</p>
+<ol>
+<li>   TCP/IP中，哪个协议是用来进行IP自动分配的？<br>A. ARP<br>B. NFS<br>C. DHCP<br>D. DNS<br>答案：C</li>
+</ol>
+<p>89.下面哪个文件定义了网络服务的端口？<br>A. /etc/netport<br>B. /etc/services<br>C. /etc/server<br>D. /etc/netconf<br>答案：B</p>
+<p>90.下面哪个功能用来生成一个文件的校验码？<br>A. md5<br>B. tar<br>C. crypt<br>D. md5sum<br>答案：A</p>
+<p>91.缺省的，用户邮件放在：<br>A. ~/mail/<br>B. /var/mail/<br>C. /var/mail/spool/<br>D. /var/spool/mail/<br>答案：D</p>
+<p>92.下面哪个文件包含了供 NFS daemon 使用的目录列表？<br>A. /etc/nfs<br>B. /etc/nfs.conf<br>C. /etc/exports<br>D. /etc/netdir<br>答案：C</p>
+<p>93.如何停止一台机器的telnet服务？<br>A. Put NONE in /etc/telnet.allow<br>B. Put a line ‘ALL:ALL’ in /etc/hosts.deny<br>C. Comment the telnet entry in /etc/inittab<br>D. Comment the telnet entry in /etc/xinetd.conf<br>答案：D</p>
+<p>94.在哪个文件中保存了sendmail的别名？<br>A. /etc/aliases<br>B. /etc/mailaliases<br>C. /etc/sendmail.aliases<br>D. /etc/sendmail/aliases<br>答案：A</p>
+<p>95.smbd and nmbddaemons 的配置文件是：<br>A. /etc/exports<br>B. /etc/smb.conf<br>C. /etc/samba/config<br>D. /usr/local/samba.cfg<br>答案：B</p>
+<p>96.下面哪个命令用来卸载一个内核模块？<br>A. rmmod<br>B. unmod<br>C. delmod<br>D. modprobe<br>答案：A</p>
+<p>97.什么情况下必须运行lilo<br>A. once a day from cron<br>B. once a week from cron<br>C. after installing a new kernel<br>D. after installing a new module<br>答案：C</p>
+<p>98.什么命令显示所有装载的模块？<br>A. lsmod<br>B. dirmod<br>C. modules<br>D. modlist<br>答案：A</p>
+<p>99.下面哪个命令刷新打印机队列？<br>A. lpflush<br>B. lprm -<br>C. lpclear<br>D. lprm all<br>答案：B</p>
+<p>100.下面哪个命令可以查看网卡的中断？<br>A. cat /proc/ioports<br>B. cat /proc/interrupts<br>C. cat /proc/memoryinfo<br>D. which interrupts<br>答案：B</p>
+
+      
+    </div>
+    <div class="article-footer">
+      <br>
+<br>
+<blockquote class="mt-2x">
+  <ul class="post-copyright list-unstyled">
+    
+    <li class="post-copyright-link hidden-xs">
+      <strong>本文链接：</strong>
+      <a href="https://codecodegogogo.github.io/2023/05/18/linux%E5%B0%8F%E9%A2%98/" title="linux小题" target="_blank" rel="external">https://codecodegogogo.github.io/2023/05/18/linux小题/</a>
+    </li>
+    
+    <li class="post-copyright-license">
+      <strong></strong>
+      <!-- <strong>版权声明： </strong> 本博客所有文章除特别声明外，均采用 <a href="http://creativecommons.org/licenses/by/4.0/deed.zh" target="_blank" rel="external">CC BY 4.0 CN协议</a> 许可协议。转载请注明出处！ -->
+    </li>
+  </ul>
+</blockquote>
+
+    </div>
+  </article>
+  
+    
+  <section id="comments">
+  	
+  </section>
+
+
+  
+</div>
+
+  <nav class="bar bar-footer clearfix" data-stick-bottom>
+  <div class="bar-inner">
+  
+  <ul class="pager pull-left">
+    
+    <li class="prev">
+      <a href="/2023/05/20/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E7%96%91%E9%97%AE/" title="计算机网络疑问"><i class="icon icon-angle-left" aria-hidden="true"></i><span>&nbsp;&nbsp;上一篇</span></a>
+    </li>
+    
+    
+    <li class="next">
+      <a href="/2023/05/18/%E5%AE%A2%E5%88%B6%E5%8C%96linux/" title="客制化linux"><span>下一篇&nbsp;&nbsp;</span><i class="icon icon-angle-right" aria-hidden="true"></i></a>
+    </li>
+    
+    
+  </ul>
+  
+  
+  <!-- Button trigger modal -->
+  <button type="button" class="btn btn-fancy btn-donate pop-onhover bg-gradient-warning" data-toggle="modal" data-target="#donateModal"><span>赏</span></button>
+  <!-- <div class="wave-icon wave-icon-danger btn-donate" data-toggle="modal" data-target="#donateModal">
+    <div class="wave-circle"><span class="icon"><i class="icon icon-bill"></i></span></div>
+  </div> -->
+  
+  
+  <div class="bar-right">
+    
+    <div class="share-component" data-sites="weibo,qq,wechat,facebook,twitter" data-mobile-sites="weibo,qq,qzone"></div>
+    
+  </div>
+  </div>
+</nav>
+  
+<!-- Modal -->
+<div class="modal modal-center modal-small modal-xs-full fade" id="donateModal" tabindex="-1" role="dialog">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content donate">
+      <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+      <div class="modal-body">
+        <div class="donate-box">
+          <div class="donate-head">
+            <p>感谢您的支持，我会继续努力的!</p>
+          </div>
+          <div class="tab-content">
+            <div role="tabpanel" class="tab-pane fade active in" id="alipay">
+              <div class="donate-payimg">
+                <img src="/images/donate/alipayimg.png" alt="扫码支持" title="扫一扫" />
+              </div>
+              <p class="text-muted mv">扫码打赏，你说多少就多少</p>
+              <p class="text-grey">打开支付宝扫一扫，即可进行扫码打赏哦</p>
+            </div>
+            <div role="tabpanel" class="tab-pane fade" id="wechatpay">
+              <div class="donate-payimg">
+                <img src="/images/donate/wechatpayimg.png" alt="扫码支持" title="扫一扫" />
+              </div>
+              <p class="text-muted mv">扫码打赏，你说多少就多少</p>
+              <p class="text-grey">打开微信扫一扫，即可进行扫码打赏哦</p>
+            </div>
+          </div>
+          <div class="donate-footer">
+            <ul class="nav nav-tabs nav-justified" role="tablist">
+              <li role="presentation" class="active">
+                <a href="#alipay" id="alipay-tab" role="tab" data-toggle="tab" aria-controls="alipay" aria-expanded="true"><i class="icon icon-alipay"></i> 支付宝</a>
+              </li>
+              <li role="presentation" class="">
+                <a href="#wechatpay" role="tab" id="wechatpay-tab" data-toggle="tab" aria-controls="wechatpay" aria-expanded="false"><i class="icon icon-wepay"></i> 微信支付</a>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+
+
+
+</main>
+
+  <footer class="footer" itemscope itemtype="http://schema.org/WPFooter">
+	
+	
+    <ul class="social-links">
+    	
+        <li><a href="https://github.com/codecodegogogo" target="_blank" title="Github" data-toggle=tooltip data-placement=top><i class="icon icon-github"></i></a></li>
+        
+    </ul>
+
+    <div class="copyright">
+    	
+        联系邮箱：<br>codecodegogogo@163.com
+        <!-- 2024 Sunny -->
+        
+        <!--  -->
+    </div>
+</footer>
+  <script src="//cdn.jsdelivr.net/npm/jquery@1.12.4/dist/jquery.min.js"></script>
+<script>
+window.jQuery || document.write('<script src="js/jquery.min.js"><\/script>')
+</script>
+
+<script src="/js/plugin.min.js"></script>
+
+
+<script src="/js/application.js"></script>
+
+
+    <script>
+(function (window) {
+    var INSIGHT_CONFIG = {
+        TRANSLATION: {
+            POSTS: '文章',
+            PAGES: '页面',
+            CATEGORIES: '分类',
+            TAGS: '标签',
+            UNTITLED: '(未命名)',
+        },
+        ROOT_URL: '/',
+        CONTENT_URL: '/content.json',
+    };
+    window.INSIGHT_CONFIG = INSIGHT_CONFIG;
+})(window);
+</script>
+
+<script src="/js/insight.js"></script>
+
+
+
+
+
+
+   
+<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+
+   
+
+
+
+
+
+
+</body>
+
+</html>

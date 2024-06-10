@@ -1,0 +1,860 @@
+<!DOCTYPE html>
+<html lang=zh>
+<head>
+  <meta charset="utf-8">
+  
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, minimal-ui">
+  <meta name="renderer" content="webkit">
+  <meta http-equiv="Cache-Control" content="no-transform" />
+  <meta http-equiv="Cache-Control" content="no-siteapp" />
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <meta name="format-detection" content="telephone=no,email=no,adress=no">
+  <!-- Color theme for statusbar -->
+  <meta name="theme-color" content="#000000" />
+  <!-- 强制页面在当前窗口以独立页面显示,防止别人在框架里调用页面 -->
+  <meta http-equiv="window-target" content="_top" />
+  
+  
+  <title>C++ Primer-C++基础 | yong&#39;s Blog</title>
+  <meta name="description" content="变量和基本类型C++是一种静态数据类型语言，它的类型检查发生在编译时。因此，编译器必须知道程序中每一个变量对应的数据类型。 数据类型是程序的基础:它告诉我们数据的意义以及我们能在数据上执行的操作。 基本内置类型算术类型算术类型分为两类:整型（integral type，包括字符和布尔类型在内）和浮点型。算术类型的尺寸（也就是该类型数据所占的比特数）在不同机器上有所差别。 布尔类型( bool）的">
+<meta property="og:type" content="article">
+<meta property="og:title" content="C++ Primer-C++基础">
+<meta property="og:url" content="https://codecodegogogo.github.io/2023/05/29/C-Primer/index.html">
+<meta property="og:site_name" content="Sunny">
+<meta property="og:description" content="变量和基本类型C++是一种静态数据类型语言，它的类型检查发生在编译时。因此，编译器必须知道程序中每一个变量对应的数据类型。 数据类型是程序的基础:它告诉我们数据的意义以及我们能在数据上执行的操作。 基本内置类型算术类型算术类型分为两类:整型（integral type，包括字符和布尔类型在内）和浮点型。算术类型的尺寸（也就是该类型数据所占的比特数）在不同机器上有所差别。 布尔类型( bool）的">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://codecodegogogo.github.io/2023/05/29/C-Primer/1.png">
+<meta property="og:image" content="https://codecodegogogo.github.io/2023/05/29/C-Primer/2.png">
+<meta property="og:image" content="https://codecodegogogo.github.io/2023/05/29/C-Primer/3.png">
+<meta property="og:image" content="https://codecodegogogo.github.io/2023/05/29/C-Primer/5.png">
+<meta property="article:published_time" content="2023-05-29T07:21:52.000Z">
+<meta property="article:modified_time" content="2023-06-17T11:39:00.071Z">
+<meta property="article:author" content="Sunny">
+<meta property="article:tag" content="c++">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://codecodegogogo.github.io/2023/05/29/C-Primer/1.png">
+  <!-- Canonical links -->
+  <link rel="canonical" href="https://codecodegogogo.github.io/2023/05/29/C-Primer/index.html">
+  
+    <link rel="alternate" href="/atom.xml" title="Sunny" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/images/favicon.png" type="image/x-icon">
+  
+  <!-- <link rel="icon" href="/images/favicon.png" type="image/x-icon"> -->
+
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  
+  
+  
+  
+<meta name="generator" content="Hexo 5.4.2"></head>
+
+
+<body class="main-center theme-purple" itemscope itemtype="http://schema.org/WebPage">
+  <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+  <div class="slimContent">
+    <div class="navbar-header">
+      
+      
+      <div class="profile-block text-center">
+        <a id="avatar" href="https://github.com/codecodegogogo" target="_blank">
+          <img class="img-circle img-rotate" src="/images/avatar.jpg" width="200" height="200">
+        </a>
+        <h2 id="name" class="hidden-xs hidden-sm">yong</h2>
+        <h3 id="title" class="hidden-xs hidden-sm hidden-md"></h3>
+        <small id="location" class="text-muted hidden-xs hidden-sm"><i class="icon icon-map-marker"></i> China</small>
+      </div>
+      
+      <div class="search" id="search-form-wrap">
+
+    <form class="search-form sidebar-form">
+        <div class="input-group">
+            <input type="text" class="search-form-input form-control" placeholder="搜索" />
+            <span class="input-group-btn">
+                <button type="submit" class="search-form-submit btn btn-flat" onclick="return false;"><i class="icon icon-search"></i></button>
+            </span>
+        </div>
+    </form>
+    <div class="ins-search">
+  <div class="ins-search-mask"></div>
+  <div class="ins-search-container">
+    <div class="ins-input-wrapper">
+      <input type="text" class="ins-search-input" placeholder="想要查找什么..." x-webkit-speech />
+      <button type="button" class="close ins-close ins-selectable" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+    </div>
+    <div class="ins-section-wrapper">
+      <div class="ins-section-container"></div>
+    </div>
+  </div>
+</div>
+
+
+</div>
+      <button class="navbar-toggle collapsed" type="button" data-toggle="collapse" data-target="#main-navbar" aria-controls="main-navbar" aria-expanded="false">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+    </div>
+    <nav id="main-navbar" class="collapse navbar-collapse" itemscope itemtype="http://schema.org/SiteNavigationElement" role="navigation">
+      <ul class="nav navbar-nav main-nav menu-highlight">
+        
+        
+        <li class="menu-item menu-item-home">
+          <a href="/.">
+            
+            <i class="icon icon-home-fill"></i>
+            
+            <span class="menu-title">首页</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags">
+            
+            <i class="icon icon-tags"></i>
+            
+            <span class="menu-title">标签</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-repository">
+          <a target="_blank" rel="noopener" href="https://github.com/codecodegogogo">
+            
+            <i class="icon icon-project"></i>
+            
+            <span class="menu-title">项目</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about">
+            
+            <i class="icon icon-cup-fill"></i>
+            
+            <span class="menu-title">关于</span>
+          </a>
+        </li>
+        
+      </ul>
+      
+	
+    <ul class="social-links">
+    	
+        <li><a href="https://github.com/codecodegogogo" target="_blank" title="Github" data-toggle=tooltip data-placement=top><i class="icon icon-github"></i></a></li>
+        
+    </ul>
+
+    </nav>
+  </div>
+</header>
+
+  
+    <aside class="sidebar" itemscope itemtype="http://schema.org/WPSideBar">
+  <div class="slimContent">
+    
+      <div class="widget">
+    <h3 class="widget-title">公告</h3>
+    <div class="widget-body">
+        <div id="board">
+            <div class="content">
+                <p>今天网站换了个新皮肤~</p> <p align="right">2023.4.14</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">标签</h3>
+    <div class="widget-body">
+      <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/c/" rel="tag">c++</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/code/" rel="tag">code</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/java/" rel="tag">java</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/javascript/" rel="tag">javascript</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/linux/" rel="tag">linux</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/os/" rel="tag">os</a><span class="tag-list-count">11</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/vue/" rel="tag">vue</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%9D%82%E8%B0%88/" rel="tag">杂谈</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%AE%97%E6%B3%95/" rel="tag">算法</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%9F%BA%E7%A1%80/" rel="tag">计算机基础</a><span class="tag-list-count">8</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%B7%A5%E5%85%B7/" rel="tag">计算机工具</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E6%96%87%E5%8C%96%E5%9F%BA%E7%A1%80/" rel="tag">计算机文化基础</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/" rel="tag">计算机网络</a><span class="tag-list-count">9</span></li></ul>
+    </div>
+  </div>
+
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">最新文章</h3>
+    <div class="widget-body">
+      <ul class="recent-post-list list-unstyled no-thumbnail">
+        
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                
+              </p>
+              <p class="item-title">
+                <a href="/2024/06/10/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E5%90%84%E5%B1%82%E7%BD%91%E7%BB%9C%E8%AE%BE%E5%A4%87/%E8%AE%A1%E7%AE%97%E6%9C%BA%E6%96%87%E5%8C%96%E5%9F%BA%E7%A1%80-ppt/" class="title">(no title)</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2024-06-10T02:05:08.833Z" itemprop="datePublished">2024-06-10</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                
+              </p>
+              <p class="item-title">
+                <a href="/2024/06/10/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E5%90%84%E5%B1%82%E7%BD%91%E7%BB%9C%E8%AE%BE%E5%A4%87/%E8%AE%A1%E7%AE%97%E6%9C%BA%E6%96%87%E5%8C%96%E5%9F%BA%E7%A1%80-%E6%95%B0%E6%8D%AE%E5%BA%93/" class="title">(no title)</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2024-06-10T02:05:08.833Z" itemprop="datePublished">2024-06-10</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                
+              </p>
+              <p class="item-title">
+                <a href="/2024/05/23/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E5%90%84%E5%B1%82%E7%BD%91%E7%BB%9C%E8%AE%BE%E5%A4%87/%E8%AE%A1%E7%AE%97%E6%9C%BA%E6%96%87%E5%8C%96%E5%9F%BA%E7%A1%80-excel/" class="title">计算机文化基础-excel</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2024-05-23T00:30:47.000Z" itemprop="datePublished">2024-05-23</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                
+              </p>
+              <p class="item-title">
+                <a href="/2024/05/14/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E5%90%84%E5%B1%82%E7%BD%91%E7%BB%9C%E8%AE%BE%E5%A4%87/%E8%AE%A1%E7%AE%97%E6%9C%BA%E6%96%87%E5%8C%96%E5%9F%BA%E7%A1%80/" class="title">计算机文化基础</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2024-05-14T01:41:05.000Z" itemprop="datePublished">2024-05-14</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                
+              </p>
+              <p class="item-title">
+                <a href="/2024/03/01/Algorithm/" class="title">Algorithm</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2024-03-01T07:52:28.000Z" itemprop="datePublished">2024-03-01</time>
+              </p>
+            </div>
+          </li>
+          
+      </ul>
+    </div>
+  </div>
+  
+
+    
+  </div>
+</aside>
+
+  
+  
+  <aside class="sidebar sidebar-toc collapse   in  " id="collapseToc" itemscope itemtype="http://schema.org/WPSideBar">
+  <div class="slimContent">
+    <nav id="toc" class="article-toc">
+      <h3 class="toc-title">文章目录</h3>
+      <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%8F%98%E9%87%8F%E5%92%8C%E5%9F%BA%E6%9C%AC%E7%B1%BB%E5%9E%8B"><span class="toc-number">1.</span> <span class="toc-text">变量和基本类型</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%9F%BA%E6%9C%AC%E5%86%85%E7%BD%AE%E7%B1%BB%E5%9E%8B"><span class="toc-number">1.1.</span> <span class="toc-text">基本内置类型</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%AE%97%E6%9C%AF%E7%B1%BB%E5%9E%8B"><span class="toc-number">1.1.1.</span> <span class="toc-text">算术类型</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%86%85%E7%BD%AE%E7%B1%BB%E5%9E%8B%E7%9A%84%E6%9C%BA%E5%99%A8%E5%AE%9E%E7%8E%B0"><span class="toc-number">1.1.1.1.</span> <span class="toc-text">内置类型的机器实现</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%B8%A6%E7%AC%A6%E5%8F%B7%E7%B1%BB%E5%9E%8B%E5%92%8C%E6%97%A0%E7%AC%A6%E5%8F%B7%E7%B1%BB%E5%9E%8B"><span class="toc-number">1.1.1.2.</span> <span class="toc-text">带符号类型和无符号类型</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%A6%82%E4%BD%95%E9%80%89%E6%8B%A9%E7%B1%BB%E5%9E%8B"><span class="toc-number">1.1.1.3.</span> <span class="toc-text">如何选择类型</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%B1%BB%E5%9E%8B%E8%BD%AC%E6%8D%A2"><span class="toc-number">1.1.2.</span> <span class="toc-text">类型转换</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E9%81%BF%E5%85%8D%E6%97%A0%E6%B3%95%E9%A2%84%E7%9F%A5%E5%92%8C%E4%BE%9D%E8%B5%96%E4%BA%8E%E5%AE%9E%E7%8E%B0%E7%8E%AF%E5%A2%83%E7%9A%84%E8%A1%8C%E4%B8%BA"><span class="toc-number">1.1.2.1.</span> <span class="toc-text">避免无法预知和依赖于实现环境的行为</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E7%BB%83%E4%B9%A0"><span class="toc-number">1.1.2.2.</span> <span class="toc-text">练习</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AD%97%E9%9D%A2%E5%80%BC%E5%B8%B8%E9%87%8F"><span class="toc-number">1.1.3.</span> <span class="toc-text">字面值常量</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%95%B4%E5%9E%8B%E5%92%8C%E6%B5%AE%E7%82%B9%E5%9E%8B%E5%AD%97%E9%9D%A2%E5%80%BC"><span class="toc-number">1.1.3.1.</span> <span class="toc-text">整型和浮点型字面值</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%AD%97%E7%AC%A6%E5%92%8C%E5%AD%97%E7%AC%A6%E4%B8%B2%E5%AD%97%E9%9D%A2%E5%80%BC"><span class="toc-number">1.1.3.2.</span> <span class="toc-text">字符和字符串字面值</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%8C%87%E5%AE%9A%E5%AD%97%E9%9D%A2%E5%80%BC%E7%9A%84%E7%B1%BB%E5%9E%8B"><span class="toc-number">1.1.3.3.</span> <span class="toc-text">指定字面值的类型</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E7%BB%83%E4%B9%A0-1"><span class="toc-number">1.1.3.4.</span> <span class="toc-text">练习</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%8F%98%E9%87%8F"><span class="toc-number">1.2.</span> <span class="toc-text">变量</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%8F%98%E9%87%8F%E5%AE%9A%E4%B9%89"><span class="toc-number">1.2.1.</span> <span class="toc-text">变量定义</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%88%9D%E5%A7%8B%E5%80%BC"><span class="toc-number">1.2.1.1.</span> <span class="toc-text">初始值</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%88%97%E8%A1%A8%E5%88%9D%E5%A7%8B%E5%8C%96"><span class="toc-number">1.2.1.2.</span> <span class="toc-text">列表初始化</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E9%BB%98%E8%AE%A4%E5%88%9D%E5%A7%8B%E5%8C%96"><span class="toc-number">1.2.1.3.</span> <span class="toc-text">默认初始化</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E7%BB%83%E4%B9%A0-2"><span class="toc-number">1.2.1.4.</span> <span class="toc-text">练习</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%8F%98%E9%87%8F%E5%A3%B0%E6%98%8E%E5%92%8C%E5%AE%9A%E4%B9%89%E7%9A%84%E5%85%B3%E7%B3%BB"><span class="toc-number">1.2.2.</span> <span class="toc-text">变量声明和定义的关系</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E7%BB%83%E4%B9%A0-3"><span class="toc-number">1.2.2.1.</span> <span class="toc-text">练习</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%A0%87%E8%AF%86%E7%AC%A6"><span class="toc-number">1.2.3.</span> <span class="toc-text">标识符</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%90%8D%E5%AD%97%E7%9A%84%E4%BD%9C%E7%94%A8%E5%9F%9F"><span class="toc-number">1.2.4.</span> <span class="toc-text">名字的作用域</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E7%BB%83%E4%B9%A0-4"><span class="toc-number">1.2.4.1.</span> <span class="toc-text">练习</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%A4%8D%E5%90%88%E7%B1%BB%E5%9E%8B"><span class="toc-number">1.3.</span> <span class="toc-text">复合类型</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%BC%95%E7%94%A8"><span class="toc-number">1.3.1.</span> <span class="toc-text">引用</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%BC%95%E7%94%A8%E7%9A%84%E5%AE%9A%E4%B9%89"><span class="toc-number">1.3.1.1.</span> <span class="toc-text">引用的定义</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E7%BB%83%E4%B9%A0-5"><span class="toc-number">1.3.1.2.</span> <span class="toc-text">练习</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%8C%87%E9%92%88"><span class="toc-number">1.3.2.</span> <span class="toc-text">指针</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E8%8E%B7%E5%8F%96%E5%AF%B9%E8%B1%A1%E7%9A%84%E5%9C%B0%E5%9D%80"><span class="toc-number">1.3.2.1.</span> <span class="toc-text">获取对象的地址</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%88%A9%E7%94%A8%E6%8C%87%E9%92%88%E8%AE%BF%E9%97%AE%E5%AF%B9%E8%B1%A1"><span class="toc-number">1.3.2.2.</span> <span class="toc-text">利用指针访问对象</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%9F%90%E4%BA%9B%E7%AC%A6%E5%8F%B7%E6%9C%89%E5%A4%9A%E9%87%8D%E5%90%AB%E4%B9%89"><span class="toc-number">1.3.2.3.</span> <span class="toc-text">某些符号有多重含义</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E7%A9%BA%E6%8C%87%E9%92%88"><span class="toc-number">1.3.2.4.</span> <span class="toc-text">空指针</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E8%B5%8B%E5%80%BC%E5%92%8C%E6%8C%87%E9%92%88"><span class="toc-number">1.3.2.5.</span> <span class="toc-text">赋值和指针</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%85%B6%E4%BB%96%E6%8C%87%E9%92%88%E6%93%8D%E4%BD%9C"><span class="toc-number">1.3.2.6.</span> <span class="toc-text">其他指针操作</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#void-%E6%8C%87%E9%92%88"><span class="toc-number">1.3.2.7.</span> <span class="toc-text">void*指针</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E7%BB%83%E4%B9%A0-6"><span class="toc-number">1.3.2.8.</span> <span class="toc-text">练习</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%90%86%E8%A7%A3%E5%A4%8D%E5%90%88%E7%B1%BB%E5%9E%8B%E7%9A%84%E5%A3%B0%E6%98%8E"><span class="toc-number">1.3.3.</span> <span class="toc-text">理解复合类型的声明</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%8C%87%E5%90%91%E6%8C%87%E9%92%88%E7%9A%84%E6%8C%87%E9%92%88"><span class="toc-number">1.3.3.1.</span> <span class="toc-text">指向指针的指针</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%8C%87%E5%90%91%E6%8C%87%E9%92%88%E7%9A%84%E5%BC%95%E7%94%A8"><span class="toc-number">1.3.3.2.</span> <span class="toc-text">指向指针的引用</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E7%BB%83%E4%B9%A0-7"><span class="toc-number">1.3.3.3.</span> <span class="toc-text">练习</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#const-%E9%99%90%E5%AE%9A%E7%AC%A6"><span class="toc-number">1.4.</span> <span class="toc-text">const 限定符</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%BB%83%E4%B9%A0-8"><span class="toc-number">1.4.1.</span> <span class="toc-text">练习</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#const-%E7%9A%84%E5%BC%95%E7%94%A8"><span class="toc-number">1.4.2.</span> <span class="toc-text">const 的引用</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%88%9D%E5%A7%8B%E5%8C%96%E5%92%8C%E5%AF%B9const%E7%9A%84%E5%BC%95%E7%94%A8"><span class="toc-number">1.4.3.</span> <span class="toc-text">初始化和对const的引用</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%AF%B9const%E7%9A%84%E5%BC%95%E7%94%A8%E5%8F%AF%E8%83%BD%E5%BC%95%E7%94%A8%E4%B8%80%E4%B8%AA%E5%B9%B6%E9%9D%9Econst%E7%9A%84%E5%AF%B9%E8%B1%A1"><span class="toc-number">1.4.3.1.</span> <span class="toc-text">对const的引用可能引用一个并非const的对象</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%8C%87%E9%92%88%E5%92%8Cconst"><span class="toc-number">1.4.4.</span> <span class="toc-text">指针和const</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#const%E6%8C%87%E9%92%88"><span class="toc-number">1.4.4.1.</span> <span class="toc-text">const指针</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E7%BB%83%E4%B9%A0-9"><span class="toc-number">1.4.4.2.</span> <span class="toc-text">练习</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%A1%B6%E5%B1%82const"><span class="toc-number">1.4.5.</span> <span class="toc-text">顶层const</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E7%BB%83%E4%B9%A0-10"><span class="toc-number">1.4.5.1.</span> <span class="toc-text">练习</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#constexpr%E5%92%8C%E5%B8%B8%E9%87%8F%E8%A1%A8%E8%BE%BE%E5%BC%8F"><span class="toc-number">1.4.6.</span> <span class="toc-text">constexpr和常量表达式</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#constexpr%E5%8F%98%E9%87%8F"><span class="toc-number">1.4.6.1.</span> <span class="toc-text">constexpr变量</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%AD%97%E9%9D%A2%E5%80%BC%E7%B1%BB%E5%9E%8B"><span class="toc-number">1.4.6.2.</span> <span class="toc-text">字面值类型</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%A4%84%E7%90%86%E7%B1%BB%E5%9E%8B"><span class="toc-number">1.5.</span> <span class="toc-text">处理类型</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%B1%BB%E5%9E%8B%E5%88%AB%E5%90%8D"><span class="toc-number">1.5.1.</span> <span class="toc-text">类型别名</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#auto%E7%B1%BB%E5%9E%8B%E8%AF%B4%E6%98%8E%E7%AC%A6"><span class="toc-number">1.5.2.</span> <span class="toc-text">auto类型说明符</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%A4%8D%E5%90%88%E7%B1%BB%E5%9E%8B%E3%80%81%E5%B8%B8%E9%87%8F%E5%92%8Cauto"><span class="toc-number">1.5.2.1.</span> <span class="toc-text">复合类型、常量和auto</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E7%BB%83%E4%B9%A0-11"><span class="toc-number">1.5.2.2.</span> <span class="toc-text">练习</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#decltype%E7%B1%BB%E5%9E%8B%E6%8C%87%E7%A4%BA%E7%AC%A6"><span class="toc-number">1.5.3.</span> <span class="toc-text">decltype类型指示符</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E7%BB%83%E4%B9%A0-12"><span class="toc-number">1.5.3.1.</span> <span class="toc-text">练习</span></a></li></ol></li></ol></li></ol></li></ol>
+    </nav>
+  </div>
+</aside>
+
+<main class="main" role="main">
+  <div class="content">
+  <article id="post-C-Primer" class="article article-type-post" itemscope itemtype="http://schema.org/BlogPosting">
+    
+    <div class="article-header">
+      
+        
+  
+    <h1 class="article-title" itemprop="name">
+      C++ Primer-C++基础
+    </h1>
+  
+
+      
+      <div class="article-meta">
+        <span class="article-date">
+    <i class="icon icon-calendar-check"></i>
+	<a href="/2023/05/29/C-Primer/" class="article-date">
+	  <time datetime="2023-05-29T07:21:52.000Z" itemprop="datePublished">2023-05-29</time>
+	</a>
+</span>
+        
+        
+  <span class="article-tag">
+    <i class="icon icon-tags"></i>
+	<a class="article-tag-link-link" href="/tags/c/" rel="tag">c++</a>
+  </span>
+
+
+        
+	<span class="article-read hidden-xs">
+	    <i class="icon icon-eye-fill" aria-hidden="true"></i>
+	    <span id="busuanzi_container_page_pv">
+			<span id="busuanzi_value_page_pv">0</span>
+		</span>
+	</span>
+
+
+        <span class="post-comment"><i class="icon icon-comment"></i> <a href="/2023/05/29/C-Primer/#comments" class="article-comment-link">评论</a></span>
+        
+	
+		<span class="post-wordcount hidden-xs" itemprop="wordCount">字数统计: 13k(字)</span>
+	
+	
+
+      </div>
+    </div>
+    <div class="article-entry marked-body" itemprop="articleBody">
+      
+        <p><img src="/2023/05/29/C-Primer/1.png" alt="?"></p>
+<h1 id="变量和基本类型"><a href="#变量和基本类型" class="headerlink" title="变量和基本类型"></a>变量和基本类型</h1><p>C++是一种静态数据类型语言，它的类型检查发生在编译时。因此，编译器必须知道程序中每一个变量对应的数据类型。</p>
+<p>数据类型是程序的基础:它告诉我们数据的意义以及我们能在数据上执行的操作。</p>
+<h2 id="基本内置类型"><a href="#基本内置类型" class="headerlink" title="基本内置类型"></a>基本内置类型</h2><h3 id="算术类型"><a href="#算术类型" class="headerlink" title="算术类型"></a>算术类型</h3><p>算术类型分为两类:整型（integral type，包括字符和布尔类型在内）和浮点型。<br>算术类型的尺寸（也就是该类型数据所占的比特数）在不同机器上有所差别。<br><img src="/2023/05/29/C-Primer/2.png" alt="?"></p>
+<p>布尔类型( bool）的取值是真（true）或者假（false）。</p>
+<p>基本的字符类型是char,一个char的空间应确保可以存放机器基本字符集中任意字符对应的数字值。也就是说，一个 char的大小和一个机器字节一样。</p>
+<p>其他字符类型用于扩展字符集，如wchar_t、char16_t、char32_t。wchar_t类型用于确保可以存放机器最大扩展字符集中的任意一个字符，类型 char16_t和char32_t则为Unicode字符集服务(Unicode是用于表示所有自然语言中字符的标准)。</p>
+<h4 id="内置类型的机器实现"><a href="#内置类型的机器实现" class="headerlink" title="内置类型的机器实现"></a>内置类型的机器实现</h4><blockquote>
+<p>大多数计算机以2的整数次幂个比特作为块来处理内存，可寻址的最小内存块称为“字节(byte”,存储的基本单元称为“字(word”,它通常由几个字节组成。在C++语言中,一个字节要至少能容纳机器基本字符集中的字符。大多数机器的字节由8比特构成，字则由32或64比特构成,也就是4或8字节。<br><img src="/2023/05/29/C-Primer/3.png" alt="?"></p>
+<p>如果位置736424处的对象类型是float,并且该机器中float 以32比特存储,那么我们就能知道这个对象的内容占满了整个字。这个float数的实际值依赖于该机器是如何存储浮点数的。或者如果位置736424处的对象类型是unsigned char,并且该机器使用ISO-Latin-1字符集，则该位置处的字节表示一个分号。</p>
+</blockquote>
+<h4 id="带符号类型和无符号类型"><a href="#带符号类型和无符号类型" class="headerlink" title="带符号类型和无符号类型"></a>带符号类型和无符号类型</h4><p>除去布尔型和扩展的字符型之外，其他整型可以划分为带符号的(signed）和无符号的(unsigned）两种。带符号类型可以表示正数、负数或0，无符号类型则仅能表示大于等于0的值。</p>
+<p><strong>类型int、short、long和 long long都是带符号的</strong>，通过在这些类型名前添加unsigned就可以得到无符号类型，例如unsigned long。类型unsigned int可以缩写为unsigned。</p>
+<p>与其他整型不同，字符型被分为了三种:char、 signed char和unsigned char.特别需要注意的是:类型char和类型signed char并不一样。尽管字符型有三种，但是字符的表现形式却只有两种:带符号的和无符号的。类型char实际上会表现为上述两种形式中的一种，具体是哪种由编译器决定。</p>
+<p>C++标准并没有规定带符号类型应如何表示，<strong>但是约定了在表示范围内正值和负值的量应该平衡</strong>。因此，8比特的signed char理论上应该可以表示-127至127区间内的值，大多数现代计算机将实际的表示范围定为-128至127。</p>
+<h4 id="如何选择类型"><a href="#如何选择类型" class="headerlink" title="如何选择类型"></a>如何选择类型</h4><p>当明确知晓数值不可能为负时,选用无符号类型。</p>
+<p>在算术表达式中不要使用char或bool，只有在存放字符或布尔值时才使用它们。因为类型 char在一些机器上是有符号的,而在另一些机器上又是无符号的，所以如果使用char进行运算特别容易出问题。如果你需要使用一个不大的整数，那么明确指定它的类型是signed char或者unsigned ch</p>
+<h3 id="类型转换"><a href="#类型转换" class="headerlink" title="类型转换"></a>类型转换</h3><p>对象的类型定义了对象能包含的数据和能参与的运算，其中一种运算被大多数类型支持，就是将对象从一种给定的类型转换(convert）为另一种相关类型。<br>当在程序的某处我们使用了一种类型而其实对象应该取另一种类型时，程序会自动进行类型转换</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">bool b = 42; // b为真</span><br><span class="line">int i = b; // i的值为1</span><br><span class="line">i = 3.14; // i的值为3</span><br><span class="line">double pi = i; //pi的值为3.0</span><br><span class="line">unsigned char c = -l; //假设 char占8比特，c的值为255</span><br><span class="line">signed char c2 = 256; //假设char 占8比特，c2的值是未定义的</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<p>当我们把一个非布尔类型的算术值赋给布尔类型时，初始值为0则结果为false,否则结果为true。</p>
+<p>当我们把一个布尔值赋给非布尔类型时，初始值为false 则结果为0，初始值为true则结果为1。</p>
+<p>当我们把一个浮点数赋给整数类型时，进行了近似处理。结果值将仅保留浮点数中小数点之前的部分。</p>
+<p>当我们把一个整数值赋给浮点类型时，小数部分记为0。如果该整数所占的空间超过了浮点类型的容量，精度可能有损失。</p>
+<p>当我们赋给无符号类型一个超出它表示范围的值时，结果是初始值对无符号类型表示数值总数取模后的余数。<br>例如，8比特大小的unsigned char可以表示0至255区间内的值，如果我们赋了一个区间以外的值，则实际的结果是该值对256取模后所得的余数。因此，把-1赋给8比特大小unsigned char所得的结果是255。（负数就从该符号的范围倒着数）</p>
+<p><a href="https://codecodegogogo.github.io/2023/05/29/%E6%B1%82%E4%BD%99%E5%92%8C%E5%8F%96%E6%A8%A1/">求模和取余</a></p>
+<p>当我们赋给带符号类型一个超出它表示范围的值时，结果是未定义的(undefined)。此时，程序可能继续工作、可能崩溃，也可能生成垃圾数据。</p>
+<h4 id="避免无法预知和依赖于实现环境的行为"><a href="#避免无法预知和依赖于实现环境的行为" class="headerlink" title="避免无法预知和依赖于实现环境的行为"></a>避免无法预知和依赖于实现环境的行为</h4><p>程序也应该尽量避免依赖于实现环境的行为。如果我们把int的尺寸看成是一个确定不变的已知值，那么这样的程序就称作不可移植(nonportable)。当程序移植到别的机器上后，依赖于实现环境的程序就可能发生错误。要从过去的代码中定位这类错误可不是一件轻松愉快的工作。</p>
+<p>在第一个输出表达式里，两个(负）整数相加并得到了期望的结果。在第二个输出表达式里，相加前首先把整数-42转换成无符号数。把负数转换成无符号数类似于直接给无符号数赋一个负值，结果等于这个负数加上无符号数的模。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">unsigned u = 10;int i = -42;</span><br><span class="line">std: : cout&lt;&lt; i +i&lt;&lt; std: :endl; //输出-84</span><br><span class="line">std::cout &lt;&lt; u +i &lt;&lt; std::endl;1/如果int占32位，输出4294967264</span><br></pre></td></tr></table></figure>
+<p><strong>当从无符号数中减去一个值时，不管这个值是不是无符号数，我们都必须确保结果不能是一个负值</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">for (unsigned u = 10; u &gt;= 0; --u)</span><br><span class="line">std: : cout&lt;&lt; u &lt;&lt; std: :endl;</span><br></pre></td></tr></table></figure>
+<h4 id="练习"><a href="#练习" class="headerlink" title="练习"></a>练习</h4><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">unsigned</span> u = <span class="number">10</span>, u2 = <span class="number">42</span>;</span><br><span class="line">std::cout &lt;&lt; u2 - u &lt;&lt; std::endl;</span><br><span class="line">std::cout &lt;&lt; u - u2 &lt;&lt; std::endl;</span><br><span class="line"><span class="type">int</span> i = <span class="number">10</span>, i2 = <span class="number">42</span>;</span><br><span class="line">std::cout &lt;&lt; i2 - i &lt;&lt; std::endl;</span><br><span class="line">std::cout &lt;&lt; i - i2 &lt;&lt; std::endl;</span><br><span class="line">std::cout &lt;&lt; i - u &lt;&lt; std::endl;</span><br><span class="line">std::cout &lt;&lt; u - i &lt;&lt; std::endl;</span><br><span class="line"></span><br><span class="line"><span class="number">32</span></span><br><span class="line"><span class="number">4294967264</span></span><br><span class="line"><span class="number">32</span></span><br><span class="line"><span class="number">-32</span></span><br><span class="line"><span class="number">0</span></span><br><span class="line"><span class="number">0</span></span><br></pre></td></tr></table></figure>
+
+
+<h3 id="字面值常量"><a href="#字面值常量" class="headerlink" title="字面值常量"></a>字面值常量</h3><h4 id="整型和浮点型字面值"><a href="#整型和浮点型字面值" class="headerlink" title="整型和浮点型字面值"></a>整型和浮点型字面值</h4><p>我们可以将整型字面值写作十进制数、八进制数或十六进制数的形式。以0开头的整数代表八进制数，以0x或0x开头的代表十六进制数。例如，我们能用下面的任意一种形式来表示数值20:<br>20/* 十进制*/<br>024/<em>八进制</em>/<br>0x14/<em>十六进制</em>/</p>
+<p>浮点型字面值表现为一个小数或以科学计数法表示的指数,其中指数部分用E或e标识:3.14159<br>3.14159EO<br>0.0e0<br>.001<br>默认的，浮点型字面值是一个double</p>
+<h4 id="字符和字符串字面值"><a href="#字符和字符串字面值" class="headerlink" title="字符和字符串字面值"></a>字符和字符串字面值</h4><p>由单引号括起来的一个字符称为char型字面值，双引号括起来的零个或多个字符则构成字符串型字面值。<br>‘a’//字符字面值<br>“Hello world! “//字符串字面值<br>字符串字面值的类型实际上是由常量字符构成的数组（ array）。编译器在每个字符串的结尾处添加一个空字符(（ ‘\0’)，因此，字符串字面值的实际长度要比它的内容多1。例如，字面值’A’表示的就是单独的字符A，而字符串”A”则代表了一个字符的数组，该数组包含两个字符:一个是字母A、另一个是空字符。</p>
+<h4 id="指定字面值的类型"><a href="#指定字面值的类型" class="headerlink" title="指定字面值的类型"></a>指定字面值的类型</h4><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">L&#x27; a&#x27;</span><br><span class="line">//宽字符型字面值，类型是wchar_t</span><br><span class="line">u8&quot;hi ! &quot;</span><br><span class="line">l / utf-8字符串字面值（utf-8用8位编码一个Unicode字符）</span><br><span class="line">42ULL</span><br><span class="line">//无符号整型字面值，类型是unsigned long</span><br><span class="line">long</span><br><span class="line">1E-3F</span><br><span class="line">//单精度浮点型字面值，类型是float</span><br><span class="line">3.14159L</span><br><span class="line">//扩展精度浮点型字面值，类型是long double```</span><br><span class="line">![?](./C-Primer/4.png)</span><br></pre></td></tr></table></figure>
+<h4 id="练习-1"><a href="#练习-1" class="headerlink" title="练习"></a>练习</h4><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">指出下述字面值的数据类型并说明每一组内几种字面值的区别：</span><br><span class="line"></span><br><span class="line">(a) ‘a’, L’a’, “a”, L&quot;a&quot;</span><br><span class="line">(b) 10, 10u, 10L, 10uL, 012, 0xC</span><br><span class="line">© 3.14, 3.14f, 3.14L</span><br><span class="line">(d) 10, 10u, 10., 10e-2</span><br><span class="line">（a）字符字面值，宽字符字面值，字符串字面值，宽字符串字面值；</span><br><span class="line">（b）整形字面值，无符号整形字面值，长整形字面值，无符号长整形字面值，八进制整形字面值，十六进制整形字面值；</span><br><span class="line">（c）浮点型字面值，单精度浮点型字面值，扩展精度浮点型字面值；</span><br><span class="line">（d）整形字面值，无符号整形字面值，浮点型字面值，浮点型字面值。</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<h2 id="变量"><a href="#变量" class="headerlink" title="变量"></a>变量</h2><p>变量提供一个具名的、可供程序操作的存储空间。C++中的每个变量都有其数据类型，数据类型决定着变量所占内存空间的大小和布局方式、该空间能存储的值的范围，以及变量能参与的运算。对C++程序员来说，“变量 (variable)”和“对象(obiect)”一般可以百换使用。</p>
+<h3 id="变量定义"><a href="#变量定义" class="headerlink" title="变量定义"></a>变量定义</h3><p>变量定义的基本形式是:首先是类型说明符(type specifier)，随后紧跟由一个或多个变量名组成的列表，其中变量名以逗号分隔，最后以分号结束。列表中每个变量名的类型都由类型说明符指定，定义时还可以为一个或多个变量赋初值:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">int sum=0，value，</span><br><span class="line">units sold=0;</span><br><span class="line">// sum、value和units sold都是int// sum和unitssold初值为0</span><br></pre></td></tr></table></figure>
+<h4 id="初始值"><a href="#初始值" class="headerlink" title="初始值"></a>初始值</h4><p>当对象在创建时获得了一个特定的值，我们说这个对象被初始化(initialized)了。用于初始化变量的值可以是任意复杂的表达式。当一次定义了两个或多个变量时，对象的名字随着定义也就马上可以使用了。因此在同一条定义语句中，可以用先定义的变量值去初始化后定义的其他变量。</p>
+<blockquote>
+<p>初始化不是赋值，初始化的含义是创建变量时赋予其一个初始值，而赋值的含义是把对象的当前值擦除，而以一个新值来替代。</p>
+</blockquote>
+<h4 id="列表初始化"><a href="#列表初始化" class="headerlink" title="列表初始化"></a>列表初始化</h4><p>C++语言定义了初始化的好几种不同形式</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">int unitssold=0;</span><br><span class="line">int unitssold=&#123;0&#125;;</span><br><span class="line">int unitssold(0);</span><br><span class="line">int unitssold&#123;0&#125;;</span><br></pre></td></tr></table></figure>
+<p>作为C++11新标准的一部分，用花括号来初始化变量得到了全面应用，这种初始化的形式被称为列表初始化 (list initialization)。现在，无论是初始化对象还是某些时候为对象赋新值，都可以使用这样一组由花括号括起来的初始值了。</p>
+<p>当用于内置类型的变量时，这种初始化形式有一个重要特点:<strong>如果我们使用列表初始化且初始值存在丢失信息的风险</strong>，则编译器将报错:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">long doubleld=3.1415926536;</span><br><span class="line">// 错误:转换未执行，因为存在丢失信息的危险</span><br><span class="line">inta&#123;ld&#125;，b=&#123;ld&#125;;</span><br><span class="line">//正确:转换执行，且确实丢失了部分值</span><br><span class="line">int c(ld)，d=ld;</span><br></pre></td></tr></table></figure>
+<p>使用 long double 的值初始化 int 变量时可能丢失数据,所以编译器拒绝了 a和b的初始化请求。其中，至少ld 的小数部分会丢失掉，而且 nt 也可能存不下d 的整数部分。</p>
+<h4 id="默认初始化"><a href="#默认初始化" class="headerlink" title="默认初始化"></a>默认初始化</h4><p>如果定义变量时没有指定初值，则变量被默认初始化(default initialized)，此时变量被赋予了“默认值”。默认值到底是什么由变量类型决定，同时定义变量的位置也会对此有影响。</p>
+<p>如果是内置类型的变量未被显式初始化，它的值由定义的位置决定。<br><strong>定义于任何函数体之外的变量被初始化为 0。定义在函数体内部的内置类型变量将不被初始化</strong> (uninitialized)。<br>一个未被初始化的内置类型变量的值是未定义的，如果试图贝或以其他形式访问此类值将引发错误。</p>
+<p>每个类各自决定其初始化对象的方式。而且，<strong>是否允许不经初始化就定义对象也由类自己决定</strong>。如果类允许这种行为，它将决定对象的初始值到底是什么。绝大多数类都支持无须显式初始化而定义对象，这样的类提供了一个合适的默认值。</p>
+<blockquote>
+<p>定义于任何函数体之外的变量被初始化为 0。<br>定义于函数体内的内置类型的对象如果没有初始化，则其值未定义。<br>类的对象如果没有显式地初始化，则其值由类确定</p>
+</blockquote>
+<h4 id="练习-2"><a href="#练习-2" class="headerlink" title="练习"></a>练习</h4><blockquote>
+<p>解释下列定义的含义，对于非法的定义，请说明错在何处并将其改正。<br>(a) std::cin &gt;&gt; int input_value;<br>(b) int i = { 3.14 };<br>(c)double salary = wage = 9999.99;<br>(d) int i = 3.14;<br>（编译时记得使用C++11标准编译”-std=c++11”）<br>(a)非法，&gt;&gt;运算符后不能定义；<br>(b)非法，不能执行强制转换；<br>©非法，同一语句的初始化应该分别进行；<br>(d)合法，已强制转换。</p>
+</blockquote>
+<blockquote>
+<p>下列变量的初值分别是什么？<br>std::string global_str;<br>int global_int;<br>int main()<br>{<br>    int local_int;<br>    std::string local_str;<br>}</p>
+<p>global_str,local_str为空字符串；<br>global_int为0；<br>local_int未初始化，没有初始值</p>
+</blockquote>
+<h3 id="变量声明和定义的关系"><a href="#变量声明和定义的关系" class="headerlink" title="变量声明和定义的关系"></a>变量声明和定义的关系</h3><p>为了允许把程序拆分成多个逻辑部分来编写，C++语言支持分离式编译。</p>
+<p>如果将程序分为多个文件，则需要有在文件间共享代码的方法。例如，一个文件的代码可能需要使用另一个文件中定义的变量。一个实际的例子是 std::cout和std::cin,它们定义于标准库，却能被我们写的程序使用。</p>
+<p>为了支持分离式编译，C++语言将声明和定义区分开来。声明(declaration)使得名字为程序所知，一个文件如果想使用别处定义的名字则必须包含对那个名字的声明。而定义(definition)负责创建与名字关联的实体。</p>
+<p>变量声明规定了变量的类型和名字，在这一点上定义与之相同。但是除此之外，定义还申请存储空间，也可能会为变量赋一个初始值。</p>
+<p>如果想声明一个变量而非定义它，就在变量名前添加关键字extern，而且不要显式地初始化变量:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">//声明i而非定义i</span><br><span class="line">externint i;</span><br><span class="line">intj;//声明并定义了</span><br></pre></td></tr></table></figure>
+
+
+<p>任何包含了显式初始化的声明即成为定义。我们能给由extern 关键字标记的变量赋一个初始值，但是这么做也就抵消了extern 的作用。extern 语句如果包含初始值就不再是声明，而变成定义了:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">extern doublepi=3.1416;//定义  </span><br></pre></td></tr></table></figure>
+
+<p><strong>在函数体内部，如果试图初始化一个由extern 关键字标记的变量，将引发错误。</strong></p>
+<p>变量能且只能被定义一次，但是可以被多次声明</p>
+<h4 id="练习-3"><a href="#练习-3" class="headerlink" title="练习"></a>练习</h4><blockquote>
+<p>指出下面的语句是声明还是定义：</p>
+<p>(a) extern int ix = 1024;<br>(b) int iy;<br>(c)extern int iz;<br>（a）定义；<br>（b）定义；<br>（c）声明。</p>
+</blockquote>
+<h3 id="标识符"><a href="#标识符" class="headerlink" title="标识符"></a>标识符</h3><p>C++的标识符(identifier)由字母、数字和下画线组成，其中必须以字母或下画线开头。标识符的长度没有限制，但是对大小写字母敏感:</p>
+<p>同时，C++也为标准库保留了一些名字。用户自定义的标识符中不能连续出现两个下画线，也不能以下画线紧连大写字母开头。此外，定义在函数体外的标识符不能以下画线开头。</p>
+<p>练习</p>
+<blockquote>
+<p>请指出下面的名字中哪些是非法的？</p>
+<p>(a) int double = 3.14;<br>(b) int _;<br>(c)int catch-22;<br>(d) int 1_or_2 = 1;<br>(e) double Double = 3.14;<br>（a）非法，关键词；<br>（b）合法；<br>（c）非法；<br>（d）非法，字母、下划线开头；<br>（e）合法。</p>
+</blockquote>
+<h3 id="名字的作用域"><a href="#名字的作用域" class="headerlink" title="名字的作用域"></a>名字的作用域</h3><p>作用域(scope)是程序的一部分，在其中名字有其特定的含义。C++语言中大多数作用域都以花括号分隔。<br>作用域能彼此包含，被包含(或者说被嵌套)的作用域称为内层作用域(inner scope),包含着别的作用域的作用域称为外层作用域(outer scope)。<br>作用域中一旦声明了某个名字，它所嵌套着的所有作用域中都能访问该名字。同时,允许在内层作用域中重新定义外层作用域已有的名字:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">//输出#3:显式地访问全局变量reused;</span><br><span class="line">std::cout&lt;&lt;::reused&lt;&lt;std::endl;</span><br></pre></td></tr></table></figure>
+
+<h4 id="练习-4"><a href="#练习-4" class="headerlink" title="练习"></a>练习</h4><blockquote>
+<p>下面程序中 j 的值是多少？</p>
+<p>int i = 42;<br>int main()<br>{<br>    int i = 100;<br>    int j = i;<br>}</p>
+<p>100</p>
+</blockquote>
+<blockquote>
+<p>下面的程序合法吗？如果合法，它将输出什么？</p>
+<p>   int i = 100, sum = 0;<br>    for (int i = 0; i != 10; ++i)<br>        sum += i;<br>    std::cout &lt;&lt; i &lt;&lt; “ “ &lt;&lt; sum &lt;&lt; std::endl;</p>
+</blockquote>
+<h2 id="复合类型"><a href="#复合类型" class="headerlink" title="复合类型"></a>复合类型</h2><p>复合类型(compoundtype)是指基于其他类型定义的类型.</p>
+<h3 id="引用"><a href="#引用" class="headerlink" title="引用"></a>引用</h3><p>引用(reference)为对象起了另外一个名字，引用类型引用(refers to)另外一种类型通过将声明符写成&amp;d的形式来定义引用类型，其中d是声明的变量名:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">int ival=1024;</span><br><span class="line">int &amp;refVal=ival;  //refVal指向ival(是ival的另一个名字)</span><br><span class="line">int &amp;refVal2;  // 报错:引用必须被初始化</span><br></pre></td></tr></table></figure>
+
+<p>在初始化变量时，初始值会被拷贝到新建的对象中。<br>然而定义引用时，程序把引用和它的初始值绑定 (bind)在一起，而不是将初始值拷贝给引用。一旦初始化完成，引用将和它的初始值对象一直绑定在一起。因为无法令引用重新绑定到另外一个对象，因此引用必须初始化。</p>
+<p>引用并非对象，相反的，它只是为一个已经存在的对象所起的另外一个名字。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">refVal=2;//把2赋给 refVal指向的对象，此处即是赋给了ival</span><br><span class="line">int ii=refVal;//与ii=ival执行结果一样</span><br></pre></td></tr></table></figure>
+<p>为引用赋值，实际上是把值赋给了与引用绑定的对象。获取引用的值，实际上是获取了与引用绑定的对象的值。同理，以引用作为初始值，实际上是以与引用绑定的对象作为初始值:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">//正确:refVal3绑定到了那个与refVal绑定的对象上，这里就是绑定到ival上</span><br><span class="line">int &amp;refVal3 =refVal;</span><br><span class="line">//利用与 refVal绑定的对象的值初始化变量 i</span><br><span class="line">int i=refVal;   //正确:被初始化为ival的值</span><br></pre></td></tr></table></figure>
+<p><strong>因为引用本身不是一个对象，所以不能定义引用的引用。</strong></p>
+<h4 id="引用的定义"><a href="#引用的定义" class="headerlink" title="引用的定义"></a>引用的定义</h4><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">int i=1024，i2=2048;//i和12都是int</span><br><span class="line">int &amp;r=i，r2=i2;//r是一个引用，与i绑定在一起，r2是int </span><br><span class="line">int i3=1024，&amp;ri=i3;  //i3是int，ri是一个引用，与3绑定在一起</span><br><span class="line">int &amp;r3=i3，&amp;r4=2; //r3和r4都是引用</span><br></pre></td></tr></table></figure>
+
+<p>引用的类型都要和与之绑定的对象严格匹配。而且，引用只能绑定在对象上，而不能与字面值或某个表达式的计算结果绑定在一起</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">int &amp;refVal4=10;  //错误:引用类型的初始值必须是一个对象</span><br><span class="line">double dval=3.14;</span><br><span class="line">int &amp;refVal5=dval; //错误:此处引用类型的初始值必须是 int 型对象</span><br><span class="line">int i=3;</span><br><span class="line">int &amp;refVal5=i;</span><br><span class="line">refVal5=i;  //类型不一样也可以，触发隐式类型转换</span><br></pre></td></tr></table></figure>
+<p><strong>除了初始化要注意一些细节。不能换引用值，其他都和普通变量无异。</strong></p>
+<h4 id="练习-5"><a href="#练习-5" class="headerlink" title="练习"></a>练习</h4><blockquote>
+<p>下面的哪个定义是不合法的？为什么？</p>
+<p>(a) int ival = 1.01;<br>(b) int &amp;rval1 = 1.01;<br>(c)int &amp;rval2 = ival;<br>(d) int &rval3;<br>（a）合法；隐式类型转换（b）不合法，引用类型的初始值必须是一个对象；<br>（c）合法；（d）不合法，引用类型必须初始化。</p>
+</blockquote>
+<blockquote>
+<p>考察下面的所有赋值然后回答：哪些赋值是不合法的？为什么？哪些赋值是合法的？它们执行了哪些操作？</p>
+<p>int i = 0, &amp;r1 = i; double d = 0, &amp;r2 = d;<br>(a) r2 = 3.14159;<br>(b) r2 = r1;<br>(c) i = r2;<br>(d) r1 = d;<br>（a）合法，将3.14159赋值给r2所引用的对象d。<br>（b）合法，将r1所引用的对象i的值赋值给r2所引用的对象d。<br>（c）合法，将r2所引用的对象d的值赋值给i。<br>（d）合法，将d的值赋值给r1所引用的对象i。</p>
+</blockquote>
+<blockquote>
+<p>执行下面的代码段将输出什么结果？</p>
+<p>int i, &amp;ri = i;<br>std::cout &lt;&lt; i &lt;&lt; “ “ &lt;&lt; ri &lt;&lt; std::endl;<br>i = 5; ri = 10;<br>std::cout &lt;&lt; i &lt;&lt; “ “ &lt;&lt; ri &lt;&lt; std::endl;<br>随机 随机 10 10</p>
+</blockquote>
+<p>函数体外初始化为0，函数体内不初始化，i和ri指向同一对象。</p>
+<h3 id="指针"><a href="#指针" class="headerlink" title="指针"></a>指针</h3><p>指针(pointer)是“指向(point to)”另外一种类型的复合类型。与引用类似，指针也实现了对其他对象的间接访问。然而指针与引用相比又有很多不同点。其一，指针本身就是一个对象，允许对指针赋值和拷贝，而且在指针的生命周期内它可以先后指向几个不同的对象。其二，指针无须在定义时赋初值。和其他内置类型一样，在块作用域内定义的指针如果没有被初始化，也将拥有一个不确定的值。</p>
+<h4 id="获取对象的地址"><a href="#获取对象的地址" class="headerlink" title="获取对象的地址"></a>获取对象的地址</h4><p>指针存放某个对象的地址，要想获取该地址，需要使用取地址符(操作符&amp;):</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">int ival=42;</span><br><span class="line">int *p=&amp;ival; // p存放变量ival的地址，或者说p是指向变量ival的指针</span><br></pre></td></tr></table></figure>
+<p>第二条语句把p定义为一个指向int 的指针，随后初始化p令其指向名为ival的int对象。<strong>因为引用不是对象，没有实际地址，所以不能定义指向引用的指针。</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">double dval;</span><br><span class="line">double*pd=&amp;dval;//正确:初始值是 double型对象的地址</span><br><span class="line">double*d2=pd;//正确:初始值是指向 double对象的指针</span><br><span class="line">int*pi=pd;//错误:指针pi的类型和pd的类型不匹配</span><br><span class="line">pi=&amp;dval;//错误:试图把 double型对象的地址赋给 int 型指针</span><br></pre></td></tr></table></figure>
+<p>因为在声明语句中指针的类型实际上被用于指定它所指向对象的类型，所以二者必须匹配。如果指针指向了一个其他类型的对象，对该对象的操作将发生错误。</p>
+<h4 id="利用指针访问对象"><a href="#利用指针访问对象" class="headerlink" title="利用指针访问对象"></a>利用指针访问对象</h4><p>如果指针指向了一个对象，则允许使用解引用符(操作符*)来访问该对象</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">int ival=42;</span><br><span class="line">cout &lt;&lt;*p;// p存放着变量ival的地址，或者说p是指向变量ival的指针</span><br><span class="line">int *p= &amp;ival; // 由符号*得到指针p所指的对象，输出42</span><br></pre></td></tr></table></figure>
+<p>对指针解引用会得出所指的对象，因此如果给解引用的结果赋值，实际上也就是给指针所指的对象赋值:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">*p=0;//由符号*得到指针p所指的对象，即可经由p为变量ival赋值</span><br><span class="line">cout &lt;&lt;*p;//输出0</span><br></pre></td></tr></table></figure>
+<p>如上述程序所示，为*p 赋值实际上是为 p 所指的对象赋值</p>
+<h4 id="某些符号有多重含义"><a href="#某些符号有多重含义" class="headerlink" title="某些符号有多重含义"></a>某些符号有多重含义</h4><p>像&amp;和*这样的符号,既能用作表达式里的运算符,也能作为声明的一部分出现,符号的上下文决定了符号的意义:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">int i=42;</span><br><span class="line">int &amp;r=i; //&amp;紧随类型名出现，因此是声明的一部分，r是一个引用</span><br><span class="line">int *p; //*紧随类型名出现，因此是声明的一部分，p是一个指针</span><br><span class="line">p=&amp;i;   //&amp;出现在表达式中，是一个取地址符</span><br><span class="line">*p=i;   //*出现在表达式中，是一个解引用符</span><br><span class="line">int &amp;r2=*p; &amp;是声明的一部分,*是一个解引用符</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<h4 id="空指针"><a href="#空指针" class="headerlink" title="空指针"></a>空指针</h4><p>空指针（null pointer）不指向任何对象，在试图使用个指针之前代码可以首先检查它是否为空。以下列出几个生成空指针的方法:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">int *pl = nullptr; //等价于int *pl =0;</span><br><span class="line">int *p2 = 0 ; //直接将p2初始化为字面常量0</span><br><span class="line">//需要首先#include cstdlib</span><br><span class="line">int *p3 =NULL;  //等价于int*p3 = 0;</span><br></pre></td></tr></table></figure>
+
+<p>得到空指针最直接的办法就是用字面值nullptr来初始化指针<br>过去的程序还会用到一个名为NULL的预处理变量(preprocessor variable）来给指针赋值，这个变量在头文件cstdlib中定义，它的值就是0.</p>
+<p>预处理变量不属于命名空间std，它由预处理器负责管理，因此我们可以直接使用预处理变量而无须在前面加上std::，当用到一个预处理变量时，预处理器会自动地将它替换为实际值</p>
+<p>把int变量直接赋给指针是错误的操作，即使int变量的值恰好等于0也不行。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">int zero = 0;</span><br><span class="line">pi = zero;</span><br><span class="line">//错误:不能把int变量直接赋给指针</span><br></pre></td></tr></table></figure>
+
+<h4 id="赋值和指针"><a href="#赋值和指针" class="headerlink" title="赋值和指针"></a>赋值和指针</h4><p>指针和引用都能提供对其他对象的间接访问，然而在具体实现细节上二者有很大不同，其中最重要的一点就是引用本身并非一个对象。一旦定义了引用，就无法令其再绑定到另外的对象，之后每次使用这个引用都是访问它最初绑定的那个对象。</p>
+<p>指针和它存放的地址之间就没有这种限制了。和其他任何变量(只要不是引用)一样，给指针赋值就是令它存放一个新的地址，从而指向一个新的对象:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">int i=42;</span><br><span class="line">int *pi=0; // pi被初始化，但没有指向任何对象</span><br><span class="line">int *pi2=&amp;i; //pi2被初始化，存有i的地址</span><br><span class="line">int *pi3;  //如果pi3定义域块内，则pi3的值是无法确定的</span><br><span class="line">pi3=pi2; //他们指向同一对象</span><br><span class="line">pi2=0; //pi2不知向那个对象了</span><br></pre></td></tr></table></figure>
+
+<h4 id="其他指针操作"><a href="#其他指针操作" class="headerlink" title="其他指针操作"></a>其他指针操作</h4><p>只要指针拥有一个合法值，就能将它用在条件表达式中。和采用算术值作为条件遵循的规则类似，如果指针的值是0，条件取false，任何非О指针对应的条件值都是true。</p>
+<p>对于两个类型相同的合法指针，可以用相等操作符(==）或不相等操作符(!=）来比较它们，比较的结果是布尔类型。如果两个指针存放的地址值相同，则它们相等;反之它们不相等。</p>
+<h4 id="void-指针"><a href="#void-指针" class="headerlink" title="void*指针"></a>void*指针</h4><p>void*是一种特殊的指针类型，可用于存放任意对象的地址。一个void*指针存放着一个地址，这一点和其他指针类似。不同的是，我们对该地址中到底是个什么类型的对象并不了解:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">double obj = 3.14, *pd = &amp;obj; //正确:void*能存放任意类型对象的地址</span><br><span class="line">void *pv = &amp;obj; // obj可以是任意类型的对象</span><br><span class="line">pv = pd;// pv可以存放任意类型的指针</span><br></pre></td></tr></table></figure>
+<p><strong>以 void*的视角来看内存空间也就仅仅是内存空间，没办法访问内存空间中所存的对象</strong></p>
+<h4 id="练习-6"><a href="#练习-6" class="headerlink" title="练习"></a>练习</h4><blockquote>
+<p>说明指针和引用的主要区别<br>1.指针本身就是一个对象，允许对指针赋值和拷贝，而且在指针的生命周期内它可以先后指向几个不同的对象；2.指针无须在定义时赋初值。</p>
+</blockquote>
+<blockquote>
+<p>请叙述下面这段代码的作用。</p>
+</blockquote>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">int i = 42;</span><br><span class="line">int *p1 = &amp;i; </span><br><span class="line">*p1 = *p1 * *p1;</span><br></pre></td></tr></table></figure>
+<p>p指向i，i最后的值为1746（42*42）</p>
+<blockquote>
+<p>请解释下述定义。在这些定义中有非法的吗？如果有，为什么？</p>
+</blockquote>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">int i = 0;</span><br><span class="line">(a) double* dp = &amp;i;</span><br><span class="line">(b) int *ip = i;</span><br><span class="line">(c) int *p = &amp;i;</span><br><span class="line">（a）非法，一个是double*，一个是int*；</span><br><span class="line">（b）非法，一个是int*，一个是int,直接赋值0可以；</span><br><span class="line">（c）合法。</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>假设 p 是一个 int 型指针，请说明下述代码的含义。</p>
+</blockquote>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">if (p) // ...</span><br><span class="line">if (*p) // ...</span><br><span class="line">指针是不是空指针；</span><br><span class="line">指针所指的对象是不是0。</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>在下面这段代码中为什么 p 合法而 lp 非法？</p>
+</blockquote>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">int i = 42;</span><br><span class="line">void *p = &amp;i;</span><br><span class="line">long *lp = &amp;i;</span><br><span class="line">类型不一样，void*可以表示任何类型的对象。</span><br></pre></td></tr></table></figure>
+
+<h3 id="理解复合类型的声明"><a href="#理解复合类型的声明" class="headerlink" title="理解复合类型的声明"></a>理解复合类型的声明</h3><p>在同一条定义语句中，虽然基本数据类型只有一个，但是声明符的形式却可以不同。也就是说，一条定义语句可能定义出不同类型的变量:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">// i是一个int型的数，p是一个int型指针，r是一个int型引用</span><br><span class="line">int i =1024,*p = &amp;i,&amp;r = i;</span><br></pre></td></tr></table></figure>
+<p>int* p基本数据类型是int而非int<em>。</em>仅仅是修饰了p而已，对该声明语句中的其他变量，它并不产生任何作用:</p>
+<h4 id="指向指针的指针"><a href="#指向指针的指针" class="headerlink" title="指向指针的指针"></a>指向指针的指针</h4><p>一般来说，声明符中修饰符的个数并没有限制。当有多个修饰符连写在一起时，按照其逻辑关系详加解释即可。以指针为例，指针是内存中的对象，像其他对象一样也有自己的地址，因此允许把指针的地址再存放到另一个指针当中。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">int ival =1024;</span><br><span class="line">int *pi = &amp;ival; //pi指向一个int型的数</span><br><span class="line">int * *ppi =&amp;pi; //ppi指向一个int型的指针</span><br></pre></td></tr></table></figure>
+<p><img src="/2023/05/29/C-Primer/5.png" alt="?"></p>
+<h4 id="指向指针的引用"><a href="#指向指针的引用" class="headerlink" title="指向指针的引用"></a>指向指针的引用</h4><p>引用本身不是一个对象，因此不能定义指向引用的指针。但指针是对象，所以存在对指针的引用:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">int i = 42;</span><br><span class="line">int *p; // p是一个int型指针</span><br><span class="line">int *&amp;r= p; //r是一个对指针p的引用</span><br><span class="line">r = &amp;i; // r引用了一个指针，因此给r赋值&amp;i就是令p指向i</span><br><span class="line">*r= 0; //解引用r得到i，也就是p指向的对象，将i的值改为0</span><br></pre></td></tr></table></figure>
+<p>要理解r的类型到底是什么，最简单的办法是从右向左阅读r的定义。离变量名最近的符号（此例中是&amp;r的符号&amp;）对变量的类型有最直接的影响，因此r是一个引用。声明符的其余部分用以确定r引用的类型是什么，此例中的符号*说明r引用的是一个指针。最后，声明的基本数据类型部分指出r引用的是一个int指针。</p>
+<p><strong>面对一条比较复杂的指针或引用的声明语句时,从右向左阅读有助于弄清楚它的真实含义。</strong></p>
+<h4 id="练习-7"><a href="#练习-7" class="headerlink" title="练习"></a>练习</h4><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">说明下列变量的类型和值。</span><br><span class="line"></span><br><span class="line">(a) int* ip, i, &amp;r = i;</span><br><span class="line">(b) int i, *ip = 0;</span><br><span class="line">(c)int* ip, ip2;</span><br><span class="line">（a）指向int的指针，int类型，int的引用；</span><br><span class="line">（b）int类型，int类型的指针；</span><br><span class="line">（c）int类型指针，int类型。</span><br></pre></td></tr></table></figure>
+
+
+<h2 id="const-限定符"><a href="#const-限定符" class="headerlink" title="const 限定符"></a>const 限定符</h2><p><strong>此书中指针常量一类概念和我们常说的是相反的。<br>本书推崇从右往左看等号左边的符号。<br>指针常量此书中叫做常量指针。 const pointer<br>常量指针称为指向常量的指针  pointer to const</strong></p>
+<p>有时我们希望定义这样一种变量,它的值不能被改变。<br>使用关键字const对变量的类型加以限定:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">const int bufsize = 512;</span><br></pre></td></tr></table></figure>
+
+<p>这样就把bufSize定义成了一个常量。任何试图为buffSize赋值的行为都将引发错误:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">bufSize = 512; //错误:试图向const对象写值</span><br></pre></td></tr></table></figure>
+<p>因为const对象一旦创建后其值就不能再改变,所以const对象必须初始化。一如既往，初始值可以是任意复杂的表达式:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">const int i = get_size();</span><br><span class="line">//正确:运行时初始化</span><br><span class="line">const int j= 42;</span><br><span class="line">//正确:编译时初始化</span><br><span class="line">const int k;</span><br><span class="line">//错误:k是一个未经初始化的常量</span><br></pre></td></tr></table></figure>
+
+
+<p>在不改变const对象的操作中还有一种是初始化，如果利用一个对象去初始化另外一个对象，则它们是不是 const都无关紧要:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">int i =42;</span><br><span class="line">const int ci = i;//正确:i值被拷贝给了ci</span><br><span class="line">int j= ci; //正确:ci的值被拷贝给了j</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>尽管ci是整型常量，但无论如何ci中的值还是一个整型数。ci的常量特征仅仅在执行改变ci的操作时才会发挥作用。当用ci去初始化j时，根本无须在意ci是不是一个常量。拷贝一个对象的值并不会改变它，一旦拷贝完成，新的对象就和原来的对象没什么关系了。</p>
+<p>当以编译时初始化的方式定义一个const对象时，就如对 bufSize的定义一样:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">const int bufSize = 512;//输入缓冲区大小`</span><br></pre></td></tr></table></figure>
+<p>编译器将在编译过程中把用到该变量的地方都替换成对应的值。也就是说，编译器会找到代码中所有用到bufSize的地方，然后用512替换。</p>
+<p><strong>如果想在多个文件之间共享const对象,必须在变量的定义之前添加extern关键字。</strong></p>
+<h3 id="练习-8"><a href="#练习-8" class="headerlink" title="练习"></a>练习</h3><blockquote>
+<p>下面哪些语句是合法的？如果不合法，请说明为什么？</p>
+<p>const int buf;<br>int cnt = 0;<br>const int sz = cnt;<br>++cnt; ++sz;<br>（a）不合法，const int必须初始化；<br>（b）合法；<br>（c）合法；<br>（d）++cnt，合法；++sz，不合法，const int不能改变。</p>
+</blockquote>
+<h3 id="const-的引用"><a href="#const-的引用" class="headerlink" title="const 的引用"></a>const 的引用</h3><p><strong>此书中指针常量与常量指针和网上相反</strong></p>
+<p>可以把引用绑定到 const对象上，就像绑定到其他对象上一样，我们称之为对常量的引用（reference to const)。与普通引用不同的是，对常量的引用不能被用作修改它所绑定的对象:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">const int ci = 1024;</span><br><span class="line">const int &amp;rl = ci;1/正确:引用及其对应的对象都是常量</span><br><span class="line">rl = 42;//错误:r1是对常量的引用</span><br><span class="line">int &amp;r2= ci;//错误:试图让一个非常量引用指向一个常量对象</span><br></pre></td></tr></table></figure>
+
+<h3 id="初始化和对const的引用"><a href="#初始化和对const的引用" class="headerlink" title="初始化和对const的引用"></a>初始化和对const的引用</h3><p><strong>普通引用不允许表达式，常引用可以。普通引用不能绑定常量，常引用可以绑定普通变量，他自己不能改此变量但别人可以改。</strong></p>
+<p>引用的类型必须与其所引用对象的类型一致，但是有两个例外。<br>第一种例外情况就是在初始化常量引用时允许用任意表达式作为初始值，只要该表达式的结果能转换成引用的类型即可。尤其，允许为一个常量引用绑定非常量的对象、字面值，甚至是个一般表达式:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">int i =42;·</span><br><span class="line">const int &amp;rl = i;//允许将const int&amp;绑定到一个普通int对象上</span><br><span class="line">const int &amp;r2= 42;//正确:r1是一个常量引用</span><br><span class="line">const int &amp;r3 = r1 * 2;//正确:r3是一个常量引用</span><br><span class="line">int &amp;r4 = r1 * 2; //错误:r4是一个普通的非常量引用</span><br></pre></td></tr></table></figure>
+
+
+<p>此处ri引用了一个int型的数。对 ri的操作应该是整数运算，但dval却是一个双精度浮点数而非整数。因此为了确保让ri绑定一个整数，编译器把上述代码变成了如下形式:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">double dval = 3.14;</span><br><span class="line">const int &amp;ri = dval;</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">//由双精度浮点数生成一个临时的整型常量</span><br><span class="line">const int temp = dval;</span><br><span class="line">const int &amp;ri = temp;</span><br><span class="line">// 让ri绑定这个临时量</span><br></pre></td></tr></table></figure>
+
+
+<h4 id="对const的引用可能引用一个并非const的对象"><a href="#对const的引用可能引用一个并非const的对象" class="headerlink" title="对const的引用可能引用一个并非const的对象"></a>对const的引用可能引用一个并非const的对象</h4><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">int i=42;</span><br><span class="line">int &amp;r1 = i;//引用ri绑定对象i</span><br><span class="line">const int &amp;r2 = i;// r2也绑定对象i，但是不允许通过r2修改i的值</span><br><span class="line">r1 = 0;// r1并非常量，i的值修改为0</span><br><span class="line">r2= 0;//错误:r2是一个常量引用</span><br></pre></td></tr></table></figure>
+<p>r2绑定（非常量）整数i是合法的行为。然而，不允许通过r2修改i的值。尽管如此，i的值仍然允许通过其他途径修改，既可以直接给i赋值，也可以通过像r1一样绑定到i的其他引用来修改。</p>
+<h3 id="指针和const"><a href="#指针和const" class="headerlink" title="指针和const"></a>指针和const</h3><p>与引用一样，也可以令指针指向常量或非常量。类似于常量引用，指向常量的指针（ pointer to const）不能用于改变其所指对象的值。<strong>这就是我们俗称的常量指针</strong><br>要想存放常量对象的地址，只能使用指向常量的指针:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">const double pi = 3.14;</span><br><span class="line">// pi是个常量，它的值不能改变</span><br><span class="line">double *ptr = &amp;pi;</span><br><span class="line">//错误:ptr是一个普通指针</span><br><span class="line">const double *cptr = &amp;pi;</span><br><span class="line">//正确:cptr可以指向一个双精度常量</span><br><span class="line">*cptr = 42;</span><br><span class="line">//错误:不能给*cptr赋值</span><br></pre></td></tr></table></figure>
+
+<p>指针的类型必须与其所指对象的类型一致，但是有两个例外。第一种例外情况是允许令一个指向常量的指针指向一个非常量对象:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">double dval = 3.14;</span><br><span class="line">ll dval是一个双精度浮点数，它的值可以改变</span><br><span class="line">cptr = &amp;dval;</span><br><span class="line">//正确:但是不能通过cptr改变dval的值</span><br></pre></td></tr></table></figure>
+
+<p>和常量引用一样，指向常量的指针也没有规定其所指的对象必须是一个常量。所谓指向常量的指针仅仅要求不能通过该指针改变对象的值，而没有规定那个对象的值不能通过其他途径改变。</p>
+<p><strong>试试这样想吧:所谓指向常量的指针或引用，不过是指针或引用目以为定罢了，它们觉得自已己指向了常量，所以自觉地不去改变所指对象的值。</strong></p>
+<h4 id="const指针"><a href="#const指针" class="headerlink" title="const指针"></a>const指针</h4><p>指针是对象而引用不是，因此就像其他对象类型一样，允许把指针本身定为常量。常量指针(const pointer）必须初始化，<strong>此处的常量指针就是我们俗称的指针常量</strong><br>而且一旦初始化完成，则它的值（也就是存放在指针中的那个地址）就不能再改变了。把*放在const关键字之前用以说明指针是一个常量，这样的书写形式隐含着一层意味，即不变的是指针本身的值而非指向的那个值:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">int errNumb = 0;</span><br><span class="line">int *const curErr = &amp;errNumb;</span><br><span class="line">// curErr将一直指向errNumb</span><br><span class="line">const double pi = 3.14159;</span><br><span class="line">const double *const pip = &amp;pi;</span><br><span class="line">// pip 是一个指向常量对象的常量指针</span><br></pre></td></tr></table></figure>
+
+<h4 id="练习-9"><a href="#练习-9" class="headerlink" title="练习"></a>练习</h4><p>下面的哪些初始化是合法的？请说明原因。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">int i = -1, &amp;r = 0;</span><br><span class="line">int *const p2 = &amp;i2;</span><br><span class="line">const int i = -1, &amp;r = 0;</span><br><span class="line">const int *const p3 = &amp;i2;</span><br><span class="line">const int *p1 = &amp;i2;</span><br><span class="line">const int &amp;const r2;</span><br><span class="line">const int i2 = i, &amp;r = i;</span><br><span class="line">1. 不合法，引用必须绑定在一个对象上，0 是一个字面常量，不是一个对象。</span><br><span class="line">2. 合法，p2 是一个指向 i 的常量指针。</span><br><span class="line">3. 合法，i 是一个常量整数，r 是一个绑定在字面常量 0 上的常量引用。</span><br><span class="line">4. 合法，p3 是一个指向 i2 的常量指针。</span><br><span class="line">5. 合法，p1 是一个指向 i2 的指针。</span><br><span class="line">6. 不合法，没有初始值。</span><br><span class="line">7. 合法，i2 是一个整数常量，r 是一个绑定在 i 上的常量引用。</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>说明下面的这些定义是什么意思，挑出其中不合法的。</p>
+</blockquote>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">int i, *const cp;</span><br><span class="line">int *p1, *const p2;</span><br><span class="line">const int ic, &amp;r = ic;</span><br><span class="line">const int *const p3;</span><br><span class="line">const int *p;</span><br><span class="line">（a）不合法，常量指针未初始化；</span><br><span class="line">（b）不合法，常量指针未初始化；</span><br><span class="line">（c）不合法，常量ic未初始化；</span><br><span class="line">（d）不合法，常量指针未初始化；</span><br><span class="line">（e）合法，指向常量的指针可以不初始化。 本质是指针</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>假设已有上一个练习中定义的那些变量，则下面的哪些语句是合法的？请说明原因。</p>
+</blockquote>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">i = ic;</span><br><span class="line">p1 = p3;</span><br><span class="line">p1 = &amp;ic;</span><br><span class="line">p3 = &amp;ic;</span><br><span class="line">p2 = p1;</span><br><span class="line">ic = *p3;</span><br><span class="line">（a）合法；</span><br><span class="line">（b）非法，p3是指向const int的指针；</span><br><span class="line">（c）非法，ic是const int；</span><br><span class="line">（d）非法，p3是常量指针，不能再次赋值；</span><br><span class="line">（e）非法，p2是常量指针，不能再次赋值；</span><br><span class="line">（f）非法，ic是const int。</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+
+<h3 id="顶层const"><a href="#顶层const" class="headerlink" title="顶层const"></a>顶层const</h3><p>用名词顶层const( top-level const）表示指针本身是个常量，而用名词底层const (low-level const）表示指针所指的对象是一个常量。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">int i = 0;</span><br><span class="line">int *const pl = &amp;i;</span><br><span class="line">//不能改变p1的值，这是一个顶层const</span><br><span class="line">const int ci = 42;</span><br><span class="line">//不能改变ci的值，这是一个顶层const</span><br><span class="line">const int *p2= &amp;ci;</span><br><span class="line">//允许改变p2的值，这是一个底层const</span><br><span class="line">const int *const p3 = p2; // 靠右的const是顶层，靠做的是底层const int &amp;r = ci;</span><br><span class="line">//用于声明引用的const都是底层const</span><br></pre></td></tr></table></figure>
+<p><strong>作用后不能改变本身的值是顶层，不能改变所指对象的值是底层</strong></p>
+<p>当执行对象的铂贝操作时，常量是顶层const还是底层const区别明显。其中，顶层const不受什么影响，<br>底层 const的限制却不能忽视。当执行对象的拷贝操作时，拷入和拷出的对象必须具有相同的底层const资格，或者两个对象的数据类型必须能够转换。<strong>一般来说，非常量可以转换成常量</strong>，反之则不行:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">int *p= p3;</span><br><span class="line">//错误:p3包含底层const的定义，而p没有</span><br><span class="line">p2 = p3;</span><br><span class="line">//正确:p2和p3都是底层const</span><br><span class="line">p2= &amp;i;</span><br><span class="line">//正确:int*能转换成const int*</span><br><span class="line">int &amp;r = ci;</span><br><span class="line">//错误:普通的int&amp;不能绑定到int常量上</span><br><span class="line">const int &amp;r2 = i;</span><br><span class="line">//正确:const int&amp;可以绑定到一个普通int 上</span><br></pre></td></tr></table></figure>
+
+<h4 id="练习-10"><a href="#练习-10" class="headerlink" title="练习"></a>练习</h4><blockquote>
+<p>对于下面的这些语句，请说明对象被声明成了顶层const还是底层const？</p>
+</blockquote>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">const int v2 = 0; int v1 = v2;</span><br><span class="line">int *p1 = &amp;v1, &amp;r1 = v1;</span><br><span class="line">const int *p2 = &amp;v2, *const p3 = &amp;i, &amp;r2 = v2;</span><br><span class="line">v2不能改变，是顶层const；v1都不是；p1都不是，r1都不是；p2所指的对象不能改变，底层const；p3既是顶层，又是底层；r2底层。</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>假设已有上一个练习中所做的那些声明，则下面的哪些语句是合法的？请说明顶层const和底层const在每个例子中有何体现。</p>
+</blockquote>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">r1 = v2;</span><br><span class="line">p1 = p2;</span><br><span class="line">p2 = p1;</span><br><span class="line">p1 = p3;</span><br><span class="line">p2 = p3;</span><br><span class="line">r1 = v2; // 合法，v2为顶层const</span><br><span class="line">p1 = p2; // 非法，p2为底层const</span><br><span class="line">p2 = p1; // 合法</span><br><span class="line">p1 = p3; // 非法</span><br><span class="line">p2 = p3; // 合法</span><br></pre></td></tr></table></figure>
+
+
+<h3 id="constexpr和常量表达式"><a href="#constexpr和常量表达式" class="headerlink" title="constexpr和常量表达式"></a>constexpr和常量表达式</h3><p><strong>常量表达式(const expression）是指值不会改变并且在编译过程就能得到计算结果的表达式。</strong>显然，字面值属于常量表达式，用常量表达式初始化的 const对象也是常量表达式。后面将会提到，C++语言中有几种情况下是要用到常量表达式的。<br>一个对象（或表达式）是不是常量表达式由它的数据类型和初始值共同决定，例如:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">const int max__files = 20;</span><br><span class="line">// max_files是常量表达式</span><br><span class="line">const int limit = max_files + l; // limit是常量表达式</span><br><span class="line">int staff_size= 27;</span><br><span class="line">// staff_size不是常量表达式</span><br><span class="line">const int sz = get_size();</span><br><span class="line">// sz不是常量表达式</span><br></pre></td></tr></table></figure>
+<p>尽管staff _size的初始值是个字面值常量，但由于它的数据类型只是一个普通int而非const int，所以它不属于常量表达式。另一方面,<br>尽管sz本身是一个常量，但它<br>的具体值直到运行时才能获取到,所以也不是常量表达式。</p>
+<h4 id="constexpr变量"><a href="#constexpr变量" class="headerlink" title="constexpr变量"></a>constexpr变量</h4><p>C++11新标准规定，允许将变量声明为constexpr类型以便由编译器来验证变量的值是否是一个常量表达式。声明为constexpr的变量一定是一个常量，而且必须用常量表达式初始化:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">constexpr int mf = 20;</span><br><span class="line">/l20是常量表达式</span><br><span class="line">constexpr int limit = mf + 1;</span><br><span class="line">ll mf + 1是常量表达式</span><br><span class="line">//只有当size是一个constexpr函数时</span><br><span class="line">constexpr int Sz= size() ;</span><br><span class="line">//才是一条正确的声明语句</span><br></pre></td></tr></table></figure>
+<h4 id="字面值类型"><a href="#字面值类型" class="headerlink" title="字面值类型"></a>字面值类型</h4><p>常量表达式的值需要在编译时就得到计算，因此对声明constexpr时用到的类型必须有所限制。因为这些类型一般比较简单，值也显而易见、容易得到，就把它们称为“字面值类型”(literal type)。<br>到目前为止接触过的数据类型中，算术类型、引用和指针都属于字面值类型。自定义类sales_item、IO 库、string 类型则不属于字面值类型，也就不能被定义成constexpr。</p>
+<h2 id="处理类型"><a href="#处理类型" class="headerlink" title="处理类型"></a>处理类型</h2><p>随着程序越来越复杂,程序中用到的类型也越来越复杂，它们的名字既难记又容易写错，还无法明确体现其真实目的和含义。有时候根本搞不清到底需要的类型是什么。</p>
+<h3 id="类型别名"><a href="#类型别名" class="headerlink" title="类型别名"></a>类型别名</h3><p>有两种方法可用于定义类型别名。传统的方法是使用关键字</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">typedef:typedef double wages;// wages是double的同义词</span><br><span class="line">typedef wages base,*p;//base是double的同义词,p是double*的同义词</span><br></pre></td></tr></table></figure>
+<p>新标准规定了一种新的方法，使用别名声明（alias declaration）来定义类型的别名:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">using ST = Sales_item;</span><br><span class="line">//SI是sales_item的同义词</span><br></pre></td></tr></table></figure>
+
+<h3 id="auto类型说明符"><a href="#auto类型说明符" class="headerlink" title="auto类型说明符"></a>auto类型说明符</h3><p>编程时常常需要把表达式的值赋给变量，这就要求在声明变量的时候清楚地知道表达式的类型。然而要做到这一点并非那么容易，有时甚至根本做不到。为了解决这个问题，C++11新标准引入了auto类型说明符，用它就能让编译器替我们去分析表达式所属的类型。和原来那些只对应一种特定类型的说明符（比如 double）不同，auto让编译器通过初始值来推算变量的类型。显然，auto定义的变量必须有初始值:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">//由val1和val2相加的结果可以推断出item的类型</span><br><span class="line">auto item = vall + val2;// item初始化为val1和val2相加的结果</span><br></pre></td></tr></table></figure>
+
+<p>使用auto也能在一条语句中声明多个变量。因为一条声明语句只能有一个基本数据类型，所以该语句中所有变量的初始基本数据类型都必须一样:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">auto i = 0, *p = &amp;i;/正确:i是整数、p是整型指针</span><br><span class="line">auto sz = 0,pi = 3.14;//错误:sz和pi的类型不一致</span><br></pre></td></tr></table></figure>
+
+<h4 id="复合类型、常量和auto"><a href="#复合类型、常量和auto" class="headerlink" title="复合类型、常量和auto"></a>复合类型、常量和auto</h4><p>其次，<strong>auto一般会忽略掉顶层const</strong>，同时底层const则会保留下来,比如当初始值是一个指向常量的指针时:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">const int ci = i, &amp;cr = ci;</span><br><span class="line">auto b = ci;// b是一个整数（ci的顶层const特性被忽略掉了)</span><br><span class="line">auto c = cr; // c是一个整数（cr是ci的别名，ci本身是一个顶层const)</span><br><span class="line">auto d = &amp;i;// d是一个整型指针（整数的地址就是指向整数的指针)</span><br><span class="line">auto e = sci; // e是一个指向整数常量的指针（对常量对象取地址是一种底层const)</span><br></pre></td></tr></table></figure>
+<p><strong>对常量对象取地址是一种底层const</strong></p>
+<p><strong>如果希望推断出的auto类型是一个顶层const</strong>，需要明确指出:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">// ci的推演类型是int，f是const int</span><br><span class="line">const auto f = ci;</span><br></pre></td></tr></table></figure>
+
+
+<p>设置一个类型为auto的引用时，初始值中的顶层常量属性仍然保留。和往常一样，如果我们给初始值绑定一个引用，则此时的常量就不是顶层常量了。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">auto &amp;g = ci;</span><br><span class="line">// g是一个整型常量引用，绑定到ci</span><br><span class="line">auto &amp;h = 42;</span><br><span class="line">//错误:不能为非常量引用绑定字面值</span><br><span class="line">const auto &amp;j= 42;</span><br><span class="line">//正确:可以为常量引用绑定字面值</span><br></pre></td></tr></table></figure>
+<p><strong>如果初始值是一个顶层常量，则定义出来的引用也是一个顶层常量引用。<br>如果初始值是一个非常量，则定义出来的引用也是一个非常量引用。</strong></p>
+<p><strong>在C++中，整数值不能直接赋值给指针变量，因为它们的数据类型不同。指针变量必须存储一个有效的内存地址，而整数值只是一个数值，它没有内存地址。</strong></p>
+<h4 id="练习-11"><a href="#练习-11" class="headerlink" title="练习"></a>练习</h4><blockquote>
+<p>判断下列定义推断出的类型是什么，然后编写程序进行验证。</p>
+</blockquote>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">const int i = 42;</span><br><span class="line">auto j = i; const auto &amp;k = i; auto *p = &amp;i; </span><br><span class="line">const auto j2 = i, &amp;k2 = i;</span><br><span class="line">j int；k 常量int的引用；常量int的指针；j2 常量int；k2常量 int的引用。</span><br></pre></td></tr></table></figure>
+
+<h3 id="decltype类型指示符"><a href="#decltype类型指示符" class="headerlink" title="decltype类型指示符"></a>decltype类型指示符</h3><p>decltype，它的作用是选择并返回操作数的数据类型。在此过程中，编译器分析表达式并得到它的类型，却不实际计算表达式的值:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">decltype(f() ) sum = x; / / sum的类型就是函数f的返回类型</span><br></pre></td></tr></table></figure>
+<p>decltype处理顶层const和引用的方式与auto有些许不同。如果decltype使用的表达式是一个变量,则decltype返回该变量的类型(包括顶层const和引用在内):</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">const int ci = 0, &amp;cj- ci;decltype(ci) x = 0;</span><br><span class="line">// x的类型是const int</span><br><span class="line">decltype(cj）y= X;</span><br><span class="line">// y的类型是const int&amp;，y绑定到变量x</span><br><span class="line">decltype(cj）z;</span><br><span class="line">//错误:z是一个引用，必须初始化</span><br></pre></td></tr></table></figure>
+<p>因为r是一个引用，因此 decltype (r)的结果是引用类型。如果想让结果类型是r所指的类型，可以把r作为表达式的一部分，如r+0，显然这个表达式的结果将是一个具体值而非一个引用。</p>
+<p>另一方面，如果表达式的内容是解引用操作，则decltype 将得到引用类型。正如我们所熟悉的那样，解引用指针可以得到指针所指的对象，而且还能给这个对象赋值。因此，decltype(*p)的结果类型就是int&amp;，而非int。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">// decltype的表达式如果是加上了括号的变量，结果将是引用decltype((i))d;</span><br><span class="line">//错误:d是int&amp;，必须初始化</span><br><span class="line">decltype(i) e;</span><br><span class="line">//正确:e是一个（未初始化的) int</span><br></pre></td></tr></table></figure>
+<p><strong>decltype中表达式产生左值就返回引用</strong><br><strong>切记:decltype ((variable))（注意是双层括号）的结果永远是引用，而decltype(variable)结果只有当variable本身就是一个引用时才是引用。</strong></p>
+<h4 id="练习-12"><a href="#练习-12" class="headerlink" title="练习"></a>练习</h4><blockquote>
+<p>关于下面的代码，请指出每一个变量的类型以及程序结束时它们各自的值。</p>
+</blockquote>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">int a = 3, b = 4;</span><br><span class="line">decltype(a) c = a;</span><br><span class="line">decltype((b)) d = a;</span><br><span class="line">++c;</span><br><span class="line">++d;</span><br><span class="line"></span><br><span class="line">a int；b int；c int；d int &amp;。</span><br><span class="line">4；4；4；4。</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>赋值是会产生引用的一类典型表达式，引用的类型就是左值的类型。也就是说，如果 i 是 int，则表达式 i=x 的类型是 int&amp;。根据这一特点，请指出下面的代码中每一个变量的类型和值。</p>
+</blockquote>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">int a = 3, b = 4;</span><br><span class="line">decltype(a) c = a;</span><br><span class="line">decltype(a = b) d = a;</span><br><span class="line">a int 3；</span><br><span class="line">b int 4；</span><br><span class="line">c int 3；</span><br><span class="line">d int &amp; 3。</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>说明由decltype 指定类型和由auto指定类型有何区别。请举一个例子，decltype指定的类型与auto指定的类型一样；再举一个例子，decltype指定的类型与auto指定的类型不一样。</p>
+</blockquote>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">如果使用引用类型，auto会识别为其引用对象的类型；</span><br><span class="line">decltype会识别为引用的类型；</span><br><span class="line">decltype(())的差别；</span><br><span class="line">顶层const差异。</span><br></pre></td></tr></table></figure>
+
+      
+    </div>
+    <div class="article-footer">
+      <br>
+<br>
+<blockquote class="mt-2x">
+  <ul class="post-copyright list-unstyled">
+    
+    <li class="post-copyright-link hidden-xs">
+      <strong>本文链接：</strong>
+      <a href="https://codecodegogogo.github.io/2023/05/29/C-Primer/" title="C++ Primer-C++基础" target="_blank" rel="external">https://codecodegogogo.github.io/2023/05/29/C-Primer/</a>
+    </li>
+    
+    <li class="post-copyright-license">
+      <strong></strong>
+      <!-- <strong>版权声明： </strong> 本博客所有文章除特别声明外，均采用 <a href="http://creativecommons.org/licenses/by/4.0/deed.zh" target="_blank" rel="external">CC BY 4.0 CN协议</a> 许可协议。转载请注明出处！ -->
+    </li>
+  </ul>
+</blockquote>
+
+    </div>
+  </article>
+  
+    
+  <section id="comments">
+  	
+  </section>
+
+
+  
+</div>
+
+  <nav class="bar bar-footer clearfix" data-stick-bottom>
+  <div class="bar-inner">
+  
+  <ul class="pager pull-left">
+    
+    <li class="prev">
+      <a href="/2023/05/29/%E6%B1%82%E4%BD%99%E5%92%8C%E5%8F%96%E6%A8%A1/" title="求余和取模"><i class="icon icon-angle-left" aria-hidden="true"></i><span>&nbsp;&nbsp;上一篇</span></a>
+    </li>
+    
+    
+    <li class="next">
+      <a href="/2023/05/26/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/" title="23种设计模式"><span>下一篇&nbsp;&nbsp;</span><i class="icon icon-angle-right" aria-hidden="true"></i></a>
+    </li>
+    
+    
+    <li class="toggle-toc">
+      <a class="toggle-btn " data-toggle="collapse" href="#collapseToc" aria-expanded="false" title="文章目录" role="button">    <span>[&nbsp;</span><span>文章目录</span>
+        <i class="text-collapsed icon icon-anchor"></i>
+        <i class="text-in icon icon-close"></i>
+        <span>]</span>
+      </a>
+    </li>
+    
+  </ul>
+  
+  
+  <!-- Button trigger modal -->
+  <button type="button" class="btn btn-fancy btn-donate pop-onhover bg-gradient-warning" data-toggle="modal" data-target="#donateModal"><span>赏</span></button>
+  <!-- <div class="wave-icon wave-icon-danger btn-donate" data-toggle="modal" data-target="#donateModal">
+    <div class="wave-circle"><span class="icon"><i class="icon icon-bill"></i></span></div>
+  </div> -->
+  
+  
+  <div class="bar-right">
+    
+    <div class="share-component" data-sites="weibo,qq,wechat,facebook,twitter" data-mobile-sites="weibo,qq,qzone"></div>
+    
+  </div>
+  </div>
+</nav>
+  
+<!-- Modal -->
+<div class="modal modal-center modal-small modal-xs-full fade" id="donateModal" tabindex="-1" role="dialog">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content donate">
+      <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+      <div class="modal-body">
+        <div class="donate-box">
+          <div class="donate-head">
+            <p>感谢您的支持，我会继续努力的!</p>
+          </div>
+          <div class="tab-content">
+            <div role="tabpanel" class="tab-pane fade active in" id="alipay">
+              <div class="donate-payimg">
+                <img src="/images/donate/alipayimg.png" alt="扫码支持" title="扫一扫" />
+              </div>
+              <p class="text-muted mv">扫码打赏，你说多少就多少</p>
+              <p class="text-grey">打开支付宝扫一扫，即可进行扫码打赏哦</p>
+            </div>
+            <div role="tabpanel" class="tab-pane fade" id="wechatpay">
+              <div class="donate-payimg">
+                <img src="/images/donate/wechatpayimg.png" alt="扫码支持" title="扫一扫" />
+              </div>
+              <p class="text-muted mv">扫码打赏，你说多少就多少</p>
+              <p class="text-grey">打开微信扫一扫，即可进行扫码打赏哦</p>
+            </div>
+          </div>
+          <div class="donate-footer">
+            <ul class="nav nav-tabs nav-justified" role="tablist">
+              <li role="presentation" class="active">
+                <a href="#alipay" id="alipay-tab" role="tab" data-toggle="tab" aria-controls="alipay" aria-expanded="true"><i class="icon icon-alipay"></i> 支付宝</a>
+              </li>
+              <li role="presentation" class="">
+                <a href="#wechatpay" role="tab" id="wechatpay-tab" data-toggle="tab" aria-controls="wechatpay" aria-expanded="false"><i class="icon icon-wepay"></i> 微信支付</a>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+
+
+
+</main>
+
+  <footer class="footer" itemscope itemtype="http://schema.org/WPFooter">
+	
+	
+    <ul class="social-links">
+    	
+        <li><a href="https://github.com/codecodegogogo" target="_blank" title="Github" data-toggle=tooltip data-placement=top><i class="icon icon-github"></i></a></li>
+        
+    </ul>
+
+    <div class="copyright">
+    	
+        联系邮箱：<br>codecodegogogo@163.com
+        <!-- 2024 Sunny -->
+        
+        <!--  -->
+    </div>
+</footer>
+  <script src="//cdn.jsdelivr.net/npm/jquery@1.12.4/dist/jquery.min.js"></script>
+<script>
+window.jQuery || document.write('<script src="js/jquery.min.js"><\/script>')
+</script>
+
+<script src="/js/plugin.min.js"></script>
+
+
+<script src="/js/application.js"></script>
+
+
+    <script>
+(function (window) {
+    var INSIGHT_CONFIG = {
+        TRANSLATION: {
+            POSTS: '文章',
+            PAGES: '页面',
+            CATEGORIES: '分类',
+            TAGS: '标签',
+            UNTITLED: '(未命名)',
+        },
+        ROOT_URL: '/',
+        CONTENT_URL: '/content.json',
+    };
+    window.INSIGHT_CONFIG = INSIGHT_CONFIG;
+})(window);
+</script>
+
+<script src="/js/insight.js"></script>
+
+
+
+
+
+
+   
+<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+
+   
+
+
+
+
+
+
+</body>
+
+</html>

@@ -1,0 +1,2439 @@
+<!DOCTYPE html>
+<html lang=zh>
+<head>
+  <meta charset="utf-8">
+  
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, minimal-ui">
+  <meta name="renderer" content="webkit">
+  <meta http-equiv="Cache-Control" content="no-transform" />
+  <meta http-equiv="Cache-Control" content="no-siteapp" />
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <meta name="format-detection" content="telephone=no,email=no,adress=no">
+  <!-- Color theme for statusbar -->
+  <meta name="theme-color" content="#000000" />
+  <!-- 强制页面在当前窗口以独立页面显示,防止别人在框架里调用页面 -->
+  <meta http-equiv="window-target" content="_top" />
+  
+  
+  <title>计算机网络-第四章网络层 | yong&#39;s Blog</title>
+  <meta name="description" content="网络层与运输层和应用层不同的是，在网络中的每一台主机和路由器中都有一个网络层部分。 在本章中，我们将对网络层的转发（forwarding）功能和路由选择（routing)功能做重要区分。转发涉及分组在单一的路由器中从一条入链路到一条出链路的传送。路由选择涉及一个网络的所有路由器，它们经路由选择协议共同交互，以决定分组从源到目的地结点所采用的路径。 为了加深对分组转发的理解，我们将“进入”路由器内部">
+<meta property="og:type" content="article">
+<meta property="og:title" content="计算机网络-第四章网络层">
+<meta property="og:url" content="https://codecodegogogo.github.io/2023/06/02/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C-%E7%AC%AC%E5%9B%9B%E7%AB%A0%E7%BD%91%E7%BB%9C%E5%B1%82/index.html">
+<meta property="og:site_name" content="Sunny">
+<meta property="og:description" content="网络层与运输层和应用层不同的是，在网络中的每一台主机和路由器中都有一个网络层部分。 在本章中，我们将对网络层的转发（forwarding）功能和路由选择（routing)功能做重要区分。转发涉及分组在单一的路由器中从一条入链路到一条出链路的传送。路由选择涉及一个网络的所有路由器，它们经路由选择协议共同交互，以决定分组从源到目的地结点所采用的路径。 为了加深对分组转发的理解，我们将“进入”路由器内部">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://codecodegogogo.github.io/2023/06/02/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C-%E7%AC%AC%E5%9B%9B%E7%AB%A0%E7%BD%91%E7%BB%9C%E5%B1%82/1.1.png">
+<meta property="og:image" content="https://codecodegogogo.github.io/2023/06/02/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C-%E7%AC%AC%E5%9B%9B%E7%AB%A0%E7%BD%91%E7%BB%9C%E5%B1%82/1.2.png">
+<meta property="og:image" content="https://codecodegogogo.github.io/2023/06/02/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C-%E7%AC%AC%E5%9B%9B%E7%AB%A0%E7%BD%91%E7%BB%9C%E5%B1%82/1.3.png">
+<meta property="og:image" content="https://codecodegogogo.github.io/2023/06/02/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C-%E7%AC%AC%E5%9B%9B%E7%AB%A0%E7%BD%91%E7%BB%9C%E5%B1%82/1.4.png">
+<meta property="og:image" content="https://codecodegogogo.github.io/2023/06/02/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C-%E7%AC%AC%E5%9B%9B%E7%AB%A0%E7%BD%91%E7%BB%9C%E5%B1%82/1.5.png">
+<meta property="og:image" content="https://codecodegogogo.github.io/2023/06/02/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C-%E7%AC%AC%E5%9B%9B%E7%AB%A0%E7%BD%91%E7%BB%9C%E5%B1%82/2.1.png">
+<meta property="og:image" content="https://codecodegogogo.github.io/2023/06/02/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C-%E7%AC%AC%E5%9B%9B%E7%AB%A0%E7%BD%91%E7%BB%9C%E5%B1%82/2.2.png">
+<meta property="og:image" content="https://codecodegogogo.github.io/2023/06/02/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C-%E7%AC%AC%E5%9B%9B%E7%AB%A0%E7%BD%91%E7%BB%9C%E5%B1%82/3.1.png">
+<meta property="og:image" content="https://codecodegogogo.github.io/2023/06/02/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C-%E7%AC%AC%E5%9B%9B%E7%AB%A0%E7%BD%91%E7%BB%9C%E5%B1%82/3.2.png">
+<meta property="og:image" content="https://codecodegogogo.github.io/2023/06/02/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C-%E7%AC%AC%E5%9B%9B%E7%AB%A0%E7%BD%91%E7%BB%9C%E5%B1%82/3.3.png">
+<meta property="og:image" content="https://codecodegogogo.github.io/2023/06/02/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C-%E7%AC%AC%E5%9B%9B%E7%AB%A0%E7%BD%91%E7%BB%9C%E5%B1%82/3.4.png">
+<meta property="og:image" content="https://codecodegogogo.github.io/2023/06/02/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C-%E7%AC%AC%E5%9B%9B%E7%AB%A0%E7%BD%91%E7%BB%9C%E5%B1%82/4.1.png">
+<meta property="og:image" content="https://codecodegogogo.github.io/2023/06/02/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C-%E7%AC%AC%E5%9B%9B%E7%AB%A0%E7%BD%91%E7%BB%9C%E5%B1%82/4.2.png">
+<meta property="og:image" content="https://codecodegogogo.github.io/2023/06/02/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C-%E7%AC%AC%E5%9B%9B%E7%AB%A0%E7%BD%91%E7%BB%9C%E5%B1%82/4.3.png">
+<meta property="og:image" content="https://codecodegogogo.github.io/2023/06/02/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C-%E7%AC%AC%E5%9B%9B%E7%AB%A0%E7%BD%91%E7%BB%9C%E5%B1%82/4.4.png">
+<meta property="og:image" content="https://codecodegogogo.github.io/2023/06/02/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C-%E7%AC%AC%E5%9B%9B%E7%AB%A0%E7%BD%91%E7%BB%9C%E5%B1%82/4.5.png">
+<meta property="og:image" content="https://codecodegogogo.github.io/2023/06/02/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C-%E7%AC%AC%E5%9B%9B%E7%AB%A0%E7%BD%91%E7%BB%9C%E5%B1%82/4.6.png">
+<meta property="og:image" content="https://codecodegogogo.github.io/2023/06/02/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C-%E7%AC%AC%E5%9B%9B%E7%AB%A0%E7%BD%91%E7%BB%9C%E5%B1%82/4.7.png">
+<meta property="og:image" content="https://codecodegogogo.github.io/2023/06/02/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C-%E7%AC%AC%E5%9B%9B%E7%AB%A0%E7%BD%91%E7%BB%9C%E5%B1%82/4.8.png">
+<meta property="og:image" content="https://codecodegogogo.github.io/2023/06/02/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C-%E7%AC%AC%E5%9B%9B%E7%AB%A0%E7%BD%91%E7%BB%9C%E5%B1%82/4.9.png">
+<meta property="og:image" content="https://codecodegogogo.github.io/2023/06/02/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C-%E7%AC%AC%E5%9B%9B%E7%AB%A0%E7%BD%91%E7%BB%9C%E5%B1%82/4.10.png">
+<meta property="og:image" content="https://codecodegogogo.github.io/2023/06/02/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C-%E7%AC%AC%E5%9B%9B%E7%AB%A0%E7%BD%91%E7%BB%9C%E5%B1%82/4.12.png">
+<meta property="og:image" content="https://codecodegogogo.github.io/2023/06/02/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C-%E7%AC%AC%E5%9B%9B%E7%AB%A0%E7%BD%91%E7%BB%9C%E5%B1%82/4.14.png">
+<meta property="og:image" content="https://codecodegogogo.github.io/2023/06/02/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C-%E7%AC%AC%E5%9B%9B%E7%AB%A0%E7%BD%91%E7%BB%9C%E5%B1%82/4.15.png">
+<meta property="og:image" content="https://codecodegogogo.github.io/2023/06/02/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C-%E7%AC%AC%E5%9B%9B%E7%AB%A0%E7%BD%91%E7%BB%9C%E5%B1%82/4.16.png">
+<meta property="og:image" content="https://codecodegogogo.github.io/2023/06/02/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C-%E7%AC%AC%E5%9B%9B%E7%AB%A0%E7%BD%91%E7%BB%9C%E5%B1%82/q8.png">
+<meta property="og:image" content="https://codecodegogogo.github.io/2023/06/02/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C-%E7%AC%AC%E5%9B%9B%E7%AB%A0%E7%BD%91%E7%BB%9C%E5%B1%82/q9.png">
+<meta property="og:image" content="https://codecodegogogo.github.io/2023/06/02/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C-%E7%AC%AC%E5%9B%9B%E7%AB%A0%E7%BD%91%E7%BB%9C%E5%B1%82/4.17.png">
+<meta property="og:image" content="https://codecodegogogo.github.io/2023/06/02/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C-%E7%AC%AC%E5%9B%9B%E7%AB%A0%E7%BD%91%E7%BB%9C%E5%B1%82/4.18.png">
+<meta property="og:image" content="https://codecodegogogo.github.io/2023/06/02/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C-%E7%AC%AC%E5%9B%9B%E7%AB%A0%E7%BD%91%E7%BB%9C%E5%B1%82/4.19.png">
+<meta property="og:image" content="https://codecodegogogo.github.io/2023/06/02/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C-%E7%AC%AC%E5%9B%9B%E7%AB%A0%E7%BD%91%E7%BB%9C%E5%B1%82/q1.png">
+<meta property="og:image" content="https://codecodegogogo.github.io/2023/06/02/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C-%E7%AC%AC%E5%9B%9B%E7%AB%A0%E7%BD%91%E7%BB%9C%E5%B1%82/q2.png">
+<meta property="og:image" content="https://codecodegogogo.github.io/2023/06/02/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C-%E7%AC%AC%E5%9B%9B%E7%AB%A0%E7%BD%91%E7%BB%9C%E5%B1%82/q7.png">
+<meta property="og:image" content="https://codecodegogogo.github.io/2023/06/02/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C-%E7%AC%AC%E5%9B%9B%E7%AB%A0%E7%BD%91%E7%BB%9C%E5%B1%82/q3.png">
+<meta property="og:image" content="https://codecodegogogo.github.io/2023/06/02/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C-%E7%AC%AC%E5%9B%9B%E7%AB%A0%E7%BD%91%E7%BB%9C%E5%B1%82/4.20.png">
+<meta property="og:image" content="https://codecodegogogo.github.io/2023/06/02/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C-%E7%AC%AC%E5%9B%9B%E7%AB%A0%E7%BD%91%E7%BB%9C%E5%B1%82/4.21.png">
+<meta property="og:image" content="https://codecodegogogo.github.io/2023/06/02/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C-%E7%AC%AC%E5%9B%9B%E7%AB%A0%E7%BD%91%E7%BB%9C%E5%B1%82/q4.png">
+<meta property="og:image" content="https://codecodegogogo.github.io/2023/06/02/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C-%E7%AC%AC%E5%9B%9B%E7%AB%A0%E7%BD%91%E7%BB%9C%E5%B1%82/q5.png">
+<meta property="og:image" content="https://codecodegogogo.github.io/2023/06/02/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C-%E7%AC%AC%E5%9B%9B%E7%AB%A0%E7%BD%91%E7%BB%9C%E5%B1%82/q6.png">
+<meta property="og:image" content="https://codecodegogogo.github.io/2023/06/02/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C-%E7%AC%AC%E5%9B%9B%E7%AB%A0%E7%BD%91%E7%BB%9C%E5%B1%82/w1.png">
+<meta property="og:image" content="https://codecodegogogo.github.io/2023/06/02/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C-%E7%AC%AC%E5%9B%9B%E7%AB%A0%E7%BD%91%E7%BB%9C%E5%B1%82/w3.png">
+<meta property="og:image" content="https://codecodegogogo.github.io/2023/06/02/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C-%E7%AC%AC%E5%9B%9B%E7%AB%A0%E7%BD%91%E7%BB%9C%E5%B1%82/w4.png">
+<meta property="og:image" content="https://codecodegogogo.github.io/2023/06/02/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C-%E7%AC%AC%E5%9B%9B%E7%AB%A0%E7%BD%91%E7%BB%9C%E5%B1%82/w5.png">
+<meta property="og:image" content="https://codecodegogogo.github.io/2023/06/02/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C-%E7%AC%AC%E5%9B%9B%E7%AB%A0%E7%BD%91%E7%BB%9C%E5%B1%82/w6.png">
+<meta property="og:image" content="https://codecodegogogo.github.io/2023/06/02/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C-%E7%AC%AC%E5%9B%9B%E7%AB%A0%E7%BD%91%E7%BB%9C%E5%B1%82/e1.png">
+<meta property="og:image" content="https://codecodegogogo.github.io/2023/06/02/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C-%E7%AC%AC%E5%9B%9B%E7%AB%A0%E7%BD%91%E7%BB%9C%E5%B1%82/e2.png">
+<meta property="og:image" content="https://codecodegogogo.github.io/2023/06/02/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C-%E7%AC%AC%E5%9B%9B%E7%AB%A0%E7%BD%91%E7%BB%9C%E5%B1%82/e3.png">
+<meta property="og:image" content="https://codecodegogogo.github.io/2023/06/02/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C-%E7%AC%AC%E5%9B%9B%E7%AB%A0%E7%BD%91%E7%BB%9C%E5%B1%82/w2.png">
+<meta property="og:image" content="https://codecodegogogo.github.io/2023/06/02/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C-%E7%AC%AC%E5%9B%9B%E7%AB%A0%E7%BD%91%E7%BB%9C%E5%B1%82/e4.png">
+<meta property="og:image" content="https://codecodegogogo.github.io/2023/06/02/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C-%E7%AC%AC%E5%9B%9B%E7%AB%A0%E7%BD%91%E7%BB%9C%E5%B1%82/e5.png">
+<meta property="og:image" content="https://codecodegogogo.github.io/2023/06/02/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C-%E7%AC%AC%E5%9B%9B%E7%AB%A0%E7%BD%91%E7%BB%9C%E5%B1%82/e6.png">
+<meta property="og:image" content="https://codecodegogogo.github.io/2023/06/02/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C-%E7%AC%AC%E5%9B%9B%E7%AB%A0%E7%BD%91%E7%BB%9C%E5%B1%82/e7.png">
+<meta property="og:image" content="https://codecodegogogo.github.io/2023/06/02/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C-%E7%AC%AC%E5%9B%9B%E7%AB%A0%E7%BD%91%E7%BB%9C%E5%B1%82/e8.png">
+<meta property="og:image" content="https://codecodegogogo.github.io/2023/06/02/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C-%E7%AC%AC%E5%9B%9B%E7%AB%A0%E7%BD%91%E7%BB%9C%E5%B1%82/e9.png">
+<meta property="og:image" content="https://codecodegogogo.github.io/2023/06/02/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C-%E7%AC%AC%E5%9B%9B%E7%AB%A0%E7%BD%91%E7%BB%9C%E5%B1%82/t2.png">
+<meta property="og:image" content="https://codecodegogogo.github.io/2023/06/02/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C-%E7%AC%AC%E5%9B%9B%E7%AB%A0%E7%BD%91%E7%BB%9C%E5%B1%82/t1.png">
+<meta property="og:image" content="https://codecodegogogo.github.io/2023/06/02/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C-%E7%AC%AC%E5%9B%9B%E7%AB%A0%E7%BD%91%E7%BB%9C%E5%B1%82/t3.png">
+<meta property="og:image" content="https://codecodegogogo.github.io/2023/06/02/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C-%E7%AC%AC%E5%9B%9B%E7%AB%A0%E7%BD%91%E7%BB%9C%E5%B1%82/t4.png">
+<meta property="og:image" content="https://codecodegogogo.github.io/2023/06/02/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C-%E7%AC%AC%E5%9B%9B%E7%AB%A0%E7%BD%91%E7%BB%9C%E5%B1%82/t5.png">
+<meta property="og:image" content="https://codecodegogogo.github.io/2023/06/02/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C-%E7%AC%AC%E5%9B%9B%E7%AB%A0%E7%BD%91%E7%BB%9C%E5%B1%82/t6.png">
+<meta property="og:image" content="https://codecodegogogo.github.io/2023/06/02/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C-%E7%AC%AC%E5%9B%9B%E7%AB%A0%E7%BD%91%E7%BB%9C%E5%B1%82/t7.png">
+<meta property="og:image" content="https://codecodegogogo.github.io/2023/06/02/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C-%E7%AC%AC%E5%9B%9B%E7%AB%A0%E7%BD%91%E7%BB%9C%E5%B1%82/t8.png">
+<meta property="og:image" content="https://codecodegogogo.github.io/2023/06/02/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C-%E7%AC%AC%E5%9B%9B%E7%AB%A0%E7%BD%91%E7%BB%9C%E5%B1%82/t9.png">
+<meta property="og:image" content="https://codecodegogogo.github.io/2023/06/02/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C-%E7%AC%AC%E5%9B%9B%E7%AB%A0%E7%BD%91%E7%BB%9C%E5%B1%82/y2.png">
+<meta property="og:image" content="https://codecodegogogo.github.io/2023/06/02/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C-%E7%AC%AC%E5%9B%9B%E7%AB%A0%E7%BD%91%E7%BB%9C%E5%B1%82/y3.png">
+<meta property="article:published_time" content="2023-06-02T13:26:56.000Z">
+<meta property="article:modified_time" content="2023-06-10T03:18:32.369Z">
+<meta property="article:author" content="Sunny">
+<meta property="article:tag" content="计算机网络">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://codecodegogogo.github.io/2023/06/02/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C-%E7%AC%AC%E5%9B%9B%E7%AB%A0%E7%BD%91%E7%BB%9C%E5%B1%82/1.1.png">
+  <!-- Canonical links -->
+  <link rel="canonical" href="https://codecodegogogo.github.io/2023/06/02/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C-%E7%AC%AC%E5%9B%9B%E7%AB%A0%E7%BD%91%E7%BB%9C%E5%B1%82/index.html">
+  
+    <link rel="alternate" href="/atom.xml" title="Sunny" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/images/favicon.png" type="image/x-icon">
+  
+  <!-- <link rel="icon" href="/images/favicon.png" type="image/x-icon"> -->
+
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  
+  
+  
+  
+<meta name="generator" content="Hexo 5.4.2"></head>
+
+
+<body class="main-center theme-purple" itemscope itemtype="http://schema.org/WebPage">
+  <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+  <div class="slimContent">
+    <div class="navbar-header">
+      
+      
+      <div class="profile-block text-center">
+        <a id="avatar" href="https://github.com/codecodegogogo" target="_blank">
+          <img class="img-circle img-rotate" src="/images/avatar.jpg" width="200" height="200">
+        </a>
+        <h2 id="name" class="hidden-xs hidden-sm">yong</h2>
+        <h3 id="title" class="hidden-xs hidden-sm hidden-md"></h3>
+        <small id="location" class="text-muted hidden-xs hidden-sm"><i class="icon icon-map-marker"></i> China</small>
+      </div>
+      
+      <div class="search" id="search-form-wrap">
+
+    <form class="search-form sidebar-form">
+        <div class="input-group">
+            <input type="text" class="search-form-input form-control" placeholder="搜索" />
+            <span class="input-group-btn">
+                <button type="submit" class="search-form-submit btn btn-flat" onclick="return false;"><i class="icon icon-search"></i></button>
+            </span>
+        </div>
+    </form>
+    <div class="ins-search">
+  <div class="ins-search-mask"></div>
+  <div class="ins-search-container">
+    <div class="ins-input-wrapper">
+      <input type="text" class="ins-search-input" placeholder="想要查找什么..." x-webkit-speech />
+      <button type="button" class="close ins-close ins-selectable" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+    </div>
+    <div class="ins-section-wrapper">
+      <div class="ins-section-container"></div>
+    </div>
+  </div>
+</div>
+
+
+</div>
+      <button class="navbar-toggle collapsed" type="button" data-toggle="collapse" data-target="#main-navbar" aria-controls="main-navbar" aria-expanded="false">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+    </div>
+    <nav id="main-navbar" class="collapse navbar-collapse" itemscope itemtype="http://schema.org/SiteNavigationElement" role="navigation">
+      <ul class="nav navbar-nav main-nav menu-highlight">
+        
+        
+        <li class="menu-item menu-item-home">
+          <a href="/.">
+            
+            <i class="icon icon-home-fill"></i>
+            
+            <span class="menu-title">首页</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags">
+            
+            <i class="icon icon-tags"></i>
+            
+            <span class="menu-title">标签</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-repository">
+          <a target="_blank" rel="noopener" href="https://github.com/codecodegogogo">
+            
+            <i class="icon icon-project"></i>
+            
+            <span class="menu-title">项目</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about">
+            
+            <i class="icon icon-cup-fill"></i>
+            
+            <span class="menu-title">关于</span>
+          </a>
+        </li>
+        
+      </ul>
+      
+	
+    <ul class="social-links">
+    	
+        <li><a href="https://github.com/codecodegogogo" target="_blank" title="Github" data-toggle=tooltip data-placement=top><i class="icon icon-github"></i></a></li>
+        
+    </ul>
+
+    </nav>
+  </div>
+</header>
+
+  
+    <aside class="sidebar" itemscope itemtype="http://schema.org/WPSideBar">
+  <div class="slimContent">
+    
+      <div class="widget">
+    <h3 class="widget-title">公告</h3>
+    <div class="widget-body">
+        <div id="board">
+            <div class="content">
+                <p>今天网站换了个新皮肤~</p> <p align="right">2023.4.14</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">标签</h3>
+    <div class="widget-body">
+      <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/c/" rel="tag">c++</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/code/" rel="tag">code</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/java/" rel="tag">java</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/javascript/" rel="tag">javascript</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/linux/" rel="tag">linux</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/os/" rel="tag">os</a><span class="tag-list-count">11</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/vue/" rel="tag">vue</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%9D%82%E8%B0%88/" rel="tag">杂谈</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%AE%97%E6%B3%95/" rel="tag">算法</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%9F%BA%E7%A1%80/" rel="tag">计算机基础</a><span class="tag-list-count">8</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%B7%A5%E5%85%B7/" rel="tag">计算机工具</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E6%96%87%E5%8C%96%E5%9F%BA%E7%A1%80/" rel="tag">计算机文化基础</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/" rel="tag">计算机网络</a><span class="tag-list-count">9</span></li></ul>
+    </div>
+  </div>
+
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">最新文章</h3>
+    <div class="widget-body">
+      <ul class="recent-post-list list-unstyled no-thumbnail">
+        
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                
+              </p>
+              <p class="item-title">
+                <a href="/2024/06/10/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E5%90%84%E5%B1%82%E7%BD%91%E7%BB%9C%E8%AE%BE%E5%A4%87/%E8%AE%A1%E7%AE%97%E6%9C%BA%E6%96%87%E5%8C%96%E5%9F%BA%E7%A1%80-ppt/" class="title">(no title)</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2024-06-10T02:05:08.833Z" itemprop="datePublished">2024-06-10</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                
+              </p>
+              <p class="item-title">
+                <a href="/2024/06/10/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E5%90%84%E5%B1%82%E7%BD%91%E7%BB%9C%E8%AE%BE%E5%A4%87/%E8%AE%A1%E7%AE%97%E6%9C%BA%E6%96%87%E5%8C%96%E5%9F%BA%E7%A1%80-%E6%95%B0%E6%8D%AE%E5%BA%93/" class="title">(no title)</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2024-06-10T02:05:08.833Z" itemprop="datePublished">2024-06-10</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                
+              </p>
+              <p class="item-title">
+                <a href="/2024/05/23/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E5%90%84%E5%B1%82%E7%BD%91%E7%BB%9C%E8%AE%BE%E5%A4%87/%E8%AE%A1%E7%AE%97%E6%9C%BA%E6%96%87%E5%8C%96%E5%9F%BA%E7%A1%80-excel/" class="title">计算机文化基础-excel</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2024-05-23T00:30:47.000Z" itemprop="datePublished">2024-05-23</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                
+              </p>
+              <p class="item-title">
+                <a href="/2024/05/14/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E5%90%84%E5%B1%82%E7%BD%91%E7%BB%9C%E8%AE%BE%E5%A4%87/%E8%AE%A1%E7%AE%97%E6%9C%BA%E6%96%87%E5%8C%96%E5%9F%BA%E7%A1%80/" class="title">计算机文化基础</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2024-05-14T01:41:05.000Z" itemprop="datePublished">2024-05-14</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                
+              </p>
+              <p class="item-title">
+                <a href="/2024/03/01/Algorithm/" class="title">Algorithm</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2024-03-01T07:52:28.000Z" itemprop="datePublished">2024-03-01</time>
+              </p>
+            </div>
+          </li>
+          
+      </ul>
+    </div>
+  </div>
+  
+
+    
+  </div>
+</aside>
+
+  
+  
+  <aside class="sidebar sidebar-toc collapse   in  " id="collapseToc" itemscope itemtype="http://schema.org/WPSideBar">
+  <div class="slimContent">
+    <nav id="toc" class="article-toc">
+      <h3 class="toc-title">文章目录</h3>
+      <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E7%BD%91%E7%BB%9C%E5%B1%82"><span class="toc-number">1.</span> <span class="toc-text">网络层</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%A6%82%E8%BF%B0"><span class="toc-number">1.1.</span> <span class="toc-text">概述</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%BD%AC%E5%8F%91%E5%92%8C%E8%B7%AF%E7%94%B1%E9%80%89%E6%8B%A9"><span class="toc-number">1.1.1.</span> <span class="toc-text">转发和路由选择</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%BD%91%E7%BB%9C%E6%9C%8D%E5%8A%A1%E6%A8%A1%E5%9E%8B"><span class="toc-number">1.1.2.</span> <span class="toc-text">网络服务模型</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%99%9A%E7%94%B5%E8%B7%AF%E5%92%8C%E6%95%B0%E6%8D%AE%E6%8A%A5%E7%BD%91%E7%BB%9C"><span class="toc-number">1.2.</span> <span class="toc-text">虚电路和数据报网络</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%99%9A%E7%94%B5%E8%B7%AF%E7%BD%91%E7%BB%9C"><span class="toc-number">1.2.1.</span> <span class="toc-text">虚电路网络</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%95%B0%E6%8D%AE%E6%8A%A5%E7%BD%91%E7%BB%9C"><span class="toc-number">1.2.2.</span> <span class="toc-text">数据报网络</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%89%8D%E7%BC%80%E5%8C%B9%E9%85%8D"><span class="toc-number">1.2.2.1.</span> <span class="toc-text">前缀匹配</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%9B%B4%E6%96%B0%E8%BD%AC%E5%8F%91%E8%A1%A8"><span class="toc-number">1.2.2.2.</span> <span class="toc-text">更新转发表</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%99%9A%E7%94%B5%E8%B7%AF%E5%92%8C%E6%95%B0%E6%8D%AE%E6%8A%A5%E7%BD%91%E7%BB%9C%E7%9A%84%E7%94%B1%E6%9D%A5"><span class="toc-number">1.2.3.</span> <span class="toc-text">虚电路和数据报网络的由来</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%B7%AF%E7%94%B1%E5%99%A8%E5%B7%A5%E4%BD%9C%E5%8E%9F%E7%90%86"><span class="toc-number">1.3.</span> <span class="toc-text">路由器工作原理</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%BE%93%E5%85%A5%E7%AB%AF%E5%8F%A3"><span class="toc-number">1.3.1.</span> <span class="toc-text">输入端口</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BA%A4%E6%8D%A2%E7%BB%93%E6%9E%84"><span class="toc-number">1.3.2.</span> <span class="toc-text">交换结构</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E4%B8%89%E7%A7%8D%E4%BA%A4%E6%8D%A2%E6%8A%80%E6%9C%AF"><span class="toc-number">1.3.2.1.</span> <span class="toc-text">三种交换技术</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E7%BB%8F%E5%86%85%E5%AD%98%E4%BA%A4%E6%8D%A2"><span class="toc-number">1.3.2.2.</span> <span class="toc-text">经内存交换</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E7%BB%8F%E6%80%BB%E7%BA%BF%E4%BA%A4%E6%8D%A2"><span class="toc-number">1.3.2.3.</span> <span class="toc-text">经总线交换</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E7%BB%8F%E4%BA%92%E8%81%94%E7%BD%91%E7%BB%9C%E4%BA%A4%E6%8D%A2"><span class="toc-number">1.3.2.4.</span> <span class="toc-text">经互联网络交换</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%BE%93%E5%87%BA%E7%AB%AF%E5%8F%A3"><span class="toc-number">1.3.3.</span> <span class="toc-text">输出端口</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BD%95%E5%A4%84%E5%87%BA%E7%8E%B0%E6%8E%92%E9%98%9F"><span class="toc-number">1.3.4.</span> <span class="toc-text">何处出现排队</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%B7%AF%E7%94%B1%E9%80%89%E6%8B%A9%E6%8E%A7%E5%88%B6%E5%B9%B3%E9%9D%A2"><span class="toc-number">1.3.5.</span> <span class="toc-text">路由选择控制平面</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%BD%91%E9%99%85%E5%8D%8F%E8%AE%AE-%E5%9B%A0%E7%89%B9%E7%BD%91%E4%B8%AD%E7%9A%84%E8%BD%AC%E5%8F%91%E5%92%8C%E7%BC%96%E5%9D%80"><span class="toc-number">1.4.</span> <span class="toc-text">网际协议:因特网中的转发和编址</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%95%B0%E6%8D%AE%E6%8A%A5%E6%A0%BC%E5%BC%8F"><span class="toc-number">1.4.1.</span> <span class="toc-text">数据报格式</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#IP%E6%95%B0%E6%8D%AE%E6%8A%A5%E5%88%86%E7%89%87"><span class="toc-number">1.4.1.1.</span> <span class="toc-text">IP数据报分片</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#IPv4-%E7%BC%96%E5%9D%80"><span class="toc-number">1.4.2.</span> <span class="toc-text">IPv4 编址</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E7%AE%80%E8%BF%B0%E4%B8%80%E4%B8%8B%E4%B8%BB%E6%9C%BA%E4%B8%8E%E8%B7%AF%E7%94%B1%E5%99%A8%E8%BF%9E%E5%85%A5%E7%BD%91%E7%BB%9C%E7%9A%84%E6%96%B9%E6%B3%95%E3%80%82"><span class="toc-number">1.4.2.1.</span> <span class="toc-text">简述一下主机与路由器连入网络的方法。</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%88%86%E9%85%8Dip"><span class="toc-number">1.4.2.2.</span> <span class="toc-text">分配ip</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%9B%A0%E7%89%B9%E7%BD%91%E6%8E%A7%E5%88%B6%E6%8A%A5%E6%96%87%E5%8D%8F%E8%AE%AE-ICMP"><span class="toc-number">1.4.3.</span> <span class="toc-text">因特网控制报文协议 ICMP</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#ipv6"><span class="toc-number">1.4.4.</span> <span class="toc-text">ipv6</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E4%BB%8E-IPv4%E5%88%B0-IPv6%E7%9A%84%E8%BF%81%E7%A7%BB"><span class="toc-number">1.4.4.1.</span> <span class="toc-text">从 IPv4到 IPv6的迁移</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%B6%89%E8%B6%B3IP%E5%AE%89%E5%85%A8%E6%80%A7"><span class="toc-number">1.4.5.</span> <span class="toc-text">涉足IP安全性</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#sdn"><span class="toc-number">1.4.6.</span> <span class="toc-text">sdn</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%B7%AF%E7%94%B1%E8%A1%A8%E5%92%8C%E8%BD%AC%E5%8F%91%E8%A1%A8"><span class="toc-number">1.5.</span> <span class="toc-text">路由表和转发表</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%B7%AF%E7%94%B1%E9%80%89%E6%8B%A9%E7%AE%97%E6%B3%95"><span class="toc-number">1.6.</span> <span class="toc-text">路由选择算法</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%B7%AF%E7%94%B1%E9%80%89%E6%8B%A9%E7%AE%97%E6%B3%95%E5%88%86%E7%B1%BB%EF%BC%9A"><span class="toc-number">1.6.1.</span> <span class="toc-text">路由选择算法分类：</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%93%BE%E8%B7%AF%E7%8A%B6%E6%80%81%E8%B7%AF%E7%94%B1%E9%80%89%E6%8B%A9%E7%AE%97%E6%B3%95%EF%BC%88LS%E7%AE%97%E6%B3%95-%E5%85%A8%E5%B1%80%E5%BC%8F%E8%B7%AF%E7%94%B1%E9%80%89%E6%8B%A9%E7%AE%97%E6%B3%95%EF%BC%89"><span class="toc-number">1.6.2.</span> <span class="toc-text">链路状态路由选择算法（LS算法  全局式路由选择算法）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%B7%9D%E7%A6%BB%E5%90%91%E9%87%8F%E8%B7%AF%E7%94%B1%E9%80%89%E6%8B%A9%E7%AE%97%E6%B3%95-DV"><span class="toc-number">1.6.3.</span> <span class="toc-text">距离向量路由选择算法 (DV)</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%B1%82%E6%AC%A1%E8%B7%AF%E7%94%B1%E9%80%89%E6%8B%A9"><span class="toc-number">1.6.3.1.</span> <span class="toc-text">层次路由选择</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%9B%A0%E7%89%B9%E7%BD%91%E4%B8%AD%E7%9A%84%E8%B7%AF%E7%94%B1%E9%80%89%E6%8B%A9"><span class="toc-number">1.7.</span> <span class="toc-text">因特网中的路由选择</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%9B%A0%E7%89%B9%E7%BD%91%E4%B8%AD%E8%87%AA%E6%B2%BB%E7%B3%BB%E7%BB%9F%E5%86%85%E9%83%A8%E7%9A%84%E8%B7%AF%E7%94%B1%E9%80%89%E6%8B%A9-RIP"><span class="toc-number">1.7.1.</span> <span class="toc-text">因特网中自治系统内部的路由选择:RIP</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%9B%A0%E7%89%B9%E7%BD%91%E4%B8%AD%E8%87%AA%E6%B2%BB%E7%B3%BB%E7%BB%9F%E5%86%85%E9%83%A8%E7%9A%84%E8%B7%AF%E7%94%B1%E9%80%89%E6%8B%A9-OSPF"><span class="toc-number">1.7.2.</span> <span class="toc-text">因特网中自治系统内部的路由选择:OSPF</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%87%AA%E6%B2%BB%E7%B3%BB%E7%BB%9F%E9%97%B4%E7%9A%84%E8%B7%AF%E7%94%B1%E9%80%89%E6%8B%A9-BGP"><span class="toc-number">1.7.3.</span> <span class="toc-text">自治系统间的路由选择:BGP</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#bgp%E5%9F%BA%E7%A1%80"><span class="toc-number">1.7.3.1.</span> <span class="toc-text">bgp基础</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E8%B7%AF%E5%BE%84%E5%B1%9E%E6%80%A7%E5%92%8CBGP%E8%B7%AF%E7%94%B1"><span class="toc-number">1.7.3.2.</span> <span class="toc-text">路径属性和BGP路由</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#BGP-%E8%B7%AF%E7%94%B1%E9%80%89%E6%8B%A9"><span class="toc-number">1.7.3.3.</span> <span class="toc-text">BGP 路由选择</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%B9%BF%E6%92%AD%E5%92%8C%E5%A4%9A%E6%92%AD%E8%B7%AF%E7%94%B1%E9%80%89%E6%8B%A9"><span class="toc-number">1.8.</span> <span class="toc-text">广播和多播路由选择</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%B9%BF%E6%92%AD%E8%B7%AF%E7%94%B1%E9%80%89%E6%8B%A9%E7%AE%97%E6%B3%95"><span class="toc-number">1.8.1.</span> <span class="toc-text">广播路由选择算法</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%97%A0%E6%8E%A7%E5%88%B6%E6%B4%AA%E6%B3%9B"><span class="toc-number">1.8.1.1.</span> <span class="toc-text">无控制洪泛</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%8F%97%E6%8E%A7%E6%B4%AA%E6%B3%9B"><span class="toc-number">1.8.1.2.</span> <span class="toc-text">受控洪泛</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%A4%9A%E6%92%AD"><span class="toc-number">1.8.2.</span> <span class="toc-text">多播</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%B1%80%E5%9F%9F%E7%BD%91%E7%A1%AC%E4%BB%B6%E5%A4%9A%E6%92%AD"><span class="toc-number">1.8.2.1.</span> <span class="toc-text">局域网硬件多播</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%9B%A0%E7%89%B9%E7%BD%91%E7%BB%84%E7%AE%A1%E7%90%86%E5%8D%8F%E8%AE%AE"><span class="toc-number">1.8.2.2.</span> <span class="toc-text">因特网组管理协议</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%A4%9A%E6%92%AD%E8%B7%AF%E7%94%B1%E9%80%89%E6%8B%A9%E5%8D%8F%E8%AE%AE"><span class="toc-number">1.8.3.</span> <span class="toc-text">多播路由选择协议</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%9F%BA%E4%BA%8E%E6%BA%90%E6%A0%91-Source-Base-Tree-%E5%A4%9A%E6%92%AD%E8%B7%AF%E7%94%B1%E9%80%89%E6%8B%A9"><span class="toc-number">1.8.3.1.</span> <span class="toc-text">基于源树 (Source-Base Tree)多播路由选择</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E7%BB%84%E5%85%B1%E4%BA%AB%E6%A0%91-Group-Shared-Tree-%E5%A4%9A%E6%92%AD%E8%B7%AF%E7%94%B1%E9%80%89%E6%8B%A9"><span class="toc-number">1.8.3.2.</span> <span class="toc-text">组共享树 (Group-Shared Tree)多播路由选择</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B9%A0%E9%A2%98"><span class="toc-number">1.9.</span> <span class="toc-text">习题</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B9%A0%E9%A2%98-1"><span class="toc-number">1.10.</span> <span class="toc-text">习题</span></a></li></ol></li></ol>
+    </nav>
+  </div>
+</aside>
+
+<main class="main" role="main">
+  <div class="content">
+  <article id="post-计算机网络-第四章网络层" class="article article-type-post" itemscope itemtype="http://schema.org/BlogPosting">
+    
+    <div class="article-header">
+      
+        
+  
+    <h1 class="article-title" itemprop="name">
+      计算机网络-第四章网络层
+    </h1>
+  
+
+      
+      <div class="article-meta">
+        <span class="article-date">
+    <i class="icon icon-calendar-check"></i>
+	<a href="/2023/06/02/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C-%E7%AC%AC%E5%9B%9B%E7%AB%A0%E7%BD%91%E7%BB%9C%E5%B1%82/" class="article-date">
+	  <time datetime="2023-06-02T13:26:56.000Z" itemprop="datePublished">2023-06-02</time>
+	</a>
+</span>
+        
+        
+  <span class="article-tag">
+    <i class="icon icon-tags"></i>
+	<a class="article-tag-link-link" href="/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/" rel="tag">计算机网络</a>
+  </span>
+
+
+        
+	<span class="article-read hidden-xs">
+	    <i class="icon icon-eye-fill" aria-hidden="true"></i>
+	    <span id="busuanzi_container_page_pv">
+			<span id="busuanzi_value_page_pv">0</span>
+		</span>
+	</span>
+
+
+        <span class="post-comment"><i class="icon icon-comment"></i> <a href="/2023/06/02/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C-%E7%AC%AC%E5%9B%9B%E7%AB%A0%E7%BD%91%E7%BB%9C%E5%B1%82/#comments" class="article-comment-link">评论</a></span>
+        
+	
+		<span class="post-wordcount hidden-xs" itemprop="wordCount">字数统计: 33.5k(字)</span>
+	
+	
+
+      </div>
+    </div>
+    <div class="article-entry marked-body" itemprop="articleBody">
+      
+        <h1 id="网络层"><a href="#网络层" class="headerlink" title="网络层"></a>网络层</h1><p>与运输层和应用层不同的是，在网络中的每一台主机和路由器中都有一个网络层部分。</p>
+<p><strong>在本章中，我们将对网络层的转发（forwarding）功能和路由选择（routing)功能做重要区分。转发涉及分组在单一的路由器中从一条入链路到一条出链路的传送。路由选择涉及一个网络的所有路由器，它们经路由选择协议共同交互，以决定分组从源到目的地结点所采用的路径。</strong></p>
+<p>为了加深对分组转发的理解，我们将“进入”路由器内部来观察它的硬件体系结构和组织。接下来我们将观察在因特网中的分组转发，以及令人称颂的网际协议（P)。我们将研究网络层编址和 IPv4的数据报格式。然后我们将探讨网络地址转换（NAT)、数据报分段、因特网控制报文协议（ICMP) 和IPv6。</p>
+<p>然后我们将注意力转向网络层的路由选择功能。我们将看到路由选择算法的任务是决定从发送方到接收方的好的路径（等价地为路由)。我们将首先学习路由选择算法的理论，关注两种最为流行的算法类型:链路状态和距离矢量算法。因为路由选择算法的复杂性随着网络路由器数量的增加会有相当大的增长，因此我们也会关注等级制路由选择方法。当我们涉及因特网的自治系统内部的路由选择协议（RIP OSPF 和IS-IS）)和因特网的自治系统之间的路由选择协议（BGP） 时，我们将看到理论是如何付诸实践的。最后我们讨论广播和多播路由选择。</p>
+<h2 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h2><p>假设H1正在向H2发送信息,H1中的网络层取得来自于H1运输层的报文段，将每个报文段封装成一个数据报(即一个网络层的分组)，然后将该数据报向相邻路由器R1发送。在接收方主机H2，网络层接收来自相邻路由器R2的数据报，提取出运输层报文段，并将其向上交付给H2的运输层。</p>
+<p>路由器的主要作用便是将数据报从入链路转发到出链路。注意到图4-1中所示路由器具有截断的协议栈，即没有网络层以上的部分，因为（除了控制目的外)<strong>路由器不运行我们在第2、3章学习过的应用层和运输层协议</strong>。<br><img src="/2023/06/02/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C-%E7%AC%AC%E5%9B%9B%E7%AB%A0%E7%BD%91%E7%BB%9C%E5%B1%82/1.1.png" alt="?"></p>
+<h3 id="转发和路由选择"><a href="#转发和路由选择" class="headerlink" title="转发和路由选择"></a>转发和路由选择</h3><p>网络层的作用从表面上看极为简单，即将分组从台发送主机移动到一台接收主机。为此,需要两种重要的网络层功能:</p>
+<p><strong>转发。</strong> 当一个分组到达路由器的一条输入链路时，路由器必须将该分组移动到适当的输出链路。例如，来自主机H1到路由器R1的一个分组，必须向在H2路径上的下一台路由器转发.</p>
+<p><strong>路由选择。</strong> 当分组从发送方流向接收方时，网络层必须决定这些分组所采用的路由或路径。计算这些路径的算法被称为路由选择算法（routing algorithm)。例如,一个路由选择算法将决定分组从到H流动所遵循的路径。</p>
+<p><strong>转发是指数据包从一个接口进入路由器，并通过另一个接口离开路由器的过程。路由选择是指路由器在转发数据包时选择哪一个接口作为出口的过程。</strong> 在路由选择过程中，路由器会根据路由表中的路由信息和网络拓扑结构来选择最佳的路径，以确保数据包能够快速、准确地到达目的地。转发和路由选择是路由器的两个基本功能，它们共同构成了路由器的核心技术。</p>
+<p>每台路由器具有一张转发表 （forwarding table)。路由器通过检查到达分组首部字段的值来转发分组，然后使用该值在该路由器的转发表中索引查询。存储在转发表项中的该首部的值指出了该分组将被转发的路由器的输出链路接口。分组首部中的该值可能是该分组的目的地址或该分组所属连接的指示，这取决于网络层协议。<br><img src="/2023/06/02/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C-%E7%AC%AC%E5%9B%9B%E7%AB%A0%E7%BD%91%E7%BB%9C%E5%B1%82/1.2.png" alt="?"></p>
+<p>路由选择算法可能是集中式的（例如，算法在某个中心场点执行，并向每台路由器下载路由选择信息)，或是分布式的（即，使用运行在每台路由器上的分布式路由选择算法的一部分)。</p>
+<p>分组交换机和路由器。分组交换机是一种通用的设备，根据分组首部字段中的值，从输入链路接口到输出链路接口转移分组。<strong>而路由器是一种特殊的分组交换机</strong>，基于网络层字段中的值做转发决定。需要注意的是，市场销售将<strong>具有以太网接口的路由器称为“三层交换机”</strong>，但实际上它们是三层设备，混淆了相关概念。因此，为了避免混淆，本章中使用术语路由器代替分组交换机。在谈论虚电路网络中的分组交换机时，也将使用词汇路由器。</p>
+<p>我们刚才说过网络层有两个重要的功能，转发和路由选择。但我们很快将看到在某些计算机网络中，实际上有第三种重要的网络功能，即连接建立（connection setup)。</p>
+<h3 id="网络服务模型"><a href="#网络服务模型" class="headerlink" title="网络服务模型"></a>网络服务模型</h3><p>其他的网络体系结构已定义和实现了许多超过<strong>因特网的尽力而为服务的服务模型。</strong><br><img src="/2023/06/02/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C-%E7%AC%AC%E5%9B%9B%E7%AB%A0%E7%BD%91%E7%BB%9C%E5%B1%82/1.3.png" alt="?"></p>
+<p>恒定比特率（Constant Bit Rate，CBR）ATM网络服务这是第一个被标准化的ATM 服务模型，它反映了电话公司对 ATM的早期兴趣以及 CBR 服务在承载实时、恒定比特率的音频和视频流量方面的适用性。使用CBR服务，ATM 信元流以如下方式被承载跨越网络，即一个信元的端到端时延、信元端到端时延中的可变性（即时延抖动)及丢失或推迟交付的信元的比率都确保在特定值以下。</p>
+<p>可用比特率(Available Bit Rate, ABR)ATM网络服务。与因特网服务模型一样，ABR 服务下的信元也许会丢失,然而与因特网不同的是,信元不能被重排序（虽然它们可能丢失)，对于使用ABR 服务的连接来说，最小信元传输速率（MCR)是可以得到保证的。如果在给定时间内网络有足够的空闲资源，发送方也可以用比 MCR更高的速率成功地发送数据。</p>
+<h2 id="虚电路和数据报网络"><a href="#虚电路和数据报网络" class="headerlink" title="虚电路和数据报网络"></a>虚电路和数据报网络</h2><p><strong>网络层也能够在两台主机之间提供无连接服务或连接服务。</strong> 网络层的连接和无连接服务在许多方面与运输层的面向连接和无连接服务类似。例如，网络层连接服务以源和目的主机间的握手开始;网络层无连接服务则没有任何握手预备步骤。</p>
+<p>尽管网络层连接和无连接服务与运输层面向连接和无连接服务有类似之处，但也存在重大差异:</p>
+<ol>
+<li><p>在网络层中，这些服务是由网络层向运输层提供的主机到主机的服务。在运输层中，这些服务则是运输层向应用层提供的进程到进程的服务。</p>
+</li>
+<li><p>在至今为止的所有主要的计算机网络体系结构中（因特网、ATM、帧中继等)，网络层或者提供了主机到主机的无连接服务，或者提供了主机到主机的连接服务,而不同时提供这两种服务。仅在网络层提供连接服务的计算机网络称为虚电路(Virtual-Circuit, VC）网络;仅在网络层提供无连接服务的计算机网络称为数据报网络（datagram network)。</p>
+</li>
+<li><p>在运输层实现面向连接的服务与在网络层实现连接服务是根本不同的。我们在前面一章看到，运输层面向连接服务是在位于网络边缘的端系统中实现的;我们很快看到，网络层连接服务除了在端系统中，也在位于网络核心的路由器中实现。</p>
+</li>
+</ol>
+<h3 id="虚电路网络"><a href="#虚电路网络" class="headerlink" title="虚电路网络"></a>虚电路网络</h3><p><strong>虽然因特网是一个数据报网络，但许多其他网络体系结构（包括ATM、帧中继的体系结构）却是虚电路网络</strong>,因此在网络层使用连接。这些网络层连接被称为虚电路。</p>
+<p>一条虚电路的组成如下:<br>①源和目的主机之间的路径（即一系列链路和路由器);<br>②VC号，沿着该路径的每段链路的一个号码;<br>③沿着该路径的每台路由器中的转发表表项。<br>属于一条虚电路的分组将在它的首部携带一个VC号。因为一条虚电路在每条链路上可能具有不同的VC号，每台中间路由器必须用一个新的VC号替代每个传输分组的VC号。该新的VC号从转发表获得。</p>
+<p><img src="/2023/06/02/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C-%E7%AC%AC%E5%9B%9B%E7%AB%A0%E7%BD%91%E7%BB%9C%E5%B1%82/1.4.png" alt="?"><br>假定该网络为该虚电路选择路径A-R1-R2-B并为这条路径上的这3条链路分配VC号12、22和 32。在这种情况下,当在这条虚电路中的分组离开主机A时,在该分组首部中的VC字段的值是12;当它离开R1时，该值是22，而当它离开R2时,该值是32。</p>
+<p><strong>在虚电路网络中，该网络的路由器必须为进行中的连接维持连接状态信息（connec-tion state information)。特别是，每当跨越一台路由器创建一个新连接，必须在该路由器的转发表中增加一个新的连接项;每当释放一个连接，必须从该表中删除该项。值得注意的是，即使没有VC号转换，仍有必要维持连接状态信息，该信息将 VC号与输出接口号联系起来。</strong></p>
+<p>在虚电路中有3个明显不同的阶段:<br><strong>虚电路建立</strong>。在建立阶段，发送运输层与网络层联系，指定接收方地址，等待网络建立虚电路。网络层决定发送方与接收方之间的路径，即该虚电路的所有分组要通过的一系列链路与路由器。网络层也为沿着该路径的每条链路决定一个 VC号。最后，网络层在沿着路径的每台路由器的转发表中增加一个表项。在虚电路建立期间，网络层还可以预留该虚电路路径上的资源（如带宽)。</p>
+<p><strong>数据传送</strong>。如图4-4中所示，一旦创建了虚电路，分组就可以开始沿该虚电路流动了。</p>
+<p><strong>虚电路拆除</strong>。当发送方（或接收方）通知网络层它希望终止该虚电路时，就启动这个阶段。然后网络层通常将通知网络另一侧的端系统结束呼叫，并更新路径上每台分组路由器中的转发表以表明该虚电路已不存在了</p>
+<p><strong>运输层的连接建立仅涉及两个端系统。在运输层的连接建立期间，两个端系统独自决定运输层连接的参数(如初始序号与流量控制窗口长度)。虽然这两个端系统已经知道该运输层连接，但网络中的路由器则对这些完全不知情。<br>对于一个虚电路网络层，沿两个端系统之间路径上的路由器都要参与虚电路的建立，且每台路由器都完全知道经过它的所有虚电路.</strong><br><img src="/2023/06/02/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C-%E7%AC%AC%E5%9B%9B%E7%AB%A0%E7%BD%91%E7%BB%9C%E5%B1%82/1.5.png" alt="?"></p>
+<p>端系统向网络发送指示虚电路启动与终止的报文。以及路由器之间传递的用于建立虚电路（即修改路由器表中的连接状态）的报文，它们被称为信令报文（signaling mes-sage)，用来交换这些报文的协议常称为信令协议（signaling protocol)。</p>
+<h3 id="数据报网络"><a href="#数据报网络" class="headerlink" title="数据报网络"></a>数据报网络</h3><p>在数据报网络中，每当一个端系统要发送分组，它就为该分组加上目的端系统的地址，然后将分组推进网络中。无需建立任何虚电路，路由器不维护任何虚电路的状态信息(因为没有虚电路!)。<br>当分组从源到目的地传输，它通过一系列路由器传递。这些路由器中的每台都使用分组的目的地址来转发该分组。每台路由器有一个将目的地址映射到链路接口的转发表;当分组到达路由器时，路由器使用该分组的目的地址在转发表中查找适当的输出链路接口。然后路由器有意将分组向该输出链路接口转发<br><img src="/2023/06/02/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C-%E7%AC%AC%E5%9B%9B%E7%AB%A0%E7%BD%91%E7%BB%9C%E5%B1%82/2.1.png" alt="?"></p>
+<p><img src="/2023/06/02/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C-%E7%AC%AC%E5%9B%9B%E7%AB%A0%E7%BD%91%E7%BB%9C%E5%B1%82/2.2.png" alt="?"></p>
+<h4 id="前缀匹配"><a href="#前缀匹配" class="headerlink" title="前缀匹配"></a>前缀匹配</h4><p>使用这种风格的转发表，路由器用分组的目的地址的前缀（prefix）与该表中的表项进行匹配:如果存在一个匹配项，则路由器向与该匹配项相联系的链路转发分组。如果一个前缀不匹配前3项中的任何一项，则路由器向链路接口3转发该分组。</p>
+<p>一个目的地址可能与不止一个表项相匹配。例如，地址11001000 00010111 00010000 10101010的前24比特与表中的第二项匹配，而该地址的前21比特与表中的第三项匹配。当有多个匹配时，该路由器使用最长前缀匹配规则（longestprefix matching rule);即在该表中寻找最长的匹配项,并向与最长前缀匹配相关联的链路接口转发分组。</p>
+<h4 id="更新转发表"><a href="#更新转发表" class="headerlink" title="更新转发表"></a>更新转发表</h4><p>虽然在数据报网络中的路由器不维持连接状态信息,但它们在其转发表中维持了转发状态信息。然而，转发状态信息表变化的时间尺度相对要慢。在数据报网络中的转发表是通过路由选择算法进行修改的，这通常每1~5分钟左右更新一次转发表。</p>
+<p>在虚电路网络中，无论何时通过路由器建立一条新的连接，或无论何时通过路由器拆除一条现有的连接，路由器中的转发表就被更新。对一台第一层主干路由器而言，这很容易以微秒的时间尺度进行更新。</p>
+<h3 id="虚电路和数据报网络的由来"><a href="#虚电路和数据报网络的由来" class="headerlink" title="虚电路和数据报网络的由来"></a>虚电路和数据报网络的由来</h3><p>虚电路的概念来源于电话界，它采用了真正的电路。由于呼叫建立及每呼叫的状态要在网络中的路由器上维持，一个面向虚电路的网络显然比数据报网络要复杂得多。</p>
+<p>因特网作为一种数据报网络，是由将计算机连接在一起的需求发展而来的。由于端系统设备复杂得多，因特网架构师们选择使网络层服务模型尽可能简单。另外的功能（例如,按序传送，可靠数据传输、拥塞控制与 DNS名字解析)在端系统中的更高层实现。这正好与电话网模型相反。</p>
+<p>由于所产生的因特网服务模型使服务保证最少，它对网络层施加了最小限度的需求。这使得互联使用各种不同链路层技术而且具有十分不同的传输速率和丢包特性的网络变得更加容易。这些链路层技术包括卫星、以太网、光纤或无线。</p>
+<p>诸如电子邮件、Web 等应用，甚至如 DNS 这样的网络基础设施都是在位于网络边缘的主机（服务器）上实现的。增加一个新服务只需连接一台主机到网络中，并定义一个新的应用层协议（如HTTP)即可，这种能力可以使如 Web之类的新服务能在相当短的时间内在因特网上得以部署。</p>
+<h2 id="路由器工作原理"><a href="#路由器工作原理" class="headerlink" title="路由器工作原理"></a>路由器工作原理</h2><p>网络层的转发功能(forwarding function)，即实际将分组从一台路由器的入链路传送到适当的出链路。</p>
+<p><img src="/2023/06/02/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C-%E7%AC%AC%E5%9B%9B%E7%AB%A0%E7%BD%91%E7%BB%9C%E5%B1%82/3.1.png" alt="?"><br><strong>输入端口：</strong> 输入端口执行几项关键功能。它要执行将一条输入的物理链路与路由器相连接的物理层功能,这显示在图4-6中输入端部分最左侧的方框与输出端口部分最右侧的方框中。</p>
+<p>它还要执行需要与位于入链路远端的数据链路层交互的数据链路层功能，这表示在输入与输出端口部分的中间方框中。</p>
+<p>也许更为重要的是，在输入端口还要完成查找功能，这显示在输入端口最右侧的方框中。正是在这里，通过查询转发表决定路由器的输出端口，到达的分组通过路由器的交换结构将转发到输出端口。控制分组（如携带路由选择协议信息的分组）从输入端口转发到路由选择处理器。注意这里的端口一词，是指路由器的物理输入和输出接口，这完全不同于网络应用程序和套接字相联系的软件端口。</p>
+<p><strong>交换结构：</strong> 交换结构将路由器的输入端口与输出端口相连接。这种交换结构完全包含在路由器中,即它是一个网络路由器中的网络!</p>
+<p><strong>输出端口：</strong> 输出端口存储从交换结构接收的分组，并通过执行必要的链路层和物理层功能在输入链路上传输这些分组。当一条链路是双向的（即承载两个方问的流量)时，输出端口通常是与该链路的输入端口在同一线路卡上成对出现的。</p>
+<p><strong>路由选择处理器：</strong> 路由选择处理器执行路由选择协议,维护路由选择表以及连接的链路状态信息,并为路由器计算转发表。它还执行网络管理功能.</p>
+<p>一台路由器的输入端口、输出端口和交换结构共同实现了这种转发功能，并且总是用硬件实现。这些转发功能有时总称为路由器转发平面（router forwarding plane)。</p>
+<p>当转发平面以纳秒时间尺度运行时，路由器的控制功能（即执行路由选择协议、对上线或下线的连接链路进行响应，管理功能)，在毫秒或秒时间尺度上运行。这些路由器控制平面 （router control plane）通常用软件实现并在路由选择处理器上执行(通常是一种传统的CPU)。</p>
+<h3 id="输入端口"><a href="#输入端口" class="headerlink" title="输入端口"></a>输入端口</h3><p>输入端口的线路端接功能与链路层处理实现了用于各个输入链路的物理层和链路层。在输入端口中执行的查找对于路由器的运行是至关重要的。正是在这个地方,路由器使用转发表来查找输出端口，使得到达的分组将能经过交换结构转发到该输出端口。</p>
+<p>转发表是由路由选择处理器计算和更新的，但转发表的一份影子副本通常会被存放在每个输入端口。转发表从路由选择处理器经过独立总线（例如一个 PCI总线）复制到线路卡,在图4-6中该总线由从路由选择处理器到输入线路卡的虚线所指示。有了影子副本，转发决策能在每个输入端口本地做出,无须调用中央路由选择处理器，因此避免了集中式处理的瓶颈。<br><img src="/2023/06/02/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C-%E7%AC%AC%E5%9B%9B%E7%AB%A0%E7%BD%91%E7%BB%9C%E5%B1%82/3.2.png" alt="?"></p>
+<p>假定转发表已经存在，从概念上讲表查找是简单的，即我们只是搜索转发表查找最长前缀匹配。一旦通过查找确定了某分组的输出端口，则该分组就能够发送进入交换结构。在某些设计中，如果来自其他输人端口的分组当前正在使用该交换结构，一个分组可能会在进入交换结构时被暂时阻塞。因此，一个被阻塞的分组必须要在输入端口处排队,并等待稍后被及时调度以通过交换结构。</p>
+<p>尽管“查找”在输入端口处理中可以说是最为重要的动作，但必须采取许多其他动作:<br>①必须出现物理层和链路层处理;<br>②必须检查分组的版本号、检验和以及寿命字段，并且重写后两个字段<br>③必须更新用于网络管理的计数器（如接收到的iP数据报的数目)。</p>
+<h3 id="交换结构"><a href="#交换结构" class="headerlink" title="交换结构"></a>交换结构</h3><p>交换结构位于一台路由器的核心部位。正是通过这种交换结构，分组才能实际地从一个输入端口交换(即转发)到一个输出端口中。交换可以用许多方式完成。</p>
+<h4 id="三种交换技术"><a href="#三种交换技术" class="headerlink" title="三种交换技术"></a>三种交换技术</h4><p><img src="/2023/06/02/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C-%E7%AC%AC%E5%9B%9B%E7%AB%A0%E7%BD%91%E7%BB%9C%E5%B1%82/3.3.png" alt="?"></p>
+<h4 id="经内存交换"><a href="#经内存交换" class="headerlink" title="经内存交换"></a>经内存交换</h4><p>最简单、最早的路由器是传统的计算机在输入端口与输出端口之间的交换是在CPU(路由选择处理器）的直接控制下完成的。输入与输出端口的功能就像在传统操作系统中的I/O设备一样。一个分组到达一个输入端口时，该端口会先通过中断方式向路由选择处理器发出信号。于是，该分组从输入端口处被复制到处理器内存中。路由选择处理器则从其首部中提取目的地址,在转发表中找出适当的输出端口，并将该分组复制到输出端口的缓存中。<br>许多现代路由器通过内存进行交换。然而，与早期路由器的一个主要差别是，目的地址的查找和将分组存储（交换)进适当的内存存储位置是由输入线路卡来处理的。在某些方面，经内存交换的路由器看起来很像共享内存的多处理机，用一个线路卡上的处理将分组交换（写)进适当的输出端口的内存中。</p>
+<h4 id="经总线交换"><a href="#经总线交换" class="headerlink" title="经总线交换"></a>经总线交换</h4><p>在这种方法中，输入端口经一根共享总线将分组直接传送到输出端口，不需要路由选择处理器的干预。通常按以下方式完成该任务:让输入端口为分组预先计划一个交换机内部标签（首部)，指示本地输出端口，使分组在总线上传送和传输到输出端口。该分组能由所有输出端口收到,但只有与该标签匹配的端口才能保存该分组。然后标签在输出端口被去除，因为其仅用于交换机内部来跨越总线。如果多个分组同时到达路由器每个位于不同的输出端口，除了一个分组外所有其他分组必须等待，因为一次只有一个分组能够跨越总线。因为每个分组必须跨过单一总线，故路由器的交换带宽受总线速率的限制;在我们环状交叉路的类比中，这相当于环状交叉路一次仅包含一辆汽车。尽管如此，对于运行在小型局域网和企业网中的路由器来说，通过总线交换通常是足够的。</p>
+<h4 id="经互联网络交换"><a href="#经互联网络交换" class="headerlink" title="经互联网络交换"></a>经互联网络交换</h4><p>克服单一、共享式总线带宽限制的一种方法是，使用一个更复杂的互联网络，例如过去在多处理器计算机体系结构中用来互联多个处理器的网络。纵横式交换机就是一种由2N条总线组成的互联网络，它连接N个输入端口与N个输出端口，如图所示。每条垂直的总线在交叉点与每条水平的总线交叉，交叉点通过交换结构控制器（其逻辑是交换结构自身的一部分）能够在任何时候开启和闭合。当某分组到达端口A ,需要转发到端口Y，交换机控制器闭合总线A和Y交叉部位的交叉点，然后端口A在其总线上发送该分组，该分组仅由总线Y安排接收。注意到来自端口B的一个分组在同一时间能够转发到端口X,因为A到Y和B到X的分组使用不同的输入和输出总线。因此，与前面两种交换方法不同，纵横式网络能够并行转发多个分组。然而，如果来自两个不同输入端口的两个分组其目的地为相同的输出端口，则一个分组必须在输入端等待，因为在某个时刻经给定总线仅有一个分组能够发送。</p>
+<h3 id="输出端口"><a href="#输出端口" class="headerlink" title="输出端口"></a>输出端口</h3><p>输出端口处理取出存放在输出端口内存中的分组并将其发送到输出链路上。这包括选择和取出排队的分组进行传输，执行所需的链路层和物理层传输功能。<br><img src="/2023/06/02/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C-%E7%AC%AC%E5%9B%9B%E7%AB%A0%E7%BD%91%E7%BB%9C%E5%B1%82/3.4.png" alt="?"></p>
+<h3 id="何处出现排队"><a href="#何处出现排队" class="headerlink" title="何处出现排队"></a>何处出现排队</h3><p>路由器排队的原因是因为交换结构比输入输出快，每条线路只能同时输出一个分组，导致路由器需要对收到的分组进行排队，以便逐个输出。</p>
+<h3 id="路由选择控制平面"><a href="#路由选择控制平面" class="headerlink" title="路由选择控制平面"></a>路由选择控制平面</h3><p>我们已经隐含地假设路由选择控制平面全部驻留并运行在路由器中的路由选择处理器上。<strong>网络范围的路由选择控制平面因此是分布式的</strong>，即不同部分（例如路由选择算法）执行在不同的路由器上并且通过彼此发送控制报文进行交互。实际上，今天因特网路由器和路由选择算法正是以这种方式运行的。此外，路由器和交换机厂商将它们的硬件数据平面和软件控制平面绑在一起放入封闭（但可互操作）的平台中，成为一种垂直综合的产品。</p>
+<h2 id="网际协议-因特网中的转发和编址"><a href="#网际协议-因特网中的转发和编址" class="headerlink" title="网际协议:因特网中的转发和编址"></a>网际协议:因特网中的转发和编址</h2><p><img src="/2023/06/02/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C-%E7%AC%AC%E5%9B%9B%E7%AB%A0%E7%BD%91%E7%BB%9C%E5%B1%82/4.1.png" alt="?"></p>
+<h3 id="数据报格式"><a href="#数据报格式" class="headerlink" title="数据报格式"></a>数据报格式</h3><p>网络层分组被称为数据报<br><strong>IPV4报文</strong><br><img src="/2023/06/02/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C-%E7%AC%AC%E5%9B%9B%E7%AB%A0%E7%BD%91%E7%BB%9C%E5%B1%82/4.2.png" alt="?"></p>
+<p>IPv4数据报中的关键字段如下:<br><strong>版本号</strong>4。这4比特规定了数据报的IP协议版本。通过查看版本号,路由器能够确定如何解释IP数据报的剩余部分。不同的IP版本使用不同的数据报格式。</p>
+<p><strong>首部长度</strong>4。因为一个 IPv4 数据报可包含一些可变数量的选项（这些选项包括在IPv4数据报首部中)，故需要用这4比特来确定IP数据报中数据部分实际从哪里开始。大多数iP数据报不包含选项，所以一般的IP数据报具有20字节的首部。</p>
+<p><strong>服务类型</strong>8。服务类型（TOS) 比特包含在IPv4首部中，以便使不同类型的iP数据报（例如，一些特别要求低时延、高吞吐量或可靠性的数据报）能相互区别开来。例如，将实时数据报（如用于IP电话应用)与非实时流量（如FTP)区分开也许是有用的。提供特定等级的服务是一个由路由器管理员决定的策略问题。</p>
+<p><strong>数据报长度</strong>16。这是IP数据报的总长度（首部加数据)，最长为16比特，所以iP数据报的理论最大长度为65535字节。然而，数据报很少有超过1500字节的。<br><strong>标识、标志、片偏移</strong>16,3,13。这三个字段与所谓IP分片有关。新版本的IP（即IPv6)不允许在路由器上对分组分片。</p>
+<p><strong>寿命</strong>8。寿命（Time-To-Live,TTL)字段用来确保数据报不会永远（如由于长时间的路由选择环路）在网络中循环。每当数据报由一台路由器处理时，该字段的值减1。若TTL字段减为0，则该数据报必须丢弃。</p>
+<p><strong>协议</strong>8。该字段仅在一个iP数据报到达其最终目的地才会有用。该字段值指示了IP数据报的数据部分应交给哪个特定的运输层协议。例如，值为6表明数据部分要交给TCP,而值为17表明数据要交给UDP。注意在iP数据报中的协议号所起的作用，类似于运输层报文段中端口号字段所起的作用。协议号是将网络层与运输层绑定到一起的粘合剂，而端口号是将运输层和应用层绑定到一起的粘合剂。链路层帧也有一个特殊字段用于将链路层与网络层绑定到一起。</p>
+<p><strong>首部检验和</strong>16。首部检验和用于帮助路由器检测收到的IP数据报中的比特错误。</p>
+<p>首部检验和是这样计算的:将首部中的每2个字节当作一个数，用反码运算对这些数求和。该和的反码（被称为因特网检验和）存放在检验和字段中。路由器要对每个收到的IP数据报计算其首部检验和，如果数据报首部中携带的检验和与计算得到的检验和不一致，则检测出是个差错。路由器一般会丢弃检测出错误的数据报。注意到在每台路由器上必须重新计算检验和并再次存放到原处,因为TTL字段以及可能的选项字段会改变</p>
+<p>此时，一个经常问到的问题是:为什么 TCP/IP在运输层与网络层都执行差错检测?这种重复检测有几种原因。首先，注意到在iP层只对iP首部计算了检验和，而TCP/UDP检验和是对整个TCP/UDP报文段进行的。其次，TCP/UDP与IP不一定都必须属于同一个协议栈。原则上TCP能运行在一个不同的协议（如ATM)上,而IP能够携带不一定要传递给TCP/UDP的数据。</p>
+<p><strong>源和目的IP地址</strong>32，32。当某源生成一个数据报时，它在源IP字段中插入它的IP地址，在目的IP地址字段中插入其最终目的地址。通常源主机通过DNS查找来决定目的地址。</p>
+<p><strong>选项</strong>？。选项字段允许iP首部被扩展。首部选项意味着很少使用，因此决定对每个数据报首部不包括选项字段中的信息，这样能够节约开销。然而，选项的可能存在的确是件复杂的事，因为数据报头长度可变，故不能预先确定数据字段从何处开始。而且还因为有些数据报要求处理选项，而有些数据报则不要求，故导致一台路由器处理一个IP数据报所需的时间变化很大。这些考虑对于高性能路由器和主机上的iP处理来说特别重要。由于这样或那样的原因，在IPv6首部中已去掉了iP选项。</p>
+<p>**数据（有效载荷)**。我们来看看最后的也是最重要的字段，这是数据报存在的首要理由!在大多数情况下，IP数据报中的数据字段包含要交付给目的地的运输层报文段（TCP或UDP)。然而，该数据字段也可承载其他类型的数据，如 ICMP报文。</p>
+<p>注意到一个IP数据报有总长为20字节的首部（假设无选项)。如果数据报承载一个TCP报文段，则每个（无分片的） 数据报共承载了总长40字节的首部(20字节的iP首部加上20字节的TCP首部)以及应用层报文。</p>
+<h4 id="IP数据报分片"><a href="#IP数据报分片" class="headerlink" title="IP数据报分片"></a>IP数据报分片</h4><p>并不是所有链路层协议都能承载相同长度的网络层分组。有的协议能承载大数据报,而有的协议只能承载小分组。以太网能句够多承载个超1500字节的数据，而某些广域网链路的帧可承载不超过576字节的数据。一个链路层帧能承载的最大数据量叫做最大传送单元(（Maximum Transmission Unit,MTU)。</p>
+<p>当一台目的主机从相同源收到一系列数据报时，它需要确定这些数据报中的某些是否是一些原来较大的数据报的片。如果某些数据报是片的话，则它必须进一步确定何时收到了最后一片，并且如何将这些接收到的片拼接到一起以形成初始的数据报。为了让目的主机执行这些重新组装任务，IPv4的设计者将标识、标志和片偏移字段放在IP数据报首部中。当生成一个数据报时，发送主机在为该数据报设置源和目的地址的同时再贴上标识号。发送主机通常将为它发送的每个数据报的标识号加1。当某路由器需要对一个数据报分片时，形成的每个数据报（即片)具有初始数据报的源地址、目的地址与标识号。当目的地从同一发送主机收到一系列数据报时，它能够检查数据报的标识号以确定哪些数据报实际上是同一较大数据报的片。由于IP是一种不可靠的服务，一个或多个片可能永远到达不了目的地。因为这种原因，为了让目的主机绝对地相信它已收到了初始数据报的最后一个片,最后一个片的标志比特被设为0，而所有其他片的标志比特被设为1。另外，为了让目的主机确定是否丢失了一个片（且能按正确的顺序重新组装片)，使用偏移字段指定该片应放在初始IP数据报的哪个位置。</p>
+<p><img src="/2023/06/02/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C-%E7%AC%AC%E5%9B%9B%E7%AB%A0%E7%BD%91%E7%BB%9C%E5%B1%82/4.3.png" alt="?"><br><strong>除了最后一片的所有初始有效载荷数据的数量应当是8字节的倍数，并且偏移值应当被规定以8字节块为单位。</strong></p>
+<p><img src="/2023/06/02/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C-%E7%AC%AC%E5%9B%9B%E7%AB%A0%E7%BD%91%E7%BB%9C%E5%B1%82/4.4.png" alt="?"></p>
+<p>在目的地,数据报的有效载荷仅当在IP层已完全重构为初始IP数据报时，才被传递给目的地运输层。如果一个或多个片没有到达目的地，则该不完整的数据报被丢弃且不会交给运输层。但是，如我们在前一章知道的那样，若在运输层正使用着TCP,则TCP将通过让源以初始数据报来重传数据,以恢复这次丢包。</p>
+<h3 id="IPv4-编址"><a href="#IPv4-编址" class="headerlink" title="IPv4 编址"></a>IPv4 编址</h3><h4 id="简述一下主机与路由器连入网络的方法。"><a href="#简述一下主机与路由器连入网络的方法。" class="headerlink" title="简述一下主机与路由器连入网络的方法。"></a>简述一下主机与路由器连入网络的方法。</h4><p>一台主机通常只有一条链路连接到网络;当主机中的iP想发送一个数据报时，它就在该链路上发送。主机与物理链路之间的边界叫做接口 (interface)。现在考虑一台路由器及其接口。因为路由器的任务是从链路上接收数据报并从某些其他链路转发出去，路由器必须拥有两条或更多条链路与它连接。路由器与它的任意一条链路之间的边界也叫做接口。一台路由器因此有多个接口，每个接口有其链路。因为每台主机与路由器都能发送和接收iP数据报，IP要求每台主机和路由器接口拥有自己的IP地址。因此，<strong>一个iP地址技术上是与一个接口相关联的，而不是与包括该接口的主机或路由器相关联的。</strong></p>
+<p>每个iP地址长度为32比特（等价为4字节)，因此总共有2^32个可能的iP地址。由于2^10近似地表示10^3，故容易看出约有40亿个可能的IP地址。</p>
+<p>这些地址一般按所谓点分十进制记法（dotted- decimal notation)书写，即地址中的每个字节用它的十进制形式书写,各字节间以句号（点）隔开。例如，考虑IP地址193.32.216.9，193是该地址第一个8比特的十进制等价数，32是该地址第二个8比特的十进制等价数，依次类推。</p>
+<p>在全球因特网中的每台主机和路由器上的每个接口，必须有一个全球唯一的IP地址(在NAT后面的接口除外)。然而，这些地址不能随意地自由选择。一个接口的iP地址的一部分需要由其连接的子网来决定。<br><img src="/2023/06/02/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C-%E7%AC%AC%E5%9B%9B%E7%AB%A0%E7%BD%91%E7%BB%9C%E5%B1%82/4.5.png" alt="?"></p>
+<p>用iP的术语来说，互联这3个主机接口与1个路由器接口的网络形成一个子网。(在因特网文献中，子网也称为P网络或直接称为网络。)iP编址为这个子网分配一个地址:223.1.1.0/24,其中的/24记法，有时称为子网掩码（networkmask)，指示了32比特中的最左侧24比特定义了子网地址。因此子网223.1.1.0/24是由3台主机接口（223.1.1.1、223.1.1.2和223.1.1.3）和1个路由器接口(223.1.1.4)组成。任何其他要连到223.1.1.0/24网络的主机都要求其地址具有223.1.1. xxx的形式。<br><img src="/2023/06/02/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C-%E7%AC%AC%E5%9B%9B%E7%AB%A0%E7%BD%91%E7%BB%9C%E5%B1%82/4.6.png" alt="?"></p>
+<p><strong>特殊的ip:</strong></p>
+<ol>
+<li>子网号全为0代表本网络</li>
+<li>主机号全为0代表本主机</li>
+<li>主机号全为1代表广播</li>
+<li>127.0.0.1本地回环地址，数据到达本网络层后再传回高层</li>
+<li>（1）10.0.0.0——10.255.255.255<br>（2）172.16.0.0——172.31.255.255<br>（3）192.168.0.0——192.168.255.255</li>
+</ol>
+<p><strong>为了确定子网，分开主机和路由器的每个接口，产生几个隔离的网络岛，使用接口端接这些隔离的网络的端点。这些隔离的网络中的每一个都叫做一个子网(subnet)。</strong><br><img src="/2023/06/02/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C-%E7%AC%AC%E5%9B%9B%E7%AB%A0%E7%BD%91%E7%BB%9C%E5%B1%82/4.7.png" alt="?"></p>
+<p>因特网的地址分配策略被称为无类别域间路由选择（Classless Interdomain Routing,CIDR)将子网寻址的概念一般化了。<br>形式为a.b.c.d/x的地址的x最高比特构成了IP地址的网络部分，并且经常被称为该地址的前缀（prefix)（或网络前缀)。一个组织通常被分配一块连续的地址，即具有相同前缀的一段地址。在这种情况下该组织内部的设备的IP地址将共享共同的前缀。</p>
+<p>假设该ISP向外界通告，它应该发送所有地址的前20比特与200. 23.16.0/20相符的数据报。外界的其他部分不需要知道在地址块200. 23.16.0/20内实际上还存在其他组织，每个组织有自己的子网。这种使用单个网络前缀通告多个网络的能力通常称为地址聚合 （address aggregation)，也称为路由聚合（route aggregation）或路由摘要（routesummarization)。</p>
+<p>一个地址的剩余32-x比特可认为是用于区分该组织内部设备的，其中的所有设备具有相同的网络前缀。当该组织内部的路由器转发分组时，才会考虑这些比特。</p>
+<p>这些较低阶比特可能具有另外的子网结构。例如，假设某CIDR化的地址a. b.c.d/21的前21比特定义了该组织的网络前缀，它对该组织中的所有主机的IP地址来说是共同的。其余的11比特标识了该组织内的主机。该组织的内部结构可以采用这样的方式，使用这最右边的11比特在该组织中划分子网，就像前面所讨论的那样。例如，a.b.c.d/24可能表示该组织内的特定子网。</p>
+<p><strong>在CIDR被采用之前，IP地址的网络部分被限制为长度为8、16或24比特，这是一种称为分类编址（classful addressing)的编址方案，这是因为具有8、16和24比特子网地址的子网分别被称为A、B和C类网络。按这种方式支持的主机高不成，低不就。</strong></p>
+<p>如果还不提及另一种类型的iP地址，即IP广播地址255.255.255.255，那将是我们的不负责任。当一台主机发出一个目的地址为255.255. 255.255的数据报时，该报文会交付给同一个网络中的所有主机。路由器也会有选择地向邻近的子网转发该报文(虽然它们通常不这样做)。</p>
+<h4 id="分配ip"><a href="#分配ip" class="headerlink" title="分配ip"></a>分配ip</h4><ol>
+<li><p><strong>获取一块地址</strong><br>为了获取一块IP地址用于一个组织的子网，某网络管理员也许首先会与他的ISP联系，该ISP可能会从已分给它的更大地址块中提供一些地址。例如，该ISP也许自己已被分配了地址块200.23.16.0/20。该ISP可以依次将该地址块分成8个长度相等的连续地址块，为本ISP支持的最多达8个组织中的一个分配这些地址块中的一块<br><img src="/2023/06/02/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C-%E7%AC%AC%E5%9B%9B%E7%AB%A0%E7%BD%91%E7%BB%9C%E5%B1%82/4.8.png" alt="?"></p>
+</li>
+<li><p>获取主机地址:<strong>动态主机配置协议DHCP</strong><br>某组织一旦获得了一块地址，它就可为本组织内的主机与路由器接口逐个分配P地址。系统管理员通常手工配置路由器中的IP地址（常常在远程通过网络管理工具进行配置)。主机地址也能手动配置，但是这项任务目前通常更多的是使用动态主机配置协议(Dynamic Host Configuration,DHCP)来完成。DHCP 允许主机自动获取（被分配）一个iP地址。网络管理员能够配置DHCP,以使某给定主机每次与网络连接时能得到一个相同的iP地址，或者某主机将被分配一个临时的IP地址（temporary IP address),该地址在每次与网络连接时也许是不同的。除了主机P地址分配外，DHCP还允许一台主机得知其他信息，例如它的子网掩码、它的第一跳路由器地址（常称为默认网关）与它的本地DNS服务器的地址.</p>
+</li>
+</ol>
+<p>DHCP是一个客户-服务器协议。客户通常是新达到的主机，它要获得包括自身使用的IP地址在内的网络配置信息。在最简单场合下，每个子网将具有一台 DHCP服务器。如果在某子网中没有服务器则需要一个DHCP 中继代理（通常是一台路由器)，这个代理知道用于该网络的 DHCP服务器的地址。<br><img src="/2023/06/02/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C-%E7%AC%AC%E5%9B%9B%E7%AB%A0%E7%BD%91%E7%BB%9C%E5%B1%82/4.9.png" alt="?"></p>
+<blockquote>
+<p>0.0.0.0是一个特殊的IP地址，表示“任何主机”，在网络中用于广播或路由表中的默认路由。它通常用于DHCP服务器分配IP地址时，表示客户端尚未分配到IP地址。</p>
+</blockquote>
+<blockquote>
+<p>而255.255.255.255是一个广播地址，表示将数据包发送给同一网络中的所有主机。它通常用于ARP协议中，用于请求网络中所有主机的MAC地址。</p>
+</blockquote>
+<blockquote>
+<p>子网号全1也被称为“本地广播地址”，因为它是在本地网络中广播数据包的一种方式。当一个主机发送一个数据包到子网号全1时，该数据包将会在本地网络中传递给所有主机，包括发送者本身。<br>但是，子网号全1并不是一般意义上的广播地址，因为它只在本地网络中有效，而不会被路由到其他网络。而255.255.255.255是全局广播地址，它可以在整个网络中广播数据包，包括跨越多个子网和网络。</p>
+</blockquote>
+<p>下图中src发送者：dhcp服务器端口67，客户端68<br>dest目标：255，255，255，255广播给所有人<br>yiaddr：服务器分给用户的地址<br><img src="/2023/06/02/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C-%E7%AC%AC%E5%9B%9B%E7%AB%A0%E7%BD%91%E7%BB%9C%E5%B1%82/4.10.png" alt="?"></p>
+<p><strong>DHCP服务器发现。</strong>一台新到的主机的首要任务是发现一个要与其交互的 DHCP服务器。这可通过使用一个 DHCP发现报文（DHCP discover message）来完成,客户在UDP分组中向端口67发送该发现报文。但是这个数据报应发给谁呢?主机甚至不知道它所连接网络的P地址，更不用说用于该网络的DHCP服务器地址了。在这种情况下，DHCP客户生成包含DHCP发现报文的IP数据报，其中使用广播目的地址255.255. 255.255并且使用“本主机”源地址0.0.0.0。DHCP客户将该IP数据报传递给链路层，链路层然后将该帧广播到所有与该子网连接的子网</p>
+<p><strong>DHCP服务器提供。</strong> DHCP服务器收到一个 DHCP发现报文时，用DHCP提供报文(DHCP offer message）向客户作出响应，仍然使用IP广播。因为在子网中可能有几个DHCP 服务器，客户端会收到这些Offer报文并从中选择一个最合适的DHCP服务器。每台服务器提供的报文包含有收到的发现报文的事务ID、向客户推荐的IP地址、网络掩码以及IP地址租用期（address lease time)，即IP地址有效的时间量。服务器租用期通常设置为几小时或几天 [ Droms 2002]</p>
+<p><strong>DHCP请求。</strong>新到达的客户从一个或多个服务器提供中选择一个，并向选中的服务器提供用一个 DHCP 请求报文（DHCP request message）进行响应，回显配置参数。</p>
+<p><strong>DHCP ACK。</strong>服务器用 DHCP ACK报文（DHCP ACK message)对DHCP请求报文进行响应,证实所要求的参数。</p>
+<ol start="3">
+<li><strong>网络地址转换</strong></li>
+</ol>
+<p>NAT使能路由器对于外部世界来说甚至不像一台路由器。NAT 路由器对外界的行为反过来就如同一个具有单一IP地址的单一设备。在图中，所有离开家庭路由器流向更大因特网的报文都拥有一个源IP地址138.76.29.7，且所有进入家庭的报文都拥有同一个目的IP地址138.76.29.7。</p>
+<p>从本质上讲，NAT使能路由器对外界隐藏了家庭网络的细节。路由器从 ISP 的 DHCP服务器得到它的地址，并且路由器运行一个 DHCP服务器，为位于NAT-DHCP 路由器控制的家庭网络地址空间中的计算机提供地址。</p>
+<p><img src="/2023/06/02/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C-%E7%AC%AC%E5%9B%9B%E7%AB%A0%E7%BD%91%E7%BB%9C%E5%B1%82/4.12.png" alt="?"></p>
+<p><strong>如果从广域网到达NAT路由器的所有数据报都有相同的目的IP地址</strong>（特别是对 NAT路由器广域网一侧的接口)，那么该路由器怎样知道它应将某个分组转发给哪个内部主机呢?技巧就是使用在NAT路由器上的一张NAT转换表(NAT translation table)，并且在表项中包含了端口号及其IP地址。</p>
+<p>如果对等方A不在一个NAT的后面，则该NAT问题能够绕过去。在这种情况下，对等方A能够首先通过一个中间对等方C与对等方B联系，其中C不位于NAT之后并与B已经创建了一条进行中的TCP连接。对等方A则能够经对等方C请求对等方B，发起直接返回对等方A的一条TCP连接。一且对等方A和B之间创建一条直接的P2P TCP连接这两个对等方就能够交换报文或文件。这种雇佣关系被称为连接反转 （connection reversal),实际上被许多P2P应用程序用于NAT 穿越（NAT traversal)。</p>
+<p>如果对等方A和对等方B都在它们自己的NAT后面，这种情况有些棘手，但是能够使用应用程序进行中继处理。</p>
+<p>(NAT穿越是指在网络中使用了NAT（网络地址转换）技术后，需要通过一些方法实现内部网络中的主机访问外部网络或者外部网络中的主机访问内部网络。这种情况通常发生在企业内部网络或者家庭网络中，因为这些网络中的主机使用的是私有IP地址，而外部网络中的主机使用的是公共IP地址。为了让内部网络中的主机能够访问外部网络或者外部网络中的主机能够访问内部网络，需要使用一些技术，如端口映射、UPnP、STUN、TURN等。这些技术可以帮助内部网络中的主机穿越NAT，实现与外部网络的通信。)</p>
+<ol start="4">
+<li><strong>UPnP</strong></li>
+</ol>
+<p>NAT穿越正越来越多地由通用即插即用（UPnP） 提供,UPnP是一种允许主机发现并配置邻近NAT的协议「UPnP Forum 2012],UPnP要求主机和NAT都是UPnP兼容的。使用UPnP,在主机上运行的应用程序能够为某些请求的公共端口号请求一个NAT映射，该映射位于其（专用P地址，专用端口号）和（公共IP地址，公共端口号）之间。如果某NAT接受该请求并生成映射，则来自外部的结点能够发起到（公共IP地址，公共端口号)的TCP 连接。此外，UPnP让该应用程序知道（公共P地址，公共端口号)，因此该应用程序能够向外部世界通告它。</p>
+<p><strong>我可以理解为，upnp在nat（局域网路由器）上开放了一个端口，并利用nat的公网通知外网他的地址，外网发送请求后，nat将这个端口的消息转发给我们的主机</strong></p>
+<h3 id="因特网控制报文协议-ICMP"><a href="#因特网控制报文协议-ICMP" class="headerlink" title="因特网控制报文协议 ICMP"></a>因特网控制报文协议 ICMP</h3><p>ICMP最典型的用途是差错报告。例如，当运行一个 Telnet、FTP或HTTP会话时，你也许会遇到一些诸如“目的网络不可达”之类的错误报文。这种报文就是在ICMP中产生的。在某个位置，IP路由器不能找到一条路径，以通往Telnet、FTP或HTTP应用所指定的主机。该路由器就会向你的主机创建和发出一个类型3的IGMP 报文以指示该错误。</p>
+<p>ICMP通常被认为是P的一部分，但从体系结构上讲它是位于P之上的.因为ICMP报文是承载在P分组中的。这就是说，ICMP报文是作为P有效载荷承载的。</p>
+<p>在第1章中我们介绍了Traceroute程序，该程序允许我们跟踪从一台主机到世界上任意一台其他主机之间的路由。有趣的是Traceroute是用 ICMP报文来实现的。为了判断源和目的地之间所有路由器的名字和地址，源主机中的Traceroute向目的主机发送一系列普通的IP数据报。这些数据报的每个携带了具有一个不可达UDP端口号的UDP报文段。第一个数据报的TTL为1,第二个的TTL为2,第三个的TTL为3，依次类推。该源主机也为每个数据报启动定时器。当第n个数据报到达第n台路由器时,第n台路由器观察到这个数据报的TTL正好过期。根据IP协议规则，路由器丢弃该数据报并发送一个 ICMP告警报文给源主机（类型11编码0)。该告警报文包含了路由器的名字与它的IP地址。当该ICMP报文返回源主机时，源主机从定时器得到往返时延，从 ICMP报文中得到第n台路由器的名字与IP地址。</p>
+<h3 id="ipv6"><a href="#ipv6" class="headerlink" title="ipv6"></a>ipv6</h3><p><img src="/2023/06/02/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C-%E7%AC%AC%E5%9B%9B%E7%AB%A0%E7%BD%91%E7%BB%9C%E5%B1%82/4.14.png" alt="?"></p>
+<p>扩大的地址容量。IPv6将IP地址长度从32比特增加到128比特。这就确保全世界将不会用尽IP地址。<br>IPv6还引人了一种称为任播地址（anycast address）的新型地址，这种地址可以使数据报交付给一组主机中的任意一个。（例如，这种特性可用于向一组包含给定文档的镜像站点中的最近的一个发送一个 HTTP GET报文。）</p>
+<p><strong>版本。</strong> 该4比特字段用于标识IP版本号。毫不奇怪，IPv6将该字段值设为6。注意到将该字段值置为4并不能创建一个合法的IPv4数据报。(如果这样的话，事情就简单多了，参见下面有关从IPv4向IPv6迁移的讨论。)</p>
+<p><strong>流量类型。</strong> 该8比特字段与我们在IPv4中看到的TOS字段的含义相似。</p>
+<p><strong>流标签。</strong> 该20比特的字段用于标识一条数据报的流。</p>
+<p><strong>有效载荷长度</strong>。该16比特值作为一个无符号整数，给出了IPv6数据报中<strong>跟在定长的40字节数据报首部后面</strong>的字节数量。</p>
+<p><strong>下一个首部。</strong> 该字段标识数据报中的内容（数据字段)需要交付给哪个协议（如TCP或 UDP）。该字段使用与IPv4首部中协议字段相同的值。</p>
+<p><strong>跳限制。</strong> 转发数据报的每台路由器将对该字段的内容减1。如果跳限制计数到达0时，则该数据报将被丢弃。</p>
+<p><strong>源地址和目的地址。</strong> IPv6 128比特地址的各种格式在RFC 4291中进行了描述。</p>
+<p><strong>数据。</strong> 这是IPv6数据报的有效载荷部分。当数据报到达目的地时，该有效载荷就从P 数据报中移出，并交给在下一个首部字段中指定的协议处理。</p>
+<h4 id="从-IPv4到-IPv6的迁移"><a href="#从-IPv4到-IPv6的迁移" class="headerlink" title="从 IPv4到 IPv6的迁移"></a>从 IPv4到 IPv6的迁移</h4><p>引入IPv6使能结点的最直接方式可能是一种双栈(dual- stack）方法，即使用该方法的IPv6结点还具有完整的IPv4实现。这样的结点被称为IPv6/IPv4结点,它有发送和接收IPv4与IPv6两种数据报的能力。当与IPv4结点互操作时，IPv6/IPv4结点可使用IPv4 数据报:当与IPv6结点互操作时，它又能使用IPv6。IPv6/IPv4结点必须具有IPv6与 IPv4 两种地址。此外，它们还必须能确定另个结点是否是IPv6使能的或仅IPv4使能的。这个问题可使用 DNS来解决，若要解析的结点名字是IPv6使能的，则 DNS会返回一个IPv6地址，否则返回一个IPv4地址。当然，如果发出DNS请求的结点是仅IPv4使能的，则DNS 只返回一个IPv4地址。<br><img src="/2023/06/02/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C-%E7%AC%AC%E5%9B%9B%E7%AB%A0%E7%BD%91%E7%BB%9C%E5%B1%82/4.15.png" alt="?"></p>
+<p>另一种双栈方法，叫做建隧道（tunneling)）。该方法能解决上述问题，允许如E接收源于A的IPv6数据报。隧道依据的基本思想如下:假定两个IPv6结点（如图4-25中的B和E）要使用IPv6数据报进行交互，但它们是经由中间IPv4路由器互联的。我们将两台IPv6路由器之间的中间IPv4路由器的集合称为一个隧道（tunnel),如图4-26所示。借助于隧道，在隧道发送端的IPv6结点（如B)可将整个IPv6数据报放到一个 IP4 数据报的数据（有效载荷）字段中。于是，该IPv4数据报的地址设为指向隧道接收端的IPv6结点（如E)，再发送给隧道中的第一个结点（如C)。隧道中的中间IPv4 路由器在它们之间为该数据报提供路由，就像对待其他数据报一样，完全不知道该IPv4数据报自身就含有一个完整的IPv6数据报。隧道接收端的IPv6结点最终收到该IPv4数据报（它是该IPv4数据报的目的地!)，并确定该IPv4 数据报含有一个 IPv6数据报，于是从中取出IPv6数据报，然后再为该IPv6数据报提供路由，就好像它是从一个直接相连的IPv6邻居那里接收到该IPv6数据的一样。<br><img src="/2023/06/02/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C-%E7%AC%AC%E5%9B%9B%E7%AB%A0%E7%BD%91%E7%BB%9C%E5%B1%82/4.16.png" alt="?"></p>
+<h3 id="涉足IP安全性"><a href="#涉足IP安全性" class="headerlink" title="涉足IP安全性"></a>涉足IP安全性</h3><p>IPsec已被设计为与 IPv4 和 IPv6向后兼容。特别是，为了享受IPsec带来的好处,我们不需要替换因特网中的所有路由器和主机中的协议栈。例如,使用运输模式（两种IPsec“模式”之一-)时，如果两台主机要安全地通信，IPsec仅需要在这两台主机中可用。所有其他路由器和主机能够继续运行普通的IPv4 。</p>
+<p>为了具体起见,我们这里将关注IPsec的运输模式使用这种模式,两台主机首先在它们之间创建一个IPsec 会话。(因此IPsec是面向连接的!）使用适当的会话，在这两台主机之间发送的所有TCP和UDP报文段都享受IPsec提供的安全性服务。在发送端，运输层向IPsec传递一个报文段。IPsec 然后加密该报文段在报文段上添加附加的安全性字段，并且在一个普通的iP数据报中封装得到的有效载荷。(实际中比上述过程要复杂一点，我们将在第8章详细讨论。）发送主机接下来向因特网中发送数据报，因特网则将数据报传送到目的主机。在那里，IPsec解密报文段并将脱密的报文段传送给运输层。</p>
+<h3 id="sdn"><a href="#sdn" class="headerlink" title="sdn"></a>sdn</h3><p>SDN是软件定义网络（Software Defined Networking）的缩写，是一种新型的网络架构，它将网络控制平面与数据平面分离，通过中央控制器对网络进行集中管理和控制。SDN的主要思想是将网络控制逻辑从网络设备中分离出来，放在一个中央控制器中，通过控制器来管理整个网络，网络设备只负责数据转发。这样可以使网络更加灵活、可编程、可扩展和可自动化，为网络的管理和运维提供了更加便捷的方式。SDN技术已经被广泛应用于数据中心网络、企业网络、运营商网络等各种场景。</p>
+<p>SDN和传统网络架构（也称为传统网络）的最大差异在于网络控制的方式。传统网络通常是集中式的，网络设备（如交换机、路由器）通过自身的逻辑来处理网络流量，网络管理员通过命令行或图形界面来配置和管理网络设备。而SDN采用分离控制和数据平面的方式，将网络控制逻辑从网络设备中分离出来，放在一个中央控制器中，通过控制器来管理整个网络，网络设备只负责数据转发。<br><img src="/2023/06/02/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C-%E7%AC%AC%E5%9B%9B%E7%AB%A0%E7%BD%91%E7%BB%9C%E5%B1%82/q8.png" alt="?"><br><img src="/2023/06/02/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C-%E7%AC%AC%E5%9B%9B%E7%AB%A0%E7%BD%91%E7%BB%9C%E5%B1%82/q9.png" alt="?"><br>与传统网络相比，SDN有以下优点：</p>
+<blockquote>
+<ol>
+<li><p>灵活性：SDN可以根据需求动态调整网络流量，实现灵活的网络配置和&gt;管理。</p>
+</li>
+<li><p>可编程性：SDN的中央控制器可以通过编程来实现各种网络功能和服&gt;务，例如负载均衡、安全策略等。</p>
+</li>
+<li><p>可扩展性：SDN可以轻松地扩展网络规模，支持大规模的网络部署。</p>
+</li>
+<li><p>可自动化：SDN可以通过自动化技术来实现网络的自动化管理和运维。</p>
+</li>
+</ol>
+<p>相比之下，传统网络的优点在于：</p>
+<ol>
+<li><p>稳定性：传统网络的集中式控制方式可以保证网络的稳定性和可靠性。</p>
+</li>
+<li><p>成熟性：传统网络技术已经经过多年的发展和实践，具有成熟的技术和&gt;丰富的经验。</p>
+</li>
+<li><p>易用性：传统网络的管理方式相对简单，网络管理员可以通过命令行或&gt;图形界面来进行网络配置和管理。</p>
+</li>
+</ol>
+<p>总之，SDN相对于传统网络来说，具有更高的灵活性、可编程性、可扩展性和可自动化性，但在稳定性和易用性方面还需要进一步的发展和完善。</p>
+</blockquote>
+<h2 id="路由表和转发表"><a href="#路由表和转发表" class="headerlink" title="路由表和转发表"></a>路由表和转发表</h2><p><strong>当一个数据包到达路由器时，路由器会根据目标IP地址查询路由表，找到与该IP地址最匹配的路由表项，并获取下一跳路由器的IP地址。然后，路由器会根据FIB表项查找出与该下一跳IP地址相对应的出接口，从而将数据包转发到正确的接口上，继续向目的地前进。</strong></p>
+<p>路由表是告诉路由器数据包该往哪里走，能到哪里；而转发表是告诉路由器数据包怎么走，该从哪个接口转发出去。</p>
+<p>假设有以下路由表和转发表：</p>
+<p>路由表：</p>
+<table>
+<thead>
+<tr>
+<th>目的网络</th>
+<th>子网掩码</th>
+<th>下一跳路由器</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>192.168.1.0</td>
+<td>255.255.255.0</td>
+<td>192.168.0.1</td>
+</tr>
+<tr>
+<td>192.168.2.0</td>
+<td>255.255.255.0</td>
+<td>192.168.0.2</td>
+</tr>
+<tr>
+<td>192.168.3.0</td>
+<td>255.255.255.0</td>
+<td>192.168.0.1</td>
+</tr>
+<tr>
+<td>192.168.4.0</td>
+<td>255.255.255.0</td>
+<td>192.168.0.3</td>
+</tr>
+</tbody></table>
+<p>转发表：</p>
+<table>
+<thead>
+<tr>
+<th>下一跳路由器</th>
+<th>出接口</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>192.168.0.1</td>
+<td>eth0</td>
+</tr>
+<tr>
+<td>192.168.0.2</td>
+<td>eth1</td>
+</tr>
+<tr>
+<td>192.168.0.3</td>
+<td>eth2</td>
+</tr>
+</tbody></table>
+<p>假设一个数据包的目的IP地址为192.168.3.5，那么路由器会查询路由表，找到192.168.3.0/24对应的路由表项，并获取下一跳路由器的IP地址192.168.0.1。然后，路由器会查询转发表，找到与该下一跳IP地址相对应的出接口eth0，从而将数据包转发到eth0出口，继续向目的地前进。</p>
+<h2 id="路由选择算法"><a href="#路由选择算法" class="headerlink" title="路由选择算法"></a>路由选择算法</h2><p>当分组到达一台路由器时，该路由器索引其转发表并决定该分组被指向的链路接口。我们也知道路由选择算法在网络路由器中运行、交换和计算信息，用这些信息配置这些转发表。</p>
+<p>主机通常直接与一台路由器相连接，该路由器即为该主机的默认路由器(default router)又称为该主机的第一跳路由器(rst-hop router)。每当主机发送一个分组时，该分组被传送给它的默认路由器。我们将源主机的默认路由器称作源路由器(sourcerouter)，把目的主机的默认路由器称作目的路由器 (destination router)。一个分组从源主机到目的主机的路由选择问题显然可归结为从源路由器到目的路由器的路由选择问题。</p>
+<p>路由选择算法的目的是简单的:给定一组路由器以及连接路由器的链路，路由选择算法要找到一条从源路由器到目的路由器的“好”路径。可以用图来形式化描述路由选择问题。我们知道图(graph)G=(N，E)是一个N个结点和E条边的集合，其中每条边是取自N的一对结点。在网络层路由选择的环境中，图中的结点表示路由器，这是做出分组转发决定的点;连接这些结点的边表示这些路由器之间的物理链路。<br><img src="/2023/06/02/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C-%E7%AC%AC%E5%9B%9B%E7%AB%A0%E7%BD%91%E7%BB%9C%E5%B1%82/4.17.png" alt="?"></p>
+<p>在图抽象中为各条边指派了费用后，<strong>路由选择算法的自然目标是找出从源到目的地间的最低费用路径。</strong></p>
+<h3 id="路由选择算法分类："><a href="#路由选择算法分类：" class="headerlink" title="路由选择算法分类："></a>路由选择算法分类：</h3><p><strong>根据该算法是全局式的还是分散式区分。</strong><br>全局式路由选择算法(globalroutingalgorithm)用完整的、全局性的网络知识计算出从源到目的地之间的最低费用路径。也就是说，该算法以所有结点之间的连通性及所有链路的费用为输入。这就要求该算法在真正开始计算以前，要以某种方式获得这些信息。计算本身可在某个场点(集中式全局路由选择算法)进行，或可在多个场点重复进行。然而这里的主要区别在于，全局式算法具有关于连通性和链路费用方面的完整信息。实践中，具有全局状态信息的算法常被称作链路状态(LinkState，LS)算法，因为该算法必须知道网络中每条链路的费用。</p>
+<p>分散式路由选择算法(decentralized routingalgorithm)以选代、分布式的方式计算出最低费用路径。没有结点拥有关于所有网络链路费用的完整信息，而每个结点仅有与其直接相连链路的费用知识即可开始工作。然后，通过迭代计算过程并与相邻结点(即与该结点相连链路的另一端的结点)交换信息，一个结点逐渐计算出到达某目的结点或一组目的结点的最低费用路径。距离向量(Distance-VectorDV)算法的分散式路由选择算法。之所以叫做DV算法，是因为每个结点维护到网络中所有其他结点的费用(距离)估计的向量。</p>
+<p><strong>根据算法是静态的还是动态的进行分类。</strong><br>在静态路由选择算法(static routing algorithm)中，随着时间的流，路由的变化是非常缓慢的，通常是人工干预进行调整(如人为手工编辑一台路由器的转发表)。动态路由选择算法(dynamicroutingalgorithm)能够当网络流量负载或拓扑发生变化时改变路由选择路径一个动态算法可周期性地运行或直接响应拓扑或链路费用的变化而运行。虽然动态算法易于对网络的变化做出反应，但也更容易受诸如路由选择循环、路由振荡之类问题的影响。</p>
+<p><strong>根据它是负载敏感的还是负载迟钝的进行划分。</strong><br>在负载敏感算法(load-sensitivealgorithm)中链路费用会动态地变化以反映出底层链路的当前拥塞水平。如果当前拥塞的一条链路与高费用相联系，则路由选择算法趋向于绕开该拥塞链路来选择路由。而早期的ARPAnet 路由选择算法就是负载敏感的，所以遇到了许多难题[Huitema 1998]。当今的因特网路由选择算法(如RIPOSPF和BGP)都是负载迟钝的(load-insensitive)，因为某条链路的费用不明显地反映其当前(或最近)的拥塞水平。</p>
+<h3 id="链路状态路由选择算法（LS算法-全局式路由选择算法）"><a href="#链路状态路由选择算法（LS算法-全局式路由选择算法）" class="headerlink" title="链路状态路由选择算法（LS算法  全局式路由选择算法）"></a>链路状态路由选择算法（LS算法  全局式路由选择算法）</h3><p>在链路状态算法中，网络拓扑和所有的链路费用都是已知的，也就是说可用作LS算法的输人。<strong>实践中这是通过让每个结点向网络中所有其他结点广播链路状态分组来完成的</strong> ，其中每个链路状态分组包含它所连接的链路的特征和费用。在实践中(例如使用因特网的OSPF路由选择协议），这经常由链路状态广播(likstatebroadcast)算法[Perlman 1999]来完成。<br><strong>结果是所有结点具有了该网络的等同的、完整的视图。于是每个结点都能够像其他结点一样，运行LS算法并计算出相同的最低费用路径集合。</strong></p>
+<p>运用迪杰斯特拉算法得<br><img src="/2023/06/02/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C-%E7%AC%AC%E5%9B%9B%E7%AB%A0%E7%BD%91%E7%BB%9C%E5%B1%82/4.18.png" alt="?"><br><img src="/2023/06/02/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C-%E7%AC%AC%E5%9B%9B%E7%AB%A0%E7%BD%91%E7%BB%9C%E5%B1%82/4.19.png" alt="?"></p>
+<p>该算法的计算复杂性是什么?即给定n个结点(不算源结点)，在最坏情况下要经过多少次计算，才能找到从源结点到所有目的结点的最低费用路径?在第一次迭代中，我们需要搜索所有的n个结点以确定出结点w-w不在N中且具有最低费用。在第二次迭代时，我们需要检查n-1个结点以确定最低费用。第三次对n-2个结点迭代，依次类推。总之，我们在所有迭代中需要搜寻的结点总数为n(n+1)/2，因此我们说前面实现的链路状态算法在最差情况下复杂性为0(n)。</p>
+<h3 id="距离向量路由选择算法-DV"><a href="#距离向量路由选择算法-DV" class="headerlink" title="距离向量路由选择算法 (DV)"></a>距离向量路由选择算法 (DV)</h3><p>距离向量(Distance-Vector，DV)算法是一种迭代的、异步的和分布式的算法，而LS算法是一种使用全局信息的算法。说它是分布式的，是因为每个结点都要从一个或多个直接相连邻居接收某些信息，执行计算，然后将其计算结果分发给邻居。说它是迭代的，是因为此过程一直要持续到邻居之间无更多信息要交换为止。(有趣的是，此算法是自我终止的，即没有计算应该停止的信号，它就停止了。) 说它是异步的，是因为它不要求所有结点相互之间步伐一致地操作。</p>
+<p>前面讲过LS算法是一种全局算法，在于它要求每个结点在运行 Dijkstra算法之前，首先获得该网络的完整信息。DV算法是分布式的，它不使用这样的全局信息。实际上，结点具有的唯一信息是它到直接相连邻居的链路费用和它从这些邻居接收到的信息。每个结点等待来自任何邻居的更新（第10～11行)，当接收到一个更新时计算它的新距离向量（第14行)并向它的邻居分布其新距离向量(第16~17行)。许多类似DV 的算法在实践中被用于多种路由选择协议中,包括因特网的RIP和 BGP、ISO IDRP Novell IPX和早期的 ARPAnet。</p>
+<p><strong>涉及到动态规划，暂时跳过。。。</strong></p>
+<h4 id="层次路由选择"><a href="#层次路由选择" class="headerlink" title="层次路由选择"></a>层次路由选择</h4><p><strong>规模。</strong> 随着路由器数目变得很大，涉及路由选择信息的计算、存储及通信（例如LS更新或最低费用路径的变化)的开销将高得不可实现。当今的公共因特网由数亿台主机组成。在这些主机中存储的路由选择信息显然需要巨大容量的内存。在公共因特网上的所有路由器中广播IS更新所需的开销将导致没有剩余的带宽用来发送数据分组!在如此大量的路由器中迭代的距离向量算法将肯定永远无法收敛!显然，必须采取一些措施以减少公共因特网这种大网络中的路由选择计算的复杂性。</p>
+<p><strong>管理自治。</strong> 虽然研究人员倾向于忽略这样的问题，如某公司要求按自己的意愿运行路由器（如运行其选择的某种路由选择算法)，或对外部隐藏其网络的内部组织面貌，但这些都是需要考虑的重要因素。在理想情况下，一个组织应当能够按自己的愿望运行和管理其网络，还要能将其网络与其他外部网络相连接。</p>
+<p>这两个问题都可以通过将路由器组织进自治系统（Autonomous System, AS）来解决,每个 AS 由一组通常处在相同管理控制下的路由器组成<br>(例如，由相同的ISP运营或属于相同的公司网络)。<strong>在相同的AS 中的路由器都全部运行同样的路由选择算法</strong>（如一种LS或DV算法)，且拥有彼此的信息。在一个自治系统内运行的路由选择算法叫做自治系统内部路由选择协议（intra - autonomoussystem routing protocol)。当然，将AS彼此互联是必需的，因此在一个AS内的一台或多台路由器将有另外的任务，即<strong>负责向在本AS之外的目的地转发分组。这些路由器被称为网关路由器</strong></p>
+<p><img src="/2023/06/02/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C-%E7%AC%AC%E5%9B%9B%E7%AB%A0%E7%BD%91%E7%BB%9C%E5%B1%82/q1.png" alt="?"><br>同时注意到路由器1b、1c、2a和3a都是网关路由器。</p>
+<p><strong>选择合适的网关</strong><br><img src="/2023/06/02/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C-%E7%AC%AC%E5%9B%9B%E7%AB%A0%E7%BD%91%E7%BB%9C%E5%B1%82/q2.png" alt="?"></p>
+<p>DV（Distance Vector）和LS（Link State）是两种不同的路由选择算法，RIP和OSPF则是基于这两种算法设计的路由选择协议。</p>
+<p>RIP（Routing Information Protocol）是一种基于DV算法的距离矢量路由选择协议，它使用跳数（hop count）作为路径选择的度量标准。</p>
+<p>OSPF（Open Shortest Path First）是一种基于LS算法的链路状态路由选择协议，它使用链路状态信息来计算最短路径，并支持多种度量标准。</p>
+<p>因此，可以说RIP和OSPF是基于不同路由选择算法设计的路由选择协议，RIP使用DV算法，而OSPF使用LS算法。同时，DV和LS也可以用来设计其他路由选择协议，例如BGP（Border Gateway Protocol）就是一种基于LS算法的路径矢量路由选择协议。</p>
+<h2 id="因特网中的路由选择"><a href="#因特网中的路由选择" class="headerlink" title="因特网中的路由选择"></a>因特网中的路由选择</h2><p>路由选择协议的任务就是要确定数据报在源与目的地之间采用的路径。<br>一个AS是一个处于相同的管理与技术控制下的路由器的集合在AS之间都运行相同的路由选择协议。每个AS通常又都包含多个子网。<br><img src="/2023/06/02/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C-%E7%AC%AC%E5%9B%9B%E7%AB%A0%E7%BD%91%E7%BB%9C%E5%B1%82/q7.png" alt="?"></p>
+<h3 id="因特网中自治系统内部的路由选择-RIP"><a href="#因特网中自治系统内部的路由选择-RIP" class="headerlink" title="因特网中自治系统内部的路由选择:RIP"></a>因特网中自治系统内部的路由选择:RIP</h3><p>AS内部路由选择协议用于确定在一个AS内执行路由选择的方式。AS内部路由选择协议又称为内部网关协议(interior gateway protocol)。历史上有两个路由选择协议曾被广泛用于因特网上自治系统内的路由选择:路由选择信息协议(RoutingInformation ProtocolRIP)与开放最短路优先(Open Shortest Path FirstOSPF)。与0SPP密切相关的路由选择协议是IS-IS协议。</p>
+<p>RIP是一种距离向量协议，其运行方式很像理想化DV协议。<br>RIP版本使用跳数作为其费用测度即每条链路的费用为1。RIP使用术语跳，跳是沿着从源路由器到目的子网(包括目的子网)的最短路径所经过的子网数量。</p>
+<p><img src="/2023/06/02/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C-%E7%AC%AC%E5%9B%9B%E7%AB%A0%E7%BD%91%E7%BB%9C%E5%B1%82/q3.png" alt="?"></p>
+<p>1条路径的最大费用被限制为15，因此RIP的使用限制在网络直径不超过15跳的自治系统内。在RIP中路由选择更新信息在邻居之间通过使用一种RIP响应报文(RIPreponsemessage)来交换，大约每30秒相互交换一次。由一台路由器或主机发出的响应报文包含了一个该AS内的多达25个目的子网的列表，以及发送方到其中每个子网的距离。响应报文又被称作RIP通告(RIPadvertisement)。</p>
+<p><strong>每台路由器维护一张称为路由选择表(routingtable)的RIP表。一台路由器的路由选择表包括该路由器的距离向量和该路由器的转发表。</strong><br>图显示了路由器D的转发表注意到该转发表有3列。第一列用于目的子网，第二列指示了沿着最短路径到目的子网的下一个路由器的标识，第三列指出了沿着最短路径到目的子网的跳数(即需要穿越的子网数，包括目的子网)。<br><img src="/2023/06/02/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C-%E7%AC%AC%E5%9B%9B%E7%AB%A0%E7%BD%91%E7%BB%9C%E5%B1%82/4.20.png" alt="?"></p>
+<p>30秒后互相通告更新<br><img src="/2023/06/02/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C-%E7%AC%AC%E5%9B%9B%E7%AB%A0%E7%BD%91%E7%BB%9C%E5%B1%82/4.21.png" alt="?"></p>
+<p>RIP路由器大约每30秒相互交互通告。如果一台路由器一旦超过180秒没有从邻居听到报文，则该邻居不再被认为是可达的;即要么其邻居死机了，要么连接的链路中断了。当这种情况发生时，RIP 修改本地路由选择表，然后通过向相邻路由器(那些仍然可达的路由器) 发送通告来传播该信息。</p>
+<p>路由器也可通过使用RIP 请求报文，请求其邻居到指定目的地的费用。路由器在 UDP上使用端口520相发送RIP请求与响应报文。封装在标准iP数据报中的UDP报文段在路器之间传输。RIP使用一个位于网络层协议(IP)之上的运输层协议(UDP)来实现网络层功能(一种路由选择算法)</p>
+<p>RIP在一个UNIX系统中通常是如何实现的?<br>例如一台用作路由器的UNIX工作站。一个称为routed的进程执行RIP，即维护路由选择信息并与相邻路由器中的routed进程交换报文。因为RIP是被当作一个应用层进程来实现的(虽然它是一个能操作UNIX 内核中的转发表的特殊进程)，它能在一个标准套接字上发送和接收报文并且使用一个标准的运输层协议。如显示的那样，RIP 是一个运行在UDP上的应用层协议(参见第2章)。</p>
+<p><img src="/2023/06/02/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C-%E7%AC%AC%E5%9B%9B%E7%AB%A0%E7%BD%91%E7%BB%9C%E5%B1%82/q4.png" alt="?"></p>
+<h3 id="因特网中自治系统内部的路由选择-OSPF"><a href="#因特网中自治系统内部的路由选择-OSPF" class="headerlink" title="因特网中自治系统内部的路由选择:OSPF"></a>因特网中自治系统内部的路由选择:OSPF</h3><p>OSPF和它的关系密切的表兄弟IS-S通常都设置在上层的ISP中，而RIP却被设置在下层ISP和企业网中。</p>
+<p>OSPF的核心就是一个使用洪泛链路状态信息的链路状态协议和一个 Dikstra 最低费用路径算法。使用OSPF一台路由器构建了一幅关于整个自治系统的完整拓扑图 (即一个图)。于是，路由器在本地运行Diikstra的最短路径算法，以确定一个以自身为根结点的到所有子网的最短路径树各条链路费用是由网络管理员配置的。管理员也许会选择将所有链路费用设为1，因而实现了最少跳数路由选择，或者可能会选择将链路权值按与链路容量成反比来设置，从而不鼓励流量使用低带宽链路。</p>
+<p>使用OSPF时，路由器向自治系统内所有其他路由器广播路由选择信息，而不仅仅是向其相邻路由器广播。每当一条链路的状态发生变化时(如费用的变化或连接/中断状态的变化)，路由器就会广播链路状态信息。即使链路状态未发生变化，它也要周期性地(至少每隔30分钟一次)广播链路状态。</p>
+<p>OSPF报文直接由IP承载。对OSPF其上层协议的值为89。因OSPF协议必须自己实现诸如可靠报文传输、链路状态广播等功能。OSPF协议还要检查链路正在运行(通过向相连的邻居发送HELLO报文)，并允许OSPF路由器获得相邻路由器的网络范围链路状态的数据库。</p>
+<h3 id="自治系统间的路由选择-BGP"><a href="#自治系统间的路由选择-BGP" class="headerlink" title="自治系统间的路由选择:BGP"></a>自治系统间的路由选择:BGP</h3><p>BGP为每个AS提供了进行以下工作的手段:<br>1)从相邻AS处获得子网可达性信息。<br>2)向本AS内部的所有路由器传播这些可达性信息。<br>3)基于可达性信息和AS策略，决定到达子网的“好”路由。</p>
+<h4 id="bgp基础"><a href="#bgp基础" class="headerlink" title="bgp基础"></a>bgp基础</h4><p>在BGP中，路由器对通过使用179端口的半永久TCP连接来交换路由选择信息。对于每条直接连接位于两个不同的AS中的路由器的链路而言，通常有一条这样的BGP TCP连接。</p>
+<p>对于每条TCP连接，位于该连接端点的两台路由器称为BGP对等方(BCPpeers)，沿着该连接发送所有BGP报文的TCP连接称为BGP会话(BGP session)。此外跨越两个AS的BGP会话称为外部BGP(eBGP)会话(external BGP session)，在同一个AS中的两台路由器之间的BCP会话称为内部BGP(BGP)会话(internal BGP session)。在图4-40中eBGP会话显示为长虚线，iBGP会话显示为短虚线。<br>ebcp(tcp连接) ibgp（半tcp连接）<br><img src="/2023/06/02/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C-%E7%AC%AC%E5%9B%9B%E7%AB%A0%E7%BD%91%E7%BB%9C%E5%B1%82/q5.png" alt="?"></p>
+<blockquote>
+<p>假设开了一个公司，要配置网络</p>
+</blockquote>
+<ol>
+<li>接入本地isp，获得ip分配</li>
+<li>和因特网注册机构签约，设置域名，dns</li>
+<li>设置dns，写入服务器地址</li>
+<li>本地isp使用bgp传播你的地址</li>
+</ol>
+<p>BGP使得每个AS知道经过其相邻AS可达哪些目的地。<strong>在BGP中，目的地不是主机而是CDIR化的前缀(prefix)，每个前缀表示一个子网或一个子网的集合。</strong></p>
+<p>因此，例如假定有4个子网与AS2相连:138.16.64/24，138.1665/24，13816.66/24和138.1667/24则AS2能为这4个子网聚合这些前缀，并使用BGP向AS1通告单一前缀1381664/22。<br>举另一个例子，假定这4个子网中的前3个在AS2中第四个子网1381667/24位于AS3中，因为路由器使用最长前缀匹配来转发数据报，所以AS3向AS1通告更特定的前缀13816.67/24而AS2仍然AS1通告聚合的前缀138.1664/22。</p>
+<p>as之间通过ebgp来传递不同as的前缀，as之内通过ibgp传递别的as的前缀，然后一直重复，as之间就互相知道前缀了</p>
+<p>当一台路由器(网关或不是网关) 得知一个新前缀时，它为该前缀在其转发表中创建一个项.</p>
+<h4 id="路径属性和BGP路由"><a href="#路径属性和BGP路由" class="headerlink" title="路径属性和BGP路由"></a>路径属性和BGP路由</h4><p>在BGP中，一个自治系统由其全局唯一的自治系统号(Autonomous System Number，ASN)所标识。</p>
+<p>当一台路由器通过BGP会话通告一个前缀时，它在前缀中包括一些BGP属性(BGPattribute)。用BGP术语来说，带有属性的前缀被称为一条路由(route)。因此，BGP对等方彼此通告路由。两个较为重要的属性是AS-PATH和NEXT-HOP。</p>
+<p>AS-PATH。该属性包含了前缀的通告已经通过的那些AS。当一个前缀传送到一个AS时该AS将它的ASN增加到AS-PATH属性中。路由器使用该AS-PATH属性来检测和防止循环通告特别是如果一台路由器看到它的AS被包括在该路径列表中，它将拒绝该通告。</p>
+<p>NEXT-HOP。 没看。。。</p>
+<h4 id="BGP-路由选择"><a href="#BGP-路由选择" class="headerlink" title="BGP 路由选择"></a>BGP 路由选择</h4><p>路由器可能知道到达任何一条前缀的多条路由，在这种情况下路由器必须在可能的路由中选择一条。进入这个路由选择进程的输入是被路由器知道并接受的所有路由的集合。如果对相同前缀存在两条或多条路由，则 BGP顺序地调用下列消除规则，直到留下一条路由。</p>
+<blockquote>
+<p>路由被指派一个本地偏好值作为它们的属性之一。一条路由的本地偏好可能由该路由器设置或可能由在相同AS中的另一台路由器学习到。这是一条由AS的网络管理员决定的决策。(我们随后将更为详细地讨论BGP 策略问题。)具有最高本地偏好值的路由将被选择。</p>
+</blockquote>
+<blockquote>
+<p>在余下的路由中（所有都具有相同的本地偏好值)，具有最短AS-PATH的路由将被选择。如果该规则是路由选择的唯一规则的话，则BGP将使用一种距离向量算法来决定路径，其中距离测度使用AS跳的数目而不是路由器跳的数目。</p>
+</blockquote>
+<blockquote>
+<p>在余下的路由中（所有都具有相同的本地偏好和相同的AS- PATH长度)，将选择具有最靠近NEXT- HOP路由器的路由。这里，最靠近是指具有最低费用路径的费用的路由器，它由 AS内部算法来决定。如在4.5.3节中所讨论的那样，该进程经常被称为热土豆路由选择。</p>
+</blockquote>
+<blockquote>
+<p>如果仍留下多条路由，该路由器使用BGP标识符来选择路由。</p>
+</blockquote>
+<p>IBGP（Interior Border Gateway Protocol，内部边界网关协议）和OSPF（Open Shortest Path First，开放式最短路径优先）都是AS（自治系统）内的路由协议，但是它们有以下区别：</p>
+<blockquote>
+<ol>
+<li><p>网络拓扑类型：IBGP适用于较大的AS网络，可以跨越多个自治系统，而&gt;OSPF适用于单个自治系统内的网络。</p>
+</li>
+<li><p>路由选择方式：IBGP使用基于路径的路由选择方式，即选择最短的AS路&gt;径。而OSPF使用基于链路状态的路由选择方式，即选择最短的路径。</p>
+</li>
+<li><p>路由信息的传递：IBGP需要在AS内部的不同路由器之间建立全网互联的&gt;BGP邻居关系，以实现路由信息的传递。而OSPF通过交换链路状态信息&gt;（LSA）来更新路由表。</p>
+</li>
+<li><p>发送路由信息的对象不同：IBGP是在AS内部的不同路由器之间传递路由&gt;信息的，而OSPF是在同一个自治系统内的不同路由器之间传递路由信息&gt;的。</p>
+</li>
+</ol>
+<p>因此，IBGP和OSPF在实现方式、适用范围、路由选择方式和路由信息传递方式等方面存在差异。</p>
+</blockquote>
+<blockquote>
+<p>1、<strong>IGP的能力限制，</strong> IGP处理路由的条目有限，而目前internet上核心路由器的路由表已经超过10万条。假如没有IBGP，那么这些路由只能采取重分发的方式直接导入到IGP中，这样做的缺点很明显：<br>第一，IGP协议的作者并没有打算让IGP来处理如此大量的路由，IGP本身也无法处理这样大的路由数量；<br>第二，<strong>BGP不会定期更新</strong> 。如果非要让IGP来处理，那么根据IGP的处理原则，假如这10万路由中任何一条路由发生变化，那么运行IGP的路由器就不得不重新计算路由，更为严重的是，假如其中某一条路由出现路由抖动的情况，例如端口反复UP/DOWN，这会导致所有的IGP路由器每时每刻都不得不把10万条路由重新计算一遍，这种计算量对于绝大多数路由器来说是无法负担的。另外对于运行RIP V1的路由器来说，10万条路由的定期更新，这根本就是无法接受的事情，除去带宽占用率不谈，也只有少量高端的GSR以及TSR能够有这样的性能吧。<br>例如：假定AS100/200/300各有100台路由器，而AS100中有1W条路由要传递要AS300中，而AS200的路由器不需要学习AS100的路由。如果没有IBGP的话，那么这1W条路由都必须被重分发到AS200的IGP中去，这样的话，相当于AS200中所有的100台路由器都增加了1W条路由。如果利用IBGP的话，那么AS200中只有运行IBGP的路由器会学习到这1W条路由，其它运行IGP的路由器都不会学习到这1W条路由。并且由于BGP的路由控制能力大大强于IGP的路由控制能力，因此运行IBGP的路由器比运行IGP的路由器能更好的对这1W条路由做一些路由策略的处理，从而保证整个AS内部的路由器学习到的路由数目可以控制在可接受的范围之内。<br>　　2、路由环路的问题。BGP是靠路由属性来防止路由环路的，例如AS_PATH属性，假如说没有IBGP协议，那么当所有BGP路由重分发到IGP中后，路由属性必然丢失，这就破坏了BGP的路由环路防止机制，产生了路由环路的隐患。   </p>
+</blockquote>
+<p>　　<br>那么引申一下，既然IBGP能够传送所有的路由前缀，为什么还需要IGP？</p>
+<blockquote>
+<p>1、IBGP之间是TCP连接，也就意味着IBGP邻居采用的是逻辑连接的方式，&gt;两个IBGP连接不一定存在实际的物理链路。所以需要有IGP来提供路由，以&gt;完成BGP路由的递归查找。<br>　　2、BGP协议本身实际上并不发现路由，BGP将路由发现的工作全部移交&gt;给了IGP协议，它本身着重于路由的控制。因此，如果没有IGP，那么BGP也&gt;就毫无用处了。</p>
+</blockquote>
+<p>　　EBGP与IBGP的区别：</p>
+<blockquote>
+<p>　　1、路由环路的避免措施不一样，IBGP强制规定ibgp speaker不允许&gt;把从一个ibgp邻居学习到的前缀传递给其它ibgp邻居，因此IBGP要求逻辑&gt;全连接。EBGP没有这样的要求，EBGP对路由环路的避免是通过AS_PATH属&gt;性来实现的。<br>　　2、使用的BGP属性不同，例如IBGP可以传递LOCAL_PREF（本地优先属&gt;性），而EBGP不行。<br>　　3、IBGP有同步的要求，而EBGP没有同步的要求<br>　　4、IBGP不需要IBGP邻居之间有物理连接，只需要逻辑连接即可，而&gt;EBGP下一般情况下都要求EBGP邻居之间存在物理连接。</p>
+</blockquote>
+<p><strong>表项是怎样进入路由器的转发表的?</strong></p>
+<ol>
+<li><p>为使一个前缀进入路由器的转发表，路由器必须首先知晓该前缀（对应于一个子网或子网的一个聚合)。如我们已经学习的那样，经过BGP路由通告，该路由器知道了前缀。这种通告可能（从位于另一个 AS中的一台路由器)经一个eBGP会话，或者(从位于相同 AS中的一台路由器）经一个iBGP会话发送给ta</p>
+</li>
+<li><p>该路由器则使用它的AS内部路由选择协议（通常为0SPF)来确定通向NEXT-HOP路由器的最短路径。路由器最后通过指出沿最短路径的第一段链路,确定端口号以关联其前缀。路由器则能够最终将前缀-端口对加入其转发表!</p>
+</li>
+</ol>
+<h2 id="广播和多播路由选择"><a href="#广播和多播路由选择" class="headerlink" title="广播和多播路由选择"></a>广播和多播路由选择</h2><p>在广播路由选择 （broadcast routing）中，网络层提供了从一种源结点到网络中的所有其他结点交付分组的服务;多播路由选择（multicast routing）使单个源结点能够向其他网络结点的一个子集发送分组的副本。</p>
+<h3 id="广播路由选择算法"><a href="#广播路由选择算法" class="headerlink" title="广播路由选择算法"></a>广播路由选择算法</h3><p>经第一跳仅发送分组的单个副本，然后让第一跳后面其他端的结点生成并转发任何附加的所需副本。这就是说,让网络结点本身（而不只是源结点）生成分组的冗余副本将更加有效。<br><img src="/2023/06/02/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C-%E7%AC%AC%E5%9B%9B%E7%AB%A0%E7%BD%91%E7%BB%9C%E5%B1%82/q6.png" alt="?"></p>
+<h4 id="无控制洪泛"><a href="#无控制洪泛" class="headerlink" title="无控制洪泛"></a>无控制洪泛</h4><p>实现广播的最显而易见的技术是洪泛（flooding)方法，该方法要求源结点向它的所有邻居发送分组的副本。当某结点接收了一个广播分组时，它复制该分组并向它的所有邻居（除了从其接收该分组的那个邻居)转发之。显然,如果图是相连的，这种方案将最终将广播分组的副本交付给该图中的所有结点。</p>
+<p>如果该图具有圈，则每个广播分组的一个或多个分组副本将无休无止地循环。</p>
+<h4 id="受控洪泛"><a href="#受控洪泛" class="headerlink" title="受控洪泛"></a>受控洪泛</h4><h3 id="多播"><a href="#多播" class="headerlink" title="多播"></a>多播</h3><p><strong>一台主机除了有唯一的IP地址外，它也可以加入多播组并获得一个多播地址。</strong></p>
+<p>使用广播服务分组被交付给网络的所有结点。使用多播(multicast)服务，多播分组仅被交付给网络结点的一个子集。</p>
+<p>在因特网中，这种表示一组接收方的单一标识就是一个D类多播地址与一个D类地址相关联的接收方小组被称为一个多播组(multicast group)。图中的4台主机(显示为深色)与多播组地址22617.30197相关联，而且它们将接收所有寻址到该多播地址的数据报。我们仍然必须应对的困难在于这样一个事实，每台主机有一个唯一的iP单播地址，该单播地址完全独立于它所参与的多播组的地址。</p>
+<p><img src="/2023/06/02/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C-%E7%AC%AC%E5%9B%9B%E7%AB%A0%E7%BD%91%E7%BB%9C%E5%B1%82/w1.png" alt="?"><br><strong>单播和多播</strong><br><img src="/2023/06/02/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C-%E7%AC%AC%E5%9B%9B%E7%AB%A0%E7%BD%91%E7%BB%9C%E5%B1%82/w3.png" alt="?"><br><strong>多播地址</strong><br><img src="/2023/06/02/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C-%E7%AC%AC%E5%9B%9B%E7%AB%A0%E7%BD%91%E7%BB%9C%E5%B1%82/w4.png" alt="?"><br><img src="/2023/06/02/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C-%E7%AC%AC%E5%9B%9B%E7%AB%A0%E7%BD%91%E7%BB%9C%E5%B1%82/w5.png" alt="?"></p>
+<h4 id="局域网硬件多播"><a href="#局域网硬件多播" class="headerlink" title="局域网硬件多播"></a>局域网硬件多播</h4><p>由于MAC地址(也称为硬件地址)有多播MAC地址这种类型，因此只要把IPV4多播地址映射成多播MAC地址，即可将IP多播数据报封装在局域网的MAC帧中，而MAC顿首部中的目的MAC地址字段的值，就设置为由IPv4多播地址映射成的多播MAC地址。这样，可以很方便地利用硬件多播来实现局域网内的IP多播<br><img src="/2023/06/02/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C-%E7%AC%AC%E5%9B%9B%E7%AB%A0%E7%BD%91%E7%BB%9C%E5%B1%82/w6.png" alt="?"><br><strong>多个ip映射到同一mac地址</strong><br><img src="/2023/06/02/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C-%E7%AC%AC%E5%9B%9B%E7%AB%A0%E7%BD%91%E7%BB%9C%E5%B1%82/e1.png" alt="?"><br><strong>怎么区分？</strong><br><img src="/2023/06/02/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C-%E7%AC%AC%E5%9B%9B%E7%AB%A0%E7%BD%91%E7%BB%9C%E5%B1%82/e2.png" alt="?"></p>
+<p><strong>网际组管理协议其作用是让连接在本地局域网上的多播路由器知道本局域网上是否有主机 (实际上是主机中的某个进程)加入或退出了某个多播组。</strong></p>
+<p>IGMP仅在本网络有效，使用IGMP并不能知道多播组所包含的成员数量，也不能知道多播组的成员都分布在哪些网络中。</p>
+<p><strong>仅使用IGMP并不能在因特网上进行IP多播。连接在局域网上的多播路由器还必须和因特网上的其他多播路由器协同工作，以便把IP多播数据报用最小的代价传送给所有的多播组成员，这就需要使用多播路由选择协议</strong></p>
+<p><img src="/2023/06/02/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C-%E7%AC%AC%E5%9B%9B%E7%AB%A0%E7%BD%91%E7%BB%9C%E5%B1%82/e3.png" alt="?"></p>
+<h4 id="因特网组管理协议"><a href="#因特网组管理协议" class="headerlink" title="因特网组管理协议"></a>因特网组管理协议</h4><p>IGMP版本3运行在一台主机与其直接相连的路由器之间。图4-48显示了3台第一跳多播路由器，每一台都通过一个向外的本地接口与相连的主机连接。在该例中，本地接口连到一个LAN上，且每个LAN都有多台相连的主机，在任意给定时间内至多有几台主机属于一个给定的多播组。<br><img src="/2023/06/02/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C-%E7%AC%AC%E5%9B%9B%E7%AB%A0%E7%BD%91%E7%BB%9C%E5%B1%82/w2.png" alt="?"></p>
+<p>IGMP有三种报文类型<br>成员报告报文<br>成员查询报文<br>离开组报文<br><img src="/2023/06/02/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C-%E7%AC%AC%E5%9B%9B%E7%AB%A0%E7%BD%91%E7%BB%9C%E5%B1%82/e4.png" alt="?"><br><strong>igmp只在局域网运行，所以可以设置为ttl=1防止外传，ttl在跨越不同子网时减一</strong></p>
+<p><strong>加入多播组</strong><br><img src="/2023/06/02/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C-%E7%AC%AC%E5%9B%9B%E7%AB%A0%E7%BD%91%E7%BB%9C%E5%B1%82/e5.png" alt="?"><br>假设c已经加入了一个多播组，d没加入，现在ab都想加入另一个多播组，b发送igmp报文，d收到后发现是多播报文直接丢弃，c发现后接受，但是在链路层发现mac地址（此地址是多播地址映射而来）不对，发现不是自己组的丢弃，a接收后发现mac和ip都对接受，并取消自己的igmp加入报文（和b重复了），r1收到报文后假如多播组列表。</p>
+<p><strong>监视变化</strong><br><img src="/2023/06/02/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C-%E7%AC%AC%E5%9B%9B%E7%AB%A0%E7%BD%91%E7%BB%9C%E5%B1%82/e6.png" alt="?"></p>
+<p>224.0.0.1：特殊的IP多播地址，在本网络中所有参加多播的主机和路由器的网际层都会接受该多播数据报</p>
+<p>r1发送监视报文确认还有这个组的成员吗，所有的多播组（不管那个组）都接受，经过mac和ip对照后接受，解析igmp报文后，本组的在随即延迟后进行响应（退避算法）发送报告报文，所有人都接受，重复加入多播组的步骤。</p>
+<p><strong>退出多播组</strong><br>当主机要退出某个多播组时，可主动发送个离开组报文而不必等待多播路由器的查询。这样可使多播路由器能够更快地发现某个组有成员离开</p>
+<p>224.0.0.2：特殊的IP多播地址在本网络中的所有多播路由器的网际层都会接受该多播数据报。这个地址只有多播组路由器接受<br><img src="/2023/06/02/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C-%E7%AC%AC%E5%9B%9B%E7%AB%A0%E7%BD%91%E7%BB%9C%E5%B1%82/e7.png" alt="?"><br>路由器收到退出报文后还会发送一个查询报文，此报文地址是多播组地址不是224.0.0.1（224.0.0.1 是所有主机的多播地址，而不是组播地址，因此不能用于通知组成员退出情况）</p>
+<h3 id="多播路由选择协议"><a href="#多播路由选择协议" class="headerlink" title="多播路由选择协议"></a>多播路由选择协议</h3><p>多播路由选择协议的主要任务是: 在多播路由器之间为每个多播组建立一个多播转发树多播转发树连接多播源和所拥有该多播组成员的路由器。<br>目前有以下两种方法来构建多播转发树</p>
+<h4 id="基于源树-Source-Base-Tree-多播路由选择"><a href="#基于源树-Source-Base-Tree-多播路由选择" class="headerlink" title="基于源树 (Source-Base Tree)多播路由选择"></a>基于源树 (Source-Base Tree)多播路由选择</h4><p>利用反向路径广播RPB算法生成的广播转发树，不会存在环路，[因此可以避免广播分组在环路中兜圈RPB算法的要点是:每一台路由器在收到一个广播分组时，先检查该广播分组是否是从源点经最短路径专送来的。<br>若是，本路由器就从自己除刚才接收该广播分组的接口的所有其他接口转发该广播分组。<br>否则，丢弃该广播分组。如果本路由器有好几个邻居路由器都处在到源点的最短路径上，也就是存在好几条同样长度的最短路径，那么只能选取一条最短路径。选取的规则是这几条最短路径中的邻居路由器的IP地址最小的那条最短路径。<br><img src="/2023/06/02/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C-%E7%AC%AC%E5%9B%9B%E7%AB%A0%E7%BD%91%E7%BB%9C%E5%B1%82/e8.png" alt="?"></p>
+<p>若有相同的距离则选择ip地址小的<br>路由器在确保连通性（自己去掉不会影响别的路由器）的情况下使用igmp报文获知自己是不是组播路由器，是则保留枝干，不是则向上游剪枝，其下的主机若加如多播则重新嫁接枝干</p>
+<h4 id="组共享树-Group-Shared-Tree-多播路由选择"><a href="#组共享树-Group-Shared-Tree-多播路由选择" class="headerlink" title="组共享树 (Group-Shared Tree)多播路由选择"></a>组共享树 (Group-Shared Tree)多播路由选择</h4><p>从多播路由器开始向核心路由构建网络<br><img src="/2023/06/02/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C-%E7%AC%AC%E5%9B%9B%E7%AB%A0%E7%BD%91%E7%BB%9C%E5%B1%82/e9.png" alt="?"></p>
+<h2 id="习题"><a href="#习题" class="headerlink" title="习题"></a>习题</h2><ol>
+<li>我们回顾一下在本书中使用的某些术语。前面讲过运输层的分组名字是报文段，数据链路层的分组名字是帧。网络层分组的名字是什么?前面讲过路由器和链路层交换机都被称为分组交换机。路由器与链路层交换机间的根本区别是什么?回想我们对数据报网络和虚电路网络都使用词汇路由器。<blockquote>
+<p>网络层数据包是一种数据报.路由器根据数据包的IP(第3层)地址转发数据包。链路层交换机根据分组的MAC(第2层)地址转发分组.</p>
+</blockquote>
+</li>
+<li>在数据报网络中，网络层的两个最重要功能是什么?虚电路网络中网络层的3个最重要的功能是什么?<blockquote>
+<p>数据平面的主要功能是转发数据包，转发数据报从它们的输入链路到它们的输出链路。例如,数据平面S输入端口执行终止传入物理链路的物理层功能在路由器处，执行链路层功能以在另一个路由器上与链路层互操作传入链路的一侧，并在输入端口上执行查找功能。</p>
+</blockquote>
+</li>
+</ol>
+<blockquote>
+<p>控制平面的主要功能是路由，即确定数据包从源到目的地的路径。控制平面负责执行路由协议，响应连接的上下链路，与远程控制器通信，并执行管理功能。<br>3. 路由选择和转发的区别是什么?<br>路由和转发之间的主要区别在于转发是路由器S将分组从其输入接口传送到其输出接口的本地动作，和转发发生在非常短的时标(通常为几纳秒),并且因此通常以硬件实现。路由是指网络范围确定数据包从来源接收到的端到端路径的过程目的地。路由发生在更长时间的时标上(通常是秒)，以及通常用软件实现。<br>4. 在数据报网络和虚电路网络中的路由器都使用转发表吗?如果是，描述用于这两类网络的转发表。<br>转发表在路由器中的作用是保存条目，以确定数据报通过路由器的哪个输出接口<br>5. 描述网络层能为单个分组提供的某些假想的服务。对分组流进行相同的描述。因特网的网络层为你提供了这些假想服务吗?ATM的CBR服务模型提供了这些假想服务吗?ATM的ABR服务模型提供了这些假想服务吗?<br>Internet网络层的服务模式是尽力而为的服务.使用该服务模型，无法保证按发送顺序接收数据包，无法保证其最终交付，不能保证端到端的延迟，也没有最小的带宽保证。<br>7. 讨论为什么在高速路由器的每个输入端口都存储转发表的影子副本。<br>利用阴影复制,在每个输入端口处本地地进行转发查找,而无需调用集中式路由处理器。这种分散的方法避免在路由器内的单个点创建查找处理瓶颈。<br>8. 在4.3节中讨论了3类交换结构。列出并简要讨论每一类交换结构。哪一种(如果有的话) 能够跨越交换结构并行发送多个分组?<br>经内存交换；经总线交换；经互联网络交换。【内存式；总线式；纵横式。P207 三种交换技术的简单图像要能画出来】 经互联网络交换可以并行转发数据包，但要求所有数据包被转发到不同的输出端口。<br>9. 描述在输人端口会出现分组丢失的原因。描述在输人端口如何消除分组丢失(不使用无限大缓存区)。<br>如果数据包到达路由器的速率超过交换结构的速率，则数据包需要在输入端口排队。 如果这种速率不匹配持续存在，队列将越来越大，最终溢出输入端口缓冲区，导致丢包。 如果交换结构的速度至少是输入速度的 n 倍，其中 n 是输入端口数，则可以消除分组丢失<br>10. 描述在输出端口出现分组丢失的原因。通过增加交换结构速率，能够防止这种丢失吗?<br>交换结构对某输出端口的发送速度快于输出端口的输出速度，会造成排队现象，排队过长就会发生丢失。<br>增加交换结构的速率对丢失现象起到相反的作用。速率越高丢失越多。<br>(这是因为增加交换结构的速率会导致更多的数据包同时进入交换结构，从而增加了竞争和冲突的可能性，造成了数据包的丢失。此外，高速率也可能导致交换结构的缓存空间不足，进一步加剧了丢包现象。因此，在设计交换结构时需要综合考虑速率和缓存空间等因素，以最优的方式平衡各种需求。)<br>11. 什么是HOL阻塞?它出现在输人端口还是输出端口?<br>如果一个输入端口的前部分组正在阻塞，后面的所有分组也不能被发送，即使后面的分组的输出端口是空闲的。出现在输入端口。<br>12. 路由器有iP地址吗?如果有，有多少个?<br>路由器有IP地址，且一个端口一个IP地址。<br>13. IP地址223.1.3.27的32比特二进制等价形式是什么?<br>11011111 00000001 00000011 00011011<br>14. 考察使用DHCP的主机，获得它的IP地址、网络掩码、默认路由器和其本地DNS服务器的iP地址。列出这些值。<br>IP地址：192.168.2.239<br>子网掩码：255.255.255.0<br>默认路由器：192.168.2.1<br>本地DNS服务器：192.168.2.1</p>
+</blockquote>
+<blockquote>
+<p>(输入cmd，点击确定<br>输入ipconfig/all，点回车键<br>找到DHCP服务器，后面的那串数字就是系统分配的DHCP的IP地址)</p>
+</blockquote>
+<ol start="15">
+<li><p>假设在一个源主机和一个目的主机之间有3 台路由器。不考虑分片，一个从源主机发送给目的主机的IP报文将通过多少个接口?为了将数据报从源移动到目的地需要检索多少个转发表?</p>
+<blockquote>
+<p>8个接口。检索3次转发表。</p>
+</blockquote>
+</li>
+<li><p>假设某应用每20ms生成一个40字节的数据块，每块封装在一个TCP报文段中TCP报文段再封装在一个iP数据报中。每个数据报的开销有多大?应用数据所占百分比是多少?</p>
+<blockquote>
+<p>40字节数据+20字节TCP首部+20字节IP首部 = 80字节<br>应用数据所占百分比为50%</p>
+</blockquote>
+</li>
+<li><p>假定主机A向主机B发送封装在一个IP数据报中的TCP报文段。当主机B接收到该数据报时，主机B中的网络层怎样知道它应当将该报文段(即数据报的有效载荷)交给TCP而不是UDP或某个其他东西呢?</p>
+<blockquote>
+<p>IP协议中有上层协议字段，指示了应该交给的上层协议。</p>
+</blockquote>
+</li>
+<li><p>假定你购买了一个无线路由器并将其与电缆调制解调器相连。同时假定ISP动态地为你连接的设备(即你的无线路由器)分配一个iP 地址。还假定你家有5台PC均使用802.11以无线方式与该无线路由器相连。怎样为这5台PC分配P地址?该无线路由器使用NAT吗?为什么?</p>
+<blockquote>
+<p>一般使用DHCP协议自动分配地址，DHCP服务器即是无线路由器。<br>一般的无线路由器是使用NAT的。因为它使用的是局域网地址，并非公网地址。</p>
+</blockquote>
+</li>
+<li><p>比较并对照IP4和IP6首部字段。它们有某些字段是相同的吗?</p>
+<blockquote>
+<p>版本，服务类型，上层协议，寿命，源地址和目的地址（位数不同）</p>
+</blockquote>
+</li>
+<li><p>有人说当IPv6建隧道通过IPv4路由器时IP6将IP4 隧道作为链路层协议。你同意这种说法吗?为什么?</p>
+<blockquote>
+<p>可以这样理解。因为IPV6数据报被封装在IPV4数据报中，对IPV6报文来讲隧道就相当于过了一跳路由器，因此比较像链路层协议。</p>
+</blockquote>
+</li>
+<li><p>比较和对照链路状态和距离向量路由选择算法。</p>
+<blockquote>
+<p>链路状态算法：<br>全局式路由选择算法，需要广播<br>距离向量路由选择算法：<br>分散式路由选择算法，只需要通知相连点</p>
+</blockquote>
+</li>
+<li><p>讨论因特网的等级制组织是怎样使得其能够扩展为数以百万计用户的</p>
+<blockquote>
+<p>不同的ISP构建了不同的自治系统，自治系统内部采用内部路由选择协议。自治系统之间使用自治系统间路由选择协议。<br>其次，OSPF协议还可以配置为多个区域，区域内运行自己的OSPF协议。</p>
+</blockquote>
+</li>
+<li><p>每个自治系统使用相同的AS内部路由选择算法是必要的吗?为什么?</p>
+<blockquote>
+<p>是不必要的。不同的AS情况可能不同，适合采用的路由选择算法也不同，且只要选择了相同的AS间路由协议，就不会影响对外的路由选择。</p>
+</blockquote>
+</li>
+<li><p>考虑图4-37。<br><img src="/2023/06/02/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C-%E7%AC%AC%E5%9B%9B%E7%AB%A0%E7%BD%91%E7%BB%9C%E5%B1%82/t2.png" alt="?"><br>从D中的初始表开始，假设D收到来自A的以下通告:<br><img src="/2023/06/02/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C-%E7%AC%AC%E5%9B%9B%E7%AB%A0%E7%BD%91%E7%BB%9C%E5%B1%82/t1.png" alt="?"><br>D中的表将会改变吗?如果是，应怎样变化?</p>
+<blockquote>
+<p>不变（吓一跳相同直接更新，吓一跳不同则对比，若来的更短更新）</p>
+</blockquote>
+</li>
+<li><p>比较并对照RIP与OSPF使用的通告。</p>
+<blockquote>
+<p>RIP通告的内容是路由器的转发表，也包含目的地的跳数。只向连接的点通告。<br>OSPF通告的内容是某链路的状态信息，向所有自治系统内的路由器通告。</p>
+</blockquote>
+</li>
+<li><p>填空:RIP通告通常宣称到各目的地的跳数，而BGP更新却宣称到各目的地的</p>
+<blockquote>
+<p>AS-PATH和NEXT-HOP</p>
+</blockquote>
+</li>
+<li><p>为什么在因特网中用到了不同类型的AS间与AS内协议?</p>
+<blockquote>
+<p>AS内协议和AS间协议处理的问题不同，比如AS内协议要求性能，但不要求规模和特殊策略，但是AS间协议对规模，可扩展性和策略要求较多。</p>
+</blockquote>
+</li>
+<li><p>定义和对比下列术语:子网，前缀和 BGP路由。</p>
+<blockquote>
+<p>子网是IP在一个网段内，里面有许多主机，IP相近，前缀相同。<br>前缀是一个子网的标识，具有相同前缀的IP在一个子网内。<br>BGP路由是在AS间的路由选择协议。<br>AS与子网不是同一个概念，AS的范围一般比子网要大，一个路由器端口连接的是一个子网。多个子网和路由器在一个为AS。不过经过路由聚合，AS对于外部可能表示为一个子网的形式。</p>
+</blockquote>
+</li>
+<li><p>BGP是怎样使用NEXT-HOP属性的?它是怎样使用AS-PATH属性的?</p>
+<blockquote>
+<p>NEXT-HOP属性，用来决定转发表下一条路由，知道通往的是哪个AS网关路由器。<br>AS-PATH属性用来检测和防止循环通告，它的长度还能用来确定路由选择。</p>
+</blockquote>
+</li>
+<li><p>描述一个较高层ISP的网络管理员在配置BGP时是如何实现策略的。</p>
+<blockquote>
+<p>使用输入策略，比如设置某些属性，过滤到不符合属性的路由信息。</p>
+</blockquote>
+</li>
+<li><p>通过多个单播实现广播抽象与通过支持广播的单个网络(路由器)实现广播抽象之间有什么重要区别?</p>
+<blockquote>
+<p>单播是指的分组被复制，然后分别通过独立的路由选择到达目的地。<br>广播则是直接使用路由器，在向多个端口转发时才复制报文。</p>
+</blockquote>
+</li>
+<li><p>对于我们学习的广播通信的3种一般方法(无控制洪泛、受控洪泛和生成树广播) 中的每种，下列说法是正确的吗?你可以假定分组不会因缓存溢出而丢失，所有分组以它们发送的顺序交付给链路。<br>a.一个结点可能接收到同一个分组的多个副本<br>b.一个结点可能通过相同的出链路转发多个分组的副本。</p>
+<blockquote>
+<p>无控制洪泛：<br>a. 正确 b. 正确<br>受控洪泛：<br>a. 正确 b. 错误<br>生成树广播：<br>a. 错误 b. 错误</p>
+</blockquote>
+</li>
+<li><p>当一台主机加人一个多播组时，它必须将其iP地址改变为它所加人的多播组的地址吗?</p>
+<blockquote>
+<p>不需要(不是必须的。当一台主机加入一个多播组时，它会在网络上发送一个IGMP报文，告知网络中的路由器它想要接收该多播组的数据。主机的IP地址不会改变，它仍然保持原来的IP地址。路由器会根据这个IGMP报文来知道哪些主机加入了哪些多播组，并将多播数据转发给这些主机。是的，主机在加入多播组时，会加入到一个特定的多播组地址。这个多播组地址是一个特殊的IP地址，用来标识一个多播组。当主机想要接收该多播组的数据时，它需要指定这个多播组地址作为目的IP地址。但是主机的源IP地址不会改变，仍然是它原来的IP地址。路由器会根据多播组地址来转发多播数据，而不是根据主机的IP地址。)</p>
+</blockquote>
+</li>
+<li><p>IGMP和广域多播路由选择协议所起的作用是什么?</p>
+<blockquote>
+<p>IGMP通知一台路由器想要加入或退出多播组。<br>多播路由选择算法的作用是使得多播组的成员接收报文，但是非多播组的成员尽量少接收报文。因于此选择多播报文的路径。</p>
+</blockquote>
+</li>
+<li><p>在多播路由选择场合中，一棵组共享的树与一棵基于源的树之间有什么区别?</p>
+<blockquote>
+<p>共享的树是所有组成员都使用这一棵树的路径来发送/接收多播报文。<br>基于源的树是指每个成员都有一颗独立的路由树，根据这个树来发送多播报文。</p>
+</blockquote>
+</li>
+</ol>
+<h2 id="习题-1"><a href="#习题-1" class="headerlink" title="习题"></a>习题</h2><ol>
+<li>在本题中，考虑虚电路网络和数据报网络的某些优缺点。<br>a.假设路由器遇到了可能经常会引起它无法正常运转的情况。提出理由说明是虚电路体系结构还是数据报体系结构更好，为什么?<blockquote>
+<p>数据报网络更好，如果无法运转时可以使用其他的路线继续发送。如果是虚电路就需要重新建立连接了。</p>
+</blockquote>
+</li>
+</ol>
+<p>b对于源和目的结点间传输流量的排他性使用，假设该源和目的结点要求，在沿源到目的地的路径上的所有路由器总能提供固定的容量。提出理由说明是虚电路体系结构还是数据报体系结构更好，为什么?</p>
+<blockquote>
+<p>虚电路体系更好，因为提供固定的容量正好能搭建一个虚电路。</p>
+</blockquote>
+<p>c假设网络中的链路和路由器从不出故障，并且所有源/目的地对之间所使用的路径保持不变。在这种情况下，虚电路或数据报体系结构哪个控制流量开销会更多?为什么?</p>
+<blockquote>
+<p>数据报体系的控制流量开销更多，因为数据报需要更大报文首部。</p>
+</blockquote>
+<ol start="2">
+<li>考虑一个虚电路网络。假定其VC号是一个8比特字段。<br>a.链路能够承载的虚电路的最大数量是多少?<blockquote>
+<p>256个</p>
+</blockquote>
+</li>
+</ol>
+<p>b.假定某中心结点在连接建立时确定了路径和VC号。假定沿着某虚电路的路径在每段链路使用相同的VC号。描述在连接建立时中心结点如何确定VC号。进行中虚电路比在(a)中确定的最大值要少，也没有相同的未用 VC号，这种情况可能出现吗?</p>
+<blockquote>
+<p>可能的确定方法：有一个虚电路表，记录当前已经使用的VC号，中心结点设定一个未被使用的VC号。这样设置就不会出现比确定的最大值少的情况。</p>
+</blockquote>
+<p>c.假定沿着某条虚电路的路径允许不同的VC号。在连接建立期间，在端到端路径确定以后，描述链路如何以分散方式而不依赖中心结点选择它们的VC号并配置它们的转发表</p>
+<blockquote>
+<p>链路只需要向它的下一跳协商，VC号不与当前结点和下一跳结点中的其它VC号重复即可。</p>
+</blockquote>
+<ol start="3">
+<li><p>在虚电路网络中的基本转发表具有4列。在这些列中的值的含义是什么?在数据报网络中的基本转发表有两列。在这些列中的值的含义是什么?</p>
+<blockquote>
+<p>虚电路网络：<br>入接口，入VC号，出接口，出VC号<br>数据报网络：<br>目的子网，出接口</p>
+</blockquote>
+</li>
+<li><p>考虑下列网络<br>a假定网络是一个数据报网络。显示路由器A中的转发表，其中所有指向主机 H3的流量通过接口3转发。</p>
+</li>
+</ol>
+<table>
+<thead>
+<tr>
+<th align="center">目的地址</th>
+<th align="center">出接口</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">H1</td>
+<td align="center">1</td>
+</tr>
+<tr>
+<td align="center">H2</td>
+<td align="center">2</td>
+</tr>
+<tr>
+<td align="center">H3</td>
+<td align="center">3</td>
+</tr>
+</tbody></table>
+<p>b假定网络是一个数据报网络。你能写出路由器A中的转发表吗?其中所有从H1指向主机3的流量通过接口3转发，而所有从H2指向主机H3的流量通过接口4转发。提示:这是一个技巧问题。</p>
+<table>
+<thead>
+<tr>
+<th align="center">入接口</th>
+<th align="center">目的地址</th>
+<th align="center">出接口</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">1</td>
+<td align="center">H2</td>
+<td align="center">2</td>
+</tr>
+<tr>
+<td align="center">2</td>
+<td align="center">H1</td>
+<td align="center">1</td>
+</tr>
+<tr>
+<td align="center">1</td>
+<td align="center">H3</td>
+<td align="center">3</td>
+</tr>
+<tr>
+<td align="center">2</td>
+<td align="center">H3</td>
+<td align="center">4</td>
+</tr>
+</tbody></table>
+<p>c现在假定网络是虚电路网络，在H1和H3之间有一个进行中的呼叫，H2和H之间有另一个进行0中的呼叫。写出路由器A中的转发表，其中所有从H1指向主机H3的流量通过接口3转发，而所有从H2指向主机H3的流量通过接口4转发。</p>
+<blockquote>
+<p>设H1-H3各段的VC号为 01 02 03 04<br>设H2-H3各段的VC号为 05 06 07 08 </p>
+</blockquote>
+<table>
+<thead>
+<tr>
+<th align="center">入接口</th>
+<th align="center">入VC号</th>
+<th align="center">出接口</th>
+<th align="center">出VC号</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">1</td>
+<td align="center">01</td>
+<td align="center">3</td>
+<td align="center">02</td>
+</tr>
+<tr>
+<td align="center">2</td>
+<td align="center">05</td>
+<td align="center">4</td>
+<td align="center">06</td>
+</tr>
+<tr>
+<td align="center">d假设场景与(c)中相同，写出在结点B、C和D中的转发表</td>
+<td align="center"></td>
+<td align="center"></td>
+<td align="center"></td>
+</tr>
+</tbody></table>
+<p>路由器B:  </p>
+<table>
+<thead>
+<tr>
+<th align="center">入接口</th>
+<th align="center">入VC号</th>
+<th align="center">出接口</th>
+<th align="center">出VC号</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">1</td>
+<td align="center">02</td>
+<td align="center">2</td>
+<td align="center">03</td>
+</tr>
+</tbody></table>
+<p>路由器C:  </p>
+<table>
+<thead>
+<tr>
+<th align="center">入接口</th>
+<th align="center">入VC号</th>
+<th align="center">出接口</th>
+<th align="center">出VC号</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">1</td>
+<td align="center">06</td>
+<td align="center">2</td>
+<td align="center">07</td>
+</tr>
+</tbody></table>
+<p>路由器D:  </p>
+<table>
+<thead>
+<tr>
+<th align="center">入接口</th>
+<th align="center">入VC号</th>
+<th align="center">出接口</th>
+<th align="center">出VC号</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">1</td>
+<td align="center">03</td>
+<td align="center">3</td>
+<td align="center">04</td>
+</tr>
+<tr>
+<td align="center">2</td>
+<td align="center">07</td>
+<td align="center">3</td>
+<td align="center">08</td>
+</tr>
+</tbody></table>
+<p><img src="/2023/06/02/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C-%E7%AC%AC%E5%9B%9B%E7%AB%A0%E7%BD%91%E7%BB%9C%E5%B1%82/t3.png" alt="?"></p>
+<ol start="5">
+<li>考虑一个用2比特字段表示VC号的虚电路网络。假定该网络要通过4条链路(链路A、链路B链路C和链路D)建立一条虚电路。假定这些链路中的每条当前都承载两条其他的虚电路，这些其他虚电路的VC号如下:<br><img src="/2023/06/02/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C-%E7%AC%AC%E5%9B%9B%E7%AB%A0%E7%BD%91%E7%BB%9C%E5%B1%82/t4.png" alt="?"><br>在回答下列问题时，记住每个现有的虚电路可能通过这4条链路之一。<br>a如果每条虚电路要求沿着其路径使用相同的VC号，能为该新的虚电路分配什么样的VC号?<blockquote>
+<p>VC号分别为 00，01，10，11  </p>
+</blockquote>
+</li>
+</ol>
+<p>b.如果每条虚电路沿其路径允许不同的链路使用不同的VC号(因此转发表必须执行VC号转换)能够使用4个VC号的多少种不同的组合(一种组合用于这4条链路之一)?</p>
+<blockquote>
+<p>buhui</p>
+</blockquote>
+<ol start="6">
+<li><p>在本书中我们使用术语面向连接服务来描述运输层服务，使用术语连接服务描述网络层服务。在术语中为何有这种微妙的差异?</p>
+<blockquote>
+<p>网络层提供了主机之间的连接服务，运输层则使用这个服务建立进程间的连接。  </p>
+</blockquote>
+</li>
+<li><p>假设两个分组在完全相同的时刻到达一台路由器的两个不同输人端口。同时假设在该路由器中没有其他分组。<br>a假设这两个分组朝着两个不同的输出端口转发。当交换结构使用一条共享总线时，这两个分组可能在相同时刻通过交换结构转发吗?</p>
+<blockquote>
+<p>不能 </p>
+</blockquote>
+</li>
+</ol>
+<p>b假设这两个分组朝着两个不同的输出端口转发。当交换结构使用纵横方式时，这两个分组可能在6相同时刻通过交换结构转发吗?</p>
+<blockquote>
+<p>可以</p>
+</blockquote>
+<p>c假设这两个分组朝着相同的输出端口转发。当交换结构使用纵横方式时。这两个分组可能在相同0时刻通过交换结构转发吗?</p>
+<blockquote>
+<p>bu能<br>8. <img src="/2023/06/02/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C-%E7%AC%AC%E5%9B%9B%E7%AB%A0%E7%BD%91%E7%BB%9C%E5%B1%82/t5.png" alt="?"><br>最好方法：2个时隙  </p>
+</blockquote>
+<table>
+<thead>
+<tr>
+<th align="center">时间</th>
+<th align="center">入端口号</th>
+<th align="center">端口号</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">1</td>
+<td align="center">1</td>
+<td align="center">X</td>
+</tr>
+<tr>
+<td align="center">1</td>
+<td align="center">2</td>
+<td align="center">Y</td>
+</tr>
+<tr>
+<td align="center">1</td>
+<td align="center">3</td>
+<td align="center">Z</td>
+</tr>
+<tr>
+<td align="center">2</td>
+<td align="center">2</td>
+<td align="center">X</td>
+</tr>
+<tr>
+<td align="center">2</td>
+<td align="center">3</td>
+<td align="center">Y</td>
+</tr>
+</tbody></table>
+<p>最差方法：3个时隙  </p>
+<table>
+<thead>
+<tr>
+<th align="center">时间</th>
+<th align="center">入端口号</th>
+<th align="center">端口号</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">1</td>
+<td align="center">1</td>
+<td align="center">X</td>
+</tr>
+<tr>
+<td align="center">1</td>
+<td align="center">3</td>
+<td align="center">Y</td>
+</tr>
+<tr>
+<td align="center">2</td>
+<td align="center">2</td>
+<td align="center">Y</td>
+</tr>
+<tr>
+<td align="center">2</td>
+<td align="center">3</td>
+<td align="center">Z</td>
+</tr>
+<tr>
+<td align="center">3</td>
+<td align="center">2</td>
+<td align="center">X</td>
+</tr>
+</tbody></table>
+<ol start="10">
+<li><img src="/2023/06/02/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C-%E7%AC%AC%E5%9B%9B%E7%AB%A0%E7%BD%91%E7%BB%9C%E5%B1%82/t6.png" alt="?"><br>提供一个具有4个表项的转发表，使用最长前缀匹配，转发分组到正确的链路接口</li>
+</ol>
+<table>
+<thead>
+<tr>
+<th align="center">目的子网</th>
+<th align="center">出接口</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">224.0.0.0/22</td>
+<td align="center">0</td>
+</tr>
+<tr>
+<td align="center">224.64.0.0/16</td>
+<td align="center">1</td>
+</tr>
+<tr>
+<td align="center">224.64.0.0/22</td>
+<td align="center">2</td>
+</tr>
+<tr>
+<td align="center">其它</td>
+<td align="center">3</td>
+</tr>
+</tbody></table>
+<p>描述你的转发表是如何为具有下列目的地址的数据报决定适当链路接口的。<br>11001000 10010001 01010001 01010101<br>11100001 01000000 11000011 00111100<br>11100001 10000000 00010001 01110111</p>
+<blockquote>
+<p>323</p>
+</blockquote>
+<ol start="11">
+<li><p><img src="/2023/06/02/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C-%E7%AC%AC%E5%9B%9B%E7%AB%A0%E7%BD%91%E7%BB%9C%E5%B1%82/t7.png" alt="?"></p>
+<blockquote>
+<p>0/6, 2^6个<br>64/5, 2^5个<br>96/5, 2^5个<br>128/6, 2^6个<br>160/6, 2^6个<br>前缀匹配到主机位上</p>
+</blockquote>
+</li>
+<li><p><img src="/2023/06/02/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C-%E7%AC%AC%E5%9B%9B%E7%AB%A0%E7%BD%91%E7%BB%9C%E5%B1%82/t8.png" alt="?"></p>
+<blockquote>
+<p>0/7, 2^7个<br>128/6, 2^6个<br>244/5, 2^5个<br>96/5, 2^5个</p>
+</blockquote>
+</li>
+<li><p>考虑互联3个子网(子网1、子网2和子网3)的一台路由器。假定在这3个子网的每个子网中的所有接口要求具有前缀223.1.17/24。还假定子网1要求支持多达60个接口，子网2要求支持多达90个接口和子网3要求支持多达12个接口。提供3个满足这些限制的网络地址(形式为.b.cd/x</p>
+<blockquote>
+<p>子网2： 223.1.17.0/25<br>子网1： 223.1.17.128/26<br>子网3： 223.1.17.192/26</p>
+</blockquote>
+</li>
+<li><p>在4.2.2节中给出了一个转发表(使用最长前缀匹配)的例子，使用ab.cd/x记法代替二进制字符串记法，重写该转发表。</p>
+</li>
+</ol>
+<table>
+<thead>
+<tr>
+<th align="center">目的子网</th>
+<th align="center">出接口</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">200.23.16.0/11</td>
+<td align="center">0</td>
+</tr>
+<tr>
+<td align="center">200.23.24.0/8</td>
+<td align="center">1</td>
+</tr>
+<tr>
+<td align="center">200.23.24.0/11</td>
+<td align="center">2</td>
+</tr>
+<tr>
+<td align="center">其他</td>
+<td align="center">3</td>
+</tr>
+</tbody></table>
+<ol start="16">
+<li>考虑具有前缀128.119.40.128/26的一个子网。给出能被分配给该网络的一个iP地址(形式为xxxxxxxxxxxx)的例子。假定一个ISP拥有形式为128.119.40.64/26的地址块。假定它要从该地址块生成4个子网，每块具有相同数量的iP地址。这4个子网(形式为bcd/x)的前缀是什么?<blockquote>
+<p>IP地址例子: 128.119.40.129<br>四个子网：  </p>
+</blockquote>
+</li>
+<li>119.40.128/5  </li>
+<li>119.40.160/5  </li>
+<li>119.40.192/5  </li>
+<li>119.40.224/5  </li>
+</ol>
+<p><strong>(主机位32-26=6，共2^6=64个主机，平均每个子网16个主机，需要5位主机位，注意：全0全1不能用4位主机位还剩14个地址)</strong></p>
+<ol start="17">
+<li>考虑图4-17中显示的拓扑。(在12:00以顺时针开始)标记具有主机的3个子网为网络AB和C标记没有主机的子网为网络D、E和F。</li>
+</ol>
+<p>a为这6个子网分配网络地址，要满足下列限制:所有地址必须从214.97.254/23 起分配;子网A应当具有足够地址以支持250个接口:子网B应当具有足够地址以支持120个接口:子网C应当具有足够地址以支持120个接口。当然，子网D、E和F应当支持两个接口。对于每个子网，分配采用的形式是abcd/x或abcd/xefgh/y。</p>
+<blockquote>
+<p>A: 214.97.254.0/24 去掉 214.97.254.0/30<br>B: 214.97.255.0/25 去掉 214.97.255.0/30<br>C: 214.97.255.128/25 去掉 214.97.255.128/30<br>D: 214.97.254.0/30<br>E: 214.97.255.0/30<br>F: 214.97.255.128/30<br><strong>始终牢记减去一个全0一个全1</strong></p>
+</blockquote>
+<ol start="19">
+<li><p>考虑向具有700字节MTU的一条链路发送一个2400字节的数据报。假定初始数据报标有标识号422。将会生成多少个分片?在生成相关分片的数据报中的各个字段中的值是多少?</p>
+<blockquote>
+<p>700字节的MTU，承载的传输层数据为680字节(减去每个数据包的20B)，因此生成4个分片。<br>第一个分片： 标识号：422, 偏移：0, 标志：1<br>第二个分片： 标识号：422, 偏移：85, 标志：1<br>第三个分片： 标识号：422, 偏移：170, 标志：1<br>第四个分片： 标识号：422, 偏移：255, 标志：0  </p>
+</blockquote>
+</li>
+<li><p>假定在源主机A和目的主机B之间的数据报被限制为1500字节(包括首部)。假设IP首部为20字节要发送一个5MB组成的MP3需要多少个数据报?解释你的答案是如何计算的。</p>
+<blockquote>
+<p>1500字节的MTU，承载的应用层数据为1460字节 (tcp20B,ip20B)<br>5MB为5242880字节，因此需要3592个数据报。 </p>
+</blockquote>
+</li>
+</ol>
+<p><strong>注意是数据包分片，还是应用层传下来的数据</strong></p>
+<ol start="21">
+<li>考虑在图4-22中建立的网络。假定SP此时为路由器分配地址24.34.112235以家庭网络的网络地址是192.168.1/24。<br>a.在家庭网络中为所有接口分配地址。<blockquote>
+<p>主机1： 192.168.0.1<br>主机2： 192.168.0.2<br>主机3： 192.168.0.3<br>路由器家庭网络端口： 192.168.0.4 </p>
+</blockquote>
+</li>
+</ol>
+<p>b.假定每台主机具有两个进行中的TCP连接，所有都是对主机128.119.40.86的80端口的。在NAT转换表中提供6个对应表项。</p>
+<table>
+<thead>
+<tr>
+<th align="center">WAN端</th>
+<th align="center">LAN端</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">24.34.112.235, 10001</td>
+<td align="center">192.168.0.1, 12345</td>
+</tr>
+<tr>
+<td align="center">24.34.112.235, 10001</td>
+<td align="center">192.168.0.1, 1234</td>
+</tr>
+<tr>
+<td align="center">24.34.112.235, 10002</td>
+<td align="center">192.168.0.2, 2345</td>
+</tr>
+<tr>
+<td align="center">24.34.112.235, 10002</td>
+<td align="center">192.168.0.2, 2375</td>
+</tr>
+<tr>
+<td align="center">24.34.112.235, 10003</td>
+<td align="center">192.168.0.2, 3345</td>
+</tr>
+<tr>
+<td align="center">24.34.112.235, 10003</td>
+<td align="center">192.168.0.2, 3845</td>
+</tr>
+</tbody></table>
+<ol start="22">
+<li>假设你有兴趣检测NAT后面的主机数量。你观察到在每个iP分组上iP 层顺序地标出一个标识号.由一台主机生成的第一个iP分组的标识号是一个随机数，后继iP分组的标识号是顺序分配的。假设由NAT后面主机产生的所有IP分组都发往外部。</li>
+</ol>
+<p>a基于这个观察，假定你能够俘获由 NAT 向外部发送的所有分组你能概要给出一种简单的技术来检测 NAT后面不同主机的数量吗?评估你的答案。</p>
+<blockquote>
+<p>可以来检测不同主机的数量。<br>检测IP分组的标识号。最开始遇到分组标识号时，记录下来，识别为一个主机。<br>后面遇到标识号如果是记录中某标识号的顺序后继，则更新记录中的标识号。<br>如果不是，则识别一个新主机，添加进记录中。  </p>
+</blockquote>
+<p>b.如果标识号不是顺序分配而是随机分配的，这种技术还能正常工作吗?评估你的答案</p>
+<blockquote>
+<p>无法工作，因为分不清是新主机还是同一主机的不同报文。</p>
+</blockquote>
+<ol start="23">
+<li><p>在这个习题中，我们将探讨NAT对P2P应用程序的影响。假定具有用户名Amold的对等方通过查询发现，具有用户名Bermard的对等方有一个要下载的文件。同时假定Berard和Arnod都位于NAT后面。尝试设计一种技术使得Amold与Bernard创建一条TCP连接，而不对NAT做应用特定的配置。如果你难以设计这样的技术，试讨论其原因。</p>
+<blockquote>
+<p>因为两方都处在NAT后面，只能主动发起连接，不能当作服务器去接收连接，因为NAT表中没有对应项。<br>即使查找某一方已经连接的主机中，让其与该主机发起连接，但是也无法直接转换为两方都是NAT后的对等方连接。 </p>
+</blockquote>
+</li>
+<li><p>观察图4-27，列举从y到u不包含任何环路的路径。</p>
+<blockquote>
+<p>y v u, y t u 等等。。</p>
+</blockquote>
+</li>
+<li><p>重复习题P24，列举从x到z到u以及到w的不含任何环路的路径。</p>
+<blockquote>
+<p>x-y-z等<br>z-y-x-u等<br>z-w等</p>
+</blockquote>
+</li>
+<li><p>考虑下面的网络。对于标明的链路费用，用 Dikstra的最短路径算法计算出从x到所有网络结点的最短路径。通过计算一个类似于表4-3的表，说明该算法是如何工作的。<br><img src="/2023/06/02/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C-%E7%AC%AC%E5%9B%9B%E7%AB%A0%E7%BD%91%E7%BB%9C%E5%B1%82/t9.png" alt="?"></p>
+</li>
+</ol>
+<table>
+<thead>
+<tr>
+<th align="center">步骤</th>
+<th align="center">N’</th>
+<th align="center">D(y), p(y)</th>
+<th align="center">D(z), p(z)</th>
+<th align="center">D(v), p(v)</th>
+<th align="center">D(u), p(u)</th>
+<th align="center">D(w), p(w)</th>
+<th align="center">D(t), p(t)</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">0</td>
+<td align="center">x</td>
+<td align="center">6,x</td>
+<td align="center">8,x</td>
+<td align="center">3,x</td>
+<td align="center">∞</td>
+<td align="center">6,x</td>
+<td align="center">∞</td>
+</tr>
+<tr>
+<td align="center">1</td>
+<td align="center">xv</td>
+<td align="center">6,x</td>
+<td align="center">8,x</td>
+<td align="center"></td>
+<td align="center">6,v</td>
+<td align="center">6,x</td>
+<td align="center">7,v</td>
+</tr>
+<tr>
+<td align="center">2</td>
+<td align="center">xvy</td>
+<td align="center"></td>
+<td align="center">8,x</td>
+<td align="center"></td>
+<td align="center">6,v</td>
+<td align="center">6,x</td>
+<td align="center">7,v</td>
+</tr>
+<tr>
+<td align="center">3</td>
+<td align="center">xvyu</td>
+<td align="center"></td>
+<td align="center">8,x</td>
+<td align="center"></td>
+<td align="center"></td>
+<td align="center">6,x</td>
+<td align="center">7,v</td>
+</tr>
+<tr>
+<td align="center">4</td>
+<td align="center">xvyuw</td>
+<td align="center"></td>
+<td align="center">8,x</td>
+<td align="center"></td>
+<td align="center"></td>
+<td align="center"></td>
+<td align="center">7,v</td>
+</tr>
+<tr>
+<td align="center">5</td>
+<td align="center">xvyuwt</td>
+<td align="center"></td>
+<td align="center">8,x</td>
+<td align="center"></td>
+<td align="center"></td>
+<td align="center"></td>
+<td align="center"></td>
+</tr>
+<tr>
+<td align="center">6</td>
+<td align="center">xvyuwtz</td>
+<td align="center"></td>
+<td align="center"></td>
+<td align="center"></td>
+<td align="center"></td>
+<td align="center"></td>
+<td align="center"></td>
+</tr>
+</tbody></table>
+<ol start="28">
+<li>考虑下图所示的网络，假设每个结点初始时知道到它的每个邻居的费用。考虑距离向量算法，并显示在结点z中的距离表表项。</li>
+</ol>
+<p>初始表<br>结点u的表：  </p>
+<table>
+<thead>
+<tr>
+<th align="center">从/到</th>
+<th align="center">u</th>
+<th align="center">v</th>
+<th align="center">x</th>
+<th align="center">y</th>
+<th align="center">z</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">u</td>
+<td align="center">0</td>
+<td align="center">1</td>
+<td align="center">∞</td>
+<td align="center">2</td>
+<td align="center">∞</td>
+</tr>
+<tr>
+<td align="center">v</td>
+<td align="center">∞</td>
+<td align="center">∞</td>
+<td align="center">∞</td>
+<td align="center">∞</td>
+<td align="center">∞</td>
+</tr>
+<tr>
+<td align="center">y</td>
+<td align="center">∞</td>
+<td align="center">∞</td>
+<td align="center">∞</td>
+<td align="center">∞</td>
+<td align="center">∞</td>
+</tr>
+</tbody></table>
+<p>结点v的表：  </p>
+<table>
+<thead>
+<tr>
+<th align="center">从/到</th>
+<th align="center">u</th>
+<th align="center">v</th>
+<th align="center">x</th>
+<th align="center">y</th>
+<th align="center">z</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">u</td>
+<td align="center">∞</td>
+<td align="center">∞</td>
+<td align="center">∞</td>
+<td align="center">∞</td>
+<td align="center">∞</td>
+</tr>
+<tr>
+<td align="center">v</td>
+<td align="center">1</td>
+<td align="center">0</td>
+<td align="center">3</td>
+<td align="center">∞</td>
+<td align="center">6</td>
+</tr>
+<tr>
+<td align="center">x</td>
+<td align="center">∞</td>
+<td align="center">∞</td>
+<td align="center">∞</td>
+<td align="center">∞</td>
+<td align="center">∞</td>
+</tr>
+<tr>
+<td align="center">z</td>
+<td align="center">∞</td>
+<td align="center">∞</td>
+<td align="center">∞</td>
+<td align="center">∞</td>
+<td align="center">∞</td>
+</tr>
+</tbody></table>
+<p>结点x的表：  </p>
+<table>
+<thead>
+<tr>
+<th align="center">从/到</th>
+<th align="center">u</th>
+<th align="center">v</th>
+<th align="center">x</th>
+<th align="center">y</th>
+<th align="center">z</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">v</td>
+<td align="center">∞</td>
+<td align="center">∞</td>
+<td align="center">∞</td>
+<td align="center">∞</td>
+<td align="center">∞</td>
+</tr>
+<tr>
+<td align="center">x</td>
+<td align="center">∞</td>
+<td align="center">3</td>
+<td align="center">0</td>
+<td align="center">3</td>
+<td align="center">2</td>
+</tr>
+<tr>
+<td align="center">y</td>
+<td align="center">∞</td>
+<td align="center">∞</td>
+<td align="center">∞</td>
+<td align="center">∞</td>
+<td align="center">∞</td>
+</tr>
+<tr>
+<td align="center">z</td>
+<td align="center">∞</td>
+<td align="center">∞</td>
+<td align="center">∞</td>
+<td align="center">∞</td>
+<td align="center">∞</td>
+</tr>
+</tbody></table>
+<p>结点y的表：  </p>
+<table>
+<thead>
+<tr>
+<th align="center">从/到</th>
+<th align="center">u</th>
+<th align="center">v</th>
+<th align="center">x</th>
+<th align="center">y</th>
+<th align="center">z</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">v</td>
+<td align="center">∞</td>
+<td align="center">∞</td>
+<td align="center">∞</td>
+<td align="center">∞</td>
+<td align="center">∞</td>
+</tr>
+<tr>
+<td align="center">x</td>
+<td align="center">∞</td>
+<td align="center">∞</td>
+<td align="center">∞</td>
+<td align="center">∞</td>
+<td align="center">∞</td>
+</tr>
+<tr>
+<td align="center">y</td>
+<td align="center">2</td>
+<td align="center">∞</td>
+<td align="center">3</td>
+<td align="center">0</td>
+<td align="center">∞</td>
+</tr>
+</tbody></table>
+<p>结点z的表：  </p>
+<table>
+<thead>
+<tr>
+<th align="center">从/到</th>
+<th align="center">u</th>
+<th align="center">v</th>
+<th align="center">x</th>
+<th align="center">y</th>
+<th align="center">z</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">v</td>
+<td align="center">∞</td>
+<td align="center">∞</td>
+<td align="center">∞</td>
+<td align="center">∞</td>
+<td align="center">∞</td>
+</tr>
+<tr>
+<td align="center">x</td>
+<td align="center">∞</td>
+<td align="center">∞</td>
+<td align="center">∞</td>
+<td align="center">∞</td>
+<td align="center">∞</td>
+</tr>
+<tr>
+<td align="center">z</td>
+<td align="center">∞</td>
+<td align="center">6</td>
+<td align="center">2</td>
+<td align="center">∞</td>
+<td align="center">0</td>
+</tr>
+</tbody></table>
+<ol>
+<li>第1次迭代<br>结点u的表：（变化）  </li>
+</ol>
+<table>
+<thead>
+<tr>
+<th align="center">从/到</th>
+<th align="center">u</th>
+<th align="center">v</th>
+<th align="center">x</th>
+<th align="center">y</th>
+<th align="center">z</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">u</td>
+<td align="center">0</td>
+<td align="center">1</td>
+<td align="center">4</td>
+<td align="center">2</td>
+<td align="center">7</td>
+</tr>
+<tr>
+<td align="center">v</td>
+<td align="center">1</td>
+<td align="center">0</td>
+<td align="center">3</td>
+<td align="center">∞</td>
+<td align="center">6</td>
+</tr>
+<tr>
+<td align="center">y</td>
+<td align="center">2</td>
+<td align="center">∞</td>
+<td align="center">3</td>
+<td align="center">0</td>
+<td align="center">∞</td>
+</tr>
+</tbody></table>
+<p>结点v的表：（变化）  </p>
+<table>
+<thead>
+<tr>
+<th align="center">从/到</th>
+<th align="center">u</th>
+<th align="center">v</th>
+<th align="center">x</th>
+<th align="center">y</th>
+<th align="center">z</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">u</td>
+<td align="center">0</td>
+<td align="center">1</td>
+<td align="center">∞</td>
+<td align="center">2</td>
+<td align="center">∞</td>
+</tr>
+<tr>
+<td align="center">v</td>
+<td align="center">1</td>
+<td align="center">0</td>
+<td align="center">3</td>
+<td align="center">3</td>
+<td align="center">5</td>
+</tr>
+<tr>
+<td align="center">x</td>
+<td align="center">∞</td>
+<td align="center">3</td>
+<td align="center">0</td>
+<td align="center">3</td>
+<td align="center">2</td>
+</tr>
+<tr>
+<td align="center">z</td>
+<td align="center">∞</td>
+<td align="center">6</td>
+<td align="center">2</td>
+<td align="center">∞</td>
+<td align="center">0</td>
+</tr>
+</tbody></table>
+<p>结点x的表：（变化）  </p>
+<table>
+<thead>
+<tr>
+<th align="center">从/到</th>
+<th align="center">u</th>
+<th align="center">v</th>
+<th align="center">x</th>
+<th align="center">y</th>
+<th align="center">z</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">v</td>
+<td align="center">1</td>
+<td align="center">0</td>
+<td align="center">3</td>
+<td align="center">∞</td>
+<td align="center">6</td>
+</tr>
+<tr>
+<td align="center">x</td>
+<td align="center">4</td>
+<td align="center">3</td>
+<td align="center">0</td>
+<td align="center">3</td>
+<td align="center">2</td>
+</tr>
+<tr>
+<td align="center">y</td>
+<td align="center">2</td>
+<td align="center">∞</td>
+<td align="center">3</td>
+<td align="center">0</td>
+<td align="center">∞</td>
+</tr>
+<tr>
+<td align="center">z</td>
+<td align="center">∞</td>
+<td align="center">6</td>
+<td align="center">2</td>
+<td align="center">∞</td>
+<td align="center">0</td>
+</tr>
+</tbody></table>
+<p>结点y的表：（变化）  </p>
+<table>
+<thead>
+<tr>
+<th align="center">从/到</th>
+<th align="center">u</th>
+<th align="center">v</th>
+<th align="center">x</th>
+<th align="center">y</th>
+<th align="center">z</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">u</td>
+<td align="center">0</td>
+<td align="center">1</td>
+<td align="center">∞</td>
+<td align="center">2</td>
+<td align="center">∞</td>
+</tr>
+<tr>
+<td align="center">x</td>
+<td align="center">∞</td>
+<td align="center">3</td>
+<td align="center">0</td>
+<td align="center">3</td>
+<td align="center">2</td>
+</tr>
+<tr>
+<td align="center">y</td>
+<td align="center">2</td>
+<td align="center">3</td>
+<td align="center">3</td>
+<td align="center">0</td>
+<td align="center">5</td>
+</tr>
+</tbody></table>
+<p>结点z的表：（变化）  </p>
+<table>
+<thead>
+<tr>
+<th align="center">从/到</th>
+<th align="center">u</th>
+<th align="center">v</th>
+<th align="center">x</th>
+<th align="center">y</th>
+<th align="center">z</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">v</td>
+<td align="center">1</td>
+<td align="center">0</td>
+<td align="center">3</td>
+<td align="center">∞</td>
+<td align="center">6</td>
+</tr>
+<tr>
+<td align="center">x</td>
+<td align="center">∞</td>
+<td align="center">3</td>
+<td align="center">0</td>
+<td align="center">3</td>
+<td align="center">2</td>
+</tr>
+<tr>
+<td align="center">z</td>
+<td align="center">7</td>
+<td align="center">5</td>
+<td align="center">2</td>
+<td align="center">5</td>
+<td align="center">0</td>
+</tr>
+</tbody></table>
+<ol start="2">
+<li>第2次迭代<br>结点u的表：（变化）  </li>
+</ol>
+<table>
+<thead>
+<tr>
+<th align="center">从/到</th>
+<th align="center">u</th>
+<th align="center">v</th>
+<th align="center">x</th>
+<th align="center">y</th>
+<th align="center">z</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">u</td>
+<td align="center">0</td>
+<td align="center">1</td>
+<td align="center">4</td>
+<td align="center">2</td>
+<td align="center">6</td>
+</tr>
+<tr>
+<td align="center">v</td>
+<td align="center">1</td>
+<td align="center">0</td>
+<td align="center">3</td>
+<td align="center">3</td>
+<td align="center">5</td>
+</tr>
+<tr>
+<td align="center">y</td>
+<td align="center">2</td>
+<td align="center">3</td>
+<td align="center">3</td>
+<td align="center">0</td>
+<td align="center">5</td>
+</tr>
+</tbody></table>
+<p>结点v的表：  </p>
+<table>
+<thead>
+<tr>
+<th align="center">从/到</th>
+<th align="center">u</th>
+<th align="center">v</th>
+<th align="center">x</th>
+<th align="center">y</th>
+<th align="center">z</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">u</td>
+<td align="center">0</td>
+<td align="center">1</td>
+<td align="center">4</td>
+<td align="center">2</td>
+<td align="center">7</td>
+</tr>
+<tr>
+<td align="center">v</td>
+<td align="center">1</td>
+<td align="center">0</td>
+<td align="center">3</td>
+<td align="center">3</td>
+<td align="center">5</td>
+</tr>
+<tr>
+<td align="center">x</td>
+<td align="center">4</td>
+<td align="center">3</td>
+<td align="center">0</td>
+<td align="center">3</td>
+<td align="center">2</td>
+</tr>
+<tr>
+<td align="center">z</td>
+<td align="center">7</td>
+<td align="center">5</td>
+<td align="center">2</td>
+<td align="center">5</td>
+<td align="center">0</td>
+</tr>
+</tbody></table>
+<p>结点x的表：  </p>
+<table>
+<thead>
+<tr>
+<th align="center">从/到</th>
+<th align="center">u</th>
+<th align="center">v</th>
+<th align="center">x</th>
+<th align="center">y</th>
+<th align="center">z</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">v</td>
+<td align="center">1</td>
+<td align="center">0</td>
+<td align="center">3</td>
+<td align="center">3</td>
+<td align="center">5</td>
+</tr>
+<tr>
+<td align="center">x</td>
+<td align="center">4</td>
+<td align="center">3</td>
+<td align="center">0</td>
+<td align="center">3</td>
+<td align="center">2</td>
+</tr>
+<tr>
+<td align="center">y</td>
+<td align="center">2</td>
+<td align="center">3</td>
+<td align="center">3</td>
+<td align="center">0</td>
+<td align="center">5</td>
+</tr>
+<tr>
+<td align="center">z</td>
+<td align="center">7</td>
+<td align="center">5</td>
+<td align="center">2</td>
+<td align="center">5</td>
+<td align="center">0</td>
+</tr>
+</tbody></table>
+<p>结点y的表：  </p>
+<table>
+<thead>
+<tr>
+<th align="center">从/到</th>
+<th align="center">u</th>
+<th align="center">v</th>
+<th align="center">x</th>
+<th align="center">y</th>
+<th align="center">z</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">u</td>
+<td align="center">0</td>
+<td align="center">1</td>
+<td align="center">4</td>
+<td align="center">2</td>
+<td align="center">7</td>
+</tr>
+<tr>
+<td align="center">x</td>
+<td align="center">4</td>
+<td align="center">3</td>
+<td align="center">0</td>
+<td align="center">3</td>
+<td align="center">2</td>
+</tr>
+<tr>
+<td align="center">y</td>
+<td align="center">2</td>
+<td align="center">3</td>
+<td align="center">3</td>
+<td align="center">0</td>
+<td align="center">5</td>
+</tr>
+</tbody></table>
+<p>结点z的表：（变化）  </p>
+<table>
+<thead>
+<tr>
+<th align="center">从/到</th>
+<th align="center">u</th>
+<th align="center">v</th>
+<th align="center">x</th>
+<th align="center">y</th>
+<th align="center">z</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">v</td>
+<td align="center">1</td>
+<td align="center">0</td>
+<td align="center">3</td>
+<td align="center">3</td>
+<td align="center">5</td>
+</tr>
+<tr>
+<td align="center">x</td>
+<td align="center">4</td>
+<td align="center">3</td>
+<td align="center">0</td>
+<td align="center">3</td>
+<td align="center">2</td>
+</tr>
+<tr>
+<td align="center">z</td>
+<td align="center">6</td>
+<td align="center">5</td>
+<td align="center">2</td>
+<td align="center">5</td>
+<td align="center">0</td>
+</tr>
+</tbody></table>
+<ol start="2">
+<li>第3次迭代<br>结点v的表：  </li>
+</ol>
+<table>
+<thead>
+<tr>
+<th align="center">从/到</th>
+<th align="center">u</th>
+<th align="center">v</th>
+<th align="center">x</th>
+<th align="center">y</th>
+<th align="center">z</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">u</td>
+<td align="center">0</td>
+<td align="center">1</td>
+<td align="center">4</td>
+<td align="center">2</td>
+<td align="center">6</td>
+</tr>
+<tr>
+<td align="center">v</td>
+<td align="center">1</td>
+<td align="center">0</td>
+<td align="center">3</td>
+<td align="center">3</td>
+<td align="center">5</td>
+</tr>
+<tr>
+<td align="center">x</td>
+<td align="center">4</td>
+<td align="center">3</td>
+<td align="center">0</td>
+<td align="center">3</td>
+<td align="center">2</td>
+</tr>
+<tr>
+<td align="center">z</td>
+<td align="center">6</td>
+<td align="center">5</td>
+<td align="center">2</td>
+<td align="center">5</td>
+<td align="center">0</td>
+</tr>
+</tbody></table>
+<p>结点x的表：  </p>
+<table>
+<thead>
+<tr>
+<th align="center">从/到</th>
+<th align="center">u</th>
+<th align="center">v</th>
+<th align="center">x</th>
+<th align="center">y</th>
+<th align="center">z</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">v</td>
+<td align="center">1</td>
+<td align="center">0</td>
+<td align="center">3</td>
+<td align="center">3</td>
+<td align="center">5</td>
+</tr>
+<tr>
+<td align="center">x</td>
+<td align="center">4</td>
+<td align="center">3</td>
+<td align="center">0</td>
+<td align="center">3</td>
+<td align="center">2</td>
+</tr>
+<tr>
+<td align="center">y</td>
+<td align="center">2</td>
+<td align="center">3</td>
+<td align="center">3</td>
+<td align="center">0</td>
+<td align="center">5</td>
+</tr>
+<tr>
+<td align="center">z</td>
+<td align="center">6</td>
+<td align="center">5</td>
+<td align="center">2</td>
+<td align="center">5</td>
+<td align="center">0</td>
+</tr>
+</tbody></table>
+<p>结点y的表：  </p>
+<table>
+<thead>
+<tr>
+<th align="center">从/到</th>
+<th align="center">u</th>
+<th align="center">v</th>
+<th align="center">x</th>
+<th align="center">y</th>
+<th align="center">z</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">u</td>
+<td align="center">0</td>
+<td align="center">1</td>
+<td align="center">4</td>
+<td align="center">2</td>
+<td align="center">6</td>
+</tr>
+<tr>
+<td align="center">x</td>
+<td align="center">4</td>
+<td align="center">3</td>
+<td align="center">0</td>
+<td align="center">3</td>
+<td align="center">2</td>
+</tr>
+<tr>
+<td align="center">y</td>
+<td align="center">2</td>
+<td align="center">3</td>
+<td align="center">3</td>
+<td align="center">0</td>
+<td align="center">5</td>
+</tr>
+</tbody></table>
+<ol start="29">
+<li><p>考虑一个一般性拓扑(即不是以上所显示的特定网络) 和一个同步版本的距离向量算法。假设每次迭代时，一个结点与其邻居交换其距离向量并接收它们的距离向量。假定算法开始时，每个结点只知道到其直接邻居的费用，在该分布式算法收敛前所需的最大迭代次数是多少?评估你的答案。</p>
+<blockquote>
+<p>收敛前所需的最大迭代次数是最长的无环路径。 </p>
+</blockquote>
+</li>
+<li><p>考虑下图所示的网络段。x只有两个相连邻居w与y。w有一条通向目的地(没有显示)的最低费用路径，其值为5;y有一条通向目的地u的最低费用路径其值为6。从与y到u(以及w与y之间)的完整路径未显示出来。网络中所有链路费用皆为正整数值。<br><img src="/2023/06/02/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C-%E7%AC%AC%E5%9B%9B%E7%AB%A0%E7%BD%91%E7%BB%9C%E5%B1%82/y2.png" alt="?"><br>a给出x对目的地w、y和u的距离向量。</p>
+</li>
+</ol>
+<table>
+<thead>
+<tr>
+<th align="center">从/到</th>
+<th align="center">x</th>
+<th align="center">w</th>
+<th align="center">y</th>
+<th align="center">u</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">x</td>
+<td align="center">0</td>
+<td align="center">2</td>
+<td align="center">5</td>
+<td align="center">7</td>
+</tr>
+<tr>
+<td align="center">y</td>
+<td align="center">4</td>
+<td align="center">2</td>
+<td align="center">0</td>
+<td align="center">6</td>
+</tr>
+<tr>
+<td align="center">w</td>
+<td align="center">2</td>
+<td align="center">0</td>
+<td align="center">2</td>
+<td align="center">5</td>
+</tr>
+</tbody></table>
+<p>b.给出对c(x，w)或c(x，y)的链路费用的变化，使得执行了距离向量算法后，x将通知其邻居有一条通向u的新最低费用路径。</p>
+<p>c.给出对c(x，w)或c(x，r)的链路费用的变化，使得执行了距离向量算法后，x将不通知其邻居有一条通向”的新最低费用路径。</p>
+<ol start="35">
+<li><p>描述在BGP中是如何检测路径中的环路的。</p>
+<blockquote>
+<p>如果路由器收到一个通告发现它所在的AS包含在AS-PATH中，则他将拒绝这个通告。</p>
+</blockquote>
+</li>
+<li><p>一台BCP路由器将总是选择具有最短AS路径长度的无环路由吗?评估你的答案。</p>
+<blockquote>
+<p>不一定，因为路由器会被设置一些偏好，从而选择一些特殊的路径。</p>
+</blockquote>
+</li>
+<li><p>考虑下图所示的网络。假定AS3和AS2正在运行OSPF作为其AS内部路由选择协议。假定AS1和AS4正在运行RIP作为其AS内部路由选择协议。假定AS间路由选择协议使用的是eBGP和iBGP。假定最初在AS2和AS4之间不存在物理链路。<br><img src="/2023/06/02/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C-%E7%AC%AC%E5%9B%9B%E7%AB%A0%E7%BD%91%E7%BB%9C%E5%B1%82/y3.png" alt="?"><br>a.路由器3c从下列哪个路由选择协议学习到了前缀x:OSPF、RIP、eBGP或iBGP?</p>
+<blockquote>
+<p>eBGP</p>
+</blockquote>
+</li>
+</ol>
+<p>b.路由器3a从哪个路由选择协议学习到了前缀x?</p>
+<blockquote>
+<p>iBGP</p>
+</blockquote>
+<p>c.路由器1c从哪个路由选择协议学习到了前缀x?</p>
+<blockquote>
+<p>eBGP</p>
+</blockquote>
+<p>d路由器1d从哪个路由选择协议学习到了前缀x?</p>
+<blockquote>
+<p>iBGP</p>
+</blockquote>
+<ol start="38">
+<li>参考上一习题，一旦路由器1d知道了x的情况，它将一个表项(x，)放人其转发表中。</li>
+</ol>
+<p>a.对这个表项而言，I将等于1还是2?用一句话解释其原因。</p>
+<blockquote>
+<p>因为I1是到1c的最短路径</p>
+</blockquote>
+<p>b现在假定在AS2和AS4之间有一条物理链路，显示为图中的虚线。假定路由器1d知道经AS2以及经AS3能够访问到x。I将设置为还是L?用一句话解释其原因。</p>
+<blockquote>
+<p>2<br>因为在AS-PATH长度相同时，I2的内部路径最短</p>
+</blockquote>
+<p>c.现在假定有另一个AS，它称为AS5，其位于路径AS2和AS4之间(没有显示在图中)。假定路由器ld知道经AS2AS5AS4以及经AS3AS4能够访问到。将设置为还是L?用一话解释其原因</p>
+<blockquote>
+<p>I1<br>因为在AS-PATH长度更短</p>
+</blockquote>
+
+      
+    </div>
+    <div class="article-footer">
+      <br>
+<br>
+<blockquote class="mt-2x">
+  <ul class="post-copyright list-unstyled">
+    
+    <li class="post-copyright-link hidden-xs">
+      <strong>本文链接：</strong>
+      <a href="https://codecodegogogo.github.io/2023/06/02/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C-%E7%AC%AC%E5%9B%9B%E7%AB%A0%E7%BD%91%E7%BB%9C%E5%B1%82/" title="计算机网络-第四章网络层" target="_blank" rel="external">https://codecodegogogo.github.io/2023/06/02/计算机网络-第四章网络层/</a>
+    </li>
+    
+    <li class="post-copyright-license">
+      <strong></strong>
+      <!-- <strong>版权声明： </strong> 本博客所有文章除特别声明外，均采用 <a href="http://creativecommons.org/licenses/by/4.0/deed.zh" target="_blank" rel="external">CC BY 4.0 CN协议</a> 许可协议。转载请注明出处！ -->
+    </li>
+  </ul>
+</blockquote>
+
+    </div>
+  </article>
+  
+    
+  <section id="comments">
+  	
+  </section>
+
+
+  
+</div>
+
+  <nav class="bar bar-footer clearfix" data-stick-bottom>
+  <div class="bar-inner">
+  
+  <ul class="pager pull-left">
+    
+    <li class="prev">
+      <a href="/2023/06/03/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E5%90%84%E5%B1%82%E7%BD%91%E7%BB%9C%E8%AE%BE%E5%A4%87/" title="计算机网络各层网络设备"><i class="icon icon-angle-left" aria-hidden="true"></i><span>&nbsp;&nbsp;上一篇</span></a>
+    </li>
+    
+    
+    <li class="next">
+      <a href="/2023/06/01/%E8%AE%A1%E7%BD%91%E4%B8%AD%E7%9A%84%E5%8F%8D%E7%A0%81/" title="计网中的反码"><span>下一篇&nbsp;&nbsp;</span><i class="icon icon-angle-right" aria-hidden="true"></i></a>
+    </li>
+    
+    
+    <li class="toggle-toc">
+      <a class="toggle-btn " data-toggle="collapse" href="#collapseToc" aria-expanded="false" title="文章目录" role="button">    <span>[&nbsp;</span><span>文章目录</span>
+        <i class="text-collapsed icon icon-anchor"></i>
+        <i class="text-in icon icon-close"></i>
+        <span>]</span>
+      </a>
+    </li>
+    
+  </ul>
+  
+  
+  <!-- Button trigger modal -->
+  <button type="button" class="btn btn-fancy btn-donate pop-onhover bg-gradient-warning" data-toggle="modal" data-target="#donateModal"><span>赏</span></button>
+  <!-- <div class="wave-icon wave-icon-danger btn-donate" data-toggle="modal" data-target="#donateModal">
+    <div class="wave-circle"><span class="icon"><i class="icon icon-bill"></i></span></div>
+  </div> -->
+  
+  
+  <div class="bar-right">
+    
+    <div class="share-component" data-sites="weibo,qq,wechat,facebook,twitter" data-mobile-sites="weibo,qq,qzone"></div>
+    
+  </div>
+  </div>
+</nav>
+  
+<!-- Modal -->
+<div class="modal modal-center modal-small modal-xs-full fade" id="donateModal" tabindex="-1" role="dialog">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content donate">
+      <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+      <div class="modal-body">
+        <div class="donate-box">
+          <div class="donate-head">
+            <p>感谢您的支持，我会继续努力的!</p>
+          </div>
+          <div class="tab-content">
+            <div role="tabpanel" class="tab-pane fade active in" id="alipay">
+              <div class="donate-payimg">
+                <img src="/images/donate/alipayimg.png" alt="扫码支持" title="扫一扫" />
+              </div>
+              <p class="text-muted mv">扫码打赏，你说多少就多少</p>
+              <p class="text-grey">打开支付宝扫一扫，即可进行扫码打赏哦</p>
+            </div>
+            <div role="tabpanel" class="tab-pane fade" id="wechatpay">
+              <div class="donate-payimg">
+                <img src="/images/donate/wechatpayimg.png" alt="扫码支持" title="扫一扫" />
+              </div>
+              <p class="text-muted mv">扫码打赏，你说多少就多少</p>
+              <p class="text-grey">打开微信扫一扫，即可进行扫码打赏哦</p>
+            </div>
+          </div>
+          <div class="donate-footer">
+            <ul class="nav nav-tabs nav-justified" role="tablist">
+              <li role="presentation" class="active">
+                <a href="#alipay" id="alipay-tab" role="tab" data-toggle="tab" aria-controls="alipay" aria-expanded="true"><i class="icon icon-alipay"></i> 支付宝</a>
+              </li>
+              <li role="presentation" class="">
+                <a href="#wechatpay" role="tab" id="wechatpay-tab" data-toggle="tab" aria-controls="wechatpay" aria-expanded="false"><i class="icon icon-wepay"></i> 微信支付</a>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+
+
+
+</main>
+
+  <footer class="footer" itemscope itemtype="http://schema.org/WPFooter">
+	
+	
+    <ul class="social-links">
+    	
+        <li><a href="https://github.com/codecodegogogo" target="_blank" title="Github" data-toggle=tooltip data-placement=top><i class="icon icon-github"></i></a></li>
+        
+    </ul>
+
+    <div class="copyright">
+    	
+        联系邮箱：<br>codecodegogogo@163.com
+        <!-- 2024 Sunny -->
+        
+        <!--  -->
+    </div>
+</footer>
+  <script src="//cdn.jsdelivr.net/npm/jquery@1.12.4/dist/jquery.min.js"></script>
+<script>
+window.jQuery || document.write('<script src="js/jquery.min.js"><\/script>')
+</script>
+
+<script src="/js/plugin.min.js"></script>
+
+
+<script src="/js/application.js"></script>
+
+
+    <script>
+(function (window) {
+    var INSIGHT_CONFIG = {
+        TRANSLATION: {
+            POSTS: '文章',
+            PAGES: '页面',
+            CATEGORIES: '分类',
+            TAGS: '标签',
+            UNTITLED: '(未命名)',
+        },
+        ROOT_URL: '/',
+        CONTENT_URL: '/content.json',
+    };
+    window.INSIGHT_CONFIG = INSIGHT_CONFIG;
+})(window);
+</script>
+
+<script src="/js/insight.js"></script>
+
+
+
+
+
+
+   
+<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+
+   
+
+
+
+
+
+
+</body>
+
+</html>

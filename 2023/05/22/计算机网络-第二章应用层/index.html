@@ -1,0 +1,887 @@
+<!DOCTYPE html>
+<html lang=zh>
+<head>
+  <meta charset="utf-8">
+  
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, minimal-ui">
+  <meta name="renderer" content="webkit">
+  <meta http-equiv="Cache-Control" content="no-transform" />
+  <meta http-equiv="Cache-Control" content="no-siteapp" />
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <meta name="format-detection" content="telephone=no,email=no,adress=no">
+  <!-- Color theme for statusbar -->
+  <meta name="theme-color" content="#000000" />
+  <!-- 强制页面在当前窗口以独立页面显示,防止别人在框架里调用页面 -->
+  <meta http-equiv="window-target" content="_top" />
+  
+  
+  <title>计算机网络-自顶向下-第二章应用层 | yong&#39;s Blog</title>
+  <meta name="description" content="应用层应用层协议原理网络应用体系结构客户服务器体系结构 P2P体系结构 套接字socket(套接字) 运输层协议的关键指标如果一个协议提供了确保数据交付服务，就认为提供了可靠数据传输。具有吞吐量要求的应用程序被称为带宽敏感的应用(bandwidth-sensitive application)，许多当前的多媒体应用是带宽敏感的。定时，这种服务将对交互式实时应用程序有吸引力。安全性，运输协议能够为应">
+<meta property="og:type" content="article">
+<meta property="og:title" content="计算机网络-自顶向下-第二章应用层">
+<meta property="og:url" content="https://codecodegogogo.github.io/2023/05/22/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C-%E7%AC%AC%E4%BA%8C%E7%AB%A0%E5%BA%94%E7%94%A8%E5%B1%82/index.html">
+<meta property="og:site_name" content="Sunny">
+<meta property="og:description" content="应用层应用层协议原理网络应用体系结构客户服务器体系结构 P2P体系结构 套接字socket(套接字) 运输层协议的关键指标如果一个协议提供了确保数据交付服务，就认为提供了可靠数据传输。具有吞吐量要求的应用程序被称为带宽敏感的应用(bandwidth-sensitive application)，许多当前的多媒体应用是带宽敏感的。定时，这种服务将对交互式实时应用程序有吸引力。安全性，运输协议能够为应">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://codecodegogogo.github.io/2023/05/22/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C-%E7%AC%AC%E4%BA%8C%E7%AB%A0%E5%BA%94%E7%94%A8%E5%B1%82/1.png">
+<meta property="og:image" content="https://codecodegogogo.github.io/2023/05/22/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C-%E7%AC%AC%E4%BA%8C%E7%AB%A0%E5%BA%94%E7%94%A8%E5%B1%82/2.png">
+<meta property="og:image" content="https://codecodegogogo.github.io/2023/05/22/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C-%E7%AC%AC%E4%BA%8C%E7%AB%A0%E5%BA%94%E7%94%A8%E5%B1%82/3.png">
+<meta property="og:image" content="https://codecodegogogo.github.io/2023/05/22/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C-%E7%AC%AC%E4%BA%8C%E7%AB%A0%E5%BA%94%E7%94%A8%E5%B1%82/4.png">
+<meta property="og:image" content="https://codecodegogogo.github.io/2023/05/22/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C-%E7%AC%AC%E4%BA%8C%E7%AB%A0%E5%BA%94%E7%94%A8%E5%B1%82/5.png">
+<meta property="og:image" content="https://codecodegogogo.github.io/2023/05/22/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C-%E7%AC%AC%E4%BA%8C%E7%AB%A0%E5%BA%94%E7%94%A8%E5%B1%82/6.png">
+<meta property="og:image" content="https://codecodegogogo.github.io/2023/05/22/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C-%E7%AC%AC%E4%BA%8C%E7%AB%A0%E5%BA%94%E7%94%A8%E5%B1%82/7.png">
+<meta property="og:image" content="https://codecodegogogo.github.io/2023/05/22/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C-%E7%AC%AC%E4%BA%8C%E7%AB%A0%E5%BA%94%E7%94%A8%E5%B1%82/9.png">
+<meta property="og:image" content="https://codecodegogogo.github.io/2023/05/22/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C-%E7%AC%AC%E4%BA%8C%E7%AB%A0%E5%BA%94%E7%94%A8%E5%B1%82/10.png">
+<meta property="og:image" content="https://codecodegogogo.github.io/2023/05/22/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C-%E7%AC%AC%E4%BA%8C%E7%AB%A0%E5%BA%94%E7%94%A8%E5%B1%82/11.png">
+<meta property="og:image" content="https://codecodegogogo.github.io/2023/05/22/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C-%E7%AC%AC%E4%BA%8C%E7%AB%A0%E5%BA%94%E7%94%A8%E5%B1%82/12.png">
+<meta property="og:image" content="https://codecodegogogo.github.io/2023/05/22/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C-%E7%AC%AC%E4%BA%8C%E7%AB%A0%E5%BA%94%E7%94%A8%E5%B1%82/cookie.png">
+<meta property="og:image" content="https://codecodegogogo.github.io/2023/05/22/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C-%E7%AC%AC%E4%BA%8C%E7%AB%A0%E5%BA%94%E7%94%A8%E5%B1%82/proxy_server.png">
+<meta property="og:image" content="https://codecodegogogo.github.io/2023/05/22/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C-%E7%AC%AC%E4%BA%8C%E7%AB%A0%E5%BA%94%E7%94%A8%E5%B1%82/if_get.png">
+<meta property="og:image" content="https://codecodegogogo.github.io/2023/05/22/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C-%E7%AC%AC%E4%BA%8C%E7%AB%A0%E5%BA%94%E7%94%A8%E5%B1%82/ftp.png">
+<meta property="og:image" content="https://codecodegogogo.github.io/2023/05/22/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C-%E7%AC%AC%E4%BA%8C%E7%AB%A0%E5%BA%94%E7%94%A8%E5%B1%82/ftp2.png">
+<meta property="og:image" content="https://codecodegogogo.github.io/2023/05/22/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C-%E7%AC%AC%E4%BA%8C%E7%AB%A0%E5%BA%94%E7%94%A8%E5%B1%82/smtp.png">
+<meta property="og:image" content="https://codecodegogogo.github.io/2023/05/22/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C-%E7%AC%AC%E4%BA%8C%E7%AB%A0%E5%BA%94%E7%94%A8%E5%B1%82/smtp2.png">
+<meta property="og:image" content="https://codecodegogogo.github.io/2023/05/22/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C-%E7%AC%AC%E4%BA%8C%E7%AB%A0%E5%BA%94%E7%94%A8%E5%B1%82/smtp3.png">
+<meta property="og:image" content="https://codecodegogogo.github.io/2023/05/22/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C-%E7%AC%AC%E4%BA%8C%E7%AB%A0%E5%BA%94%E7%94%A8%E5%B1%82/smtp4.png">
+<meta property="og:image" content="https://codecodegogogo.github.io/2023/05/22/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C-%E7%AC%AC%E4%BA%8C%E7%AB%A0%E5%BA%94%E7%94%A8%E5%B1%82/smtp5.png">
+<meta property="og:image" content="https://codecodegogogo.github.io/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C-%E7%AC%AC%E4%BA%8C%E7%AB%A0%E5%BA%94%E7%94%A8%E5%B1%82/dns.png">
+<meta property="og:image" content="https://codecodegogogo.github.io/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C-%E7%AC%AC%E4%BA%8C%E7%AB%A0%E5%BA%94%E7%94%A8%E5%B1%82/dns4.png">
+<meta property="og:image" content="https://codecodegogogo.github.io/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C-%E7%AC%AC%E4%BA%8C%E7%AB%A0%E5%BA%94%E7%94%A8%E5%B1%82/dns2.png">
+<meta property="og:image" content="https://codecodegogogo.github.io/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C-%E7%AC%AC%E4%BA%8C%E7%AB%A0%E5%BA%94%E7%94%A8%E5%B1%82/dns3.png">
+<meta property="og:image" content="https://codecodegogogo.github.io/2023/05/22/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C-%E7%AC%AC%E4%BA%8C%E7%AB%A0%E5%BA%94%E7%94%A8%E5%B1%82/dns5.png">
+<meta property="og:image" content="https://codecodegogogo.github.io/2023/05/22/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C-%E7%AC%AC%E4%BA%8C%E7%AB%A0%E5%BA%94%E7%94%A8%E5%B1%82/dns6.png">
+<meta property="og:image" content="https://codecodegogogo.github.io/2023/05/22/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C-%E7%AC%AC%E4%BA%8C%E7%AB%A0%E5%BA%94%E7%94%A8%E5%B1%82/dns7.png">
+<meta property="og:image" content="https://codecodegogogo.github.io/2023/05/22/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C-%E7%AC%AC%E4%BA%8C%E7%AB%A0%E5%BA%94%E7%94%A8%E5%B1%82/p2p1.png">
+<meta property="og:image" content="https://codecodegogogo.github.io/2023/05/22/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C-%E7%AC%AC%E4%BA%8C%E7%AB%A0%E5%BA%94%E7%94%A8%E5%B1%82/p2p2.png">
+<meta property="og:image" content="https://codecodegogogo.github.io/2023/05/22/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C-%E7%AC%AC%E4%BA%8C%E7%AB%A0%E5%BA%94%E7%94%A8%E5%B1%82/p2p3.png">
+<meta property="og:image" content="https://codecodegogogo.github.io/2023/05/22/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C-%E7%AC%AC%E4%BA%8C%E7%AB%A0%E5%BA%94%E7%94%A8%E5%B1%82/p2p4.png">
+<meta property="og:image" content="https://codecodegogogo.github.io/2023/05/22/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C-%E7%AC%AC%E4%BA%8C%E7%AB%A0%E5%BA%94%E7%94%A8%E5%B1%82/p2p5.png">
+<meta property="og:image" content="https://codecodegogogo.github.io/2023/05/22/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C-%E7%AC%AC%E4%BA%8C%E7%AB%A0%E5%BA%94%E7%94%A8%E5%B1%82/socket.png">
+<meta property="og:image" content="https://codecodegogogo.github.io/2023/05/22/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C-%E7%AC%AC%E4%BA%8C%E7%AB%A0%E5%BA%94%E7%94%A8%E5%B1%82/tcp1.png">
+<meta property="og:image" content="https://codecodegogogo.github.io/2023/05/22/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C-%E7%AC%AC%E4%BA%8C%E7%AB%A0%E5%BA%94%E7%94%A8%E5%B1%82/tcp2.png">
+<meta property="og:image" content="https://codecodegogogo.github.io/2023/05/22/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C-%E7%AC%AC%E4%BA%8C%E7%AB%A0%E5%BA%94%E7%94%A8%E5%B1%82/t1.png">
+<meta property="og:image" content="https://codecodegogogo.github.io/2023/05/22/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C-%E7%AC%AC%E4%BA%8C%E7%AB%A0%E5%BA%94%E7%94%A8%E5%B1%82/t2.png">
+<meta property="og:image" content="https://codecodegogogo.github.io/2023/05/22/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C-%E7%AC%AC%E4%BA%8C%E7%AB%A0%E5%BA%94%E7%94%A8%E5%B1%82/t5.png">
+<meta property="og:image" content="https://codecodegogogo.github.io/2023/05/22/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C-%E7%AC%AC%E4%BA%8C%E7%AB%A0%E5%BA%94%E7%94%A8%E5%B1%82/t6.png">
+<meta property="og:image" content="https://codecodegogogo.github.io/2023/05/22/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C-%E7%AC%AC%E4%BA%8C%E7%AB%A0%E5%BA%94%E7%94%A8%E5%B1%82/t6.1.png">
+<meta property="article:published_time" content="2023-05-22T12:42:24.000Z">
+<meta property="article:modified_time" content="2023-06-10T03:18:35.764Z">
+<meta property="article:author" content="Sunny">
+<meta property="article:tag" content="计算机网络">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://codecodegogogo.github.io/2023/05/22/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C-%E7%AC%AC%E4%BA%8C%E7%AB%A0%E5%BA%94%E7%94%A8%E5%B1%82/1.png">
+  <!-- Canonical links -->
+  <link rel="canonical" href="https://codecodegogogo.github.io/2023/05/22/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C-%E7%AC%AC%E4%BA%8C%E7%AB%A0%E5%BA%94%E7%94%A8%E5%B1%82/index.html">
+  
+    <link rel="alternate" href="/atom.xml" title="Sunny" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/images/favicon.png" type="image/x-icon">
+  
+  <!-- <link rel="icon" href="/images/favicon.png" type="image/x-icon"> -->
+
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  
+  
+  
+  
+<meta name="generator" content="Hexo 5.4.2"></head>
+
+
+<body class="main-center theme-purple" itemscope itemtype="http://schema.org/WebPage">
+  <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+  <div class="slimContent">
+    <div class="navbar-header">
+      
+      
+      <div class="profile-block text-center">
+        <a id="avatar" href="https://github.com/codecodegogogo" target="_blank">
+          <img class="img-circle img-rotate" src="/images/avatar.jpg" width="200" height="200">
+        </a>
+        <h2 id="name" class="hidden-xs hidden-sm">yong</h2>
+        <h3 id="title" class="hidden-xs hidden-sm hidden-md"></h3>
+        <small id="location" class="text-muted hidden-xs hidden-sm"><i class="icon icon-map-marker"></i> China</small>
+      </div>
+      
+      <div class="search" id="search-form-wrap">
+
+    <form class="search-form sidebar-form">
+        <div class="input-group">
+            <input type="text" class="search-form-input form-control" placeholder="搜索" />
+            <span class="input-group-btn">
+                <button type="submit" class="search-form-submit btn btn-flat" onclick="return false;"><i class="icon icon-search"></i></button>
+            </span>
+        </div>
+    </form>
+    <div class="ins-search">
+  <div class="ins-search-mask"></div>
+  <div class="ins-search-container">
+    <div class="ins-input-wrapper">
+      <input type="text" class="ins-search-input" placeholder="想要查找什么..." x-webkit-speech />
+      <button type="button" class="close ins-close ins-selectable" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+    </div>
+    <div class="ins-section-wrapper">
+      <div class="ins-section-container"></div>
+    </div>
+  </div>
+</div>
+
+
+</div>
+      <button class="navbar-toggle collapsed" type="button" data-toggle="collapse" data-target="#main-navbar" aria-controls="main-navbar" aria-expanded="false">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+    </div>
+    <nav id="main-navbar" class="collapse navbar-collapse" itemscope itemtype="http://schema.org/SiteNavigationElement" role="navigation">
+      <ul class="nav navbar-nav main-nav menu-highlight">
+        
+        
+        <li class="menu-item menu-item-home">
+          <a href="/.">
+            
+            <i class="icon icon-home-fill"></i>
+            
+            <span class="menu-title">首页</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags">
+            
+            <i class="icon icon-tags"></i>
+            
+            <span class="menu-title">标签</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-repository">
+          <a target="_blank" rel="noopener" href="https://github.com/codecodegogogo">
+            
+            <i class="icon icon-project"></i>
+            
+            <span class="menu-title">项目</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about">
+            
+            <i class="icon icon-cup-fill"></i>
+            
+            <span class="menu-title">关于</span>
+          </a>
+        </li>
+        
+      </ul>
+      
+	
+    <ul class="social-links">
+    	
+        <li><a href="https://github.com/codecodegogogo" target="_blank" title="Github" data-toggle=tooltip data-placement=top><i class="icon icon-github"></i></a></li>
+        
+    </ul>
+
+    </nav>
+  </div>
+</header>
+
+  
+    <aside class="sidebar" itemscope itemtype="http://schema.org/WPSideBar">
+  <div class="slimContent">
+    
+      <div class="widget">
+    <h3 class="widget-title">公告</h3>
+    <div class="widget-body">
+        <div id="board">
+            <div class="content">
+                <p>今天网站换了个新皮肤~</p> <p align="right">2023.4.14</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">标签</h3>
+    <div class="widget-body">
+      <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/c/" rel="tag">c++</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/code/" rel="tag">code</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/java/" rel="tag">java</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/javascript/" rel="tag">javascript</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/linux/" rel="tag">linux</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/os/" rel="tag">os</a><span class="tag-list-count">11</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/vue/" rel="tag">vue</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%9D%82%E8%B0%88/" rel="tag">杂谈</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%AE%97%E6%B3%95/" rel="tag">算法</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%9F%BA%E7%A1%80/" rel="tag">计算机基础</a><span class="tag-list-count">8</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%B7%A5%E5%85%B7/" rel="tag">计算机工具</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E6%96%87%E5%8C%96%E5%9F%BA%E7%A1%80/" rel="tag">计算机文化基础</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/" rel="tag">计算机网络</a><span class="tag-list-count">9</span></li></ul>
+    </div>
+  </div>
+
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">最新文章</h3>
+    <div class="widget-body">
+      <ul class="recent-post-list list-unstyled no-thumbnail">
+        
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                
+              </p>
+              <p class="item-title">
+                <a href="/2024/06/10/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E5%90%84%E5%B1%82%E7%BD%91%E7%BB%9C%E8%AE%BE%E5%A4%87/%E8%AE%A1%E7%AE%97%E6%9C%BA%E6%96%87%E5%8C%96%E5%9F%BA%E7%A1%80-ppt/" class="title">(no title)</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2024-06-10T02:05:08.833Z" itemprop="datePublished">2024-06-10</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                
+              </p>
+              <p class="item-title">
+                <a href="/2024/06/10/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E5%90%84%E5%B1%82%E7%BD%91%E7%BB%9C%E8%AE%BE%E5%A4%87/%E8%AE%A1%E7%AE%97%E6%9C%BA%E6%96%87%E5%8C%96%E5%9F%BA%E7%A1%80-%E6%95%B0%E6%8D%AE%E5%BA%93/" class="title">(no title)</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2024-06-10T02:05:08.833Z" itemprop="datePublished">2024-06-10</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                
+              </p>
+              <p class="item-title">
+                <a href="/2024/05/23/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E5%90%84%E5%B1%82%E7%BD%91%E7%BB%9C%E8%AE%BE%E5%A4%87/%E8%AE%A1%E7%AE%97%E6%9C%BA%E6%96%87%E5%8C%96%E5%9F%BA%E7%A1%80-excel/" class="title">计算机文化基础-excel</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2024-05-23T00:30:47.000Z" itemprop="datePublished">2024-05-23</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                
+              </p>
+              <p class="item-title">
+                <a href="/2024/05/14/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E5%90%84%E5%B1%82%E7%BD%91%E7%BB%9C%E8%AE%BE%E5%A4%87/%E8%AE%A1%E7%AE%97%E6%9C%BA%E6%96%87%E5%8C%96%E5%9F%BA%E7%A1%80/" class="title">计算机文化基础</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2024-05-14T01:41:05.000Z" itemprop="datePublished">2024-05-14</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                
+              </p>
+              <p class="item-title">
+                <a href="/2024/03/01/Algorithm/" class="title">Algorithm</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2024-03-01T07:52:28.000Z" itemprop="datePublished">2024-03-01</time>
+              </p>
+            </div>
+          </li>
+          
+      </ul>
+    </div>
+  </div>
+  
+
+    
+  </div>
+</aside>
+
+  
+  
+  <aside class="sidebar sidebar-toc collapse   in  " id="collapseToc" itemscope itemtype="http://schema.org/WPSideBar">
+  <div class="slimContent">
+    <nav id="toc" class="article-toc">
+      <h3 class="toc-title">文章目录</h3>
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%BA%94%E7%94%A8%E5%B1%82"><span class="toc-number">1.</span> <span class="toc-text">应用层</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%BA%94%E7%94%A8%E5%B1%82%E5%8D%8F%E8%AE%AE%E5%8E%9F%E7%90%86"><span class="toc-number">1.1.</span> <span class="toc-text">应用层协议原理</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E7%BD%91%E7%BB%9C%E5%BA%94%E7%94%A8%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84"><span class="toc-number">1.1.1.</span> <span class="toc-text">网络应用体系结构</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%A5%97%E6%8E%A5%E5%AD%97"><span class="toc-number">1.1.2.</span> <span class="toc-text">套接字</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E8%BF%90%E8%BE%93%E5%B1%82%E5%8D%8F%E8%AE%AE%E7%9A%84%E5%85%B3%E9%94%AE%E6%8C%87%E6%A0%87"><span class="toc-number">1.1.3.</span> <span class="toc-text">运输层协议的关键指标</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%BA%94%E7%94%A8%E5%B1%82%E5%8D%8F%E8%AE%AE"><span class="toc-number">1.1.4.</span> <span class="toc-text">应用层协议</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#web%E5%92%8Chttp"><span class="toc-number">1.2.</span> <span class="toc-text">web和http</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#http%E5%8D%8F%E8%AE%AE"><span class="toc-number">1.2.1.</span> <span class="toc-text">http协议</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%8C%81%E7%BB%AD%E5%93%8D%E5%BA%94%E5%92%8C%E9%9D%9E%E6%8C%81%E7%BB%AD%E5%93%8D%E5%BA%94"><span class="toc-number">1.2.2.</span> <span class="toc-text">持续响应和非持续响应</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#http%E7%9A%84%E6%8A%A5%E6%96%87%E6%A0%BC%E5%BC%8F"><span class="toc-number">1.2.3.</span> <span class="toc-text">http的报文格式</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E7%94%A8%E6%88%B7%E4%B8%8E%E6%9C%8D%E5%8A%A1%E5%99%A8%E7%9A%84%E4%BA%A4%E4%BA%92-cookie"><span class="toc-number">1.2.4.</span> <span class="toc-text">用户与服务器的交互:cookie</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#web%E7%BC%93%E5%AD%98"><span class="toc-number">1.2.5.</span> <span class="toc-text">web缓存</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%9D%A1%E4%BB%B6get"><span class="toc-number">1.2.6.</span> <span class="toc-text">条件get</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%96%87%E4%BB%B6%E4%BC%A0%E8%BE%93%E5%8D%8F%E8%AE%AE-FTP"><span class="toc-number">1.3.</span> <span class="toc-text">文件传输协议:FTP</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#ftp%E6%AF%8F%E4%B8%AA%E5%91%BD%E4%BB%A4%E7%94%B14%E4%B8%AAascii%E7%A0%81%E7%BB%84%E6%88%90-n%E5%88%86%E5%89%B2"><span class="toc-number">1.3.1.</span> <span class="toc-text">ftp每个命令由4个ascii码组成\n分割</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Ftp%E7%8A%B6%E6%80%81%E7%A0%81"><span class="toc-number">1.3.2.</span> <span class="toc-text">Ftp状态码</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%9B%A0%E7%89%B9%E7%BD%91%E4%B8%AD%E7%9A%84%E7%94%B5%E5%AD%90%E9%82%AE%E4%BB%B6"><span class="toc-number">1.4.</span> <span class="toc-text">因特网中的电子邮件</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#http%E5%92%8Csmtp"><span class="toc-number">1.4.1.</span> <span class="toc-text">http和smtp</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E9%82%AE%E4%BB%B6%E8%AE%BF%E9%97%AE%E5%8D%8F%E8%AE%AE"><span class="toc-number">1.4.2.</span> <span class="toc-text">邮件访问协议</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#DNS-Domain-Name-System%EF%BC%8C-DNS%EF%BC%89"><span class="toc-number">1.5.</span> <span class="toc-text">DNS(Domain Name System， DNS）</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#dns%E6%9C%8D%E5%8A%A1"><span class="toc-number">1.5.1.</span> <span class="toc-text">dns服务</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#dns%E5%B7%A5%E4%BD%9C%E5%8E%9F%E7%90%86"><span class="toc-number">1.5.2.</span> <span class="toc-text">dns工作原理</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#dns%E7%BC%93%E5%AD%98"><span class="toc-number">1.5.3.</span> <span class="toc-text">dns缓存</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#dns%E8%AE%B0%E5%BD%95%E5%92%8C%E6%8A%A5%E6%96%87"><span class="toc-number">1.5.4.</span> <span class="toc-text">dns记录和报文</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#dns%E6%94%BB%E5%87%BB"><span class="toc-number">1.5.5.</span> <span class="toc-text">dns攻击</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#P2P"><span class="toc-number">1.6.</span> <span class="toc-text">P2P</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#p2p%E6%96%87%E4%BB%B6%E5%88%86%E5%8F%91"><span class="toc-number">1.6.1.</span> <span class="toc-text">p2p文件分发</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%88%86%E5%B8%83%E5%BC%8F%E6%95%A3%E5%88%97%E8%A1%A8"><span class="toc-number">1.6.2.</span> <span class="toc-text">分布式散列表</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%A5%97%E6%8E%A5%E5%AD%97%E7%BC%96%E7%A8%8B"><span class="toc-number">1.7.</span> <span class="toc-text">套接字编程</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#udp%E5%A5%97%E6%8E%A5%E5%AD%97%E7%BC%96%E7%A8%8B"><span class="toc-number">1.7.1.</span> <span class="toc-text">udp套接字编程</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#tcp%E5%A5%97%E6%8E%A5%E5%AD%97%E7%BC%96%E7%A8%8B"><span class="toc-number">1.7.2.</span> <span class="toc-text">tcp套接字编程</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%A4%8D%E4%B9%A0%E5%92%8C%E4%B9%A0%E9%A2%98"><span class="toc-number">1.8.</span> <span class="toc-text">复习和习题</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BB%A3%E7%A0%81"><span class="toc-number">1.9.</span> <span class="toc-text">代码</span></a></li></ol></li></ol>
+    </nav>
+  </div>
+</aside>
+
+<main class="main" role="main">
+  <div class="content">
+  <article id="post-计算机网络-第二章应用层" class="article article-type-post" itemscope itemtype="http://schema.org/BlogPosting">
+    
+    <div class="article-header">
+      
+        
+  
+    <h1 class="article-title" itemprop="name">
+      计算机网络-自顶向下-第二章应用层
+    </h1>
+  
+
+      
+      <div class="article-meta">
+        <span class="article-date">
+    <i class="icon icon-calendar-check"></i>
+	<a href="/2023/05/22/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C-%E7%AC%AC%E4%BA%8C%E7%AB%A0%E5%BA%94%E7%94%A8%E5%B1%82/" class="article-date">
+	  <time datetime="2023-05-22T12:42:24.000Z" itemprop="datePublished">2023-05-22</time>
+	</a>
+</span>
+        
+        
+  <span class="article-tag">
+    <i class="icon icon-tags"></i>
+	<a class="article-tag-link-link" href="/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/" rel="tag">计算机网络</a>
+  </span>
+
+
+        
+	<span class="article-read hidden-xs">
+	    <i class="icon icon-eye-fill" aria-hidden="true"></i>
+	    <span id="busuanzi_container_page_pv">
+			<span id="busuanzi_value_page_pv">0</span>
+		</span>
+	</span>
+
+
+        <span class="post-comment"><i class="icon icon-comment"></i> <a href="/2023/05/22/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C-%E7%AC%AC%E4%BA%8C%E7%AB%A0%E5%BA%94%E7%94%A8%E5%B1%82/#comments" class="article-comment-link">评论</a></span>
+        
+	
+		<span class="post-wordcount hidden-xs" itemprop="wordCount">字数统计: 12k(字)</span>
+	
+	
+
+      </div>
+    </div>
+    <div class="article-entry marked-body" itemprop="articleBody">
+      
+        <h2 id="应用层"><a href="#应用层" class="headerlink" title="应用层"></a>应用层</h2><h3 id="应用层协议原理"><a href="#应用层协议原理" class="headerlink" title="应用层协议原理"></a>应用层协议原理</h3><h4 id="网络应用体系结构"><a href="#网络应用体系结构" class="headerlink" title="网络应用体系结构"></a>网络应用体系结构</h4><p><strong>客户服务器体系结构</strong><br><img src="/2023/05/22/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C-%E7%AC%AC%E4%BA%8C%E7%AB%A0%E5%BA%94%E7%94%A8%E5%B1%82/1.png" alt="?"></p>
+<p><strong>P2P体系结构</strong><br><img src="/2023/05/22/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C-%E7%AC%AC%E4%BA%8C%E7%AB%A0%E5%BA%94%E7%94%A8%E5%B1%82/2.png" alt="?"></p>
+<h4 id="套接字"><a href="#套接字" class="headerlink" title="套接字"></a>套接字</h4><p><strong>socket(套接字)</strong><br><img src="/2023/05/22/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C-%E7%AC%AC%E4%BA%8C%E7%AB%A0%E5%BA%94%E7%94%A8%E5%B1%82/3.png" alt="?"><br><img src="/2023/05/22/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C-%E7%AC%AC%E4%BA%8C%E7%AB%A0%E5%BA%94%E7%94%A8%E5%B1%82/4.png" alt="?"></p>
+<h4 id="运输层协议的关键指标"><a href="#运输层协议的关键指标" class="headerlink" title="运输层协议的关键指标"></a>运输层协议的关键指标</h4><p>如果一个协议提供了确保数据交付服务，就认为提供了可靠数据传输。<br>具有吞吐量要求的应用程序被称为带宽敏感的应用(bandwidth-sensitive application)，许多当前的多媒体应用是带宽敏感的。<br>定时，这种服务将对交互式实时应用程序有吸引力。<br>安全性，运输协议能够为应用程序提供一种或多种安全性服务。</p>
+<p><img src="/2023/05/22/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C-%E7%AC%AC%E4%BA%8C%E7%AB%A0%E5%BA%94%E7%94%A8%E5%B1%82/5.png" alt="?"></p>
+<p><strong>TCP:</strong><br>面向连接，可靠的网络传输</p>
+<p><strong>安全套接字层（secure socket layer）ssl:</strong><br>他不是传输层上的第三种协议，而是tcp协议的加强版。<br>用 SSL 加强后的 TCP不仅能够做传统的TCP所能做的一切，而且提供了关键的进程到进程的安全性服务，包括加密、数据完整性和端点鉴别。<br>SSL有它自己的套接字API,这类似于传统的TCP套接字API。当一个应用使用SSL时，发送进程向SSL套接字传递明文数据;在发送主机中的SSL则加密该数据并将加密的数据传递给TCP套接字。加密的数据经因特网传送到接收进程中的TCP套接字。该接收套接字将加密数据传递给SSL，由其进行解密。</p>
+<p><strong>UDP:</strong><br>无连接，不可靠的网络传输</p>
+<h4 id="应用层协议"><a href="#应用层协议" class="headerlink" title="应用层协议"></a>应用层协议</h4><p><img src="/2023/05/22/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C-%E7%AC%AC%E4%BA%8C%E7%AB%A0%E5%BA%94%E7%94%A8%E5%B1%82/6.png" alt="?"></p>
+<h3 id="web和http"><a href="#web和http" class="headerlink" title="web和http"></a>web和http</h3><h4 id="http协议"><a href="#http协议" class="headerlink" title="http协议"></a>http协议</h4><p>Web的应用层协议是超文本传输协议(HyperText Transfe Protocol,HTTP)</p>
+<p>因为 Web浏览器（Web browser）（例如 Internet Explorer 和 Firefox）实现了HTTP 的客户端,所以在 Web环境中我们经常交替使用。<br>“浏览器”和“客户”这两个术语。 Web服务器（Web server）实现了HTTP的服务器端，它用于存储Web对象，每个对象由 URL寻址。流行的Web服务器有 Apache和 Microso<br>Internet Information Server。</p>
+<p><strong>http的底层是tcp协议</strong><br>这里我们看到了分层体系结构最大的优点，即 HTTP 协议不用担心数据丢失，也不关注TCP 从网络的数据丢失和乱序故障中恢复的细节。那是 TCP以及协议栈较低层协议的工作。</p>
+<p><strong>http协议不会保存用户的信息，所以他是无状态的。</strong></p>
+<h4 id="持续响应和非持续响应"><a href="#持续响应和非持续响应" class="headerlink" title="持续响应和非持续响应"></a>持续响应和非持续响应</h4><p>对响应或者请求都使用一个tcp进行连接发送是持续响应，否则是非持续响应。</p>
+<p>往返时间 （Round-Trip Time, RTT）的定义，该时间是指一个短分组从客户到服务器然后再返回客户所花费的时间。</p>
+<p><img src="/2023/05/22/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C-%E7%AC%AC%E4%BA%8C%E7%AB%A0%E5%BA%94%E7%94%A8%E5%B1%82/7.png" alt="?"></p>
+<h4 id="http的报文格式"><a href="#http的报文格式" class="headerlink" title="http的报文格式"></a>http的报文格式</h4><p><strong>http请求报文</strong></p>
+<p>请求行包括：方法字段（get、put、head、delete、post）、URL字段(请求字段)和 HTTP版本字段</p>
+<p><img src="/2023/05/22/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C-%E7%AC%AC%E4%BA%8C%E7%AB%A0%E5%BA%94%E7%94%A8%E5%B1%82/9.png" alt="?"><br><img src="/2023/05/22/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C-%E7%AC%AC%E4%BA%8C%E7%AB%A0%E5%BA%94%E7%94%A8%E5%B1%82/10.png" alt="?"></p>
+<p>通过包含 Connection:close首部行，该浏览器告诉服务器不希望麻烦地使用持续连接，它要求服务器在发送完被请求的对象后就关闭这条连接。</p>
+<p>User-agent:首部行用来指明用户代理，即向服务器发送请求的浏览器的类型，这里浏览器类型是 Mozilla/5.0,即Firefox浏览器。</p>
+<p>注意到了在首部行（和附加的回车和换行）后有一个实体主体（entity body）。使用GET方法时实体主体为空，而使用POST方法时才使用该实体体。当用户提交表单时，HTTP客户常常使用POST方法,例如当用户向搜索引擎提供搜索关键词时。使用 POST 报文时，用户仍可以向服务器请求一个Web页面，但Web页面的特定内容依赖于用户在表单字段中输人的内容。如果方法字段的值为POST时，则实体体中包含的就是用户在表单字段中的输入值。</p>
+<p>用表单生成的请求报文不是必须使用POST方法。HTML表单经常使用GET方法，并在（表单字段中）所请求的URL中包括输入的数据。例如，一个表单使用GET方法有一个字段填写的是monkeys（<a target="_blank" rel="noopener" href="https://www.baidu.com/s?wd=monkey%EF%BC%89%E3%80%82">https://www.baidu.com/s?wd=monkey）。</a></p>
+<p>HEAD方法类似于GET方法。当服务器收到使用HEAD方法的请求时，将会用一个HTTP报文进行响应,但是并不返回请求对象。应用程序开发者常用HEAD方法进行调试跟踪。</p>
+<p>PUT方法常与Web发行工具联合使用，它允许上传指定的路径（目录）。PUT 方法也被那些需要向Web服务器上传对象的应用程序使用。</p>
+<p>DELETE方法允许用户或者应用程序删除Web服务器上的对象。</p>
+<p><strong>http响应报文</strong></p>
+<p><img src="/2023/05/22/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C-%E7%AC%AC%E4%BA%8C%E7%AB%A0%E5%BA%94%E7%94%A8%E5%B1%82/11.png" alt="?"></p>
+<p>我们仔细看一下这个响应报文。它有三个部分:<br>初始状态行（status line）,首部行（header line)，然后是实体体（entity body)。</p>
+<p>实体体部分是报文的主要部分，即它包含了所请求的对象本身（表示为data data data data…)。</p>
+<p>状态行有3个字段:协议版本字段、状态码和相应状态信息。在这个例子中，状态行指示服务器正在使用 HTTP/1.1,并且一切正常（即服务器已经找到并正在发送所请求的对象)。</p>
+<p>我们现在来看看首部行。服务器用Connection: close首部行告诉客户，发送完报文后将关闭该TCP连接。</p>
+<p>Date:首部行指示服务器产生并发送该响应报文的日期和时间。值得一提的是，这个时间不是指对象创建或者最后修改的时间，而是服务器从它的文件系统中检索到该对象，插入到响应报文，并发送该响应报文的时间。</p>
+<p>Server:首部行指示该报文是由一台 Apache Web 服务器产生的,它类似于HTTP请求报文中的 User- agent:首部行。</p>
+<p>Last-Modified:首部行指示了对象创建或者最后修改的日期和时间。</p>
+<p>Last- Modified:首部行对既可能在本地客户也可能在网络缓存服务器上的对象缓存来说非常重要。</p>
+<p>Content- Length:首部行指示了被发送对象中的字节数。</p>
+<p>Content-Type:首部行指示了实体体中的对象是HTML文本。</p>
+<p><img src="/2023/05/22/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C-%E7%AC%AC%E4%BA%8C%E7%AB%A0%E5%BA%94%E7%94%A8%E5%B1%82/12.png" alt="?"></p>
+<p><strong>响应状态码</strong><br>200 OK:请求成功,信息在返回的响应报文中。<br>301 Moved Permanently:请求的对象已经被永久转移了新的URL定义在响应报文的Location:首部行中，客户软件将自动获取新的URL。<br>400 Bad Request:一个通用差错代码，指示该请求不能被服务器理解。<br>404 Not Found:被请求的文档不在服务器上。<br>505 HTTP Version Not Supported:服务器不支持请求报<br>文使用的HTTP协议版本。</p>
+<h4 id="用户与服务器的交互-cookie"><a href="#用户与服务器的交互-cookie" class="headerlink" title="用户与服务器的交互:cookie"></a>用户与服务器的交互:cookie</h4><p><strong>http是无状态的，要获取用户登录信息，故使用cookie</strong></p>
+<p><img src="/2023/05/22/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C-%E7%AC%AC%E4%BA%8C%E7%AB%A0%E5%BA%94%E7%94%A8%E5%B1%82/cookie.png" alt="?"></p>
+<h4 id="web缓存"><a href="#web缓存" class="headerlink" title="web缓存"></a>web缓存</h4><p>Web 缓存器（Web cache）也叫代理服务器（proxy server）,它是能够代表初始Web服务器来满足 HTTP请求的网络实体。Web缓存器有自己的磁盘存储空间，并在存储空间中保存最近请求过的对象的副本。</p>
+<p><img src="/2023/05/22/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C-%E7%AC%AC%E4%BA%8C%E7%AB%A0%E5%BA%94%E7%94%A8%E5%B1%82/proxy_server.png" alt="?"></p>
+<p>在因特网上部署Web缓存器有两个原因。首先，Web缓存器可以大大减少对客户请求的响应时间，特别是当客户与初始服务器之间的瓶颈带宽远低于客户与Web缓存器之间的瓶颈带宽时更是如此。如果在客户与Web缓存器之间有一个高速连接（情况常常如此），并且如果用户所请求的对象在Web缓存器上，则Web缓存器可以迅速将该对象交付给用户。</p>
+<p>其次，如我们马上用例子说明的那样，Web缓存器能够大大减少一个机构的接人链路到因特网的通信量。通过减少通信量，该机构（如一家公司或者一所大学）就不必急于增加带宽，因此降低了费用。此外，Web缓存器能从整体上大大减低因特网上的 Web流量，从而改善了所有应用的性能。</p>
+<p>内容分发网络（Content Distri-bution Network, CDN）</p>
+<h4 id="条件get"><a href="#条件get" class="headerlink" title="条件get"></a>条件get</h4><p>为了防止代理服务器上的内容是过时的，允许代理服务器使用条件get</p>
+<p>如果:请求报文使用GET方法，并且请求报文中包含一个If-Modified-Since:首部行。<br>那么，这个 HTTP请求报文就是一个条件GET请求报文。</p>
+<p><img src="/2023/05/22/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C-%E7%AC%AC%E4%BA%8C%E7%AB%A0%E5%BA%94%E7%94%A8%E5%B1%82/if_get.png" alt="?"></p>
+<h3 id="文件传输协议-FTP"><a href="#文件传输协议-FTP" class="headerlink" title="文件传输协议:FTP"></a>文件传输协议:FTP</h3><p>ftp是有状态的</p>
+<p>用户通过FTP用户代理与FTP交互。该用户首先提供远程主机的主机名，使本地主机的FTP客户进程建立一个到远程主机FTP服务器进程的TCP连接。该用户接着提供用户标识和口令，作为FTP命令的一部分在该 TCP连接上传送。一旦该服务器向该用户授权，用户可以将存放在本地文件系统中的一个或者多个文件复制到远程文件系统（反之亦然)。</p>
+<p><img src="/2023/05/22/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C-%E7%AC%AC%E4%BA%8C%E7%AB%A0%E5%BA%94%E7%94%A8%E5%B1%82/ftp.png" alt="?"></p>
+<p>FTP使用了两个并行的TCP连接来传输文件，一个是控制连接（control connection），一个是数据连接（data connection）。connection）。</p>
+<p>控制连接用于在两主机之间传输控制信息如用户标识、口令、改变远程目录的命令以及“存放（put)”和“获取(get)”文件的命令。</p>
+<p>数据连接用于实际发送一个文件。因为FTP协议使用一个独立的控制连接，所以我们也称FTP的控制信息是带外(out-of-band）传送的。<br><img src="/2023/05/22/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C-%E7%AC%AC%E4%BA%8C%E7%AB%A0%E5%BA%94%E7%94%A8%E5%B1%82/ftp2.png" alt="?"></p>
+<p>当用户主机与远程主机开始一个FTP会话时,FTP的客户(用户)端首先在服务器21号端口与服务器(远程主机）端发起一个用于控制的 TCP连接。FTP的客户端也通过该控制连接发送用户的标识和口令,发送改变远程目录的命令。当FTP 的服务器端从该连接上收到文件传输的命令后(无论是向还是来自远程主机)，就发起一个到客户端的TCP 数据连接。FTP在该数据连接上准确地传送一个文件，然后关闭该连接。在同一个会话期间,如果用户还需要传输另一个文件,FTP则打开另一个数据连接。因而对FTP传输而言，控制连接贯穿了整个用户会话期间,但是对会话中的每一次文件传输都需要建立一个新的数据连接（即数据连接是非持续的)。</p>
+<h4 id="ftp每个命令由4个ascii码组成-n分割"><a href="#ftp每个命令由4个ascii码组成-n分割" class="headerlink" title="ftp每个命令由4个ascii码组成\n分割"></a>ftp每个命令由4个ascii码组成\n分割</h4><p>USER username:用于向服务器传送用户标识。PASS password:用于向服务器发送用户口令。</p>
+<p>LIST:用于请求服务器回送当前远程目录中的所有文件列表。该文件列表是经一个（新建且非持续连接）数据连接传送的，而不是在控制TCP连接上传送。</p>
+<p>RETR filename:用于从远程主机当前目录检索（即 get文件。该命令引起远程主机发起一个数据连接，并经该数据连接发送所请求的文件。</p>
+<p>STOR filename:用于在远程主机的当前目录上存放（即put）文件。</p>
+<h4 id="Ftp状态码"><a href="#Ftp状态码" class="headerlink" title="Ftp状态码"></a>Ftp状态码</h4><p>331 Username OK, Password required（用户名OK，需要口令).<br>125 Data connection already open;transfer starting(数据连接已经打开，开始传送)。<br>425 Can’t open data connection(无法打开数据连接)。<br>452 Error writing file（写文件差错）。</p>
+<h3 id="因特网中的电子邮件"><a href="#因特网中的电子邮件" class="headerlink" title="因特网中的电子邮件"></a>因特网中的电子邮件</h3><p>smtp使用持续连接</p>
+<p>它有3个主要组成部分:用户代理(user agent)、邮件服务器（mail server）和简单邮件传输协议(Simple Mail Transfer Protocol,SMTP)。<br><img src="/2023/05/22/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C-%E7%AC%AC%E4%BA%8C%E7%AB%A0%E5%BA%94%E7%94%A8%E5%B1%82/smtp.png" alt="?"></p>
+<p>SMTP是如何将一个报文从发送邮件服务器传送到接收邮件服务器的?<br>首先，客户端SMTP（运行在发送邮件服务器上）在25号端口建立一个到服务器SMTP（在按收邮件服务器上）的TCP 连接。如果服务器没有开机，客户会在稍后继续尝试连接。一旦连接建立，服务器和客户执行某些应用层的握手。SMTP的客户和服务器在传输信息前先相互介绍。在SMTP握手的阶段,SMTP 客户指示发送方的邮件地址（产生报文的那个人）和接收方的邮件地址。一旦该SMTP 客户和服务器彼此介绍之后，客户发送该报文。SMTP 能依赖TCP提供的可靠数据传输无差错地将邮件投递到接收服务器。该客户如果有另外的报文要发送到该服务器，就在该相同的TCP连接上重复这种处理;否则，它指示TCP 关闭连接。</p>
+<h4 id="http和smtp"><a href="#http和smtp" class="headerlink" title="http和smtp"></a>http和smtp</h4><p>http是拉协议，从服务器往我们这里拉，smtp是推协议，从服务器往另一个服务器推。<br>smtp双方各有一个服务器，逻辑上a向b发文件，a是客户端，b是服务端，反之亦然。</p>
+<h4 id="邮件访问协议"><a href="#邮件访问协议" class="headerlink" title="邮件访问协议"></a>邮件访问协议</h4><p><img src="/2023/05/22/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C-%E7%AC%AC%E4%BA%8C%E7%AB%A0%E5%BA%94%E7%94%A8%E5%B1%82/smtp2.png" alt="?"><br><img src="/2023/05/22/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C-%E7%AC%AC%E4%BA%8C%E7%AB%A0%E5%BA%94%E7%94%A8%E5%B1%82/smtp3.png" alt="?"><br><img src="/2023/05/22/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C-%E7%AC%AC%E4%BA%8C%E7%AB%A0%E5%BA%94%E7%94%A8%E5%B1%82/smtp4.png" alt="?"><br><img src="/2023/05/22/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C-%E7%AC%AC%E4%BA%8C%E7%AB%A0%E5%BA%94%E7%94%A8%E5%B1%82/smtp5.png" alt="?"></p>
+<p>基于web的电子邮件<br>使用这种服务，用户代理就是普通的浏览器，用户和他远程邮箱之间的通信则通过HTTP进行。</p>
+<p>当一个收件人，想从他的邮箱中访问一个报文时，该电子邮件报文从他邮件服务器发送到他的浏览器，使用的是HTTP而不是POP3或者IMAP协议。</p>
+<p>当发件人要发送封电子邮件报文时,该电子邮件报文从他的浏览器发送到她的邮件服务器，使用的是 HTTP而不是SMTP。然而，他的邮件服务器在与其他的邮件服务器之间发送和接收邮件时，仍然使用的是SMTP。</p>
+<h3 id="DNS-Domain-Name-System，-DNS）"><a href="#DNS-Domain-Name-System，-DNS）" class="headerlink" title="DNS(Domain Name System， DNS）"></a>DNS(Domain Name System， DNS）</h3><p>DNS是:<br>一个由分层的 DNS 服务器（DNSserver）实现的分布式数据库;<br>一个使得主机能够查询分布式数据库的应用层协议。<br>DNS 服务器通常是运行 BIND （Berkeley Internet Name Domain)软件[BIND 2012]的UNIX 机器。DNS协议运行在UDP之上，使用53号端口。</p>
+<h4 id="dns服务"><a href="#dns服务" class="headerlink" title="dns服务"></a>dns服务</h4><p><img src="/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C-%E7%AC%AC%E4%BA%8C%E7%AB%A0%E5%BA%94%E7%94%A8%E5%B1%82/dns.png" alt="?"></p>
+<p>主机别名 （host aliasing）。有着复杂主机名的主机能拥有一个或者多个别名。<br>邮件服务器别名（mail server aliasing）。显而易见，人们也非常希望电子邮件地址好记忆。<br>负载分配（load distribution）。DNS也用于在冗余的服务器（如冗余的Web服务器等）之间进行负载分配。繁忙的站点（如 cnn.com)被冗余分布在多台服务器上。</p>
+<h4 id="dns工作原理"><a href="#dns工作原理" class="headerlink" title="dns工作原理"></a>dns工作原理</h4><p><img src="/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C-%E7%AC%AC%E4%BA%8C%E7%AB%A0%E5%BA%94%E7%94%A8%E5%B1%82/dns4.png" alt="?"></p>
+<p><img src="/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C-%E7%AC%AC%E4%BA%8C%E7%AB%A0%E5%BA%94%E7%94%A8%E5%B1%82/dns2.png" alt="?"></p>
+<p><img src="/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C-%E7%AC%AC%E4%BA%8C%E7%AB%A0%E5%BA%94%E7%94%A8%E5%B1%82/dns3.png" alt="?"></p>
+<h4 id="dns缓存"><a href="#dns缓存" class="headerlink" title="dns缓存"></a>dns缓存</h4><p>为了改善时延性能并减少在因特网上到处传输的DNS报文数量,DNS 广泛使用了缓存技术。DNS 缓存的原理非常简单。在一个请求链中,当某DNS服务器接收一个DNS 回答（例如,包含主机名到IP地址的映射)时,它能将该回答中的信息缓存在本地存储器中。</p>
+<p>举—个例子,假定主机 apricot. poly. edu向 dns. poly.<br>edu 查询主机名 cnn.com 的IP地址。此后，假定过了几个小时，Polytechnic理工大学的另外一台主机如 kiwi. poly. edu也向dns. poly. edu查询相同的主机名。因为有了缓存，该本地DNS服务器可以立即返回cnn.com的IP地址，而不必查询任何其他DNS服务器。本地DNS服务器也能够缓存TLD服务器的iP地址，因而允许本地DNS绕过查询链中的根DNS服务器（这经常发生)。</p>
+<h4 id="dns记录和报文"><a href="#dns记录和报文" class="headerlink" title="dns记录和报文"></a>dns记录和报文</h4><p>共同实现 DNS分布式数据库的所有DNS服务器存储了资源记录（Resource Record,RR).RR提供了主机名到P地址的映射。</p>
+<p>资源记录是一个包含了下列字段的4元组:(Name,Value, Type, TTL)<br><img src="/2023/05/22/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C-%E7%AC%AC%E4%BA%8C%E7%AB%A0%E5%BA%94%E7%94%A8%E5%B1%82/dns5.png" alt="?"></p>
+<p>设一台edu TLD服务器不是主机 gaia. cs. umass. edu的权威DNS服务器，则该服务器将包含一条包括主机 cs. umass. edu的域记录，如 （umass. edu， dns. umass. edu, NS);该eduTLD服务器还将包含一条类型A记录，如（dns. umass.edu,128.119. 40.111, A)，该记录将名字dns. umass.edu映射为一个iP地址。</p>
+<p><strong>ns就是本dns服务器没有你这个主机的ip，我告诉你一个dns服务器，你去那里找，我这里还有这个dns的服务器的ip</strong></p>
+<p><strong>dns的查询和回答报文相同</strong><br><img src="/2023/05/22/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C-%E7%AC%AC%E4%BA%8C%E7%AB%A0%E5%BA%94%E7%94%A8%E5%B1%82/dns6.png" alt="?"></p>
+<p><img src="/2023/05/22/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C-%E7%AC%AC%E4%BA%8C%E7%AB%A0%E5%BA%94%E7%94%A8%E5%B1%82/dns7.png" alt="?"></p>
+<h4 id="dns攻击"><a href="#dns攻击" class="headerlink" title="dns攻击"></a>dns攻击</h4><p>对DNS 的潜在更为有效的DDoS攻击将是向顶级域名服务器（例如向所有处理.com域的顶级域名服务器）发送大量的 DNS请求。过滤指向DNS服务器的 DNS 请求将更为困难，并且顶级域名服务器不像根服务器那样容易绕过。但是这种攻击的严重性通过本地 DNS 服务器中的缓存技术可将部分地被缓解。</p>
+<p>DNS能够潜在地以其他方式被攻击。在中间人攻击中，攻击者截获来自主机的请求并返回伪造的回答。在DNS毒害攻击中，攻击者向一台DNS服务器发送伪造的回答，诱使服务器在它的缓存中接收伪造的记录。这些攻击中的任一种，都能够将满怀信任的Web用户重定向到攻击者的Web 站点。然而，这些攻击难以实现，因为它们要求截获分组或扼制住服务器。</p>
+<p>另一种重要的DNS攻击本质上并不是一种对DNS服务的攻击，而是充分利用 DNS基础设施来对目标主机发起 DDoS攻击（例如，你所在大字的邮件服分斋)。仕这利坟击中，攻击者向许多权威DNS服务器发送DNS请求，每个请求具有目标主机的假冒源地址。这些DNS服务器则直接向目标主机发送它们的回答。如果这些请求能够精心制作成下述方式的话，即响应比请求（字节数)大得多（所谓放大)，则攻击者不必自行产生大量的流量就有可能淹没目标主机。这种利用 DNs的反射攻击至今为止只取得了有限的成功。</p>
+<h3 id="P2P"><a href="#P2P" class="headerlink" title="P2P"></a>P2P</h3><h4 id="p2p文件分发"><a href="#p2p文件分发" class="headerlink" title="p2p文件分发"></a>p2p文件分发</h4><p><img src="/2023/05/22/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C-%E7%AC%AC%E4%BA%8C%E7%AB%A0%E5%BA%94%E7%94%A8%E5%B1%82/p2p1.png" alt="?"><br><img src="/2023/05/22/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C-%E7%AC%AC%E4%BA%8C%E7%AB%A0%E5%BA%94%E7%94%A8%E5%B1%82/p2p2.png" alt="?"></p>
+<p>我们现在来对P2P体系结构进行简单的分析，其中每个对等方能够帮助服务器分发该文件。特别是，当一个对等方接收到某些文件数据，它能够使用自己的上载能力重新将数据分发给其他对等方。计算P2P体系结构的分发时间在某种程度上比计算客户-服务器体系结构的更为复杂，因为分发时间取决于每个对等方如何向其他对等方分发该文件的各个部分。<br><img src="/2023/05/22/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C-%E7%AC%AC%E4%BA%8C%E7%AB%A0%E5%BA%94%E7%94%A8%E5%B1%82/p2p3.png" alt="?"></p>
+<p><strong>具有PP体系结构的应用程序能够是自扩展的。这种扩展性的直接成因是:对等方除了是比特的消费者外还是它们的重新分发者。</strong><br><img src="/2023/05/22/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C-%E7%AC%AC%E4%BA%8C%E7%AB%A0%E5%BA%94%E7%94%A8%E5%B1%82/p2p4.png" alt="?"></p>
+<p>每个洪流具有一个基础设施结点，称为追踪器（tracker)。当一个对等方加人某洪流时，它向追踪器注册自己,并周期性地通知追踪器它仍在该洪流中。以这种方式,追踪器跟踪正参与在洪流中的对等方。一个给定的洪流可能在任何时刻具有数以百计或数以千计的对等方。</p>
+<p>当一个新的对等方Alice加入该洪流时，追踪器随机地从参与对等方的集合中选择对等方的一个子集(为了具体起见,设有50个对等方),并将这50个对等方的P地址发送给 Alice。 Alice持有对等方的这张列表试图与该列表上的所有对等方创建并行的TCP连接。我们称所有这样与 Aliee成功地创建一个TCP 连接的对等方为“邻近对等方”（在图2-26中，Alice显示了仅有三个邻近对等方。通常，她应当有更多的对等方)。随着时间的流逝，这些对等方中的某些可能离开其他对等方(最初50个以外的)可能试图与Alice创建TCP 连接。因此一个对等方的邻近对等方将随时间而波动。</p>
+<p><img src="/2023/05/22/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C-%E7%AC%AC%E4%BA%8C%E7%AB%A0%E5%BA%94%E7%94%A8%E5%B1%82/p2p5.png" alt="?"></p>
+<p>应当向哪些向她请求块的邻居发送?在决定请求哪些块的过程中，Alice使用一种称为最稀缺优先（rarest first)的技术。这种技术的思路是，针对她没有的块在她的邻居中决定最稀缺的块（最稀缺的块就是那些在她的邻居中副本数量最少的块)，并首先请求那些最稀缺的块。这样，最稀缺块得到更为迅速的重新分发，其目标是（大致地）均衡每个块在洪流中的副本数量。</p>
+<h4 id="分布式散列表"><a href="#分布式散列表" class="headerlink" title="分布式散列表"></a>分布式散列表</h4><p>在该P2P系统中，每个对等方将保持(键，值)对仅占总体的一个小子集。我们将允许任何对等方用一个特别的键来查询该分布式数据库。分布式数据库则将定位拥有该相应（键，值）对的对等方，然后向查询的对等方返回该（键，值)对。任何对等方也将允许在数据库中插入新键-值对。这样一种分布式数据库被称为分布式散列(Distributed Hash Table DHT）。</p>
+<h3 id="套接字编程"><a href="#套接字编程" class="headerlink" title="套接字编程"></a>套接字编程</h3><p><strong>每一个套接字会分配一个端口</strong><br>1.是否遵守RFC协议（不遵守则避开规定端口）<br>2.采用tcp还是udp</p>
+<h4 id="udp套接字编程"><a href="#udp套接字编程" class="headerlink" title="udp套接字编程"></a>udp套接字编程</h4><p>运行在不同机器上的进程彼此通过向套接字发送报文来进行通信。我们说过每个进程好比是一座房子，该进程的套接字则好比是一扇门。应用程序位于房子中门的一侧;运输层位于该门朝外的另一侧。应用程序开发者在套接字的应用层一侧可以控制所有东西;然而，它几乎无法控制运输层一侧。</p>
+<p>我们将使用下列简单的客户-服务器应用程序来演示对于UDP和TCP的套接字编程:<br>1）客户从其键盘读取一行字符并将数据向服务器发送。<br>2）服务器接收该数据并将这些字符转换为大写。<br>3）服务器将修改的数据发送给客户。<br>4）客户接收修改的数据并在其监视器上将该行显示出</p>
+<p><img src="/2023/05/22/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C-%E7%AC%AC%E4%BA%8C%E7%AB%A0%E5%BA%94%E7%94%A8%E5%B1%82/socket.png" alt="?"></p>
+<p>udpclient.py</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> socket <span class="keyword">import</span>*</span><br><span class="line">serverName = <span class="string">&quot;10.173.57.86&quot;</span></span><br><span class="line">serverPort = <span class="number">12000</span></span><br><span class="line">clientSocket = socket(AF_INET, SOCK_DGRAM)</span><br><span class="line">message = <span class="built_in">input</span>(<span class="string">&#x27;Input lowercase sentence:&#x27;</span>)</span><br><span class="line"><span class="keyword">try</span>:</span><br><span class="line">    clientSocket.sendto(message.encode(), (serverName, serverPort))</span><br><span class="line">    modifiedMessage, serverAddress = clientSocket.recvfrom(<span class="number">2048</span>)</span><br><span class="line">    <span class="built_in">print</span>(modifiedMessage)</span><br><span class="line"><span class="keyword">except</span> gaierror <span class="keyword">as</span> e:</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&#x27;Error:&#x27;</span>, e)</span><br><span class="line"><span class="keyword">finally</span>:</span><br><span class="line">    clientSocket.close()</span><br></pre></td></tr></table></figure>
+
+<p>udpserver.py</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> socket <span class="keyword">import</span> *</span><br><span class="line">serverPort = <span class="number">12000</span></span><br><span class="line">serverSocket = socket(AF_INET, SOCK_DGRAM)</span><br><span class="line">serverSocket.bind((<span class="string">&#x27;&#x27;</span>, serverPort))</span><br><span class="line"><span class="built_in">print</span>(<span class="string">&quot;The server is ready to receive&quot;</span>)</span><br><span class="line"><span class="keyword">while</span> <span class="literal">True</span>:</span><br><span class="line">    <span class="keyword">try</span>:</span><br><span class="line">        message, clientAddress = serverSocket.recvfrom(<span class="number">2048</span>)</span><br><span class="line">        <span class="keyword">if</span> <span class="built_in">len</span>(message) &gt; <span class="number">2048</span>:</span><br><span class="line">            <span class="keyword">raise</span> error(<span class="string">&#x27;Message too long&#x27;</span>)</span><br><span class="line">        modifiedMessage = message.decode().upper()</span><br><span class="line">        serverSocket.sendto(modifiedMessage.encode(), clientAddress)</span><br><span class="line">    <span class="keyword">except</span> error <span class="keyword">as</span> e:</span><br><span class="line">        <span class="built_in">print</span>(<span class="string">&#x27;Error:&#x27;</span>, e)</span><br><span class="line">    <span class="keyword">except</span> KeyboardInterrupt:</span><br><span class="line">        serverSocket.close()</span><br><span class="line">        <span class="keyword">break</span></span><br></pre></td></tr></table></figure>
+
+<h4 id="tcp套接字编程"><a href="#tcp套接字编程" class="headerlink" title="tcp套接字编程"></a>tcp套接字编程</h4><p>与UDP 不同，TCP是一个面向连接的协议。这意味着在客户和服务器能够开始互相发送数据之前,它们先要握手和创建一个 TCP连接。<br>TCP连接的一端与客户套接字相联系，另一端与服务器套接字相联系。当创建该TCP连接时，我们将其与客户套接字地址(IP地址和端口号）和服务器套接字地址(IP地址和端口号） 关联起来。使用创建的TCP连接，当一侧要向另一侧发送数据时，它只需经过其套接字将数据丢给TCP连接。UDP 服务器在将分组丢进套接字之前必须为其附上一个<br>目的地地址。</p>
+<p>随着服务器进程的运行，客户进程能够向服务器发起一个TCP连接。这是由客户程序通过创建一个 TCP套接字完成的。当该客户生成其 TCP<br>套接字时,它指定了服务器中的套接字的地址，即服务器主机的P地址及其套接字的端口号。生成其套接字后，该客户发起了一个三次握手并创建与服务器的一个TCP连接。发生在运输层的三次握手，对于客户和服务器程序是完全透明的。</p>
+<p>在三次握手期间，客户进程敲服务器进程的欢迎之门。当该服务器“听”到敲门时,**它将生成一扇新门(更精确地讲是一个新套接字)**，它专门用于特定的客户。在我们下面的例子中，欢迎之门是一个我们称为 serverSocket 的 TCp套接字对象;它专门对客户进行连接的新生成的套接字，称为连接套接字(connection Socket)。初次遇到TCP套接字的学生有时会混淆欢迎套接字（这是所有要与服务器通信的客户的起始接触点）和每个新生成的服务器侧的连接套接字（这是随后为与每个客户通信而生成的套接字)。</p>
+<p><img src="/2023/05/22/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C-%E7%AC%AC%E4%BA%8C%E7%AB%A0%E5%BA%94%E7%94%A8%E5%B1%82/tcp1.png" alt="?"></p>
+<p><img src="/2023/05/22/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C-%E7%AC%AC%E4%BA%8C%E7%AB%A0%E5%BA%94%E7%94%A8%E5%B1%82/tcp2.png" alt="?"></p>
+<p>tcpclient.py</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> socket <span class="keyword">import</span> *</span><br><span class="line">serverName = <span class="string">&quot;10.173.57.86&quot;</span></span><br><span class="line">serverPort = <span class="number">12000</span></span><br><span class="line">clientSocket=socket(AF_INET,SOCK_STREAM)</span><br><span class="line">clientSocket.connect((serverName,serverPort))</span><br><span class="line">sentence=<span class="built_in">input</span>(<span class="string">&#x27;input:&#x27;</span>)</span><br><span class="line">clientSocket.send(sentence.encode())</span><br><span class="line">modifiedSentence=clientSocket.recv(<span class="number">1024</span>)</span><br><span class="line"><span class="built_in">print</span>(modifiedSentence.decode())</span><br><span class="line">clientSocket.close()</span><br></pre></td></tr></table></figure>
+<p>tcpserver.py</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> socket <span class="keyword">import</span> *</span><br><span class="line">serverPort = <span class="number">12000</span></span><br><span class="line">serverSocket=socket(AF_INET,SOCK_STREAM)</span><br><span class="line">serverSocket.bind((<span class="string">&#x27;&#x27;</span>,serverPort))</span><br><span class="line">serverSocket.listen(<span class="number">1</span>)</span><br><span class="line"><span class="built_in">print</span>(<span class="string">&quot;ok&quot;</span>)</span><br><span class="line"><span class="keyword">while</span> <span class="number">1</span>:</span><br><span class="line">    connectionSocket,addr=serverSocket.accept()</span><br><span class="line">    sentence=connectionSocket.recv(<span class="number">1024</span>)</span><br><span class="line">    capitalizedSentence=sentence.decode().upper()</span><br><span class="line">    connectionSocket.send(capitalizedSentence.encode())</span><br><span class="line">    connectionSocket.close()</span><br></pre></td></tr></table></figure>
+
+<h3 id="复习和习题"><a href="#复习和习题" class="headerlink" title="复习和习题"></a>复习和习题</h3><ol>
+<li><p>前面讲过TCP能用SSL来强化，以提供进程到进程的安全性服务，包括加密。SSL 运行在运输层还是应用层?如果某应用程序研制者想要用SSL 来强化UDP,该研制者应当做些什么工作?</p>
+<blockquote>
+<p>SSL在应用层运行。SSL套接字从应用层接收未加密的数据，对其进行加密，然后将其传递给TCP套接宇。如果应用程序开发人员希望使用SSL增强TCP，则必须在应用程序中包含SSL代码。</p>
+</blockquote>
+</li>
+<li><p>为什么 HTTP、FTP、SMTP 及POP3都运行在TCP,而不是 UDP上?</p>
+<blockquote>
+<p>与这些协议相关联的应用程序要求以正确的顺序接收所有应用程序数据，并且不存在空白。TCP提供此服务，而UDP不提供此服务。</p>
+</blockquote>
+</li>
+<li><p>考虑一个电子商务网站需要保留每一个客户的购买记录。描述如何使用cookie来完成该功能?</p>
+<blockquote>
+<p>当用户第一次访问站点时，服务器将创建一个唯一的标识号，在其后端数据库中创建一个条目，并将此标识号作为cokie编号返回。此cookie编号存储在用户的主机上，并由浏览器管理。在每次后续访问(和购买)期间，浏览器将cookie编号发送回站点。因此，站点知道这个用户(更准确地说，是这个浏览器)访问该站点的时间.</p>
+</blockquote>
+</li>
+<li><p>假定Alice使用一个基于Web的电子邮件账户（例如Hotmail或gmail）向Bob发报文，而Bob使用POP3从他的邮件服务器访问自己的邮件。讨论是怎样从 Alice 王机到 bob王机得到以报义的。安列出在两台主机间移动该报文时所使用的各种应用层协议。</p>
+<blockquote>
+<p>该消息⾸先通过HTTP从Alice的主机发送到她的邮件服务器。然后，Alice的邮件服务器通过SMTP向Bob的邮件服务器发送消息。然后Bob通过POP3将消息从他的邮件服务器传输到他的主机。</p>
+</blockquote>
+</li>
+<li><p>从用户的观点看，POP3协议中下载并删除模式和下载并保留模式有什么区别吗?</p>
+<blockquote>
+<p>通过下载和删除，⽤⼾从POP服务器检索其消息后，消息将被删除。这给游牧⽤⼾带来了⼀个问题，他们可能希望从许多不同的机器(办公PC、家庭PC等)访问消息。在下载和保存配置中，在⽤⼾检索消息后不会删除消息。这也可能不⽅便，因为每次⽤⼾从新机器检索存储的消息时，所有未删除的消息都将传输到新机器(包括⾮常旧的消息)。</p>
+</blockquote>
+</li>
+<li><p>UDP服务器仅需要一个套接字，而TCP服务器需要两个套接字。<br>为什么?如果TCP 服务器支持n个并行连接，每条连接来自不同的客户主机，那么TCP服务器将需要多少个套接字?</p>
+<blockquote>
+<p>UDP服务器只需要一个套接字，因为UDP是无连接的，它不需要维护连接状态。而TCP服务器需要两个套接字，一个用于监听客户端连接请求，另一个用于处理与客户端的通信.如果TCP服务器支持n个并行连接，每条连接来自不同的客户主机，那么TCP服务器将需要n+1个套接字，其中一个用于监听客户端连接请求，其余n+1个用于处理与客户端的通信。</p>
+</blockquote>
+</li>
+</ol>
+<p>7.运行在 TCP之上的客户-服务器应用程序,服务器程序为什么必须先于客户程序运行?对于运行在 UDP之上的客户-服务器应用程序，客户程序为什么可以先于服务器程序运行?</p>
+<blockquote>
+<p>对于TCP应⽤程序，⼀旦客⼾端被执⾏，它就会尝试启动与服务器的TCP连接。如果TCP服务器没有运⾏，则客⼾端将⽆法建⽴连接。对于UDP应⽤程序，客⼾端在执⾏时不会⽴即启动连接(或尝试与UDP服务器通信)。</p>
+</blockquote>
+<ol start="8">
+<li><p>假设用户请求由某些文本和3幅图像组成的Web页面。对于这个页面，客户将发送一个请求报文并接收4个响应报文。</p>
+<blockquote>
+<p>请求与响应必定成对.对于这个页面，客户端将发送一个请求报文并接收一个响应报文，该响应报文包含页面的文本内容和3幅图像的URL。之后，客户端将根据这些URL发送3个请求报文，并分别接收3个响应报文，这些响应报文包含3幅图像的内容。因此，客户端总共发送4个请求报文并接收4个响应报文。</p>
+</blockquote>
+</li>
+<li><p>两个不同的Web页面（例如，<a target="_blank" rel="noopener" href="http://www.mit/">www.mit</a>. edu/ research. html 及 <a target="_blank" rel="noopener" href="http://www.mit/">www.mit</a>. edu/ students. html）可以通过同一个持续连接发送。</p>
+<blockquote>
+<p>是的，两个不同的Web页面可以通过同一个持续连接发送。HTTP/1.1支持持久连接（也称为持续连接或连接重用），这意味着在同一连接上可以发送多个HTTP请求和响应。当客户端通过TCP连接发送第一个HTTP请求时，它可以在请求头中指定“Connection: keep-alive”，以指示服务器在响应中保持连接打开状态。这样，客户端就可以通过同一个连接发送多个请求，而不必为每个请求都建立一个新的TCP连接。当客户端完成所有请求时，它可以在最后一个请求中发送“Connection: close”头，以指示服务器关闭连接。</p>
+</blockquote>
+</li>
+<li><p>在浏览器和初始服务器之间使用非持续连接的话，一个TCP报文段是可能携带两个不同的 HTTP服务请求报文的。</p>
+<blockquote>
+<p>在非持续连接中，一个TCP报文段只能携带一个HTTP请求报文。因为在非持续连接中，每个HTTP请求都需要建立一个新的TCP连接，因此每个连接只能携带一个HTTP请求和响应。如果多个HTTP请求在短时间内发生，它们将会被分别发送到不同的TCP连接中。每个TCP连接只能处理一个HTTP请求和响应。</p>
+</blockquote>
+</li>
+<li><p>在HTTP 响应报文中的Date:首部指出了该响应中对象最后一次修改的时间。</p>
+<blockquote>
+<p>在HTTP响应报文中，Date首部字段表示服务器发送响应的时间。它不指示响应中对象最后一次修改的时间。为了指示对象最后一次修改的时间，HTTP响应报文使用Last-Modified首部字段。Last-Modified首部字段表示服务器上响应对象最后一次修改的时间。当客户端再次请求同一对象时，可以使用If-Modified-Since请求首部字段将上次的Last-Modified时间发送到服务器。如果服务器上的对象自上次访问以来未被修改，则服务器将返回一个状态码为304的响应，表示客户端可以使用其本地缓存的对象。否则，服务器将返回新的对象并在响应头中更新Last-Modified时间。</p>
+</blockquote>
+</li>
+<li><p>考虑一个HTTP客户要获取一个给定 URL的Web页面。该HTTP服务器的P地址开始时并不知道。在这种情况下，除了HTTP外，还需要什么运输层和应用层协议?</p>
+<blockquote>
+<p>应⽤层协议：DNS和HTTP传输层协议：UDP⽤于DNS；TCP⽤于HTTP</p>
+</blockquote>
+</li>
+<li><p><img src="/2023/05/22/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C-%E7%AC%AC%E4%BA%8C%E7%AB%A0%E5%BA%94%E7%94%A8%E5%B1%82/t1.png" alt="?"><br>由浏览器请求的文档的URL是什么?</p>
+<blockquote>
+<p>文档请求是<a target="_blank" rel="noopener" href="http://gaia.cs.umass.edu/cs453/index.html%E3%80%82host:%E5%AD%97%E6%AE%B5%E8%A1%A8%E7%A4%BA%E6%9C%8D%E5%8A%A1%E5%99%A8%E7%9A%84%E5%90%8D%E7%A7%B0%EF%BC%8C/cs453/index.html%E8%A1%A8%E7%A4%BA%E6%96%87%E4%BB%B6%E5%90%8D%E3%80%82">http://gaia.cs.umass.edu/cs453/index.html。host:字段表示服务器的名称，/cs453/index.html表示文件名。</a></p>
+</blockquote>
+</li>
+</ol>
+<p>该浏览器运行的是HTTP的何种版本?</p>
+<blockquote>
+<p>浏览器正在运⾏HTTP1.1版本，就像第⼀对之前所指出的那样</p>
+</blockquote>
+<p>该浏览器请求的是一条非持续连接还是一条持续连接?</p>
+<blockquote>
+<p>connection 浏览器正在请求持久连接，如连接所⽰：保持-活动。</p>
+</blockquote>
+<p>该浏览器所运行的主机的P地址是什么?</p>
+<blockquote>
+<p>这是刁钻的问题。此信息不包含在任何地⽅的HTTP消息中。因此，仅看HTTP消息的交换就⽆法区分这⼀点。您需要从IP数据报(承载承载HTTPGET请求的TCP段)中获得信息来回答这个问题。</p>
+</blockquote>
+<p>发起该报文的浏览器的类型是什么?在一个 HTTP 请求报文中，为什么需要浏览器类型?</p>
+<blockquote>
+<p>Mozilla/5.0。服务器需要浏览器类型信息将同⼀对象的不同版本发送到不同类型的浏览器。</p>
+</blockquote>
+<p>14.<br><img src="/2023/05/22/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C-%E7%AC%AC%E4%BA%8C%E7%AB%A0%E5%BA%94%E7%94%A8%E5%B1%82/t2.png" alt="?"><br>服务器能否成功地找到那个文档?该文档提供回答是什么时间?</p>
+<blockquote>
+<p>状态代码200和短语ok表⽰服务器能够找到⽂档成功。答复于2008年3⽉7⽇星期⼆提供格林威治标准时间12:39:45。</p>
+</blockquote>
+<p>该文档最后修改是什么时间?</p>
+<blockquote>
+<p>last-Modified  上⼀次修改index.html⽂档是在2005年12⽉10⽇星期六18:27:46 格林尼治时间。</p>
+</blockquote>
+<p>文档中被返回的字节有多少?</p>
+<blockquote>
+<p>返回的⽂档中有3874个字节。</p>
+</blockquote>
+<p>文档被返回的前5个字节是什么?该服务器同意一条持续连接吗?</p>
+<blockquote>
+<p>返回⽂件的前五个字节是：&lt;！医⽣服务器同意持久连接，如connection:Keep Alive字段所⽰</p>
+</blockquote>
+<p>15.<br>解释在客户和服务器之间用于指示关闭持续连接的信令机制。客户、服务器或两者都能发送信令通知连接关闭了吗?</p>
+<blockquote>
+<p>在RFC 2616的第8节中讨论了持久连接（这⼀点的真正⽬的问题是让你检索并阅读⼀份RFC(第8.1.2和8.1.2.1节)rfc表⽰客⼾机或服务器可以向另⼀个表明它是将关闭永久连接。它通过包含连接令牌来实现“关闭”在http请求/回复的连接头字段中</p>
+</blockquote>
+<p>HTTP提供了什么加密服务?</p>
+<blockquote>
+<p>http不提供任何加密服务。</p>
+</blockquote>
+<p>一个客户能够与一个给定的服务器打开3条或更多条并发连接吗?</p>
+<blockquote>
+<p>“使⽤持久连接的客⼾端应该限制同时维护到给定服务器的连接。单⽤⼾客⼾端与任何服务器或代理服务器的连接不应超过2个。</p>
+</blockquote>
+<p>如果一个服务器或一个客户检测到连接已经空闲一段时间，该服务器或客户可以关闭两者之间的传输连接。一侧开始关闭连接而另一侧通过该连接传输数据是可能的吗?请解释。</p>
+<blockquote>
+<p>是。(来⾃RFC 2616)“在服务器决定关闭”空闲“连接的同时，客⼾端可能已经开始发送新请求。从服务器的⻆度来看，连接是在空闲时关闭的，但从客⼾端的⻆度来看，请求正在进⾏中。“</p>
+</blockquote>
+<ol start="16">
+<li>假定你在浏览器中点击一条超链接获得Web页面。相关联的URL 的IP地址没有缓存在本地主机上，因此必须使用 DNS lookup以获得该IP地址。如果主机从 DNS得到IP地址之前已经访问了n个 DNS服务器;相继产生的RTT依次为RTT1,、…、RTTn,。进一步假定与链路相关的Web页面只包含一个对象，即由少量的HTML文本组成。令RTT0,表示本地主机和包含对象的服务器之间的RTT值。假定该对象传输时间为零，则从客户点击该超链接到它接收到该对象需要多长时间?<blockquote>
+<p>RTT1+RTT2+…+RTTn为获取ip的时间<br>总时间为2RTT0+RTT1+RTT2+…+RTTn<br>因为一个 RTT 就是一个往返的时延，因此访问 DNS 的时延是 1~n 各 1 个，接着 HTTP 采取 TCP 连接，需要在第一个 RTT 内建立连接，第二个 RTT 内发送请求并接收应答，故有两个 RTT0</p>
+</blockquote>
+</li>
+</ol>
+<ol start="17">
+<li>参照上题，假定在同一服务器上某HTML文件引用了8个非常小的对象。忽略发送时间，在下列情况下需要多长时间:<br>a没有并行 TCP 连接的非持续HTTP。<blockquote>
+<p>18RTT0+RTT1+RTT2+…+RTTn<br>其他部分与第七题一样，然后客户发送一个 HTTP 请求，得到基本 HTML 文件后，经过解析这个 HTML 文件得到 8 个图像的地址，再继续同样的 HTTP 请求 8 次，即在第七题基础上多了 8 个图像的建立连接、请求响应，注意非持续性连接在发送响应后，TCP 连接就立刻断开了，需要继续发送则需要重新申请建立连接</p>
+</blockquote>
+</li>
+</ol>
+<p>b.配置有5个并行连接的非持续HTTP。</p>
+<blockquote>
+<p>6RTT0+RTT1+…+RTTn<br>客户仍需先请求建立 TCP 连接、发送数据请求并接受 HTML基本文件，消耗 2 个 RTT0，接着解析 HTML 文件后同时申请建立 5 个 TCP 连接，消耗 1 个RTT0，请求并接收 5 个图像，消耗 1 个 RTT0，还余下 3 个 RTT0 仍需申请建立 3 个 TCP 连接、请求并接收 3 个图像</p>
+</blockquote>
+<p>c.持续HTTP。</p>
+<blockquote>
+<p>无并行） 10RTT0+RTT1+…+RTTn【持续性链接即 a 省掉后续 8 次申请 TCP 的 RTT0】<br>（5 并行） 3RTT0+RTT1+…+RTTn  (不理解，我觉得是4rtt0不是3)</p>
+</blockquote>
+<ol start="18">
+<li><p>HTTP 响应报文绝不会具有空的报文体。</p>
+<blockquote>
+<p>答：错误。HTTP 调用 TCP，必定有确认报文段，如果没有消息回复则无法捎带确认，就会发送一个空内容的报文用于确认</p>
+</blockquote>
+</li>
+<li><p>SMTP是怎样标识一个报文体结束的?HTTP是怎样做的呢?HTTP能够使用与SMTP标识一个报文体结束相同的方法吗?试解释。</p>
+<blockquote>
+<p>SMTP使⽤仅包含句点的⾏来标记邮件正⽂的结束。http使⽤“内容⻓度标题字段”来表⽰消息正⽂的⻓度。<br>不，HTTP不能使⽤SMTP使⽤的⽅法，因为HTTP消息可以是⼆进制数据，⽽在SMTP中，消息主体必须是7位的ASCII格式。</p>
+</blockquote>
+</li>
+<li><p>什么是 whois数据库?</p>
+<blockquote>
+<p>对于给定的域名输⼊(如ccn.com)、IP地址或⽹络管理员名称，whois数据库可⽤于定位相应的注册服务器、whois服务器、DNS服务器等。</p>
+</blockquote>
+</li>
+</ol>
+<p><a target="_blank" rel="noopener" href="https://whois.cloud.tencent.com/domain?domain=baidu.com">腾讯whois数据库</a></p>
+<p><img src="/2023/05/22/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C-%E7%AC%AC%E4%BA%8C%E7%AB%A0%E5%BA%94%E7%94%A8%E5%B1%82/t5.png" alt="?"></p>
+<ol start="21">
+<li><p>假设你所在系具有一台用于系里所有计算机的本地DNS服务器。你是普通用户（即你不是网络/系统管理员)。你能够确定是否在几秒钟前从你系里的一台计算机可能访问过一台外部Web站点吗?解释原因。</p>
+<blockquote>
+<p>是的，我们可以在本地DNS服务器中使⽤DIG查询该⽹站。例如，digCNN.com将返回查找CNN.com的查询时间。如果CNN.com⼏秒钟前刚刚被访问，那么<br>CNN.com的条⽬将缓存在本地DNS缓存中，因此查询时间为0毫秒。否则，查询时间很⻓。</p>
+</blockquote>
+</li>
+<li><p><img src="/2023/05/22/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C-%E7%AC%AC%E4%BA%8C%E7%AB%A0%E5%BA%94%E7%94%A8%E5%B1%82/t6.png"></p>
+<blockquote>
+<p>不知道他是怎么按这个公式算出来的<br><img src="/2023/05/22/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C-%E7%AC%AC%E4%BA%8C%E7%AB%A0%E5%BA%94%E7%94%A8%E5%B1%82/t6.1.png"></p>
+</blockquote>
+</li>
+<li><p>在一台主机上安装编译 TCPClient 和 UDPClient 的 Python 程序，在另一台主机上安装编译TCPServer 和 UDPServer 的程序。<br>a.假设在运行 TCPServer 之前运行 TCPClient，将会发生什么现象？为什么？</p>
+<blockquote>
+<p>答：如果首先运行 TCPClient，那么客户端将尝试与不存在的服务器进程进行 TCP 连接。无法进行 TCP 连接。</p>
+</blockquote>
+</li>
+</ol>
+<p>b.假设在运行 UDPServer 之前运行 UDPClient，将会发生什么现象？为什么？</p>
+<blockquote>
+<p>答：UDPClient 没有与服务器建立 TCP 连接。 因此，如果首先运行 UDPClient，然后运行 UDPServer，然后在键盘上键入一些输入，那么一切都会正常工作</p>
+</blockquote>
+<h3 id="代码"><a href="#代码" class="headerlink" title="代码"></a>代码</h3><ol>
+<li><blockquote>
+<p>在这个编程作业中，你将用Python语言开发一个简单的Web服务器，它仅能处理一个请求。具体而言，你的Web服务器将：<br>当一个客户（浏览器）联系时创建一个连接套接字；<br>从这个连接套接字接收HTTP请求；<br>解释该请求以确定所请求的特定文件；<br>从服务器的文件系统获得请求的文件；<br>创建一个由请求的文件组成的HTTP响应报文，报文前面有首部行；<br>经TCP连接向请求浏览器发送响应。如果浏览器请求一个在该服务器种不存在的文件，服务器应当返回一个“404 Not Found”差错报文。</p>
+</blockquote>
+</li>
+</ol>
+<p>webserver.py<br>在内网内可以进行交流</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> socket <span class="keyword">import</span> *</span><br><span class="line"></span><br><span class="line">serverSocket = socket(AF_INET, SOCK_STREAM)</span><br><span class="line"><span class="comment"># Prepare a sever socket</span></span><br><span class="line">serverSocket.bind((<span class="string">&#x27;&#x27;</span>, <span class="number">6789</span>))  <span class="comment"># 将TCP欢迎套接字绑定到指定端口</span></span><br><span class="line">serverSocket.listen(<span class="number">1</span>)  <span class="comment"># 最大连接数为1</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">while</span> <span class="literal">True</span>:</span><br><span class="line">    <span class="comment"># Establish the connection</span></span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&#x27;Ready to serve...&#x27;</span>)</span><br><span class="line">    connectionSocket, addr = serverSocket.accept()  <span class="comment"># 接收到客户连接请求后，建立新的TCP连接套接字</span></span><br><span class="line">    <span class="keyword">try</span>:</span><br><span class="line">        message = connectionSocket.recv(<span class="number">1024</span>)  <span class="comment"># 获取客户发送的报文</span></span><br><span class="line">        filename = message.split()[<span class="number">1</span>]</span><br><span class="line">        f = <span class="built_in">open</span>(filename[<span class="number">1</span>:])</span><br><span class="line">        outputdata = f.read();</span><br><span class="line">        <span class="comment"># Send one HTTP header line into socket</span></span><br><span class="line">        header = <span class="string">&#x27; HTTP/1.1 200 OK\nConnection: close\nContent-Type: text/html\nContent-Length: %d\n\n&#x27;</span> % (</span><br><span class="line">            <span class="built_in">len</span>(outputdata))</span><br><span class="line">        connectionSocket.send(header.encode())</span><br><span class="line"></span><br><span class="line">        <span class="comment"># Send the content of the requested file to the client</span></span><br><span class="line">        <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">0</span>, <span class="built_in">len</span>(outputdata)):</span><br><span class="line">            connectionSocket.send(outputdata[i].encode())</span><br><span class="line">        connectionSocket.close()</span><br><span class="line">    <span class="keyword">except</span> IOError:</span><br><span class="line">        <span class="comment"># Send response message for file not found</span></span><br><span class="line">        header = <span class="string">&#x27; HTTP/1.1 404 Found&#x27;</span></span><br><span class="line">        connectionSocket.send(header.encode())</span><br><span class="line"></span><br><span class="line">        <span class="comment"># Close client socket</span></span><br><span class="line">        connectionSocket.close()</span><br><span class="line">serverSocket.close()</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<ol start="2">
+<li><blockquote>
+<p>在这个编程作业中，你将用Python编写一个客户ping程序。该客户将发送一个简单的ping报文，接受一个从服务器返回的pong报文，并确定从该客户发送ping报文到接收到pong报文为止的时延。该时延称为往返时延（RTT）。由该客户和服务器提供的功能类似于在现代操作系统中可用的标准ping程序，然而，标准的ping使用互联网控制报文协议（ICMP）（我们将在第4章中学习ICMP）。此时我们将创建一个非标准（但简单）的基于UDP的ping程序。<br>你的ping程序经UDP向目标服务器发送10个ping报文，对于每个报文，当对应的pong报文返回时，你的客户要确定和打印RTT。因为UDP是一个不可靠协议，由客户发送的分组可能会丢失。为此，客户不能无限期地等待对ping报文的回答。客户等待服务器回答的时间至多为1秒；如果没有收到回答，客户假定该分组丢失并相应地打印一条报文。<br>UDPPinger.py</p>
+</blockquote>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> socket <span class="keyword">import</span> *</span><br><span class="line"><span class="keyword">import</span> time</span><br><span class="line"></span><br><span class="line">serverName = <span class="string">&#x27;191.101.232.165&#x27;</span> <span class="comment"># 服务器地址，本例中使用一台远程主机</span></span><br><span class="line">serverPort = <span class="number">12000</span> <span class="comment"># 服务器指定的端口</span></span><br><span class="line">clientSocket = socket(AF_INET, SOCK_DGRAM) <span class="comment"># 创建UDP套接字，使用IPv4协议</span></span><br><span class="line">clientSocket.settimeout(<span class="number">1</span>) <span class="comment"># 设置套接字超时值1秒</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">0</span>, <span class="number">10</span>):</span><br><span class="line">	sendTime = time.time()</span><br><span class="line">	message = (<span class="string">&#x27;Ping %d %s&#x27;</span> % (i+<span class="number">1</span>, sendTime)).encode() <span class="comment"># 生成数据报，编码为bytes以便发送</span></span><br><span class="line">	<span class="keyword">try</span>:</span><br><span class="line">		clientSocket.sendto(message, (serverName, serverPort)) <span class="comment"># 将信息发送到服务器</span></span><br><span class="line">		modifiedMessage, serverAddress = clientSocket.recvfrom(<span class="number">1024</span>) <span class="comment"># 从服务器接收信息，同时也能得到服务器地址</span></span><br><span class="line">		rtt = time.time() - sendTime <span class="comment"># 计算往返时间</span></span><br><span class="line">		<span class="built_in">print</span>(<span class="string">&#x27;Sequence %d: Reply from %s    RTT = %.3fs&#x27;</span> % (i+<span class="number">1</span>, serverName, rtt)) <span class="comment"># 显示信息</span></span><br><span class="line">	<span class="keyword">except</span> Exception <span class="keyword">as</span> e:</span><br><span class="line">		<span class="built_in">print</span>(<span class="string">&#x27;Sequence %d: Request timed out&#x27;</span> % (i+<span class="number">1</span>))</span><br><span class="line">		</span><br><span class="line">clientSocket.close() <span class="comment"># 关闭套接字</span></span><br></pre></td></tr></table></figure></li>
+</ol>
+<p>UDPPingerServer.py</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># UDPPingerServer.py</span></span><br><span class="line"><span class="comment"># We will need the following module to generate randomized lost packets import random</span></span><br><span class="line"><span class="keyword">from</span> socket <span class="keyword">import</span> *</span><br><span class="line"><span class="keyword">import</span> random</span><br><span class="line"></span><br><span class="line"><span class="comment"># Create a UDP socket</span></span><br><span class="line"><span class="comment"># Notice the use of SOCK_DGRAM for UDP packets</span></span><br><span class="line">serverSocket = socket(AF_INET, SOCK_DGRAM)</span><br><span class="line"><span class="comment"># Assign IP address and port number to socket</span></span><br><span class="line">serverSocket.bind((<span class="string">&#x27;&#x27;</span>, <span class="number">12000</span>))</span><br><span class="line"></span><br><span class="line"><span class="keyword">while</span> <span class="literal">True</span>:</span><br><span class="line">	<span class="comment"># Generate random number in the range of 0 to 10</span></span><br><span class="line">	rand = random.randint(<span class="number">0</span>, <span class="number">10</span>)</span><br><span class="line">	<span class="comment"># Receive the client packet along with the address it is coming from</span></span><br><span class="line">	message, address = serverSocket.recvfrom(<span class="number">1024</span>)</span><br><span class="line">	<span class="comment"># Capitalize the message from the client</span></span><br><span class="line">	message = message.upper()</span><br><span class="line">	<span class="comment"># If rand is less is than 4, we consider the packet lost and do not respond</span></span><br><span class="line">	<span class="keyword">if</span> rand &lt; <span class="number">4</span>:</span><br><span class="line">		<span class="keyword">continue</span></span><br><span class="line">	<span class="comment"># Otherwise, the server responds</span></span><br><span class="line">	serverSocket.sendto(message, address)</span><br></pre></td></tr></table></figure>
+
+<ol start="3">
+<li><blockquote>
+<p>在这个编程作业中，你将研发一个简单的Web代理服务器。当你的代理服务器从一个浏览器收到某对象的HTTP请求，它生成对相同对象的一个新HTTP请求并向初始服务器发送。当该代理从初始服务器接收到具有该对象的HTTP响应时，它生成一个包括该对象的新HTTP响应，并发送给该客户。这个代理将是多线程的，使其在相同时间能够处理多个请求。</p>
+</blockquote>
+</li>
+</ol>
+<p><a target="_blank" rel="noopener" href="https://gitcode.net/mirrors/moranzcw/Computer-Networking-A-Top-Down-Approach-NOTES/-/blob/master/SocketProgrammingAssignment/%E4%BD%9C%E4%B8%9A4-%E5%A4%9A%E7%BA%BF%E7%A8%8BWeb%E4%BB%A3%E7%90%86%E6%9C%8D%E5%8A%A1%E5%99%A8/%E4%BD%9C%E4%B8%9A4-%E5%A4%9A%E7%BA%BF%E7%A8%8BWeb%E4%BB%A3%E7%90%86%E6%9C%8D%E5%8A%A1%E5%99%A8-%E8%A7%A3%E7%AD%94.md">讲解</a><br>WebProxy.py</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#coding:utf-8</span></span><br><span class="line"><span class="keyword">from</span> socket <span class="keyword">import</span> *</span><br><span class="line"></span><br><span class="line"><span class="comment"># 创建socket，绑定到端口，开始监听</span></span><br><span class="line">tcpSerPort = <span class="number">8899</span></span><br><span class="line">tcpSerSock = socket(AF_INET, SOCK_STREAM)</span><br><span class="line"></span><br><span class="line"><span class="comment"># Prepare a server socket</span></span><br><span class="line">tcpSerSock.bind((<span class="string">&#x27;&#x27;</span>, tcpSerPort))</span><br><span class="line">tcpSerSock.listen(<span class="number">5</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">while</span> <span class="literal">True</span>:</span><br><span class="line">    <span class="comment"># 开始从客户端接收请求</span></span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&#x27;Ready to serve...&#x27;</span>)</span><br><span class="line">    tcpCliSock, addr = tcpSerSock.accept()</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&#x27;Received a connection from: &#x27;</span>, addr)</span><br><span class="line">    message = tcpCliSock.recv(<span class="number">4096</span>).decode()</span><br><span class="line"></span><br><span class="line">    <span class="comment"># 从请求中解析出filename</span></span><br><span class="line">    filename = message.split()[<span class="number">1</span>].partition(<span class="string">&quot;//&quot;</span>)[<span class="number">2</span>].replace(<span class="string">&#x27;/&#x27;</span>, <span class="string">&#x27;_&#x27;</span>)</span><br><span class="line">    fileExist = <span class="string">&quot;false&quot;</span></span><br><span class="line">    <span class="keyword">try</span>:</span><br><span class="line">        <span class="comment"># 检查缓存中是否存在该文件</span></span><br><span class="line">        f = <span class="built_in">open</span>(filename, <span class="string">&quot;r&quot;</span>)</span><br><span class="line">        outputdata = f.readlines()</span><br><span class="line">        fileExist = <span class="string">&quot;true&quot;</span></span><br><span class="line">        <span class="built_in">print</span>(<span class="string">&#x27;File Exists!&#x27;</span>)</span><br><span class="line"></span><br><span class="line">        <span class="comment"># 缓存中存在该文件，把它向客户端发送</span></span><br><span class="line">        <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">0</span>, <span class="built_in">len</span>(outputdata)):</span><br><span class="line">            tcpCliSock.send(outputdata[i].encode())</span><br><span class="line">        <span class="built_in">print</span>(<span class="string">&#x27;Read from cache&#x27;</span>)</span><br><span class="line"></span><br><span class="line">    <span class="comment"># 缓存中不存在该文件，异常处理</span></span><br><span class="line">    <span class="keyword">except</span> IOError:</span><br><span class="line">        <span class="built_in">print</span>(<span class="string">&#x27;File Exist: &#x27;</span>, fileExist)</span><br><span class="line">        <span class="keyword">if</span> fileExist == <span class="string">&quot;false&quot;</span>:</span><br><span class="line">            <span class="comment"># 在代理服务器上创建一个tcp socket</span></span><br><span class="line">            <span class="built_in">print</span>(<span class="string">&#x27;Creating socket on proxyserver&#x27;</span>)</span><br><span class="line">            c = socket(AF_INET, SOCK_STREAM)</span><br><span class="line"></span><br><span class="line">            hostn = message.split()[<span class="number">1</span>].partition(<span class="string">&quot;//&quot;</span>)[<span class="number">2</span>].partition(<span class="string">&quot;/&quot;</span>)[<span class="number">0</span>]</span><br><span class="line">            <span class="built_in">print</span>(<span class="string">&#x27;Host Name: &#x27;</span>, hostn)</span><br><span class="line">            <span class="keyword">try</span>:</span><br><span class="line">                <span class="comment"># 连接到远程服务器80端口</span></span><br><span class="line">                c.connect((hostn, <span class="number">80</span>))</span><br><span class="line">                <span class="built_in">print</span>(<span class="string">&#x27;Socket connected to port 80 of the host&#x27;</span>)</span><br><span class="line"></span><br><span class="line">                c.sendall(message.encode())</span><br><span class="line">                <span class="comment"># Read the response into buffer</span></span><br><span class="line">                buff = c.recv(<span class="number">4096</span>)</span><br><span class="line"></span><br><span class="line">                tcpCliSock.sendall(buff)</span><br><span class="line">                <span class="comment"># Create a new file in the cache for the requested file.</span></span><br><span class="line">                <span class="comment"># Also send the response in the buffer to client socket</span></span><br><span class="line">                <span class="comment"># and the corresponding file in the cache</span></span><br><span class="line">                tmpFile = <span class="built_in">open</span>(<span class="string">&quot;./&quot;</span> + filename, <span class="string">&quot;w&quot;</span>)</span><br><span class="line">                tmpFile.writelines(buff.decode().replace(<span class="string">&#x27;\r\n&#x27;</span>, <span class="string">&#x27;\n&#x27;</span>))</span><br><span class="line">                tmpFile.close()</span><br><span class="line"></span><br><span class="line">            <span class="keyword">except</span>:</span><br><span class="line">                <span class="built_in">print</span>(<span class="string">&quot;Illegal request&quot;</span>)</span><br><span class="line"></span><br><span class="line">        <span class="keyword">else</span>:</span><br><span class="line">            <span class="comment"># HTTP response message for file not found</span></span><br><span class="line">            <span class="comment"># Do stuff here</span></span><br><span class="line">            <span class="built_in">print</span>(<span class="string">&#x27;File Not Found...Stupid Andy&#x27;</span>)</span><br><span class="line">    <span class="comment"># Close the client and the server sockets</span></span><br><span class="line">    tcpCliSock.close()</span><br><span class="line">tcpSerSock.close()</span><br></pre></td></tr></table></figure>
+
+
+<ol start="4">
+<li>nslookup <a target="_blank" rel="noopener" href="http://www.mit.edu/">www.mit.edu</a><br>说这个命令是说，请告诉我主机 <a target="_blank" rel="noopener" href="http://www.mit.edu/">www.mit.edu</a> 的IP地址。如屏幕截图所示，此命令的响应提供两条信息：（1）提供响应的DNS服务器的名称和IP地址；（2）响应本身，即 <a target="_blank" rel="noopener" href="http://www.mit.edu/">www.mit.edu</a> 的主机名和IP地址。虽然响应来自理工大学的本地DNS服务器，但本地DNS服务器很可能会迭代地联系其他几个DNS服务器来获得结果，如书中第2.4节所述。</li>
+</ol>
+
+      
+    </div>
+    <div class="article-footer">
+      <br>
+<br>
+<blockquote class="mt-2x">
+  <ul class="post-copyright list-unstyled">
+    
+    <li class="post-copyright-link hidden-xs">
+      <strong>本文链接：</strong>
+      <a href="https://codecodegogogo.github.io/2023/05/22/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C-%E7%AC%AC%E4%BA%8C%E7%AB%A0%E5%BA%94%E7%94%A8%E5%B1%82/" title="计算机网络-自顶向下-第二章应用层" target="_blank" rel="external">https://codecodegogogo.github.io/2023/05/22/计算机网络-第二章应用层/</a>
+    </li>
+    
+    <li class="post-copyright-license">
+      <strong></strong>
+      <!-- <strong>版权声明： </strong> 本博客所有文章除特别声明外，均采用 <a href="http://creativecommons.org/licenses/by/4.0/deed.zh" target="_blank" rel="external">CC BY 4.0 CN协议</a> 许可协议。转载请注明出处！ -->
+    </li>
+  </ul>
+</blockquote>
+
+    </div>
+  </article>
+  
+    
+  <section id="comments">
+  	
+  </section>
+
+
+  
+</div>
+
+  <nav class="bar bar-footer clearfix" data-stick-bottom>
+  <div class="bar-inner">
+  
+  <ul class="pager pull-left">
+    
+    <li class="prev">
+      <a href="/2023/05/24/Markdown/" title="Markdown"><i class="icon icon-angle-left" aria-hidden="true"></i><span>&nbsp;&nbsp;上一篇</span></a>
+    </li>
+    
+    
+    <li class="next">
+      <a href="/2023/05/20/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C-%E7%AC%AC%E4%B8%80%E7%AB%A0%E6%80%BB%E8%BF%B0/" title="计算机网络-自顶向下_第一章总述"><span>下一篇&nbsp;&nbsp;</span><i class="icon icon-angle-right" aria-hidden="true"></i></a>
+    </li>
+    
+    
+    <li class="toggle-toc">
+      <a class="toggle-btn " data-toggle="collapse" href="#collapseToc" aria-expanded="false" title="文章目录" role="button">    <span>[&nbsp;</span><span>文章目录</span>
+        <i class="text-collapsed icon icon-anchor"></i>
+        <i class="text-in icon icon-close"></i>
+        <span>]</span>
+      </a>
+    </li>
+    
+  </ul>
+  
+  
+  <!-- Button trigger modal -->
+  <button type="button" class="btn btn-fancy btn-donate pop-onhover bg-gradient-warning" data-toggle="modal" data-target="#donateModal"><span>赏</span></button>
+  <!-- <div class="wave-icon wave-icon-danger btn-donate" data-toggle="modal" data-target="#donateModal">
+    <div class="wave-circle"><span class="icon"><i class="icon icon-bill"></i></span></div>
+  </div> -->
+  
+  
+  <div class="bar-right">
+    
+    <div class="share-component" data-sites="weibo,qq,wechat,facebook,twitter" data-mobile-sites="weibo,qq,qzone"></div>
+    
+  </div>
+  </div>
+</nav>
+  
+<!-- Modal -->
+<div class="modal modal-center modal-small modal-xs-full fade" id="donateModal" tabindex="-1" role="dialog">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content donate">
+      <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+      <div class="modal-body">
+        <div class="donate-box">
+          <div class="donate-head">
+            <p>感谢您的支持，我会继续努力的!</p>
+          </div>
+          <div class="tab-content">
+            <div role="tabpanel" class="tab-pane fade active in" id="alipay">
+              <div class="donate-payimg">
+                <img src="/images/donate/alipayimg.png" alt="扫码支持" title="扫一扫" />
+              </div>
+              <p class="text-muted mv">扫码打赏，你说多少就多少</p>
+              <p class="text-grey">打开支付宝扫一扫，即可进行扫码打赏哦</p>
+            </div>
+            <div role="tabpanel" class="tab-pane fade" id="wechatpay">
+              <div class="donate-payimg">
+                <img src="/images/donate/wechatpayimg.png" alt="扫码支持" title="扫一扫" />
+              </div>
+              <p class="text-muted mv">扫码打赏，你说多少就多少</p>
+              <p class="text-grey">打开微信扫一扫，即可进行扫码打赏哦</p>
+            </div>
+          </div>
+          <div class="donate-footer">
+            <ul class="nav nav-tabs nav-justified" role="tablist">
+              <li role="presentation" class="active">
+                <a href="#alipay" id="alipay-tab" role="tab" data-toggle="tab" aria-controls="alipay" aria-expanded="true"><i class="icon icon-alipay"></i> 支付宝</a>
+              </li>
+              <li role="presentation" class="">
+                <a href="#wechatpay" role="tab" id="wechatpay-tab" data-toggle="tab" aria-controls="wechatpay" aria-expanded="false"><i class="icon icon-wepay"></i> 微信支付</a>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+
+
+
+</main>
+
+  <footer class="footer" itemscope itemtype="http://schema.org/WPFooter">
+	
+	
+    <ul class="social-links">
+    	
+        <li><a href="https://github.com/codecodegogogo" target="_blank" title="Github" data-toggle=tooltip data-placement=top><i class="icon icon-github"></i></a></li>
+        
+    </ul>
+
+    <div class="copyright">
+    	
+        联系邮箱：<br>codecodegogogo@163.com
+        <!-- 2024 Sunny -->
+        
+        <!--  -->
+    </div>
+</footer>
+  <script src="//cdn.jsdelivr.net/npm/jquery@1.12.4/dist/jquery.min.js"></script>
+<script>
+window.jQuery || document.write('<script src="js/jquery.min.js"><\/script>')
+</script>
+
+<script src="/js/plugin.min.js"></script>
+
+
+<script src="/js/application.js"></script>
+
+
+    <script>
+(function (window) {
+    var INSIGHT_CONFIG = {
+        TRANSLATION: {
+            POSTS: '文章',
+            PAGES: '页面',
+            CATEGORIES: '分类',
+            TAGS: '标签',
+            UNTITLED: '(未命名)',
+        },
+        ROOT_URL: '/',
+        CONTENT_URL: '/content.json',
+    };
+    window.INSIGHT_CONFIG = INSIGHT_CONFIG;
+})(window);
+</script>
+
+<script src="/js/insight.js"></script>
+
+
+
+
+
+
+   
+<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+
+   
+
+
+
+
+
+
+</body>
+
+</html>

@@ -1,0 +1,573 @@
+<!DOCTYPE html>
+<html lang=zh>
+<head>
+  <meta charset="utf-8">
+  
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, minimal-ui">
+  <meta name="renderer" content="webkit">
+  <meta http-equiv="Cache-Control" content="no-transform" />
+  <meta http-equiv="Cache-Control" content="no-siteapp" />
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <meta name="format-detection" content="telephone=no,email=no,adress=no">
+  <!-- Color theme for statusbar -->
+  <meta name="theme-color" content="#000000" />
+  <!-- 强制页面在当前窗口以独立页面显示,防止别人在框架里调用页面 -->
+  <meta http-equiv="window-target" content="_top" />
+  
+  
+  <title>Markdown | yong&#39;s Blog</title>
+  <meta name="description" content="Markdown是什么？Markdown 是一种轻量级标记语言，使用的是纯文本的方式。诞生初期是为了简化 HTML 语法，用于编写阅读次数多、更新频率高，但内容格式相对稳定的 README 类的文档。所以 Markdown 语法支持嵌入原始的 HTML 标记语言，支持 CSS 样式。 我们所看到的 Markdown 网页预览的效果，其实都是将 Markdown 文档内容首先转换成 HTML 标签，">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Markdown">
+<meta property="og:url" content="https://codecodegogogo.github.io/2023/05/24/Markdown/index.html">
+<meta property="og:site_name" content="Sunny">
+<meta property="og:description" content="Markdown是什么？Markdown 是一种轻量级标记语言，使用的是纯文本的方式。诞生初期是为了简化 HTML 语法，用于编写阅读次数多、更新频率高，但内容格式相对稳定的 README 类的文档。所以 Markdown 语法支持嵌入原始的 HTML 标记语言，支持 CSS 样式。 我们所看到的 Markdown 网页预览的效果，其实都是将 Markdown 文档内容首先转换成 HTML 标签，">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://codecodegogogo.github.io/2023/05/24/Markdown/1.png">
+<meta property="og:image" content="https://codecodegogogo.github.io/2023/05/24/Markdown/2.png">
+<meta property="og:image" content="https://codecodegogogo.github.io/2023/05/24/Markdown/3.png">
+<meta property="og:image" content="https://codecodegogogo.github.io/2023/05/24/Markdown/4.png">
+<meta property="og:image" content="https://codecodegogogo.github.io/2023/05/24/Markdown/5.png">
+<meta property="og:image" content="https://codecodegogogo.github.io/2023/05/24/Markdown/6.png">
+<meta property="og:image" content="https://codecodegogogo.github.io/2023/05/24/Markdown/7.png">
+<meta property="og:image" content="https://codecodegogogo.github.io/2023/05/24/Markdown/8.png">
+<meta property="og:image" content="https://codecodegogogo.github.io/2023/05/24/Markdown/9.png">
+<meta property="og:image" content="https://codecodegogogo.github.io/2023/05/24/Markdown/10.png">
+<meta property="article:published_time" content="2023-05-24T08:02:01.000Z">
+<meta property="article:modified_time" content="2023-06-12T06:14:39.140Z">
+<meta property="article:author" content="Sunny">
+<meta property="article:tag" content="计算机工具">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://codecodegogogo.github.io/2023/05/24/Markdown/1.png">
+  <!-- Canonical links -->
+  <link rel="canonical" href="https://codecodegogogo.github.io/2023/05/24/Markdown/index.html">
+  
+    <link rel="alternate" href="/atom.xml" title="Sunny" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/images/favicon.png" type="image/x-icon">
+  
+  <!-- <link rel="icon" href="/images/favicon.png" type="image/x-icon"> -->
+
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  
+  
+  
+  
+<meta name="generator" content="Hexo 5.4.2"></head>
+
+
+<body class="main-center theme-purple" itemscope itemtype="http://schema.org/WebPage">
+  <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+  <div class="slimContent">
+    <div class="navbar-header">
+      
+      
+      <div class="profile-block text-center">
+        <a id="avatar" href="https://github.com/codecodegogogo" target="_blank">
+          <img class="img-circle img-rotate" src="/images/avatar.jpg" width="200" height="200">
+        </a>
+        <h2 id="name" class="hidden-xs hidden-sm">yong</h2>
+        <h3 id="title" class="hidden-xs hidden-sm hidden-md"></h3>
+        <small id="location" class="text-muted hidden-xs hidden-sm"><i class="icon icon-map-marker"></i> China</small>
+      </div>
+      
+      <div class="search" id="search-form-wrap">
+
+    <form class="search-form sidebar-form">
+        <div class="input-group">
+            <input type="text" class="search-form-input form-control" placeholder="搜索" />
+            <span class="input-group-btn">
+                <button type="submit" class="search-form-submit btn btn-flat" onclick="return false;"><i class="icon icon-search"></i></button>
+            </span>
+        </div>
+    </form>
+    <div class="ins-search">
+  <div class="ins-search-mask"></div>
+  <div class="ins-search-container">
+    <div class="ins-input-wrapper">
+      <input type="text" class="ins-search-input" placeholder="想要查找什么..." x-webkit-speech />
+      <button type="button" class="close ins-close ins-selectable" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+    </div>
+    <div class="ins-section-wrapper">
+      <div class="ins-section-container"></div>
+    </div>
+  </div>
+</div>
+
+
+</div>
+      <button class="navbar-toggle collapsed" type="button" data-toggle="collapse" data-target="#main-navbar" aria-controls="main-navbar" aria-expanded="false">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+    </div>
+    <nav id="main-navbar" class="collapse navbar-collapse" itemscope itemtype="http://schema.org/SiteNavigationElement" role="navigation">
+      <ul class="nav navbar-nav main-nav menu-highlight">
+        
+        
+        <li class="menu-item menu-item-home">
+          <a href="/.">
+            
+            <i class="icon icon-home-fill"></i>
+            
+            <span class="menu-title">首页</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags">
+            
+            <i class="icon icon-tags"></i>
+            
+            <span class="menu-title">标签</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-repository">
+          <a target="_blank" rel="noopener" href="https://github.com/codecodegogogo">
+            
+            <i class="icon icon-project"></i>
+            
+            <span class="menu-title">项目</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about">
+            
+            <i class="icon icon-cup-fill"></i>
+            
+            <span class="menu-title">关于</span>
+          </a>
+        </li>
+        
+      </ul>
+      
+	
+    <ul class="social-links">
+    	
+        <li><a href="https://github.com/codecodegogogo" target="_blank" title="Github" data-toggle=tooltip data-placement=top><i class="icon icon-github"></i></a></li>
+        
+    </ul>
+
+    </nav>
+  </div>
+</header>
+
+  
+    <aside class="sidebar" itemscope itemtype="http://schema.org/WPSideBar">
+  <div class="slimContent">
+    
+      <div class="widget">
+    <h3 class="widget-title">公告</h3>
+    <div class="widget-body">
+        <div id="board">
+            <div class="content">
+                <p>今天网站换了个新皮肤~</p> <p align="right">2023.4.14</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">标签</h3>
+    <div class="widget-body">
+      <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/c/" rel="tag">c++</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/code/" rel="tag">code</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/java/" rel="tag">java</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/javascript/" rel="tag">javascript</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/linux/" rel="tag">linux</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/os/" rel="tag">os</a><span class="tag-list-count">11</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/vue/" rel="tag">vue</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%9D%82%E8%B0%88/" rel="tag">杂谈</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%AE%97%E6%B3%95/" rel="tag">算法</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%9F%BA%E7%A1%80/" rel="tag">计算机基础</a><span class="tag-list-count">8</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%B7%A5%E5%85%B7/" rel="tag">计算机工具</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E6%96%87%E5%8C%96%E5%9F%BA%E7%A1%80/" rel="tag">计算机文化基础</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/" rel="tag">计算机网络</a><span class="tag-list-count">9</span></li></ul>
+    </div>
+  </div>
+
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">最新文章</h3>
+    <div class="widget-body">
+      <ul class="recent-post-list list-unstyled no-thumbnail">
+        
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                
+              </p>
+              <p class="item-title">
+                <a href="/2024/06/10/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E5%90%84%E5%B1%82%E7%BD%91%E7%BB%9C%E8%AE%BE%E5%A4%87/%E8%AE%A1%E7%AE%97%E6%9C%BA%E6%96%87%E5%8C%96%E5%9F%BA%E7%A1%80-ppt/" class="title">(no title)</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2024-06-10T02:05:08.833Z" itemprop="datePublished">2024-06-10</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                
+              </p>
+              <p class="item-title">
+                <a href="/2024/06/10/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E5%90%84%E5%B1%82%E7%BD%91%E7%BB%9C%E8%AE%BE%E5%A4%87/%E8%AE%A1%E7%AE%97%E6%9C%BA%E6%96%87%E5%8C%96%E5%9F%BA%E7%A1%80-%E6%95%B0%E6%8D%AE%E5%BA%93/" class="title">(no title)</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2024-06-10T02:05:08.833Z" itemprop="datePublished">2024-06-10</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                
+              </p>
+              <p class="item-title">
+                <a href="/2024/05/23/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E5%90%84%E5%B1%82%E7%BD%91%E7%BB%9C%E8%AE%BE%E5%A4%87/%E8%AE%A1%E7%AE%97%E6%9C%BA%E6%96%87%E5%8C%96%E5%9F%BA%E7%A1%80-excel/" class="title">计算机文化基础-excel</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2024-05-23T00:30:47.000Z" itemprop="datePublished">2024-05-23</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                
+              </p>
+              <p class="item-title">
+                <a href="/2024/05/14/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E5%90%84%E5%B1%82%E7%BD%91%E7%BB%9C%E8%AE%BE%E5%A4%87/%E8%AE%A1%E7%AE%97%E6%9C%BA%E6%96%87%E5%8C%96%E5%9F%BA%E7%A1%80/" class="title">计算机文化基础</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2024-05-14T01:41:05.000Z" itemprop="datePublished">2024-05-14</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                
+              </p>
+              <p class="item-title">
+                <a href="/2024/03/01/Algorithm/" class="title">Algorithm</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2024-03-01T07:52:28.000Z" itemprop="datePublished">2024-03-01</time>
+              </p>
+            </div>
+          </li>
+          
+      </ul>
+    </div>
+  </div>
+  
+
+    
+  </div>
+</aside>
+
+  
+  
+  <aside class="sidebar sidebar-toc collapse   in  " id="collapseToc" itemscope itemtype="http://schema.org/WPSideBar">
+  <div class="slimContent">
+    <nav id="toc" class="article-toc">
+      <h3 class="toc-title">文章目录</h3>
+      <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#Markdown%E6%98%AF%E4%BB%80%E4%B9%88%EF%BC%9F"><span class="toc-number">1.</span> <span class="toc-text">Markdown是什么？</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Markdown-%E5%88%86%E7%BA%A7%E6%A0%87%E9%A2%98"><span class="toc-number">2.</span> <span class="toc-text">Markdown 分级标题</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Markdown-%E6%AE%B5%E8%90%BD"><span class="toc-number">3.</span> <span class="toc-text">Markdown 段落</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Markdown-%E5%88%97%E8%A1%A8"><span class="toc-number">4.</span> <span class="toc-text">Markdown 列表</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Markdown-%E5%BC%95%E7%94%A8"><span class="toc-number">5.</span> <span class="toc-text">Markdown 引用</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Markdown-%E5%BC%BA%E8%B0%83"><span class="toc-number">6.</span> <span class="toc-text">Markdown 强调</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Markdown-%E8%BE%85%E5%8A%A9%E7%BA%BF"><span class="toc-number">7.</span> <span class="toc-text">Markdown 辅助线</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Markdown-%E4%BB%A3%E7%A0%81%E5%9D%97"><span class="toc-number">8.</span> <span class="toc-text">Markdown 代码块</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Markdown-%E8%B6%85%E9%93%BE%E6%8E%A5"><span class="toc-number">9.</span> <span class="toc-text">Markdown 超链接</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Markdown-%E5%9B%BE%E7%89%87"><span class="toc-number">10.</span> <span class="toc-text">Markdown 图片</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Markdown-%E6%B3%A8%E9%87%8A"><span class="toc-number">11.</span> <span class="toc-text">Markdown 注释</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Markdown-%E8%A1%A8%E6%A0%BC"><span class="toc-number">12.</span> <span class="toc-text">Markdown 表格</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Markdown-%E7%94%9F%E6%88%90%E7%9B%AE%E5%BD%95"><span class="toc-number">13.</span> <span class="toc-text">Markdown 生成目录</span></a></li></ol>
+    </nav>
+  </div>
+</aside>
+
+<main class="main" role="main">
+  <div class="content">
+  <article id="post-Markdown" class="article article-type-post" itemscope itemtype="http://schema.org/BlogPosting">
+    
+    <div class="article-header">
+      
+        
+  
+    <h1 class="article-title" itemprop="name">
+      Markdown
+    </h1>
+  
+
+      
+      <div class="article-meta">
+        <span class="article-date">
+    <i class="icon icon-calendar-check"></i>
+	<a href="/2023/05/24/Markdown/" class="article-date">
+	  <time datetime="2023-05-24T08:02:01.000Z" itemprop="datePublished">2023-05-24</time>
+	</a>
+</span>
+        
+        
+  <span class="article-tag">
+    <i class="icon icon-tags"></i>
+	<a class="article-tag-link-link" href="/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%B7%A5%E5%85%B7/" rel="tag">计算机工具</a>
+  </span>
+
+
+        
+	<span class="article-read hidden-xs">
+	    <i class="icon icon-eye-fill" aria-hidden="true"></i>
+	    <span id="busuanzi_container_page_pv">
+			<span id="busuanzi_value_page_pv">0</span>
+		</span>
+	</span>
+
+
+        <span class="post-comment"><i class="icon icon-comment"></i> <a href="/2023/05/24/Markdown/#comments" class="article-comment-link">评论</a></span>
+        
+	
+		<span class="post-wordcount hidden-xs" itemprop="wordCount">字数统计: 763(字)</span>
+	
+	
+
+      </div>
+    </div>
+    <div class="article-entry marked-body" itemprop="articleBody">
+      
+        <h3 id="Markdown是什么？"><a href="#Markdown是什么？" class="headerlink" title="Markdown是什么？"></a>Markdown是什么？</h3><p>Markdown 是一种轻量级标记语言，使用的是纯文本的方式。诞生初期是为了简化 HTML 语法，用于编写阅读次数多、更新频率高，但内容格式相对稳定的 README 类的文档。所以 Markdown 语法支持嵌入原始的 HTML 标记语言，支持 CSS 样式。</p>
+<p>我们所看到的 Markdown 网页预览的效果，其实都是将 Markdown 文档内容首先转换成 HTML 标签，再配以某些默认预定共同渲染而成的。同样的一段表格代码，在 Typora 和 VS Code 预览中的表现不同，<strong>为了让 Markdown 的表现形式稳定，我们可将 Markdown 导出成 HTML 文件。</strong></p>
+<h3 id="Markdown-分级标题"><a href="#Markdown-分级标题" class="headerlink" title="Markdown 分级标题"></a>Markdown 分级标题</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"># 这是一个标题</span><br><span class="line">## 这是一个标题</span><br><span class="line">### 这是一个标题</span><br><span class="line">#### 这是一个标题</span><br><span class="line">##### 这是一个标题</span><br><span class="line">###### 这是一个标题</span><br></pre></td></tr></table></figure>
+
+<p><img src="/2023/05/24/Markdown/1.png" alt="?"></p>
+<h3 id="Markdown-段落"><a href="#Markdown-段落" class="headerlink" title="Markdown 段落"></a>Markdown 段落</h3><p>在 Markdown 文件中，没有任何标记的文字会被解析成正文。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">### 这是标题</span><br><span class="line"></span><br><span class="line">这是一段正文文字。</span><br></pre></td></tr></table></figure>
+<p><img src="/2023/05/24/Markdown/2.png" alt="?"></p>
+<h3 id="Markdown-列表"><a href="#Markdown-列表" class="headerlink" title="Markdown 列表"></a>Markdown 列表</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">** 无序列表**</span><br><span class="line"></span><br><span class="line">使用星号生成无序列表</span><br><span class="line"></span><br><span class="line">* 项目1</span><br><span class="line">* 项目2</span><br><span class="line">* 项目3</span><br><span class="line"></span><br><span class="line">使用加号生成无序列表</span><br><span class="line"></span><br><span class="line">+ 项目1</span><br><span class="line">+ 项目2</span><br><span class="line">+ 项目3</span><br><span class="line"></span><br><span class="line">使用减号生成无序列表</span><br><span class="line"></span><br><span class="line">- 项目1</span><br><span class="line">- 项目2</span><br><span class="line">- 项目3</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p><img src="/2023/05/24/Markdown/3.png" alt="?"></p>
+<p><strong>有序列表</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">1. 项目1</span><br><span class="line">2. 项目2</span><br><span class="line">3. 项目3</span><br><span class="line"></span><br><span class="line">源码中的数字与渲染后的数字并不一一对应，但可以决定列表的开始序号</span><br><span class="line"></span><br><span class="line">例如，让 Markdown 渲染器自动安排序号：</span><br><span class="line"></span><br><span class="line">0. 项目1</span><br><span class="line">0. 项目2</span><br><span class="line">0. 项目3</span><br><span class="line"></span><br><span class="line">让有序列表以 “2” 开头：</span><br><span class="line"></span><br><span class="line">2. 项目1</span><br><span class="line">1. 项目2</span><br><span class="line">0. 项目3</span><br></pre></td></tr></table></figure>
+
+<p><img src="/2023/05/24/Markdown/4.png" alt="?"></p>
+<h3 id="Markdown-引用"><a href="#Markdown-引用" class="headerlink" title="Markdown 引用"></a>Markdown 引用</h3><p>在 Markdown 文件中，用「大于号」开头的行会被转换为块引用。<br>如果需要在块引用内的换行，可以在行尾增加两个连续的空格。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">&gt; 一支穿云箭，千军万马来相见；  </span><br><span class="line">&gt; 两副忠义胆，刀山火海提命现。  </span><br><span class="line">&gt;</span><br><span class="line">&gt; —— 星仔</span><br></pre></td></tr></table></figure>
+<p><img src="/2023/05/24/Markdown/5.png"></p>
+<h3 id="Markdown-强调"><a href="#Markdown-强调" class="headerlink" title="Markdown 强调"></a>Markdown 强调</h3><figure class="highlight plaintext"><figcaption><span>斜体的演示</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">  *用星号表示的斜体*</span><br><span class="line"></span><br><span class="line">  _用下划线表示的斜体_</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">- 粗体的演示</span><br><span class="line"></span><br><span class="line">  **用星号表示的粗体**</span><br><span class="line"></span><br><span class="line">  __用下划线表示的粗体__</span><br></pre></td></tr></table></figure>
+
+<p><img src="/2023/05/24/Markdown/6.png"></p>
+<h3 id="Markdown-辅助线"><a href="#Markdown-辅助线" class="headerlink" title="Markdown 辅助线"></a>Markdown 辅助线</h3><figure class="highlight plaintext"><figcaption><span>"空格" 时，删除线效果会失效。</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">~~有效的删除线~~</span><br><span class="line"></span><br><span class="line">~~失效的删除线 ~~</span><br></pre></td></tr></table></figure>
+
+<p><img src="/2023/05/24/Markdown/7.png" alt="?"></p>
+<h3 id="Markdown-代码块"><a href="#Markdown-代码块" class="headerlink" title="Markdown 代码块"></a>Markdown 代码块</h3><p>使用反引号定义代码块</p>
+<p>使用反引号定义代码块，并定义高亮(在反引号后加语言名称)</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">pubic <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> &#123;</span><br><span class="line">    System.out.println(<span class="string">&quot;Hello world&quot;</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+<h3 id="Markdown-超链接"><a href="#Markdown-超链接" class="headerlink" title="Markdown 超链接"></a>Markdown 超链接</h3><p><code>一对中括号就可以将文字转换为超链接，如: [北京](www.baidu.com)，[上海]()，[广州]()，[深圳]()</code></p>
+<p><img src="/2023/05/24/Markdown/8.png" alt="?"></p>
+<h3 id="Markdown-图片"><a href="#Markdown-图片" class="headerlink" title="Markdown 图片"></a>Markdown 图片</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">![?](Markdown/8.png)</span><br></pre></td></tr></table></figure>
+
+<h3 id="Markdown-注释"><a href="#Markdown-注释" class="headerlink" title="Markdown 注释"></a>Markdown 注释</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">这是一段没有被注释的文字</span><br><span class="line">&lt;!-- 这是一段被注释掉的文字 --&gt;</span><br></pre></td></tr></table></figure>
+
+<p><img src="/2023/05/24/Markdown/9.png" alt="?"></p>
+<h3 id="Markdown-表格"><a href="#Markdown-表格" class="headerlink" title="Markdown 表格"></a>Markdown 表格</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">|学号|姓名|age|</span><br><span class="line">|:---|----|---:|</span><br><span class="line">|1|张三|21|</span><br><span class="line">|2|李四|43|</span><br><span class="line">|3|王五|76|</span><br></pre></td></tr></table></figure>
+<p><img src="/2023/05/24/Markdown/10.png" alt="?"></p>
+<h3 id="Markdown-生成目录"><a href="#Markdown-生成目录" class="headerlink" title="Markdown 生成目录"></a>Markdown 生成目录</h3><p>在 Markdown 中，自动生成目录非常简单，只需要在恰当的位置添加 [TOC] 符号，凡是以 # 定义的标题都会被编排到目录中。</p>
+
+      
+    </div>
+    <div class="article-footer">
+      <br>
+<br>
+<blockquote class="mt-2x">
+  <ul class="post-copyright list-unstyled">
+    
+    <li class="post-copyright-link hidden-xs">
+      <strong>本文链接：</strong>
+      <a href="https://codecodegogogo.github.io/2023/05/24/Markdown/" title="Markdown" target="_blank" rel="external">https://codecodegogogo.github.io/2023/05/24/Markdown/</a>
+    </li>
+    
+    <li class="post-copyright-license">
+      <strong></strong>
+      <!-- <strong>版权声明： </strong> 本博客所有文章除特别声明外，均采用 <a href="http://creativecommons.org/licenses/by/4.0/deed.zh" target="_blank" rel="external">CC BY 4.0 CN协议</a> 许可协议。转载请注明出处！ -->
+    </li>
+  </ul>
+</blockquote>
+
+    </div>
+  </article>
+  
+    
+  <section id="comments">
+  	
+  </section>
+
+
+  
+</div>
+
+  <nav class="bar bar-footer clearfix" data-stick-bottom>
+  <div class="bar-inner">
+  
+  <ul class="pager pull-left">
+    
+    <li class="prev">
+      <a href="/2023/05/26/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C-%E7%AC%AC%E4%B8%89%E7%AB%A0%E8%BF%90%E8%BE%93%E5%B1%82/" title="计算机网络-自定向下-第三章运输层"><i class="icon icon-angle-left" aria-hidden="true"></i><span>&nbsp;&nbsp;上一篇</span></a>
+    </li>
+    
+    
+    <li class="next">
+      <a href="/2023/05/22/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C-%E7%AC%AC%E4%BA%8C%E7%AB%A0%E5%BA%94%E7%94%A8%E5%B1%82/" title="计算机网络-自顶向下-第二章应用层"><span>下一篇&nbsp;&nbsp;</span><i class="icon icon-angle-right" aria-hidden="true"></i></a>
+    </li>
+    
+    
+    <li class="toggle-toc">
+      <a class="toggle-btn " data-toggle="collapse" href="#collapseToc" aria-expanded="false" title="文章目录" role="button">    <span>[&nbsp;</span><span>文章目录</span>
+        <i class="text-collapsed icon icon-anchor"></i>
+        <i class="text-in icon icon-close"></i>
+        <span>]</span>
+      </a>
+    </li>
+    
+  </ul>
+  
+  
+  <!-- Button trigger modal -->
+  <button type="button" class="btn btn-fancy btn-donate pop-onhover bg-gradient-warning" data-toggle="modal" data-target="#donateModal"><span>赏</span></button>
+  <!-- <div class="wave-icon wave-icon-danger btn-donate" data-toggle="modal" data-target="#donateModal">
+    <div class="wave-circle"><span class="icon"><i class="icon icon-bill"></i></span></div>
+  </div> -->
+  
+  
+  <div class="bar-right">
+    
+    <div class="share-component" data-sites="weibo,qq,wechat,facebook,twitter" data-mobile-sites="weibo,qq,qzone"></div>
+    
+  </div>
+  </div>
+</nav>
+  
+<!-- Modal -->
+<div class="modal modal-center modal-small modal-xs-full fade" id="donateModal" tabindex="-1" role="dialog">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content donate">
+      <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+      <div class="modal-body">
+        <div class="donate-box">
+          <div class="donate-head">
+            <p>感谢您的支持，我会继续努力的!</p>
+          </div>
+          <div class="tab-content">
+            <div role="tabpanel" class="tab-pane fade active in" id="alipay">
+              <div class="donate-payimg">
+                <img src="/images/donate/alipayimg.png" alt="扫码支持" title="扫一扫" />
+              </div>
+              <p class="text-muted mv">扫码打赏，你说多少就多少</p>
+              <p class="text-grey">打开支付宝扫一扫，即可进行扫码打赏哦</p>
+            </div>
+            <div role="tabpanel" class="tab-pane fade" id="wechatpay">
+              <div class="donate-payimg">
+                <img src="/images/donate/wechatpayimg.png" alt="扫码支持" title="扫一扫" />
+              </div>
+              <p class="text-muted mv">扫码打赏，你说多少就多少</p>
+              <p class="text-grey">打开微信扫一扫，即可进行扫码打赏哦</p>
+            </div>
+          </div>
+          <div class="donate-footer">
+            <ul class="nav nav-tabs nav-justified" role="tablist">
+              <li role="presentation" class="active">
+                <a href="#alipay" id="alipay-tab" role="tab" data-toggle="tab" aria-controls="alipay" aria-expanded="true"><i class="icon icon-alipay"></i> 支付宝</a>
+              </li>
+              <li role="presentation" class="">
+                <a href="#wechatpay" role="tab" id="wechatpay-tab" data-toggle="tab" aria-controls="wechatpay" aria-expanded="false"><i class="icon icon-wepay"></i> 微信支付</a>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+
+
+
+</main>
+
+  <footer class="footer" itemscope itemtype="http://schema.org/WPFooter">
+	
+	
+    <ul class="social-links">
+    	
+        <li><a href="https://github.com/codecodegogogo" target="_blank" title="Github" data-toggle=tooltip data-placement=top><i class="icon icon-github"></i></a></li>
+        
+    </ul>
+
+    <div class="copyright">
+    	
+        联系邮箱：<br>codecodegogogo@163.com
+        <!-- 2024 Sunny -->
+        
+        <!--  -->
+    </div>
+</footer>
+  <script src="//cdn.jsdelivr.net/npm/jquery@1.12.4/dist/jquery.min.js"></script>
+<script>
+window.jQuery || document.write('<script src="js/jquery.min.js"><\/script>')
+</script>
+
+<script src="/js/plugin.min.js"></script>
+
+
+<script src="/js/application.js"></script>
+
+
+    <script>
+(function (window) {
+    var INSIGHT_CONFIG = {
+        TRANSLATION: {
+            POSTS: '文章',
+            PAGES: '页面',
+            CATEGORIES: '分类',
+            TAGS: '标签',
+            UNTITLED: '(未命名)',
+        },
+        ROOT_URL: '/',
+        CONTENT_URL: '/content.json',
+    };
+    window.INSIGHT_CONFIG = INSIGHT_CONFIG;
+})(window);
+</script>
+
+<script src="/js/insight.js"></script>
+
+
+
+
+
+
+   
+<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+
+   
+
+
+
+
+
+
+</body>
+
+</html>

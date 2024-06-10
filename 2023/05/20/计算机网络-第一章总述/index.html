@@ -1,0 +1,731 @@
+<!DOCTYPE html>
+<html lang=zh>
+<head>
+  <meta charset="utf-8">
+  
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, minimal-ui">
+  <meta name="renderer" content="webkit">
+  <meta http-equiv="Cache-Control" content="no-transform" />
+  <meta http-equiv="Cache-Control" content="no-siteapp" />
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <meta name="format-detection" content="telephone=no,email=no,adress=no">
+  <!-- Color theme for statusbar -->
+  <meta name="theme-color" content="#000000" />
+  <!-- 强制页面在当前窗口以独立页面显示,防止别人在框架里调用页面 -->
+  <meta http-equiv="window-target" content="_top" />
+  
+  
+  <title>计算机网络-自顶向下_第一章总述 | yong&#39;s Blog</title>
+  <meta name="description" content="总述网络边缘 接入网和终端设备网络核心电路交换频分复用只能得到1&#x2F;n的带宽，时分复用可以间断的得到全部带宽。 分组交换分组交换是一种在计算机网络中进行数据传输的方法。在分组交换中，数据被分为较小的数据包（也称为分组），每个数据包都带有目标地址和其他必要的控制信息。这些数据包被发送到网络中，通过路由器和交换机等设备传输到目标地址。 与电路交换不同，分组交换不需要在通信开始之前建立连接。它使用存储转发">
+<meta property="og:type" content="article">
+<meta property="og:title" content="计算机网络-自顶向下_第一章总述">
+<meta property="og:url" content="https://codecodegogogo.github.io/2023/05/20/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C-%E7%AC%AC%E4%B8%80%E7%AB%A0%E6%80%BB%E8%BF%B0/index.html">
+<meta property="og:site_name" content="Sunny">
+<meta property="og:description" content="总述网络边缘 接入网和终端设备网络核心电路交换频分复用只能得到1&#x2F;n的带宽，时分复用可以间断的得到全部带宽。 分组交换分组交换是一种在计算机网络中进行数据传输的方法。在分组交换中，数据被分为较小的数据包（也称为分组），每个数据包都带有目标地址和其他必要的控制信息。这些数据包被发送到网络中，通过路由器和交换机等设备传输到目标地址。 与电路交换不同，分组交换不需要在通信开始之前建立连接。它使用存储转发">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://codecodegogogo.github.io/2023/05/20/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C-%E7%AC%AC%E4%B8%80%E7%AB%A0%E6%80%BB%E8%BF%B0/0.1.png">
+<meta property="og:image" content="https://codecodegogogo.github.io/2023/05/20/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C-%E7%AC%AC%E4%B8%80%E7%AB%A0%E6%80%BB%E8%BF%B0/1.1.png">
+<meta property="og:image" content="https://codecodegogogo.github.io/2023/05/20/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C-%E7%AC%AC%E4%B8%80%E7%AB%A0%E6%80%BB%E8%BF%B0/1.2.png">
+<meta property="og:image" content="https://codecodegogogo.github.io/2023/05/20/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C-%E7%AC%AC%E4%B8%80%E7%AB%A0%E6%80%BB%E8%BF%B0/1.3.png">
+<meta property="og:image" content="https://codecodegogogo.github.io/2023/05/20/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C-%E7%AC%AC%E4%B8%80%E7%AB%A0%E6%80%BB%E8%BF%B0/1.3.1.png">
+<meta property="og:image" content="https://codecodegogogo.github.io/2023/05/20/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C-%E7%AC%AC%E4%B8%80%E7%AB%A0%E6%80%BB%E8%BF%B0/1.3.2.png">
+<meta property="og:image" content="https://codecodegogogo.github.io/2023/05/20/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C-%E7%AC%AC%E4%B8%80%E7%AB%A0%E6%80%BB%E8%BF%B0/1.3.3.png">
+<meta property="og:image" content="https://codecodegogogo.github.io/2023/05/20/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C-%E7%AC%AC%E4%B8%80%E7%AB%A0%E6%80%BB%E8%BF%B0/1.3.4.png">
+<meta property="og:image" content="https://codecodegogogo.github.io/2023/05/20/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C-%E7%AC%AC%E4%B8%80%E7%AB%A0%E6%80%BB%E8%BF%B0/1.4.png">
+<meta property="og:image" content="https://codecodegogogo.github.io/2023/05/20/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C-%E7%AC%AC%E4%B8%80%E7%AB%A0%E6%80%BB%E8%BF%B0/1.4.1.png">
+<meta property="og:image" content="https://codecodegogogo.github.io/2023/05/20/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C-%E7%AC%AC%E4%B8%80%E7%AB%A0%E6%80%BB%E8%BF%B0/1.4.2.png">
+<meta property="og:image" content="https://codecodegogogo.github.io/2023/05/20/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C-%E7%AC%AC%E4%B8%80%E7%AB%A0%E6%80%BB%E8%BF%B0/1.4.3.png">
+<meta property="og:image" content="https://codecodegogogo.github.io/2023/05/20/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C-%E7%AC%AC%E4%B8%80%E7%AB%A0%E6%80%BB%E8%BF%B0/1.4.5.png">
+<meta property="og:image" content="https://codecodegogogo.github.io/2023/05/20/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C-%E7%AC%AC%E4%B8%80%E7%AB%A0%E6%80%BB%E8%BF%B0/1.4.6.png">
+<meta property="og:image" content="https://codecodegogogo.github.io/2023/05/20/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C-%E7%AC%AC%E4%B8%80%E7%AB%A0%E6%80%BB%E8%BF%B0/1.4.7.png">
+<meta property="og:image" content="https://codecodegogogo.github.io/2023/05/20/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C-%E7%AC%AC%E4%B8%80%E7%AB%A0%E6%80%BB%E8%BF%B0/1.4.8.png">
+<meta property="og:image" content="https://codecodegogogo.github.io/2023/05/20/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C-%E7%AC%AC%E4%B8%80%E7%AB%A0%E6%80%BB%E8%BF%B0/1.5.png">
+<meta property="og:image" content="https://codecodegogogo.github.io/2023/05/20/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C-%E7%AC%AC%E4%B8%80%E7%AB%A0%E6%80%BB%E8%BF%B0/1.5.1.png">
+<meta property="og:image" content="https://codecodegogogo.github.io/2023/05/20/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C-%E7%AC%AC%E4%B8%80%E7%AB%A0%E6%80%BB%E8%BF%B0/1.5.2.png">
+<meta property="og:image" content="https://codecodegogogo.github.io/2023/05/20/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C-%E7%AC%AC%E4%B8%80%E7%AB%A0%E6%80%BB%E8%BF%B0/1.5.3.png">
+<meta property="og:image" content="https://codecodegogogo.github.io/2023/05/20/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C-%E7%AC%AC%E4%B8%80%E7%AB%A0%E6%80%BB%E8%BF%B0/1.6.1.png">
+<meta property="og:image" content="https://codecodegogogo.github.io/2023/05/20/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C-%E7%AC%AC%E4%B8%80%E7%AB%A0%E6%80%BB%E8%BF%B0/1.6.png">
+<meta property="og:image" content="https://codecodegogogo.github.io/2023/05/20/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C-%E7%AC%AC%E4%B8%80%E7%AB%A0%E6%80%BB%E8%BF%B0/1.6.2.png">
+<meta property="og:image" content="https://codecodegogogo.github.io/2023/05/20/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C-%E7%AC%AC%E4%B8%80%E7%AB%A0%E6%80%BB%E8%BF%B0/1.6.3.png">
+<meta property="og:image" content="https://codecodegogogo.github.io/2023/05/20/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C-%E7%AC%AC%E4%B8%80%E7%AB%A0%E6%80%BB%E8%BF%B0/1.7.2.png">
+<meta property="og:image" content="https://codecodegogogo.github.io/2023/05/20/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C-%E7%AC%AC%E4%B8%80%E7%AB%A0%E6%80%BB%E8%BF%B0/1.7.3.png">
+<meta property="og:image" content="https://codecodegogogo.github.io/2023/05/20/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C-%E7%AC%AC%E4%B8%80%E7%AB%A0%E6%80%BB%E8%BF%B0/1.7.4.png">
+<meta property="og:image" content="https://codecodegogogo.github.io/2023/05/20/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C-%E7%AC%AC%E4%B8%80%E7%AB%A0%E6%80%BB%E8%BF%B0/1.7.6.png">
+<meta property="og:image" content="https://codecodegogogo.github.io/2023/05/20/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C-%E7%AC%AC%E4%B8%80%E7%AB%A0%E6%80%BB%E8%BF%B0/1.7.5.png">
+<meta property="og:image" content="https://codecodegogogo.github.io/2023/05/20/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C-%E7%AC%AC%E4%B8%80%E7%AB%A0%E6%80%BB%E8%BF%B0/1.7.7.png">
+<meta property="og:image" content="https://codecodegogogo.github.io/2023/05/20/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C-%E7%AC%AC%E4%B8%80%E7%AB%A0%E6%80%BB%E8%BF%B0/1.7.8.png">
+<meta property="og:image" content="https://codecodegogogo.github.io/2023/05/20/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C-%E7%AC%AC%E4%B8%80%E7%AB%A0%E6%80%BB%E8%BF%B0/1.7.9.png">
+<meta property="og:image" content="https://codecodegogogo.github.io/2023/05/20/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C-%E7%AC%AC%E4%B8%80%E7%AB%A0%E6%80%BB%E8%BF%B0/1.7.10.png">
+<meta property="article:published_time" content="2023-05-20T06:10:04.000Z">
+<meta property="article:modified_time" content="2023-06-10T03:18:28.807Z">
+<meta property="article:author" content="Sunny">
+<meta property="article:tag" content="计算机网络">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://codecodegogogo.github.io/2023/05/20/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C-%E7%AC%AC%E4%B8%80%E7%AB%A0%E6%80%BB%E8%BF%B0/0.1.png">
+  <!-- Canonical links -->
+  <link rel="canonical" href="https://codecodegogogo.github.io/2023/05/20/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C-%E7%AC%AC%E4%B8%80%E7%AB%A0%E6%80%BB%E8%BF%B0/index.html">
+  
+    <link rel="alternate" href="/atom.xml" title="Sunny" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/images/favicon.png" type="image/x-icon">
+  
+  <!-- <link rel="icon" href="/images/favicon.png" type="image/x-icon"> -->
+
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  
+  
+  
+  
+<meta name="generator" content="Hexo 5.4.2"></head>
+
+
+<body class="main-center theme-purple" itemscope itemtype="http://schema.org/WebPage">
+  <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+  <div class="slimContent">
+    <div class="navbar-header">
+      
+      
+      <div class="profile-block text-center">
+        <a id="avatar" href="https://github.com/codecodegogogo" target="_blank">
+          <img class="img-circle img-rotate" src="/images/avatar.jpg" width="200" height="200">
+        </a>
+        <h2 id="name" class="hidden-xs hidden-sm">yong</h2>
+        <h3 id="title" class="hidden-xs hidden-sm hidden-md"></h3>
+        <small id="location" class="text-muted hidden-xs hidden-sm"><i class="icon icon-map-marker"></i> China</small>
+      </div>
+      
+      <div class="search" id="search-form-wrap">
+
+    <form class="search-form sidebar-form">
+        <div class="input-group">
+            <input type="text" class="search-form-input form-control" placeholder="搜索" />
+            <span class="input-group-btn">
+                <button type="submit" class="search-form-submit btn btn-flat" onclick="return false;"><i class="icon icon-search"></i></button>
+            </span>
+        </div>
+    </form>
+    <div class="ins-search">
+  <div class="ins-search-mask"></div>
+  <div class="ins-search-container">
+    <div class="ins-input-wrapper">
+      <input type="text" class="ins-search-input" placeholder="想要查找什么..." x-webkit-speech />
+      <button type="button" class="close ins-close ins-selectable" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+    </div>
+    <div class="ins-section-wrapper">
+      <div class="ins-section-container"></div>
+    </div>
+  </div>
+</div>
+
+
+</div>
+      <button class="navbar-toggle collapsed" type="button" data-toggle="collapse" data-target="#main-navbar" aria-controls="main-navbar" aria-expanded="false">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+    </div>
+    <nav id="main-navbar" class="collapse navbar-collapse" itemscope itemtype="http://schema.org/SiteNavigationElement" role="navigation">
+      <ul class="nav navbar-nav main-nav menu-highlight">
+        
+        
+        <li class="menu-item menu-item-home">
+          <a href="/.">
+            
+            <i class="icon icon-home-fill"></i>
+            
+            <span class="menu-title">首页</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags">
+            
+            <i class="icon icon-tags"></i>
+            
+            <span class="menu-title">标签</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-repository">
+          <a target="_blank" rel="noopener" href="https://github.com/codecodegogogo">
+            
+            <i class="icon icon-project"></i>
+            
+            <span class="menu-title">项目</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about">
+            
+            <i class="icon icon-cup-fill"></i>
+            
+            <span class="menu-title">关于</span>
+          </a>
+        </li>
+        
+      </ul>
+      
+	
+    <ul class="social-links">
+    	
+        <li><a href="https://github.com/codecodegogogo" target="_blank" title="Github" data-toggle=tooltip data-placement=top><i class="icon icon-github"></i></a></li>
+        
+    </ul>
+
+    </nav>
+  </div>
+</header>
+
+  
+    <aside class="sidebar" itemscope itemtype="http://schema.org/WPSideBar">
+  <div class="slimContent">
+    
+      <div class="widget">
+    <h3 class="widget-title">公告</h3>
+    <div class="widget-body">
+        <div id="board">
+            <div class="content">
+                <p>今天网站换了个新皮肤~</p> <p align="right">2023.4.14</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">标签</h3>
+    <div class="widget-body">
+      <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/c/" rel="tag">c++</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/code/" rel="tag">code</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/java/" rel="tag">java</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/javascript/" rel="tag">javascript</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/linux/" rel="tag">linux</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/os/" rel="tag">os</a><span class="tag-list-count">11</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/vue/" rel="tag">vue</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%9D%82%E8%B0%88/" rel="tag">杂谈</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%AE%97%E6%B3%95/" rel="tag">算法</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%9F%BA%E7%A1%80/" rel="tag">计算机基础</a><span class="tag-list-count">8</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%B7%A5%E5%85%B7/" rel="tag">计算机工具</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E6%96%87%E5%8C%96%E5%9F%BA%E7%A1%80/" rel="tag">计算机文化基础</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/" rel="tag">计算机网络</a><span class="tag-list-count">9</span></li></ul>
+    </div>
+  </div>
+
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">最新文章</h3>
+    <div class="widget-body">
+      <ul class="recent-post-list list-unstyled no-thumbnail">
+        
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                
+              </p>
+              <p class="item-title">
+                <a href="/2024/06/10/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E5%90%84%E5%B1%82%E7%BD%91%E7%BB%9C%E8%AE%BE%E5%A4%87/%E8%AE%A1%E7%AE%97%E6%9C%BA%E6%96%87%E5%8C%96%E5%9F%BA%E7%A1%80-ppt/" class="title">(no title)</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2024-06-10T02:05:08.833Z" itemprop="datePublished">2024-06-10</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                
+              </p>
+              <p class="item-title">
+                <a href="/2024/06/10/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E5%90%84%E5%B1%82%E7%BD%91%E7%BB%9C%E8%AE%BE%E5%A4%87/%E8%AE%A1%E7%AE%97%E6%9C%BA%E6%96%87%E5%8C%96%E5%9F%BA%E7%A1%80-%E6%95%B0%E6%8D%AE%E5%BA%93/" class="title">(no title)</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2024-06-10T02:05:08.833Z" itemprop="datePublished">2024-06-10</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                
+              </p>
+              <p class="item-title">
+                <a href="/2024/05/23/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E5%90%84%E5%B1%82%E7%BD%91%E7%BB%9C%E8%AE%BE%E5%A4%87/%E8%AE%A1%E7%AE%97%E6%9C%BA%E6%96%87%E5%8C%96%E5%9F%BA%E7%A1%80-excel/" class="title">计算机文化基础-excel</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2024-05-23T00:30:47.000Z" itemprop="datePublished">2024-05-23</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                
+              </p>
+              <p class="item-title">
+                <a href="/2024/05/14/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E5%90%84%E5%B1%82%E7%BD%91%E7%BB%9C%E8%AE%BE%E5%A4%87/%E8%AE%A1%E7%AE%97%E6%9C%BA%E6%96%87%E5%8C%96%E5%9F%BA%E7%A1%80/" class="title">计算机文化基础</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2024-05-14T01:41:05.000Z" itemprop="datePublished">2024-05-14</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                
+              </p>
+              <p class="item-title">
+                <a href="/2024/03/01/Algorithm/" class="title">Algorithm</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2024-03-01T07:52:28.000Z" itemprop="datePublished">2024-03-01</time>
+              </p>
+            </div>
+          </li>
+          
+      </ul>
+    </div>
+  </div>
+  
+
+    
+  </div>
+</aside>
+
+  
+  
+  <aside class="sidebar sidebar-toc collapse   in  " id="collapseToc" itemscope itemtype="http://schema.org/WPSideBar">
+  <div class="slimContent">
+    <nav id="toc" class="article-toc">
+      <h3 class="toc-title">文章目录</h3>
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%80%BB%E8%BF%B0"><span class="toc-number">1.</span> <span class="toc-text">总述</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%BD%91%E7%BB%9C%E8%BE%B9%E7%BC%98"><span class="toc-number">1.1.</span> <span class="toc-text">网络边缘</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%8E%A5%E5%85%A5%E7%BD%91%E5%92%8C%E7%BB%88%E7%AB%AF%E8%AE%BE%E5%A4%87"><span class="toc-number">1.1.1.</span> <span class="toc-text">接入网和终端设备</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%BD%91%E7%BB%9C%E6%A0%B8%E5%BF%83"><span class="toc-number">1.2.</span> <span class="toc-text">网络核心</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E7%94%B5%E8%B7%AF%E4%BA%A4%E6%8D%A2"><span class="toc-number">1.2.1.</span> <span class="toc-text">电路交换</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%88%86%E7%BB%84%E4%BA%A4%E6%8D%A2"><span class="toc-number">1.2.2.</span> <span class="toc-text">分组交换</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E7%BD%91%E7%BB%9C%E7%9A%84%E7%BD%91%E7%BB%9C"><span class="toc-number">1.2.3.</span> <span class="toc-text">网络的网络</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%97%B6%E5%BB%B6%E3%80%81%E4%B8%A2%E5%8C%85%E3%80%81%E5%90%9E%E5%90%90%E9%87%8F"><span class="toc-number">1.3.</span> <span class="toc-text">时延、丢包、吞吐量</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%88%86%E7%BB%84%E4%BA%A4%E6%8D%A2%E7%BD%91%E7%9A%84%E6%97%B6%E5%BB%B6"><span class="toc-number">1.3.1.</span> <span class="toc-text">分组交换网的时延</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%90%9E%E5%90%90%E9%87%8F"><span class="toc-number">1.3.2.</span> <span class="toc-text">吞吐量</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%BD%91%E7%BB%9C%E5%88%86%E5%B1%82"><span class="toc-number">1.4.</span> <span class="toc-text">网络分层</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%8D%8F%E8%AE%AE"><span class="toc-number">1.4.1.</span> <span class="toc-text">协议</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AE%89%E5%85%A8"><span class="toc-number">1.5.</span> <span class="toc-text">安全</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#ddos"><span class="toc-number">1.5.1.</span> <span class="toc-text">ddos</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%A4%8D%E4%B9%A0%E5%92%8C%E4%B9%A0%E9%A2%98"><span class="toc-number">1.6.</span> <span class="toc-text">复习和习题</span></a></li></ol></li></ol>
+    </nav>
+  </div>
+</aside>
+
+<main class="main" role="main">
+  <div class="content">
+  <article id="post-计算机网络-第一章总述" class="article article-type-post" itemscope itemtype="http://schema.org/BlogPosting">
+    
+    <div class="article-header">
+      
+        
+  
+    <h1 class="article-title" itemprop="name">
+      计算机网络-自顶向下_第一章总述
+    </h1>
+  
+
+      
+      <div class="article-meta">
+        <span class="article-date">
+    <i class="icon icon-calendar-check"></i>
+	<a href="/2023/05/20/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C-%E7%AC%AC%E4%B8%80%E7%AB%A0%E6%80%BB%E8%BF%B0/" class="article-date">
+	  <time datetime="2023-05-20T06:10:04.000Z" itemprop="datePublished">2023-05-20</time>
+	</a>
+</span>
+        
+        
+  <span class="article-tag">
+    <i class="icon icon-tags"></i>
+	<a class="article-tag-link-link" href="/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/" rel="tag">计算机网络</a>
+  </span>
+
+
+        
+	<span class="article-read hidden-xs">
+	    <i class="icon icon-eye-fill" aria-hidden="true"></i>
+	    <span id="busuanzi_container_page_pv">
+			<span id="busuanzi_value_page_pv">0</span>
+		</span>
+	</span>
+
+
+        <span class="post-comment"><i class="icon icon-comment"></i> <a href="/2023/05/20/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C-%E7%AC%AC%E4%B8%80%E7%AB%A0%E6%80%BB%E8%BF%B0/#comments" class="article-comment-link">评论</a></span>
+        
+	
+		<span class="post-wordcount hidden-xs" itemprop="wordCount">字数统计: 7k(字)</span>
+	
+	
+
+      </div>
+    </div>
+    <div class="article-entry marked-body" itemprop="articleBody">
+      
+        <h2 id="总述"><a href="#总述" class="headerlink" title="总述"></a>总述</h2><h3 id="网络边缘"><a href="#网络边缘" class="headerlink" title="网络边缘"></a>网络边缘</h3><p><img src="/2023/05/20/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C-%E7%AC%AC%E4%B8%80%E7%AB%A0%E6%80%BB%E8%BF%B0/0.1.png" alt="?"></p>
+<h4 id="接入网和终端设备"><a href="#接入网和终端设备" class="headerlink" title="接入网和终端设备"></a>接入网和终端设备</h4><h3 id="网络核心"><a href="#网络核心" class="headerlink" title="网络核心"></a>网络核心</h3><h4 id="电路交换"><a href="#电路交换" class="headerlink" title="电路交换"></a>电路交换</h4><p>频分复用只能得到1/n的带宽，时分复用可以间断的得到全部带宽。<br><img src="/2023/05/20/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C-%E7%AC%AC%E4%B8%80%E7%AB%A0%E6%80%BB%E8%BF%B0/1.1.png" alt="1.1"><br><img src="/2023/05/20/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C-%E7%AC%AC%E4%B8%80%E7%AB%A0%E6%80%BB%E8%BF%B0/1.2.png" alt="1.1"></p>
+<h4 id="分组交换"><a href="#分组交换" class="headerlink" title="分组交换"></a>分组交换</h4><p>分组交换是一种在计算机网络中进行数据传输的方法。在分组交换中，数据被分为较小的数据包（也称为分组），每个数据包都带有目标地址和其他必要的控制信息。这些数据包被发送到网络中，通过路由器和交换机等设备传输到目标地址。</p>
+<p>与电路交换不同，分组交换不需要在通信开始之前建立连接。它使用存储转发的方式,<strong>即在发送数据包之前，必须先将其存储在中间设备（如路由器和交换机）中，然后再转发到下一个设备。</strong> 这种方式可以提高网络的效率和可靠性。</p>
+<p>分组交换的优点包括：</p>
+<ol>
+<li><p>可以更好地利用网络带宽，因为多个数据包可以同时传输。</p>
+</li>
+<li><p>可以更好地适应网络流量的变化，因为数据包可以根据网络状况进行调整。</p>
+</li>
+<li><p>可以更好地处理错误，因为每个数据包都带有控制信息，使得错误可以更容易地被检测和纠正。</p>
+</li>
+<li><p>可以更好地支持多种应用程序，因为分组交换可以同时传输不同类型的数据包，如音频、视频和数据。</p>
+</li>
+</ol>
+<h4 id="网络的网络"><a href="#网络的网络" class="headerlink" title="网络的网络"></a>网络的网络</h4><p><img src="/2023/05/20/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C-%E7%AC%AC%E4%B8%80%E7%AB%A0%E6%80%BB%E8%BF%B0/1.3.png" alt="1.1"><br><img src="/2023/05/20/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C-%E7%AC%AC%E4%B8%80%E7%AB%A0%E6%80%BB%E8%BF%B0/1.3.1.png" alt="1.1"><br>多宿（Multi-homing）是指在一个网络中使用多个互联网服务提供商（ISP）或多个网络连接，以提高网络的可用性和容错能力。多宿可以确保当一个ISP或网络连接出现故障时，网络仍然可以继续运行，并且可以通过其他可用的连接访问互联网。</p>
+<p>在多宿网络中，一个网络可以同时连接多个ISP，这些ISP可以提供不同的服务等级、带宽和成本等方面的选择。多宿网络通常使用路由协议和负载均衡技术来管理不同ISP之间的数据流量，确保数据包被正确路由，并且在不同的ISP之间平衡负载，以提高网络的性能和可靠性。</p>
+<p>多宿可以应用于企业网络、数据中心、云计算等场景，以确保网络的高可用性和容错能力。同时，多宿也需要考虑到成本、安全和管理等方面的问题，因此在实际应用中需要仔细评估和规划。<br><img src="/2023/05/20/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C-%E7%AC%AC%E4%B8%80%E7%AB%A0%E6%80%BB%E8%BF%B0/1.3.2.png" alt="1.1"><br><img src="/2023/05/20/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C-%E7%AC%AC%E4%B8%80%E7%AB%A0%E6%80%BB%E8%BF%B0/1.3.3.png" alt="1.1"><br><img src="/2023/05/20/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C-%E7%AC%AC%E4%B8%80%E7%AB%A0%E6%80%BB%E8%BF%B0/1.3.4.png" alt="1.1"></p>
+<h3 id="时延、丢包、吞吐量"><a href="#时延、丢包、吞吐量" class="headerlink" title="时延、丢包、吞吐量"></a>时延、丢包、吞吐量</h3><h4 id="分组交换网的时延"><a href="#分组交换网的时延" class="headerlink" title="分组交换网的时延"></a>分组交换网的时延</h4><p>总时延=处理时延+排队时延+传输时延+传播时延</p>
+<p>时延带宽积 = 传播时延 * 带宽</p>
+<p>讨论网络核心路由器交换机链路</p>
+<p><img src="/2023/05/20/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C-%E7%AC%AC%E4%B8%80%E7%AB%A0%E6%80%BB%E8%BF%B0/1.4.png" alt="1.1"><br><img src="/2023/05/20/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C-%E7%AC%AC%E4%B8%80%E7%AB%A0%E6%80%BB%E8%BF%B0/1.4.1.png" alt="1.1"><br><img src="/2023/05/20/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C-%E7%AC%AC%E4%B8%80%E7%AB%A0%E6%80%BB%E8%BF%B0/1.4.2.png" alt="1.1"><br><img src="/2023/05/20/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C-%E7%AC%AC%E4%B8%80%E7%AB%A0%E6%80%BB%E8%BF%B0/1.4.3.png" alt="1.1"></p>
+<p>流量强度：分组平均传输速率*分组长度/比特传输速率<br><img src="/2023/05/20/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C-%E7%AC%AC%E4%B8%80%E7%AB%A0%E6%80%BB%E8%BF%B0/1.4.5.png" alt="1.1"><br><img src="/2023/05/20/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C-%E7%AC%AC%E4%B8%80%E7%AB%A0%E6%80%BB%E8%BF%B0/1.4.6.png" alt="1.1"><br>流量强度越接近于1，则排队时延越高，反之则代表分组很少<br><img src="/2023/05/20/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C-%E7%AC%AC%E4%B8%80%E7%AB%A0%E6%80%BB%E8%BF%B0/1.4.7.png" alt="1.1"></p>
+<p><img src="/2023/05/20/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C-%E7%AC%AC%E4%B8%80%E7%AB%A0%E6%80%BB%E8%BF%B0/1.4.8.png" alt="1.1"><br><strong>Traceroute是Linux和Mac OS等系统默认提供的路由追踪小程序，Tracert是Windows系统默认提供的路由追踪小程序。他会发送3个数据包，并记录往返时延。</strong></p>
+<blockquote>
+<p>Tracert <a target="_blank" rel="noopener" href="http://www.baidu.com/">www.baidu.com</a><br>通过最多 30 个跃点跟踪<br>到 <a target="_blank" rel="noopener" href="http://www.a.shifen.com/">www.a.shifen.com</a> [110.242.68.3] 的路由:</p>
+<p> 1     *      107 ms     *     10.173.255.254<br> 2    13 ms    10 ms    12 ms  10.191.1.6<br> 3     5 ms     5 ms     7 ms  112.53.79.9<br> 4     *        *        *     请求超时。<br> 5     *        *        *     请求超时。<br> 6     *        *        *     请求超时。<br> 7    22 ms    24 ms    19 ms  221.183.94.38<br> 8     *       33 ms     *     221.183.95.62<br> 9    47 ms    21 ms    36 ms  219.158.3.65<br>10     *        *        *     请求超时。<br>11    29 ms    36 ms    31 ms  110.242.66.178<br>12    37 ms    25 ms    21 ms  221.194.45.134<br>13     *        *        *     请求超时。<br>14     *        *        *     请求超时。<br>15    39 ms    36 ms    40 ms  10.166.96.50<br>16     *        *       39 ms  10.165.1.69<br>17    33 ms    31 ms    29 ms  110.242.68.3</p>
+</blockquote>
+<p>跟踪完成。</p>
+<h4 id="吞吐量"><a href="#吞吐量" class="headerlink" title="吞吐量"></a>吞吐量</h4><p>吞吐量指的是在一定时间内通过网络传输的数据量，通常以每秒钟传输的数据量（比特或字节）来衡量。吞吐量通常用于评估网络性能和带宽需求。较高的吞吐量表示网络传输速度较快，可以更快地传输数据，同时也可以支持更多的用户和应用程序。</p>
+<p>Rs Rc接入网和R网络核心路由器交换机链路比较<br><img src="/2023/05/20/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C-%E7%AC%AC%E4%B8%80%E7%AB%A0%E6%80%BB%E8%BF%B0/1.5.png" alt="?"><br><img src="/2023/05/20/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C-%E7%AC%AC%E4%B8%80%E7%AB%A0%E6%80%BB%E8%BF%B0/1.5.1.png" alt="?"><br><img src="/2023/05/20/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C-%E7%AC%AC%E4%B8%80%E7%AB%A0%E6%80%BB%E8%BF%B0/1.5.2.png" alt="?"><br><img src="/2023/05/20/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C-%E7%AC%AC%E4%B8%80%E7%AB%A0%E6%80%BB%E8%BF%B0/1.5.3.png" alt="?"></p>
+<p>吞吐量在有没干扰流量时取决于源和目的地之间的最小传输速率（从边缘到核心到边缘的所有速率）</p>
+<h3 id="网络分层"><a href="#网络分层" class="headerlink" title="网络分层"></a>网络分层</h3><h4 id="协议"><a href="#协议" class="headerlink" title="协议"></a>协议</h4><p><img src="/2023/05/20/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C-%E7%AC%AC%E4%B8%80%E7%AB%A0%E6%80%BB%E8%BF%B0/1.6.1.png" alt="?"></p>
+<p>应用层  (报文)</p>
+<blockquote>
+<p>应用层协议是指计算机网络中应用程序之间进行通信时所使用的协&gt;议。常见的应用层协议包括HTTP、FTP、SMTP、POP3、IMAP、DNS&gt;等。</p>
+<p>HTTP协议是超文本传输协议，用于在Web服务器和客户端之间传输数&gt;据。</p>
+<p>FTP协议是文件传输协议，用于在网络上进行文件传输。</p>
+<p>SMTP协议是简单邮件传输协议，用于在网络上进行邮件的发送和接&gt;收。</p>
+<p>POP3协议是邮局协议3，用于在网络上接收邮件。</p>
+<p>IMAP协议是Internet邮件访问协议，用于在网络上接收和管理邮件。</p>
+<p>DNS协议是域名系统协议，用于将域名转换为IP地址。</p>
+</blockquote>
+<p>运输层  （报文段）</p>
+<blockquote>
+<p>运输层协议是计算机网络中的一种协议，主要用于提供可靠的数据传&gt;输和数据分段重组。常见的运输层协议包括TCP和UDP两种。</p>
+<p>TCP协议（传输控制协议）是一种面向连接的协议，它提供了可靠的数&gt;据传输服务，能够确保数据的完整性和可靠性。TCP协议通过三次握手&gt;建立连接，通过序列号和确认号来保证数据的有序传输和可靠传输。&gt;TCP协议适用于对数据传输可靠性要求较高的应用程序，如文件传输、&gt;电子邮件等。</p>
+<p>UDP协议（用户数据报协议）是一种无连接的协议，它不提供可靠的数&gt;据传输服务，也不保证数据的有序传输和可靠传输。UDP协议适用于对&gt;数据传输实时性要求较高的应用程序，如音频、视频等。因为UDP协议&gt;没有建立连接的过程，所以它的数据传输速度比TCP协议快，但数据的&gt;可靠性和完整性不能得到保证。</p>
+</blockquote>
+<p>网络层  （数据报）</p>
+<blockquote>
+<p>网络层是计算机网络体系结构中的一个层次，主要负责网络间的数据&gt;传输和路由选择。常见的网络层协议包括IP协议、ICMP协议、ARP协&gt;议等。</p>
+<p>IP协议（Internet协议）是网络层的核心协议，它定义了数据在网络&gt;中的传输方式和寻址方式。IP协议通过IP地址来标识网络中的主机和&gt;路由器，可以实现跨网络的数据传输。IP协议还支持分片和重组机&gt;制，可以将大数据包分割成小的数据包进行传输。</p>
+<p>ICMP协议（Internet控制报文协议）是网络层的辅助协议，主要用于&gt;网络故障的诊断和控制。ICMP协议可以向网络中的主机和路由器发送&gt;控制报文，比如ping命令就是利用ICMP协议来测试网络连接状态的。</p>
+<p>ARP协议（地址解析协议）是网络层的辅助协议，主要用于将IP地址转&gt;换为MAC地址。ARP协议可以通过广播的方式向网络中的主机询问某个&gt;IP地址对应的MAC地址，从而实现数据包的发送和接收。</p>
+<p>网络层还包括路由选择算法，它可以根据网络拓扑和路由器之间的链&gt;路状态来选择最优的路径进行数据传输。常见的路由选择协议包括&gt;RIP、OSPF、BGP等。</p>
+</blockquote>
+<p>链路层  （帧）</p>
+<blockquote>
+<p>链路层是计算机网络体系结构中的一个层次，主要负责物理层和网络&gt;层之间的数据传输。链路层的主要功能是将网络层的数据包封装成&gt;帧，并在物理层上传输。常见的链路层协议包括以太网、Wi-Fi、PPP&gt;等。</p>
+<p>以太网是一种常见的有线局域网技术，它是基于CSMA/CD（载波侦听&gt;多点接入/碰撞检测）协议的。以太网将网络层的数据包封装成帧，每&gt;个帧包含了目标MAC地址、源MAC地址、数据和校验码。以太网还支持&gt;广播和多播，可以实现数据包的广播和多播传输。</p>
+<p>Wi-Fi是一种无线局域网技术，它基于IEEE 802.11协议。Wi-Fi将网&gt;络层的数据包封装成帧，每个帧包含了目标MAC地址、源MAC地址、数&gt;据和校验码。Wi-Fi还支持无线信道的管理和协调，可以实现多台无线&gt;设备之间的协同工作。</p>
+<p>PPP协议（点对点协议）是一种点对点的串行通信协议，它可以在串行&gt;线路上进行数据传输。PPP协议将网络层的数据包封装成帧，每个帧包&gt;含了同步字符、地址、控制、协议和数据等字段。PPP协议还支持认证&gt;和加密，可以保证数据的安全性和可靠性。</p>
+<p>链路层还包括MAC地址的管理和ARP协议的实现，它们可以实现网络设&gt;备之间的通信和地址解析。</p>
+</blockquote>
+<p>物理层  （比特）</p>
+<blockquote>
+<p>物理层是计算机网络体系结构中的最底层，主要负责将数字信号转换&gt;为模拟信号，并在物理介质上传输。物理层的主要任务是定义物理介&gt;质的传输特性，包括传输速率、数据传输距离、信号强度等。</p>
+<p>常见的物理层介质包括双绞线、同轴电缆、光纤等。不同的物理介质&gt;有不同的传输特性和传输速率，可以根据应用场景的需求来选择合适&gt;的物理介质。</p>
+<p>物理层还包括数字信号和模拟信号的转换，以及调制和解调技术的应&gt;用。数字信号是由0和1组成的电信号，而模拟信号是连续的电信号。&gt;在数字信号传输过程中，需要将数字信号转换为模拟信号，然后在物&gt;理介质上传输。接收端需要将接收到的模拟信号转换为数字信号，以&gt;便上层协议进行处理。</p>
+<p>物理层还包括编码和解码技术的应用，用于将数字信号转换为物理介&gt;质上的电信号。常见的编码和解码技术包括曼彻斯特编码、差分曼彻&gt;斯特编码、4B/5B编码等。</p>
+<p>总之，物理层是计算机网络体系结构中最基础的层次，它为上层协议&gt;提供了可靠的物理传输基础。</p>
+</blockquote>
+<h3 id="安全"><a href="#安全" class="headerlink" title="安全"></a>安全</h3><h4 id="ddos"><a href="#ddos" class="headerlink" title="ddos"></a>ddos</h4><p><img src="/2023/05/20/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C-%E7%AC%AC%E4%B8%80%E7%AB%A0%E6%80%BB%E8%BF%B0/1.6.png" alt="?"><br><img src="/2023/05/20/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C-%E7%AC%AC%E4%B8%80%E7%AB%A0%E6%80%BB%E8%BF%B0/1.6.2.png" alt="?"></p>
+<p>分组嗅探器<br><img src="/2023/05/20/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C-%E7%AC%AC%E4%B8%80%E7%AB%A0%E6%80%BB%E8%BF%B0/1.6.3.png" alt="/"></p>
+<h3 id="复习和习题"><a href="#复习和习题" class="headerlink" title="复习和习题"></a>复习和习题</h3><p>1.<br><strong>假定在发送主机和接收主机间只有一台分组交换机。发送主机和交换机间以及交换机和接收主机间的传输速率分别是R1和R2,。假设该交换机使用存储转发分组交换方式，发送一个长度为L的分组的端到端总时延是什么?（忽略排队时延、传播时延和处理时延。）</strong></p>
+<blockquote>
+<p>t0时发送端主机开始传输数据,t1=L/R1时发送端完成传输并且交换机&gt;收到完整的数据包（没有传播延时）。因为交换机在t1时已收到完整&gt;包，那么t1时交换机开始传输包至接收主机。t=t1+L/R2时交换机完&gt;成输出并且接收主机收到完整包（没有传播延时）。因此，端到端总&gt;延时是L/R1＋L/R2 。</p>
+</blockquote>
+<p>2.<br><strong>与分组交换网络相比，电路交换网络有哪些优点?在电路交换网络中，TDM 比 FDM有哪些优点:</strong></p>
+<blockquote>
+<p>电路交换网络可以在响应时间内保证一定量的端到端带宽。如今大部&gt;分分组交换网络（包括因特网）无法保证端到端带宽。FDM需要复杂&gt;的模拟硬件来将信号转换为合适的频率。</p>
+</blockquote>
+<p>3.<br><strong>一个长度为1000字节的分组经距离为2500km的链路传播，传播速率为2.5×1000000000m/s并且传输速率为2Mbps,它需要用多长时间?更为一般地，一个长度为L的分组经距离为d的链路传播，传播速率为s并且传输速率为R bps，它需要用多长时间?该时延与传输速率相关吗?</strong></p>
+<blockquote>
+<p>传播时间可以通过距离除以传播速率得出：2500km / 2.5×10^8 m/&gt;s = 10s。传输时间可以通过分组长度除以传输速率得出：1000字节 &gt;* 8位/字节 / 2Mbps = 0.004s。因此，总共需要的时间为传播时间&gt;加上传输时间，即10s + 0.004s = 10.004s。</p>
+<p>对于更一般的情况，可以使用以下公式来计算分组的传输时间：</p>
+<p>传输时间 = 分组长度 / 传输速率</p>
+<p>传播时间 = 距离 / 传播速率</p>
+<p>总时延 = 传输时间 + 传播时间</p>
+<p>其中，分组长度和距离都是已知量，传输速率和传播速率也是已知&gt;量。因此，可以通过这个公式来计算出任何长度的分组在任何距离下&gt;的传输时间和总时延。</p>
+<p>该时延与传输速率和传播速率都有关系。传播速率越大，时延就越&gt;小；传输速率越大，时延也越小。因此，如果想要减少分组的传输时&gt;延，可以提高传播速率和传输速率。但是，时延也受到距离的影响，&gt;距离越远，时延就越大，这是无法改变的。</p>
+<p>4.<br><strong>假定主机A要向主机B发送一个大文件。从主机A到主机B的路径上有&gt;3段链路，其速率分别为R,=500kbps，R,=2Mbps, R, =1Mbps 。<br>a.假定该网络中没有其他流量，该文件传送的吞吐量是多少?<br>b.假定该文件为4MB。传输该文件到主机B大致需要多长时间?<br>c.重复(a） 和(b)，只是这时R减小到100kbps</strong></p>
+<p>a. 该网络中没有其他流量，则传输的吞吐量等于三个链路中最小的链&gt;路速率，即500kbps。因此，传输的吞吐量为500kbps。</p>
+<p>b. 文件大小为4MB，需要将其转换为比特数，即4MB * 8 = 32Mb。&gt;传输时间可以通过以下公式计算：</p>
+<p>传输时间 = 文件大小 / 传输速率</p>
+<p>其中，传输速率等于三个链路速率中最小的那个，即500kbps。将传&gt;输速率转换为比特每秒（bps），即500kbps * 1000 = &gt;500000bps。因此，传输时间为32Mb / 500000bps = 64秒。</p>
+<p>c. 当链路速率为100kbps时，传输的吞吐量仍然等于三个链路中最小&gt;的链路速率，即100kbps。因此，传输的吞吐量为100kbps。</p>
+<p>传输时间可以通过以下公式计算：</p>
+<p>传输时间 = 文件大小 / 传输速率</p>
+<p>传输速率等于三个链路速率中最小的那个，即100kbps。将传输速率&gt;转换为比特每秒（bps），即100kbps * 1000 = 100000bps。因&gt;此，传输时间为32Mb / 100000bps = 320秒。</p>
+<p><strong>在计算文件传输时间时，使用吞吐量（throughput）而非网速&gt;（bandwidth）的原因是，吞吐量考虑的是整个路径上的数据传输速&gt;率，而网速仅仅是链路的最大传输速率。在一条路径上传输数据时，&gt;数据的传输速率受到整个路径上最小的链路速率的限制，因此，计算&gt;文件传输时间时需要考虑整个路径上的传输速率，即吞吐量。<br>测网速实际上就是测量网络的吞吐量。网速指的是网络链路的最大传&gt;输速率，而吞吐量指的是在特定时间段内通过网络传输的数据量，即&gt;单位时间内的数据传输速率。在实际应用中，我们通常会使用吞吐量&gt;来评估网络的性能，因为吞吐量考虑的是整个网络路径上的数据传输&gt;速率，能够更加全面地反映网络的真实性能.</strong><br>5.<br><strong>病毒和蠕虫之间有什么不同?</strong><br>病毒：需要以下⼈的交互来传播。⽐如邮件病毒。<br>蠕⾍：不需要⽤⼾介⼊。受感染主机中的蠕⾍会扫描IP地址和端⼝号来查找可感染的进程。</p>
+</blockquote>
+<p>6.<br><strong>设计并描述在自动柜员机和银行的中央计算机之间使用的一种应用层协议。你的协议应当允许验证用户卡和口令，查询账目结算 (这些都在中央计算机系统中进行维护)，支取账目 (即向用户支付钱)。你的协议实体应当能够处理取钱时账目中钱不够的常见问题。通过列出自动柜员机和银行中央计算机在报文传输和接收过程中交换的报文和采取的动作来定义你的协议。使用类似于图1-2 所示的图，拟定在简单无差错取钱情况下该协议的操作。明确地阐述在该协议中关于底层端到端运输服务所作的假设。</strong></p>
+<blockquote>
+<p>协议名称：Bank ATM Protocol</p>
+<p>协议实体：自动柜员机（ATM），银行中央计算机</p>
+<p>协议操作：</p>
+<ol>
+<li>验证用户卡和口令</li>
+</ol>
+<p>ATM发送验证请求报文，包含用户卡号和口令。银行中央计算机接收请&gt;求报文，验证用户信息并返回验证结果报文。</p>
+<ol start="2">
+<li>查询账目结算</li>
+</ol>
+<p>ATM发送查询请求报文，包含用户卡号。银行中央计算机接收请求报&gt;文，查询用户账目结算信息并返回查询结果报文。</p>
+<ol start="3">
+<li>支取账目</li>
+</ol>
+<p>ATM发送支取请求报文，包含用户卡号和支取金额。银行中央计算机接&gt;收请求报文，检查账目余额是否充足，如果充足则更新账目余额并返&gt;回支取结果报文；如果不充足则返回支取失败报文。</p>
+<ol start="4">
+<li>处理账目余额不足问题</li>
+</ol>
+<p>如果账目余额不足，银行中央计算机将返回支取失败报文，ATM将显示&gt;错误信息并提示用户重新输入支取金额。</p>
+<p>报文格式：</p>
+<p>验证请求报文：CardNum, Password</p>
+<p>验证结果报文：Result</p>
+<p>查询请求报文：CardNum</p>
+<p>查询结果报文：Balance</p>
+<p>支取请求报文：CardNum, Amount</p>
+<p>支取结果报文：Result</p>
+<p>底层端到端运输服务假设：</p>
+<p>该协议假设底层端到端运输服务是可靠的，即发送的每个报文都能够&gt;被成功接收。此外，该协议假设底层端到端运输服务提供了足够的带&gt;宽和低延迟，以确保快速响应用户请求。</p>
+</blockquote>
+<p>7.<br><strong>式(1-1)给出了经传输速率为R的N段链路发送长度L的一个分组的端到端时延。对于经过N段链路连续地发送P个这样的分组，一般化地表示出这个公式</strong></p>
+<blockquote>
+<p>对于经过N段链路连续地发送P个长度为L的分组，其端到端时延可以表示为：</p>
+<p>T = N * (L / R) + (P - 1) * L / R + d</p>
+<p>其中，N为链路段数，L为分组长度，R为传输速率，P为分组数，d为传输时延中的固定时延（如传播时延、处理时延等）。<br>公式中第一项 N * (L / R) 表示数据在N个链路段上的传输时延，即数据通过N个链路段所需要的时间。这里的 L / R 表示数据通过一个链路段所需要的时间，再乘以 N 就得到了数据通过 N 个链路段所需要的时间。</p>
+<p>公式中第二项 (P - 1) * L / R 表示数据在链路之间等待传输的时间，即数据在每个链路段之间传输的时间。这里的 (P - 1) 表示有 P 个分组，而每个分组之间需要经过 P - 1 个链路段，因此需要等待 P - 1 个链路段的时间，再乘以 L / R 就得到了数据在链路之间等待传输的时间。</p>
+<p>公式中最后一项 d 表示传输时延中的固定时延，例如传播时延、处理时延等。这些时延不随数据的大小和传输速率而改变，因此可以视为固定的时延。</p>
+</blockquote>
+<p>8.<br><strong>考虑一个应用程序以稳定的速率传输数据(例如，发送方每个时间单元产生一个N比特的数据单元，其中h较小且固定)。另外，当这个应用程序启动时，它将连续运行相当长的一段时间。回答下列问题，简要论证你的回答:<br>a.是分组交换网还是电路交换网更为适合这种应用?为什么?<br>b假定使用了分组交换网，并且该网中的所有流量都来自如上所述的这种应用程序。此外，假定该应用程序数据传输速率的总和小于每条链路的各自容量。需要某种形式的拥塞控制吗?为什么?</strong></p>
+<blockquote>
+<p>a. 对于以稳定速率传输数据的应用程序，电路交换网更适合。因为在电路交换网中，通信的两端会建立一条独占的物理通路，这条通路在通信过程中一直被保留，因此对于这种稳定的数据传输，可以通过预先建立的电路进行传输，可以保证数据传输的实时性和可靠性。而在分组交换网中，数据是以分组的形式进行传输的，每个分组独立地传输，可能会受到拥塞和延迟等因素的影响，因此不太适合对实时性要求较高的应用程序。</p>
+<p>b. 在分组交换网中，对于该应用程序的数据传输速率的总和小于每条链路的各自容量的情况下，不需要采用某种形式的拥塞控制。因为在这种情况下，网络中的每条链路都有足够的带宽来容纳该应用程序的数据传输，不会出现拥塞的情况。如果采用了拥塞控制，可能会降低网络的吞吐量，而且在实际应用中实现拥塞控制也需要一定的成本和复杂性。因此，在网络中没有拥塞的情况下，不需要采用拥塞控制。</p>
+</blockquote>
+<p>8.<br><img src="/2023/05/20/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C-%E7%AC%AC%E4%B8%80%E7%AB%A0%E6%80%BB%E8%BF%B0/1.7.2.png" alt="?"></p>
+<p><img src="/2023/05/20/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C-%E7%AC%AC%E4%B8%80%E7%AB%A0%E6%80%BB%E8%BF%B0/1.7.3.png" alt="?"></p>
+<p>9.<br><strong>在这个习题中，我们考虑从主机A向主机B通过分组交换网发送语音（VolP)。主机A将模拟语音转换为传输中的64kbps 数字比特流。然后主机A将这些比特分为56字节的分组。A和B之间有一条链路:它的传输速率是2Mbps，传播时延是10ms。一旦A收集了一个分组，就将它向主机B发送。一日主机B接收到一个完整的分组，它将该分组的比特转换成模拟信号。从比特产生（从位于主机的初始模拟信号起)的时刻起,到该比特被解码（在主机B上作为模拟信号的一部分)，花了多少<br>时间?</strong></p>
+<blockquote>
+<p>生成分组:56<em>8b/64kbps=7ms<br>传输时延:56</em>8b/2Mbps=0.224<br>总时间=10（传播时延）+7+0.224=17.224ms</p>
+</blockquote>
+<p>10.<br><img src="/2023/05/20/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C-%E7%AC%AC%E4%B8%80%E7%AB%A0%E6%80%BB%E8%BF%B0/1.7.4.png" alt="?"><br><img src="/2023/05/20/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C-%E7%AC%AC%E4%B8%80%E7%AB%A0%E6%80%BB%E8%BF%B0/1.7.6.png" alt="?"><br><img src="/2023/05/20/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C-%E7%AC%AC%E4%B8%80%E7%AB%A0%E6%80%BB%E8%BF%B0/1.7.5.png" alt="?"></p>
+<p>11.<br><strong>一台分组交换机接收一个分组并决定该分组应当转发的出链路。当某分组到达时,另一个分组正在该出链路上被发送到一半，还有4个其他分组正等待传输。这些分组以到达的次序传输。假定所有分组是1500字节并且链路速率是2Mbps。该分组的排队时延是多少?在更一般的情况下，当所有分组的长度是L,传输速率是R,当前正在传输的分组已经传输了x比特,并且已经在队列中有n个分组，其排队时延是多少?</strong></p>
+<blockquote>
+<p>P12.到达的数据包必须首先等待链路发送<br>4.5×1500字节=6750字节或54000比特。<br>由于这些比特是以2Mbps发送的，所以队列延迟为27毫秒。一般情况下，排队延迟为(nL(L-x))/R。<br>有一个完整分组的排队时延为1500× 8b / 2Mbps = 0.6ms<br>4.5个分组的总排队时延为4.5* 0.6ms = 2.7ms</p>
+</blockquote>
+<p>12.<br><strong>a.假定有N个分组同时到达一条当前没有分组传输或排队的链路<br>每个分组长为L，链路传输速率<br>为R。对N个分组而言，其平均排队时延是多少?<br>b.现在假定每隔LN/R秒有N个分组同时到达链路。一个分组的平均排队时延是多少?</strong></p>
+<blockquote>
+<p>a.第一个分组的排队时延为o,第二个L/R，第三个2L/R，第N个(N -1)L/R因此平均排队时延为(L/R＋2L/R＋…+(N -1)L/R)/N=(N -1)L/2Rb.<br>当下一批N个分组到达时，上一批已经传完，因此平均排队时延为(N -1)L/2R</p>
+</blockquote>
+<p>13.<br><strong>考虑一台路由器缓存前面的一条出链路。在这个习题中，将使用李特尔(Lile)公式，这是排队论中的一个著名公式。令N表示在缓存中的分组加上被传输的分组的平均数。令a表示到达链路的分组速率。令d表示一个分组历经的平均总时延(即排队时延加传输时延)。李特尔公式是N=axd假定该缓存平均包含10个分组，并且平均分组排队时延是10ms。该链路的传输速率是100分组秒。使用李特尔公式，在没有丢包的情况下，平均分组到达率是多少?</strong></p>
+<blockquote>
+<p>N应该等于缓存中的分组加上正在传输的分组数，即N=10+1=11个分组。传输时延是指一个分组在链路上传输所需的时间,传输时延是1/100秒，因为每个分组传输的时间是1/100秒，所以传输时延为1/100秒。因此，总时延d=排队时延+传输时延=10ms+1/100s=0.02s。根据李特尔公式N=axd，可以求得平均分组到达率a：</p>
+<p>a = N / d = 11 / 0.02 = 550分组/秒</p>
+</blockquote>
+<p>14.<br><strong>考虑对应于图1-20b吞吐量的例子。现在假定有M对客户-服务器而不是10对。用Rs Rc和R分别表示服务器链路、客户链路和网络链路的速率。假设所有的其他链路都有充足容量，并且除了由这M对客户-服务器产生的流量外，网络中没有其他流量。推导出由Rs、Rc R和M表示的通用吞吐量表达式。</strong></p>
+<blockquote>
+<p>min{Rc,Rs,R/m}</p>
+</blockquote>
+<p>15.<br><img src="/2023/05/20/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C-%E7%AC%AC%E4%B8%80%E7%AB%A0%E6%80%BB%E8%BF%B0/1.7.7.png" alt="?"><br><img src="/2023/05/20/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C-%E7%AC%AC%E4%B8%80%E7%AB%A0%E6%80%BB%E8%BF%B0/1.7.8.png" alt="?"></p>
+<p>16.<br><img src="/2023/05/20/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C-%E7%AC%AC%E4%B8%80%E7%AB%A0%E6%80%BB%E8%BF%B0/1.7.9.png" alt="?"><br><img src="/2023/05/20/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C-%E7%AC%AC%E4%B8%80%E7%AB%A0%E6%80%BB%E8%BF%B0/1.7.10.png" alt="?"></p>
+<p>c:在某一个传时（除了在第一个路由器），他后边的也传，时间重合了。</p>
+
+      
+    </div>
+    <div class="article-footer">
+      <br>
+<br>
+<blockquote class="mt-2x">
+  <ul class="post-copyright list-unstyled">
+    
+    <li class="post-copyright-link hidden-xs">
+      <strong>本文链接：</strong>
+      <a href="https://codecodegogogo.github.io/2023/05/20/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C-%E7%AC%AC%E4%B8%80%E7%AB%A0%E6%80%BB%E8%BF%B0/" title="计算机网络-自顶向下_第一章总述" target="_blank" rel="external">https://codecodegogogo.github.io/2023/05/20/计算机网络-第一章总述/</a>
+    </li>
+    
+    <li class="post-copyright-license">
+      <strong></strong>
+      <!-- <strong>版权声明： </strong> 本博客所有文章除特别声明外，均采用 <a href="http://creativecommons.org/licenses/by/4.0/deed.zh" target="_blank" rel="external">CC BY 4.0 CN协议</a> 许可协议。转载请注明出处！ -->
+    </li>
+  </ul>
+</blockquote>
+
+    </div>
+  </article>
+  
+    
+  <section id="comments">
+  	
+  </section>
+
+
+  
+</div>
+
+  <nav class="bar bar-footer clearfix" data-stick-bottom>
+  <div class="bar-inner">
+  
+  <ul class="pager pull-left">
+    
+    <li class="prev">
+      <a href="/2023/05/22/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C-%E7%AC%AC%E4%BA%8C%E7%AB%A0%E5%BA%94%E7%94%A8%E5%B1%82/" title="计算机网络-自顶向下-第二章应用层"><i class="icon icon-angle-left" aria-hidden="true"></i><span>&nbsp;&nbsp;上一篇</span></a>
+    </li>
+    
+    
+    <li class="next">
+      <a href="/2023/05/20/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E7%96%91%E9%97%AE/" title="计算机网络疑问"><span>下一篇&nbsp;&nbsp;</span><i class="icon icon-angle-right" aria-hidden="true"></i></a>
+    </li>
+    
+    
+    <li class="toggle-toc">
+      <a class="toggle-btn " data-toggle="collapse" href="#collapseToc" aria-expanded="false" title="文章目录" role="button">    <span>[&nbsp;</span><span>文章目录</span>
+        <i class="text-collapsed icon icon-anchor"></i>
+        <i class="text-in icon icon-close"></i>
+        <span>]</span>
+      </a>
+    </li>
+    
+  </ul>
+  
+  
+  <!-- Button trigger modal -->
+  <button type="button" class="btn btn-fancy btn-donate pop-onhover bg-gradient-warning" data-toggle="modal" data-target="#donateModal"><span>赏</span></button>
+  <!-- <div class="wave-icon wave-icon-danger btn-donate" data-toggle="modal" data-target="#donateModal">
+    <div class="wave-circle"><span class="icon"><i class="icon icon-bill"></i></span></div>
+  </div> -->
+  
+  
+  <div class="bar-right">
+    
+    <div class="share-component" data-sites="weibo,qq,wechat,facebook,twitter" data-mobile-sites="weibo,qq,qzone"></div>
+    
+  </div>
+  </div>
+</nav>
+  
+<!-- Modal -->
+<div class="modal modal-center modal-small modal-xs-full fade" id="donateModal" tabindex="-1" role="dialog">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content donate">
+      <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+      <div class="modal-body">
+        <div class="donate-box">
+          <div class="donate-head">
+            <p>感谢您的支持，我会继续努力的!</p>
+          </div>
+          <div class="tab-content">
+            <div role="tabpanel" class="tab-pane fade active in" id="alipay">
+              <div class="donate-payimg">
+                <img src="/images/donate/alipayimg.png" alt="扫码支持" title="扫一扫" />
+              </div>
+              <p class="text-muted mv">扫码打赏，你说多少就多少</p>
+              <p class="text-grey">打开支付宝扫一扫，即可进行扫码打赏哦</p>
+            </div>
+            <div role="tabpanel" class="tab-pane fade" id="wechatpay">
+              <div class="donate-payimg">
+                <img src="/images/donate/wechatpayimg.png" alt="扫码支持" title="扫一扫" />
+              </div>
+              <p class="text-muted mv">扫码打赏，你说多少就多少</p>
+              <p class="text-grey">打开微信扫一扫，即可进行扫码打赏哦</p>
+            </div>
+          </div>
+          <div class="donate-footer">
+            <ul class="nav nav-tabs nav-justified" role="tablist">
+              <li role="presentation" class="active">
+                <a href="#alipay" id="alipay-tab" role="tab" data-toggle="tab" aria-controls="alipay" aria-expanded="true"><i class="icon icon-alipay"></i> 支付宝</a>
+              </li>
+              <li role="presentation" class="">
+                <a href="#wechatpay" role="tab" id="wechatpay-tab" data-toggle="tab" aria-controls="wechatpay" aria-expanded="false"><i class="icon icon-wepay"></i> 微信支付</a>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+
+
+
+</main>
+
+  <footer class="footer" itemscope itemtype="http://schema.org/WPFooter">
+	
+	
+    <ul class="social-links">
+    	
+        <li><a href="https://github.com/codecodegogogo" target="_blank" title="Github" data-toggle=tooltip data-placement=top><i class="icon icon-github"></i></a></li>
+        
+    </ul>
+
+    <div class="copyright">
+    	
+        联系邮箱：<br>codecodegogogo@163.com
+        <!-- 2024 Sunny -->
+        
+        <!--  -->
+    </div>
+</footer>
+  <script src="//cdn.jsdelivr.net/npm/jquery@1.12.4/dist/jquery.min.js"></script>
+<script>
+window.jQuery || document.write('<script src="js/jquery.min.js"><\/script>')
+</script>
+
+<script src="/js/plugin.min.js"></script>
+
+
+<script src="/js/application.js"></script>
+
+
+    <script>
+(function (window) {
+    var INSIGHT_CONFIG = {
+        TRANSLATION: {
+            POSTS: '文章',
+            PAGES: '页面',
+            CATEGORIES: '分类',
+            TAGS: '标签',
+            UNTITLED: '(未命名)',
+        },
+        ROOT_URL: '/',
+        CONTENT_URL: '/content.json',
+    };
+    window.INSIGHT_CONFIG = INSIGHT_CONFIG;
+})(window);
+</script>
+
+<script src="/js/insight.js"></script>
+
+
+
+
+
+
+   
+<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+
+   
+
+
+
+
+
+
+</body>
+
+</html>

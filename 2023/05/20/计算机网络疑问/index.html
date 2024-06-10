@@ -1,0 +1,815 @@
+<!DOCTYPE html>
+<html lang=zh>
+<head>
+  <meta charset="utf-8">
+  
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, minimal-ui">
+  <meta name="renderer" content="webkit">
+  <meta http-equiv="Cache-Control" content="no-transform" />
+  <meta http-equiv="Cache-Control" content="no-siteapp" />
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <meta name="format-detection" content="telephone=no,email=no,adress=no">
+  <!-- Color theme for statusbar -->
+  <meta name="theme-color" content="#000000" />
+  <!-- 强制页面在当前窗口以独立页面显示,防止别人在框架里调用页面 -->
+  <meta http-equiv="window-target" content="_top" />
+  
+  
+  <title>计算机网络疑问 | yong&#39;s Blog</title>
+  <meta name="description" content="网络有边缘部分主机和核心部分交换机，这些交换机是个人的路由器还是isp的路由器? 在互联网中，边缘部分主机指的是连接到互联网的个人电脑、手机、平板等设备，而核心部分交换机指的是连接不同网络的路由器、交换机等网络设备。这些交换机不是个人的路由器，而是由互联网服务提供商（ISP）或其他网络运营商提供和管理的。 ISP通常会在核心部分网络中设置大量的路由器和交换机，这些设备负责将数据包从一个网络转发到另">
+<meta property="og:type" content="article">
+<meta property="og:title" content="计算机网络疑问">
+<meta property="og:url" content="https://codecodegogogo.github.io/2023/05/20/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E7%96%91%E9%97%AE/index.html">
+<meta property="og:site_name" content="Sunny">
+<meta property="og:description" content="网络有边缘部分主机和核心部分交换机，这些交换机是个人的路由器还是isp的路由器? 在互联网中，边缘部分主机指的是连接到互联网的个人电脑、手机、平板等设备，而核心部分交换机指的是连接不同网络的路由器、交换机等网络设备。这些交换机不是个人的路由器，而是由互联网服务提供商（ISP）或其他网络运营商提供和管理的。 ISP通常会在核心部分网络中设置大量的路由器和交换机，这些设备负责将数据包从一个网络转发到另">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2023-05-20T03:07:54.000Z">
+<meta property="article:modified_time" content="2023-06-12T02:04:11.687Z">
+<meta property="article:author" content="Sunny">
+<meta property="article:tag" content="计算机网络">
+<meta name="twitter:card" content="summary">
+  <!-- Canonical links -->
+  <link rel="canonical" href="https://codecodegogogo.github.io/2023/05/20/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E7%96%91%E9%97%AE/index.html">
+  
+    <link rel="alternate" href="/atom.xml" title="Sunny" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/images/favicon.png" type="image/x-icon">
+  
+  <!-- <link rel="icon" href="/images/favicon.png" type="image/x-icon"> -->
+
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  
+  
+  
+  
+<meta name="generator" content="Hexo 5.4.2"></head>
+
+
+<body class="main-center theme-purple" itemscope itemtype="http://schema.org/WebPage">
+  <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+  <div class="slimContent">
+    <div class="navbar-header">
+      
+      
+      <div class="profile-block text-center">
+        <a id="avatar" href="https://github.com/codecodegogogo" target="_blank">
+          <img class="img-circle img-rotate" src="/images/avatar.jpg" width="200" height="200">
+        </a>
+        <h2 id="name" class="hidden-xs hidden-sm">yong</h2>
+        <h3 id="title" class="hidden-xs hidden-sm hidden-md"></h3>
+        <small id="location" class="text-muted hidden-xs hidden-sm"><i class="icon icon-map-marker"></i> China</small>
+      </div>
+      
+      <div class="search" id="search-form-wrap">
+
+    <form class="search-form sidebar-form">
+        <div class="input-group">
+            <input type="text" class="search-form-input form-control" placeholder="搜索" />
+            <span class="input-group-btn">
+                <button type="submit" class="search-form-submit btn btn-flat" onclick="return false;"><i class="icon icon-search"></i></button>
+            </span>
+        </div>
+    </form>
+    <div class="ins-search">
+  <div class="ins-search-mask"></div>
+  <div class="ins-search-container">
+    <div class="ins-input-wrapper">
+      <input type="text" class="ins-search-input" placeholder="想要查找什么..." x-webkit-speech />
+      <button type="button" class="close ins-close ins-selectable" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+    </div>
+    <div class="ins-section-wrapper">
+      <div class="ins-section-container"></div>
+    </div>
+  </div>
+</div>
+
+
+</div>
+      <button class="navbar-toggle collapsed" type="button" data-toggle="collapse" data-target="#main-navbar" aria-controls="main-navbar" aria-expanded="false">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+    </div>
+    <nav id="main-navbar" class="collapse navbar-collapse" itemscope itemtype="http://schema.org/SiteNavigationElement" role="navigation">
+      <ul class="nav navbar-nav main-nav menu-highlight">
+        
+        
+        <li class="menu-item menu-item-home">
+          <a href="/.">
+            
+            <i class="icon icon-home-fill"></i>
+            
+            <span class="menu-title">首页</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags">
+            
+            <i class="icon icon-tags"></i>
+            
+            <span class="menu-title">标签</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-repository">
+          <a target="_blank" rel="noopener" href="https://github.com/codecodegogogo">
+            
+            <i class="icon icon-project"></i>
+            
+            <span class="menu-title">项目</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about">
+            
+            <i class="icon icon-cup-fill"></i>
+            
+            <span class="menu-title">关于</span>
+          </a>
+        </li>
+        
+      </ul>
+      
+	
+    <ul class="social-links">
+    	
+        <li><a href="https://github.com/codecodegogogo" target="_blank" title="Github" data-toggle=tooltip data-placement=top><i class="icon icon-github"></i></a></li>
+        
+    </ul>
+
+    </nav>
+  </div>
+</header>
+
+  
+    <aside class="sidebar" itemscope itemtype="http://schema.org/WPSideBar">
+  <div class="slimContent">
+    
+      <div class="widget">
+    <h3 class="widget-title">公告</h3>
+    <div class="widget-body">
+        <div id="board">
+            <div class="content">
+                <p>今天网站换了个新皮肤~</p> <p align="right">2023.4.14</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">标签</h3>
+    <div class="widget-body">
+      <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/c/" rel="tag">c++</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/code/" rel="tag">code</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/java/" rel="tag">java</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/javascript/" rel="tag">javascript</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/linux/" rel="tag">linux</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/os/" rel="tag">os</a><span class="tag-list-count">11</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/vue/" rel="tag">vue</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%9D%82%E8%B0%88/" rel="tag">杂谈</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%AE%97%E6%B3%95/" rel="tag">算法</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%9F%BA%E7%A1%80/" rel="tag">计算机基础</a><span class="tag-list-count">8</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%B7%A5%E5%85%B7/" rel="tag">计算机工具</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E6%96%87%E5%8C%96%E5%9F%BA%E7%A1%80/" rel="tag">计算机文化基础</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/" rel="tag">计算机网络</a><span class="tag-list-count">9</span></li></ul>
+    </div>
+  </div>
+
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">最新文章</h3>
+    <div class="widget-body">
+      <ul class="recent-post-list list-unstyled no-thumbnail">
+        
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                
+              </p>
+              <p class="item-title">
+                <a href="/2024/06/10/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E5%90%84%E5%B1%82%E7%BD%91%E7%BB%9C%E8%AE%BE%E5%A4%87/%E8%AE%A1%E7%AE%97%E6%9C%BA%E6%96%87%E5%8C%96%E5%9F%BA%E7%A1%80-ppt/" class="title">(no title)</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2024-06-10T02:05:08.833Z" itemprop="datePublished">2024-06-10</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                
+              </p>
+              <p class="item-title">
+                <a href="/2024/06/10/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E5%90%84%E5%B1%82%E7%BD%91%E7%BB%9C%E8%AE%BE%E5%A4%87/%E8%AE%A1%E7%AE%97%E6%9C%BA%E6%96%87%E5%8C%96%E5%9F%BA%E7%A1%80-%E6%95%B0%E6%8D%AE%E5%BA%93/" class="title">(no title)</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2024-06-10T02:05:08.833Z" itemprop="datePublished">2024-06-10</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                
+              </p>
+              <p class="item-title">
+                <a href="/2024/05/23/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E5%90%84%E5%B1%82%E7%BD%91%E7%BB%9C%E8%AE%BE%E5%A4%87/%E8%AE%A1%E7%AE%97%E6%9C%BA%E6%96%87%E5%8C%96%E5%9F%BA%E7%A1%80-excel/" class="title">计算机文化基础-excel</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2024-05-23T00:30:47.000Z" itemprop="datePublished">2024-05-23</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                
+              </p>
+              <p class="item-title">
+                <a href="/2024/05/14/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E5%90%84%E5%B1%82%E7%BD%91%E7%BB%9C%E8%AE%BE%E5%A4%87/%E8%AE%A1%E7%AE%97%E6%9C%BA%E6%96%87%E5%8C%96%E5%9F%BA%E7%A1%80/" class="title">计算机文化基础</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2024-05-14T01:41:05.000Z" itemprop="datePublished">2024-05-14</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                
+              </p>
+              <p class="item-title">
+                <a href="/2024/03/01/Algorithm/" class="title">Algorithm</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2024-03-01T07:52:28.000Z" itemprop="datePublished">2024-03-01</time>
+              </p>
+            </div>
+          </li>
+          
+      </ul>
+    </div>
+  </div>
+  
+
+    
+  </div>
+</aside>
+
+  
+  
+<main class="main" role="main">
+  <div class="content">
+  <article id="post-计算机网络疑问" class="article article-type-post" itemscope itemtype="http://schema.org/BlogPosting">
+    
+    <div class="article-header">
+      
+        
+  
+    <h1 class="article-title" itemprop="name">
+      计算机网络疑问
+    </h1>
+  
+
+      
+      <div class="article-meta">
+        <span class="article-date">
+    <i class="icon icon-calendar-check"></i>
+	<a href="/2023/05/20/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E7%96%91%E9%97%AE/" class="article-date">
+	  <time datetime="2023-05-20T03:07:54.000Z" itemprop="datePublished">2023-05-20</time>
+	</a>
+</span>
+        
+        
+  <span class="article-tag">
+    <i class="icon icon-tags"></i>
+	<a class="article-tag-link-link" href="/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/" rel="tag">计算机网络</a>
+  </span>
+
+
+        
+	<span class="article-read hidden-xs">
+	    <i class="icon icon-eye-fill" aria-hidden="true"></i>
+	    <span id="busuanzi_container_page_pv">
+			<span id="busuanzi_value_page_pv">0</span>
+		</span>
+	</span>
+
+
+        <span class="post-comment"><i class="icon icon-comment"></i> <a href="/2023/05/20/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E7%96%91%E9%97%AE/#comments" class="article-comment-link">评论</a></span>
+        
+	
+		<span class="post-wordcount hidden-xs" itemprop="wordCount">字数统计: 13.6k(字)</span>
+	
+	
+
+      </div>
+    </div>
+    <div class="article-entry marked-body" itemprop="articleBody">
+      
+        <h4 id="网络有边缘部分主机和核心部分交换机，这些交换机是个人的路由器还是isp的路由器"><a href="#网络有边缘部分主机和核心部分交换机，这些交换机是个人的路由器还是isp的路由器" class="headerlink" title="网络有边缘部分主机和核心部分交换机，这些交换机是个人的路由器还是isp的路由器?"></a>网络有边缘部分主机和核心部分交换机，这些交换机是个人的路由器还是isp的路由器?</h4><blockquote>
+<p>在互联网中，边缘部分主机指的是连接到互联网的个人电脑、手机、平板等设备，而核心部分交换机指的是连接不同网络的路由器、交换机等网络设备。这些交换机不是个人的路由器，而是由互联网服务提供商（ISP）或其他网络运营商提供和管理的。</p>
+<p>ISP通常会在核心部分网络中设置大量的路由器和交换机，这些设备负责将数据包从一个网络转发到另一个网络。当一个数据包从边缘部分主机发送出去后，它会先到达本地网络中的路由器（通常是家庭路由器），然后通过ISP的网络设备转发到目标网络中的路由器，最终到达目标主机。在这个过程中，数据包会经过多个网络设备，包括ISP的路由器、交换机等。</p>
+<p>因此，个人设备通过家庭路由器连接到互联网，而数据包经过的路由器和交换机是由ISP或其他网络运营商提供和管理的。</p>
+</blockquote>
+<h4 id="所以我在我的电脑上不能抓包别人的数据是吗"><a href="#所以我在我的电脑上不能抓包别人的数据是吗" class="headerlink" title="所以我在我的电脑上不能抓包别人的数据是吗?"></a>所以我在我的电脑上不能抓包别人的数据是吗?</h4><blockquote>
+<p>一般情况下，你在自己的电脑上不能抓取其他人的数据包。这是因为，在互联网中，数据包是通过路由器进行转发的，而不是直接发送到目标主机。当一个数据包从发送端发出后，它会先到达发送端所在的本地网络，然后通过本地路由器转发到目标网络，最终到达目标主机。在这个过程中，数据包经过的路由器和交换机是由ISP或其他网络运营商提供和管理的。</p>
+<p>如果你想抓取其他人的数据包，需要在数据包经过的路由器或交换机上进行抓包。这通常需要获得网络管理员的授权，并且需要使用专业的网络抓包工具。此外，抓取其他人的数据包也可能会涉及到隐私和安全等问题，因此需要谨慎处理。</p>
+</blockquote>
+<h4 id="那这个转发的过程不是很危险吗，截取数据怎么办"><a href="#那这个转发的过程不是很危险吗，截取数据怎么办" class="headerlink" title="那这个转发的过程不是很危险吗，截取数据怎么办?"></a>那这个转发的过程不是很危险吗，截取数据怎么办?</h4><blockquote>
+<p>在互联网中，数据包的转发是通过路由器进行的，路由器会根据其路由表进行数据包的转发。在这个过程中，数据包可能会经过多个路由器进行转发，因此存在一定的安全风险，例如路由器被黑客攻击或者路由器被设置了恶意路由等。</p>
+<p>为了保护数据的安全性，互联网中通常采用加密协议来保护数据的传输过程。例如，HTTPS协议可以对数据进行加密传输，从而防止数据被截取和窃听。此外，还可以使用虚拟专用网络（VPN）等技术来保护数据的安全性。VPN可以在公共互联网上建立一个加密的通道，从而保护数据在传输过程中的安全性。</p>
+<p>总之，在互联网中，数据的安全性需要依靠多种技术手段来保护，而不仅仅是依赖于路由器的安全性。</p>
+</blockquote>
+<h4 id="链路指的是什么，网络核心的路由器交换机和线路吗"><a href="#链路指的是什么，网络核心的路由器交换机和线路吗" class="headerlink" title="链路指的是什么，网络核心的路由器交换机和线路吗"></a>链路指的是什么，网络核心的路由器交换机和线路吗</h4><p>吞吐量<br>作为最后一个例子，考虑图1-20b，其中有10台服务器和10个客户与某计算机网络核心相连。在这个例子中，同时发生10个下载，涉及10个客户-服务器对。假定这10个下载是网络中当时的唯一流量。如该图所示，在核心中有一条所有10个下载通过的链路。将这条链路R的传输速率表示为R。假定所有服务器接入链路具有相同的速率Rs，所有客户接入链路具有相同的速率Rc，并且核心中除了速率为R的一条共同链路之外的所有链路传输速率都比R、Rc和Rs大得多。现在我们要问，这种下载的吞吐量是多少?显然，如果该公共链路的速率R很大，比如说比Rc和Rs大100倍，则每个下载的吞吐量将仍然是minRs，Rc。但是如果该公共链路的速率与R和R有相同量级会怎样呢?在这种情况下其吞吐量将是多少呢?让我们观察一个特定的例子。假定Rs=2Mbps，Rc=1Mbps，R=5Mbps，并且公共链路在10个下载之间平等划分它的传输速率。这时每个下载的瓶颈不再位于接人网中，而是位于核心中的共享链路了，该瓶颈仅能为每个下载提供500kbps的吞吐量。因此每个下载的端到端吞吐量现在减少到500kbps。</p>
+<blockquote>
+<p>在计算机网络中，链路（Link）指的是连接两个网络设备的通信媒介，例如交换机和路由器之间的物理线路或者无线信道。链路可以是有线的或者无线的，它们可以是光纤、双绞线、无线电波等各种不同的传输媒介。在网络核心中，链路通常指的是连接路由器或交换机之间的物理线路或者光纤。因此，在题目中，所有服务器接入链路和所有客户接入链路都指的是连接服务器和客户端的物理链路，而共享链路R是连接网络核心中的路由器或交换机的物理链路。</p>
+</blockquote>
+<h4 id="题目中是假定他们同时下载了是吗"><a href="#题目中是假定他们同时下载了是吗" class="headerlink" title="题目中是假定他们同时下载了是吗"></a>题目中是假定他们同时下载了是吗</h4><blockquote>
+<p>是的，题目中假设10个下载是同时进行的，因此它们共享同一条链路R。如果这些下载是分别进行的，那么它们之间就不存在共享链路的问题，每个下载的带宽分配将会独立计算。但是，由于10个下载是同时进行的，它们的流量将会在链路R上竞争带宽，因此链路R成为了这些下载的共同瓶颈。因此，每个下载的带宽将会受到链路R带宽的限制，因此它们的带宽是平分的。</p>
+</blockquote>
+<h4 id="题目中的R是指的哪里的速率？路由器推出分组的速率？还是物理介质传播的速率"><a href="#题目中的R是指的哪里的速率？路由器推出分组的速率？还是物理介质传播的速率" class="headerlink" title="题目中的R是指的哪里的速率？路由器推出分组的速率？还是物理介质传播的速率"></a>题目中的R是指的哪里的速率？路由器推出分组的速率？还是物理介质传播的速率</h4><blockquote>
+<p>题目中的R指的是核心中的共享链路的传输速率，也就是物理介质传播的速率。</p>
+</blockquote>
+<h4 id="rs-rc是指接入网的速率吗"><a href="#rs-rc是指接入网的速率吗" class="headerlink" title="rs rc是指接入网的速率吗"></a>rs rc是指接入网的速率吗</h4><blockquote>
+<p>是的，Rs和Rc指的是接入网的速率。Rs是指所有服务器接入链路的速率，Rc是指所有客户端接入链路的速率。这些速率决定了每个客户端和服务器能够传输的最大速率。</p>
+</blockquote>
+<h4 id="接入网和网络核心的区别"><a href="#接入网和网络核心的区别" class="headerlink" title="接入网和网络核心的区别"></a>接入网和网络核心的区别</h4><blockquote>
+<p>接入网和网络核心是计算机网络中两个不同的概念。</p>
+<p>接入网是指连接用户设备和互联网服务提供商(ISP)网络的物理链路或&gt;无线连接，通常包括调制解调器、路由器、交换机、光纤或电缆等设&gt;备。接入网的速率通常比核心网速率低，因为接入网需要覆盖更广泛&gt;的区域，并且需要支持更多的用户设备。</p>
+<p>网络核心是指网络的中央部分，包括路由器、交换机和其他网络设&gt;备，用于转发和处理网络流量。网络核心通常具有更高的速率和更复&gt;杂的拓扑结构，用于支持大量的数据传输和流量管理。</p>
+<p>因此，接入网和网络核心在计算机网络中具有不同的作用和特点。接&gt;入网连接用户设备和ISP网络，提供用户与网络之间的连接，而网络核&gt;心用于处理和转发网络流量，维护网络的正常运行。</p>
+</blockquote>
+<h4 id="电路交换和分组交换是不是都有复用，电路交换需要预留某个用户的带宽"><a href="#电路交换和分组交换是不是都有复用，电路交换需要预留某个用户的带宽" class="headerlink" title="电路交换和分组交换是不是都有复用，电路交换需要预留某个用户的带宽"></a>电路交换和分组交换是不是都有复用，电路交换需要预留某个用户的带宽</h4><blockquote>
+<p>是的，电路交换和分组交换都有复用的概念。在电路交换中，需要预留某个用户的带宽，因此可以说是一种静态复用。而在分组交换中，带宽是动态分配的，可以根据实际需要进行动态复用。</p>
+</blockquote>
+<blockquote>
+<p>电路交换和分组交换是计算机网络通信中的两种基本交换方式。两种交换方式的主要区别在于数据传输的方式不同。</p>
+<p>电路交换是指在通信开始之前，建立一条专用的、端到端的物理连接，然后在通信过程中一直占用这条连接。在电路交换中，数据传输是连续不间断的，通常用于传输实时性要求较高的音视频数据。电路交换需要预留带宽，因此在通信过程中不允许其他用户占用这条连接，因此也称为静态复用。</p>
+<p>分组交换是指将数据分成若干个大小相同的数据包（分组），然后通过网络传输。在传输过程中，每个分组都是独立处理的，可以通过不同的路径到达目的地。因此，分组交换具有更好的灵活性和可靠性，可以根据网络的实际情况进行动态分配带宽，因此也称为动态复用。</p>
+<p>两种交换方式的异同点如下：</p>
+<ol>
+<li><p>建立连接的方式不同。电路交换需要在通信开始之前建立一条专用的、端到端的物理连接(占用资源)，而分组交换则不需要建立连接，只需要将数据包发送到网络中，然后等待接收方响应。</p>
+</li>
+<li><p>数据传输的方式不同。在电路交换中，数据传输是连续不间断的，而在分组交换中，数据被分成若干个数据包进行传输。</p>
+</li>
+<li><p>复用方式不同。电路交换需要预留带宽，因此在通信过程中不允许其他用户占用这条连接，因此也称为静态复用。而分组交换具有更好的灵活性和可靠性，可以根据网络的实际情况进行动态分配带宽，因此也称为动态复用。</p>
+</li>
+<li><p>传输速度不同。由于电路交换需要建立连接和预留带宽，因此传输速度比分组交换慢。而分组交换可以根据网络情况进行动态分配带宽，因此传输速度相对较快。</p>
+</li>
+</ol>
+</blockquote>
+<h4 id="电路交换的应用"><a href="#电路交换的应用" class="headerlink" title="电路交换的应用"></a>电路交换的应用</h4><blockquote>
+<p>电路交换是一种传输数据的方式，通常用于传输实时性要求较高的音&gt;视频数据。以下是电路交换的一些应用：</p>
+<ol>
+<li><p>电话通信：传统的电话通信就是一种使用电路交换的通信方式。在&gt;通信开始之前，电话线路会建立一条专用的、端到端的物理连接，然&gt;后在通信过程中一直占用这条连接。</p>
+</li>
+<li><p>电视广播：电视广播也是一种使用电路交换的应用。电视信号需要&gt;连续不间断地传输，因此需要建立一条专用的、端到端的物理连接，&gt;以保证传输的稳定性和实时性。</p>
+</li>
+<li><p>视频会议：视频会议也是一种使用电路交换的应用。在视频会议&gt;中，参会者需要实时地传输音视频数据，因此需要建立一条专用的、&gt;端到端的物理连接，以保证传输的稳定性和实时性。</p>
+</li>
+<li><p>实时监控：在一些场合下，需要对现场进行实时监控，例如银行、&gt;商场、机场等。实时监控需要传输大量的视频数据，因此需要使用电&gt;路交换方式进行传输。</p>
+</li>
+</ol>
+<p>总之，电路交换通常用于传输实时性要求较高的数据，需要建立一条&gt;专用的、端到端的物理连接，以保证传输的稳定性和实时性。</p>
+</blockquote>
+<h4 id="bittorrent为什么是p2p"><a href="#bittorrent为什么是p2p" class="headerlink" title="bittorrent为什么是p2p"></a>bittorrent为什么是p2p</h4><blockquote>
+<p>BitTorrent是一种P2P协议，它采用P2P结构来实现文件共享和下&gt;载。BitTorrent的P2P结构可以让用户之间直接进行文件传输，而不&gt;需要通过中央服务器进行转发和管理，这样可以减少服务器的负载，&gt;提高系统的可扩展性和可靠性。</p>
+<p>BitTorrent的P2P结构是通过将文件切分成多个小块来实现的，每个&gt;用户可以下载和上传不同的文件块，从而实现文件的分布式共享和下&gt;载。BitTorrent还采用了一种“种子-下载”的方式，即用户需要先下&gt;载一个种子文件，通过该种子文件来获取目标文件的元数据和下载地&gt;址，然后再通过P2P网络进行文件的下载和共享。</p>
+<p>总之，BitTorrent之所以采用P2P结构，是因为它可以实现高效的文&gt;件共享和下载，同时也可以降低服务器的负载和提高系统的可靠性。</p>
+</blockquote>
+<h4 id="元数据是什么"><a href="#元数据是什么" class="headerlink" title="元数据是什么"></a>元数据是什么</h4><blockquote>
+<p>元数据是指描述数据的数据，也叫做“中介数据”或“数据的数据”。&gt;它是对数据的描述和解释，可以包括数据的属性、结构、来源、格&gt;式、语义等信息。元数据可以帮助用户更好地理解数据，同时也可以&gt;帮助计算机系统更好地管理和利用数据。</p>
+<p>例如，在数字图书馆中，每一本图书都有元数据，包括书名、作者、&gt;出版社、出版日期、ISBN号等信息。这些元数据可以帮助用户更好地&gt;了解和查找图书，也可以帮助图书管理员更好地管理和维护图书馆。</p>
+<p>在计算机系统中，元数据也非常重要。例如，在文件系统中，每个文&gt;件都有元数据，包括文件名、大小、创建时间、修改时间、访问权限&gt;等信息。这些元数据可以帮助操作系统更好地管理和维护文件系统，&gt;同时也可以帮助用户更好地查找和使用文件。</p>
+<p>总之，元数据是数据的描述信息，它可以帮助用户更好地理解和利用&gt;数据，同时也可以帮助计算机系统更好地管理和利用数据。</p>
+</blockquote>
+<h4 id="使用p2p应用时，如果没有人上载或者挂着某资源，别人就没法下载对吗"><a href="#使用p2p应用时，如果没有人上载或者挂着某资源，别人就没法下载对吗" class="headerlink" title="使用p2p应用时，如果没有人上载或者挂着某资源，别人就没法下载对吗"></a>使用p2p应用时，如果没有人上载或者挂着某资源，别人就没法下载对吗</h4><blockquote>
+<p>是的，如果没有人上载某个资源，或者没有其他用户同时上传文件&gt;块，那么其他用户就无法下载该资源。P2P应用是一种点对点的文件共享方式，每个用户都可以成为文件的提供者和下载者。当用户下载文件时，他们不仅从其他用户下载文件块，也同时将自己的文件块上传给其他用户。因此，如果没有其他用户同时上传文件块，或者没有人上载某个资源，那么其他用户就无法下载该资源。</p>
+<p>在P2P应用中，用户之间的文件共享是基于互相协作的，需要有足够的&gt;用户同时上传文件块，才能保证文件下载的成功率和速度。如果没有&gt;其他用户同时上传文件块，那么文件下载就会停滞或者变得非常慢。&gt;因此，P2P应用中的文件下载需要保证有其他用户同时在上传文件块。</p>
+<p>总之，P2P应用中的文件下载需要保证有其他用户同时上传文件块，如果没有其他用户同时上传文件块，或者没有人上载某个资源，那么其他用户就无法下载该资源。</p>
+</blockquote>
+<h4 id="服务器可以主动给客户端发消息吗"><a href="#服务器可以主动给客户端发消息吗" class="headerlink" title="服务器可以主动给客户端发消息吗"></a>服务器可以主动给客户端发消息吗</h4><blockquote>
+<p>一般情况下，服务器不能主动给客户端发消息。客户端需要向服务器发送请求，服务器才会响应并返回数据。但是，有些技术可以实现服务器向客户端推送消息，如WebSocket、长轮询、服务器推送事件等。这些技术可以在客户端与服务器之间建立一个持久化的连接，从而实现服务器向客户端主动发送消息。</p>
+</blockquote>
+<h4 id="dns底层是udp吗"><a href="#dns底层是udp吗" class="headerlink" title="dns底层是udp吗?"></a>dns底层是udp吗?</h4><blockquote>
+<p>DNS协议使用UDP协议而不是TCP协议，主要是出于以下几个原因：</p>
+<ol>
+<li><p>UDP协议比TCP协议更轻量级，因为它不需要建立连接、保持连接&gt;状态和拆除连接等复杂的机制。这使得DNS查询可以更快地完成，因为&gt;UDP协议的开销更小。</p>
+</li>
+<li><p>DNS查询通常是短暂的，只需要发送一个小的查询数据包并接收一&gt;个小的响应数据包。因此，UDP协议足以满足DNS查询需求。</p>
+</li>
+<li><p>DNS查询通常需要进行大量的并发查询，如果使用TCP协议，每个&gt;查询都需要创建一个新的TCP连接，这将导致大量的连接开销和资源浪&gt;费。而UDP协议可以通过一个单独的端口号处理大量的并发查询，从而&gt;更加高效。</p>
+</li>
+</ol>
+<p>尽管UDP协议没有TCP协议那么可靠，但DNS查询通常是短暂的，因此&gt;数据包在传输过程中的丢失或重复通常不会对查询产生重大影响。如&gt;果需要更可靠的DNS查询，DNS协议还支持使用TCP协议进行查询，但&gt;这通常只在DNS数据包较大或DNS查询需要更高的可靠性时使用。</p>
+</blockquote>
+<h4 id="CND（Content-Delivery-Network）：内容分发网络，是一种分布式服务器系统，可以加速互联网上的内容传输和访问。"><a href="#CND（Content-Delivery-Network）：内容分发网络，是一种分布式服务器系统，可以加速互联网上的内容传输和访问。" class="headerlink" title="CND（Content Delivery Network）：内容分发网络，是一种分布式服务器系统，可以加速互联网上的内容传输和访问。"></a>CND（Content Delivery Network）：内容分发网络，是一种分布式服务器系统，可以加速互联网上的内容传输和访问。</h4><blockquote>
+<p>是的，您说得对。CND（Content Delivery Network）是一种分布式服务器系统，可以将内容缓存到全球各地的服务器上，从而加速互联网上的内容传输和访问。CND可以减轻源服务器的负担，提高用户访问速度和稳定性，同时也可以降低带宽成本。CND通常用于大型网站、视频、音频等流媒体内容的分发，以及在线游戏、电子商务等需要快速响应的应用场景。</p>
+</blockquote>
+<h4 id="cdn是提前缓存吗"><a href="#cdn是提前缓存吗" class="headerlink" title="cdn是提前缓存吗"></a>cdn是提前缓存吗</h4><blockquote>
+<p>是的，CDN（Content Delivery Network）可以通过提前缓存来加速内容传输和访问。CDN将内容缓存到全球各地的服务器上，当用户请求访问这些内容时，CDN会自动选择距离用户最近的服务器进行响应，从而减少网络延迟和带宽消耗，提高访问速度和稳定性。CDN的缓存可以是静态内容（如图片、CSS、JS等），也可以是动态内容（如视频、音频、游戏等），具体缓存策略可以根据实际情况进行调整。</p>
+</blockquote>
+<h4 id="那网络直播cdn怎么弄的，直播怎么提前缓存"><a href="#那网络直播cdn怎么弄的，直播怎么提前缓存" class="headerlink" title="那网络直播cdn怎么弄的，直播怎么提前缓存"></a>那网络直播cdn怎么弄的，直播怎么提前缓存</h4><blockquote>
+<p>网络直播CDN的实现方式与普通内容CDN有些不同。对于网络直播，CDN需要实时地接收直播源，并将其缓存到全球各地的服务器上。一般来说，网络直播CDN的实现过程如下：</p>
+<ol>
+<li><p>直播源推送：将直播源推送到CDN提供商的服务器上，这些服务器通常位于主要的网络骨干节点上，具有高带宽和低延迟的特点。</p>
+</li>
+<li><p>转码和分发：CDN将接收到的直播源进行转码和分发，生成多种不同分辨率和码率的直播流，并将其缓存到全球各地的服务器上。</p>
+</li>
+<li><p>用户访问：用户通过CDN提供商的域名访问直播流，CDN会自动选择距离用户最近的服务器进行响应，从而提高访问速度和稳定性。</p>
+</li>
+<li><p>直播结束：直播结束后，CDN会自动清空缓存，释放资源。</p>
+</li>
+</ol>
+<p>需要注意的是，网络直播CDN需要具备高带宽、低延迟、高并发等特点，同时还需要具备实时性和可靠性。针对不同的应用场景，需要选择不同的CDN提供商，并进行合理的配置和调优，以达到最优的效果。</p>
+</blockquote>
+<h4 id="直播源是什么"><a href="#直播源是什么" class="headerlink" title="直播源是什么"></a>直播源是什么</h4><blockquote>
+<p>直播源是指视频直播的源数据，通常是由摄像头、编码器等设备采集、编码和推送到流媒体服务器上的视频数据。直播源包含视频、音频、字幕等多种数据流，可以通过RTMP、RTSP、HLS等协议进行传输。在直播过程中，直播源是不断变化的，可以是单个摄像头的画面，也可以是多个摄像头的画面进行切换、合成等操作后的结果。</p>
+</blockquote>
+<h4 id="流媒体是什么"><a href="#流媒体是什么" class="headerlink" title="流媒体是什么"></a>流媒体是什么</h4><blockquote>
+<p>流媒体（Streaming Media）是一种数据传输方式，可以在数据传输的同时进行实时的解码和播放，无需等待数据完全下载后再进行播放。流媒体通常用于音视频的传输，可以实现音视频的实时播放和交互。</p>
+<p>流媒体的传输方式与下载方式有所不同。在下载方式中，用户需要等待数据完全下载后才能进行播放，而流媒体则是将数据分成多个小的数据包进行传输，并实时进行解码和播放。流媒体的传输速度和质量取决于网络带宽和延迟，如果网络带宽太低或延迟太高，可能会导致视频卡顿、声音不同步等问题。</p>
+<p>流媒体的应用场景非常广泛，包括在线音乐、视频直播、在线教育、远程会议等等。流媒体技术的发展也在不断提高其传输速度和质量，如HTTP Live Streaming（HLS）、Dynamic Adaptive Streaming over HTTP（DASH）等技术的出现，使得流媒体的应用更加广泛和便捷。</p>
+</blockquote>
+<h4 id="p2p"><a href="#p2p" class="headerlink" title="p2p"></a>p2p</h4><blockquote>
+<p>P2P技术的实现涉及到多种技术细节。以下是其中一些关键技术的介绍：</p>
+<ol>
+<li><p>节点发现：P2P网络中的节点需要能够发现其他节点，以便建立连&gt;接和进行数据传输。节点发现通常使用两种方法：基于中心化服务器&gt;的发现和分布式哈希表（DHT）发现。前者需要中心化服务器来维护节&gt;点列表，而后者则是通过哈希算法将节点信息存储在网络中，使得节&gt;点可以自行发现其他节点。</p>
+</li>
+<li><p>文件分割和传输：在P2P网络中，文件通常被分割成小块并分布在&gt;各个节点上。节点之间可以通过点对点连接进行数据传输，从而实现&gt;文件共享。文件分割和传输需要考虑数据完整性、传输速度和负载均&gt;衡等问题。</p>
+</li>
+<li><p>协议设计：P2P网络需要使用一种协议来管理节点之间的通信和数&gt;据传输。常见的P2P协议包括BitTorrent协议、eDonkey协议和&gt;Gnutella协议等。这些协议通常包括节点之间的握手、数据块请求和&gt;响应、心跳包等功能。</p>
+</li>
+<li><p>NAT穿透：由于大多数用户都位于NAT（网络地址转换）后面，因&gt;此P2P网络需要能够穿透NAT，使得节点之间可以直接通信。NAT穿透&gt;通常使用STUN（Simple Traversal of UDP through NATs）和&gt;TURN（Traversal Using Relays around NAT）等技术实现。</p>
+</li>
+<li><p>安全性保护：P2P网络容易受到恶意节点的攻击和破坏，因此需要&gt;一定的安全机制来保护网络和用户的安全。常见的安全机制包括加密&gt;通信、防止DDoS攻击、节点信任度评估等。</p>
+</li>
+</ol>
+<p>以上是P2P技术的一些关键技术细节。不同的P2P应用可能涉及到不同&gt;的技术细节，但是它们都遵循着去中心化、分布式和点对点的基本原&gt;则，实现了高效的数据共享和通信。</p>
+</blockquote>
+<h4 id="心跳包"><a href="#心跳包" class="headerlink" title="心跳包"></a>心跳包</h4><blockquote>
+<p>心跳包是指在计算机网络通信中，为了维持连接状态而定期发送的数据包。它通常由客户端或服务器发送，用于告知对方自己的存在和状态。在P2P网络中，节点之间需要定期发送心跳包来维护连接状态，以确保数据传输的可靠性和稳定性。</p>
+<p>心跳包通常包含以下信息：</p>
+<ol>
+<li><p>发送方的标识符或ID：用于告知接收方发送方的身份信息。</p>
+</li>
+<li><p>时间戳：用于告知接收方发送方的最新状态，以便接收方根据时间&gt;戳判断发送方是否仍然在线。</p>
+</li>
+<li><p>其他状态信息：例如发送方的带宽、CPU利用率、内存占用率等信&gt;息。</p>
+</li>
+</ol>
+<p>节点之间通常会约定一个心跳包的发送周期，例如每隔10秒发送一次&gt;心跳包。当接收方收到心跳包时，会根据时间戳判断发送方是否仍然&gt;在线。如果发送方长时间未发送心跳包，则接收方会认为发送方已经&gt;下线，并从节点列表中删除该节点。</p>
+<p>心跳包在P2P网络中的作用非常重要，它可以帮助节点维护连接状态，&gt;避免数据传输中断，保证P2P网络的稳定性和可靠性。同时，心跳包也&gt;可以用于节点之间的状态监控和性能优化，例如通过心跳包中的其他&gt;状态信息来调整数据传输策略，提高P2P网络的效率和速度。</p>
+</blockquote>
+<h4 id="电脑没网卡有ip地址吗"><a href="#电脑没网卡有ip地址吗" class="headerlink" title="电脑没网卡有ip地址吗"></a>电脑没网卡有ip地址吗</h4><blockquote>
+<p>没有网卡的电脑没有网络连接，因此无法获得IP地址。IP地址是由网络接口设备（如网卡）分配的，没有网卡就没有网络接口设备来分配IP地址。</p>
+</blockquote>
+<h4 id="电脑有网卡没有网有ip地址吗，是什么"><a href="#电脑有网卡没有网有ip地址吗，是什么" class="headerlink" title="电脑有网卡没有网有ip地址吗，是什么"></a>电脑有网卡没有网有ip地址吗，是什么</h4><blockquote>
+<p>如果电脑有网卡但没有连接到网络，它仍然可以获得一个本地IP地址，称为“本地回环地址”，通常是127.0.0.1。本地回环地址是指电脑上的一个虚拟接口，用于在同一台电脑上进行网络通信。虽然这个地址不是用于连接到互联网的，但它可以用于测试网络应用程序或运行本地服务器。</p>
+</blockquote>
+<h4 id="电脑有网卡有网有ip地址吗"><a href="#电脑有网卡有网有ip地址吗" class="headerlink" title="电脑有网卡有网有ip地址吗"></a>电脑有网卡有网有ip地址吗</h4><blockquote>
+<p>如果电脑有网卡并且已连接到网络，它将获得一个IP地址，该地址用于在网络上唯一标识该电脑。这个IP地址可以是静态的（由管理员手动配置）或动态的（由DHCP服务器自动分配）。如果电脑有多个网卡，则每个网卡都可以获得一个IP地址。</p>
+</blockquote>
+<h4 id="浏览器有多个标签时请求服务器，服务器怎么知道数据给那一个标签"><a href="#浏览器有多个标签时请求服务器，服务器怎么知道数据给那一个标签" class="headerlink" title="浏览器有多个标签时请求服务器，服务器怎么知道数据给那一个标签"></a>浏览器有多个标签时请求服务器，服务器怎么知道数据给那一个标签</h4><blockquote>
+<p>浏览器发送请求时会在请求头中包含一些信息，例如Referer（来源页面）和User-Agent（浏览器类型和版本号）等，可以用这些信息来判断请求的来源。另外，浏览器还会在请求的URL中包含一些参数，例如session ID和token等，可以用这些参数来区分不同的标签页。服务器可以根据这些信息来判断请求的来源，然后返回相应的数据。</p>
+</blockquote>
+<h4 id="gbn接收方是不是收到分组后就立刻上交应用层然后发送ack"><a href="#gbn接收方是不是收到分组后就立刻上交应用层然后发送ack" class="headerlink" title="gbn接收方是不是收到分组后就立刻上交应用层然后发送ack"></a>gbn接收方是不是收到分组后就立刻上交应用层然后发送ack</h4><blockquote>
+<p>GBN协议中接收方并不是在收到分组后立刻将数据上交给应用层，而是必须等到按序接收到数据才能将数据上交给应用层。具体来说，接收方会按照序号依次接收数据包，如果接收到的数据包序号不是期望的序号，接收方会将该数据包丢弃，并等待后续的数据包。当接收方按序收到数据包时，将数据上交给应用层并发送确认消息（ACK），确认消息中包含期望接收的下一个数据包的序号。因此，GBN协议中的接收方只会在按序接收到数据包时才会将数据上交给应用层并发送ACK。</p>
+</blockquote>
+<h4 id="gbn为什么收到ack后就代表此确认前的分组已经接受了？"><a href="#gbn为什么收到ack后就代表此确认前的分组已经接受了？" class="headerlink" title="gbn为什么收到ack后就代表此确认前的分组已经接受了？"></a>gbn为什么收到ack后就代表此确认前的分组已经接受了？</h4><blockquote>
+<p>GBN（Go-Back-N）协议中的累计确认是指接收方在收到数据包后，发送一个包含期望接收的下一个数据包序号的确认消息（ACK）。例如，当接收方成功接收到序号为1、2、3的三个数据包时，它会发送一个ACK序号为4的确认消息，表示期望接收的下一个数据包的序号为4。在此之前，接收方将不会向应用层传递任何数据。<br>GBN协议中的累计确认是一种简单而有效的确认机制，可以减少网络拥塞和重传次数。发送方在收到确认消息后，就知道哪些数据已经成功传输到接收方，从而可以继续发送下一个数据包。同时，如果发送方没有收到确认消息，就会认为数据包丢失，会重新发送之前的数据包，这样就能保证数据的可靠传输。</p>
+</blockquote>
+<h4 id="gbn假如1234这几个包发送，发送方收到了ack1-ack1-ack1-此时1的定时器还没有超时，他是等待超时后发送234，还是直接发送234"><a href="#gbn假如1234这几个包发送，发送方收到了ack1-ack1-ack1-此时1的定时器还没有超时，他是等待超时后发送234，还是直接发送234" class="headerlink" title="gbn假如1234这几个包发送，发送方收到了ack1,ack1,ack1,此时1的定时器还没有超时，他是等待超时后发送234，还是直接发送234"></a>gbn假如1234这几个包发送，发送方收到了ack1,ack1,ack1,此时1的定时器还没有超时，他是等待超时后发送234，还是直接发送234</h4><blockquote>
+<p>非常抱歉，之前的回答有误。在GBN协议中，如果发送方收到多个重复的ACK确认消息，但是对应的数据包还没有超时，那么发送方会继续等待超时后再进行重传。这是因为在GBN协议中，发送方使用定时器来等待ACK确认消息的到达，并在定时器超时后进行重传，而不是根据收到的ACK确认消息来进行重传。</p>
+<p>因此，在上述情况下，如果发送方收到了多个重复的ACK1确认消息，但是数据包1还没有超时，那么发送方会继续等待定时器超时后再进行重传。当定时器超时后，发送方会重新发送数据包2、3、4，从而保证数据的可靠传输。</p>
+<p>需要注意的是，如果发送方收到的重复ACK确认消息数量超过了一个阈值，通常表示网络中存在丢包或其他问题。此时，发送方可能会启动拥塞控制机制，例如减少窗口大小或进行慢启动等，以避免网络拥塞。</p>
+</blockquote>
+<h4 id="什么是带外通信和带内通信"><a href="#什么是带外通信和带内通信" class="headerlink" title="什么是带外通信和带内通信"></a>什么是带外通信和带内通信</h4><blockquote>
+<p>带外通信（out-of-band communication）指的是在网络传输中，使用不同于正常数据传输的通道进行通信。这种通信方式通常用于控制和管理网络设备，例如发送一些命令或警告信息。带外通信能够在网络故障或攻击时保持可靠性和安全性。</p>
+<p>带内通信（in-band communication）指的是在网络传输中，使用正常的数据传输通道进行通信。这种通信方式是网络中最常见的通信方式，例如发送电子邮件、浏览网页等。带内通信的缺点是在网络故障或攻击时容易受到影响，可能会导致数据传输中断或延迟。</p>
+</blockquote>
+<h4 id="tcp拥塞控制为什么把超时导致的丢包和3次ack的丢包分开"><a href="#tcp拥塞控制为什么把超时导致的丢包和3次ack的丢包分开" class="headerlink" title="tcp拥塞控制为什么把超时导致的丢包和3次ack的丢包分开"></a>tcp拥塞控制为什么把超时导致的丢包和3次ack的丢包分开</h4><blockquote>
+<p>TCP拥塞控制把超时导致的丢包和3次ACK的丢包分开是因为它们所代表的情况不同，需要采取不同的措施。</p>
+<p>超时导致的丢包通常意味着网络出现了较严重的拥塞，&gt;需要采取较为激进的措施来缓解拥塞，例如减小拥塞窗&gt;口，降低发送速率等。</p>
+<p>而3次ACK的丢包通常意味着网络出现了较轻微的拥塞，&gt;可以通过快速重传和快速恢复等措施来缓解拥塞，而不&gt;必采取过于激进的措施。</p>
+<p>因此，将超时导致的丢包和3次ACK的丢包分开处理可以&gt;更加精细地控制网络拥塞，提高TCP性能和可靠性。</p>
+</blockquote>
+<h4 id="为什么UDP是使用二元组（目标IP，目标Port）来标识套接字？"><a href="#为什么UDP是使用二元组（目标IP，目标Port）来标识套接字？" class="headerlink" title="为什么UDP是使用二元组（目标IP，目标Port）来标识套接字？"></a>为什么UDP是使用二元组（目标IP，目标Port）来标识套接字？</h4><blockquote>
+<p>首先udp会由操作系统给他附上源地址和源端口。也就是说不管是udp还是tcp其实其报文段中都会有源ip地址和源端口，下面我们考虑源地址和源端口把他放在tcp套接字的作用是什么？有两个作用，第一很明显，用于作为回来的时候传输的地址。还有个作用（能回答你的疑惑）那就是用于标识目的套接字，在udp中一个udp套接字是由一个二元祖目的ip地址和目的端口全面标识的，也就是说两个源ip或者源端口不同的udp套接字是通过相同的目的套接字定位到相同的进程。但是如果你让tcp变成四元祖那上述情况就会被定位到不同目的套接字，但这是udp的一个特性，我们显然不能这样改变。</p>
+</blockquote>
+<h4 id="udp中只要有相同目的地址和端口的数据报都经过同一个socket，应用层怎么分辨他们呢"><a href="#udp中只要有相同目的地址和端口的数据报都经过同一个socket，应用层怎么分辨他们呢" class="headerlink" title="udp中只要有相同目的地址和端口的数据报都经过同一个socket，应用层怎么分辨他们呢?"></a>udp中只要有相同目的地址和端口的数据报都经过同一个socket，应用层怎么分辨他们呢?</h4><blockquote>
+<p>UDP协议中没有提供对数据报的标识或者序号，因此在应用层无法直接分辨相同目的地址和端口的数据报。一般情况下，应用层通过在数据报中添加一些特定的标识信息或者数据头来进行区分。例如，DNS协议使用查询ID来标识不同的查询请求和响应，TFTP协议使用操作码来标识不同的操作请求和响应等。在接收到数据报后，应用层根据这些标识信息或者数据头来进行处理和解析。</p>
+</blockquote>
+<h4 id="tcp首部只有端口号没有ip地址，那么网络层怎么知道目的ip地址的呢？"><a href="#tcp首部只有端口号没有ip地址，那么网络层怎么知道目的ip地址的呢？" class="headerlink" title="tcp首部只有端口号没有ip地址，那么网络层怎么知道目的ip地址的呢？"></a>tcp首部只有端口号没有ip地址，那么网络层怎么知道目的ip地址的呢？</h4><blockquote>
+<p>http 拿到 dns 返回的 ip 之后，会通过 tcp 建立一个长连接，建立连接需要 ip 和 port，port 放在 tcp 的 header 中，ip 则是放在下一层网络层 IP Layer 的 header 中。 传输层不负责寻址，所以和 ip 地址无关，自然不需要再 header 中存放 ip 信息。</p>
+</blockquote>
+<h4 id="什么是流量控制？流量控制的目的？"><a href="#什么是流量控制？流量控制的目的？" class="headerlink" title="什么是流量控制？流量控制的目的？"></a>什么是流量控制？流量控制的目的？</h4><blockquote>
+<p>如果发送者发送数据过快，接收者来不及接收，那么就会有分组丢失。为了避免分组丢失，控制发送者的发送速度，使得接收者来得及接收，这就是流量控制。流量控制根本目的是防止分组丢失，它是构成TCP可靠性的一方面。</p>
+</blockquote>
+<h4 id="如何实现流量控制？"><a href="#如何实现流量控制？" class="headerlink" title="如何实现流量控制？"></a>如何实现流量控制？</h4><blockquote>
+<p>由滑动窗口协议（连续ARQ协议）实现。滑动窗口协议既保证了分组无差错、有序接收，也实现了流量控制。主要的方式就是接收方返回的 ACK 中会包含自己的接收窗口的大小，并且利用大小来控制发送方的数据发送。</p>
+</blockquote>
+<h4 id="流量控制引发的死锁？怎么避免死锁的发生？"><a href="#流量控制引发的死锁？怎么避免死锁的发生？" class="headerlink" title="流量控制引发的死锁？怎么避免死锁的发生？"></a>流量控制引发的死锁？怎么避免死锁的发生？</h4><blockquote>
+<p>当发送者收到了一个窗口为0的应答，发送者便停止发送，等待接收者的下一个应答。但是如果这个窗口不为0的应答在传输过程丢失，发送者一直等待下去，而接收者以为发送者已经收到该应答，等待接收新数据，这样双方就相互等待，从而产生死锁。<br>为了避免流量控制引发的死锁，TCP使用了持续计时器。每当发送者收到一个零窗口的应答后就启动该计时器。时间一到便主动发送报文询问接收者的窗口大小。若接收者仍然返回零窗口，则重置该计时器继续等待；若窗口不为0，则表示应答报文丢失了，此时重置发送窗口后开始发送，这样就避免了死锁的产生。</p>
+</blockquote>
+<h4 id="拥塞控制和流量控制的区别"><a href="#拥塞控制和流量控制的区别" class="headerlink" title="拥塞控制和流量控制的区别"></a>拥塞控制和流量控制的区别</h4><blockquote>
+<p>拥塞控制：拥塞控制是作用于网络的，它是防止过多的数据注入到网络中，避免出现网络负载过大的情况；常用的方法就是：（ 1 ）慢开始、拥塞避免（ 2 ）快重传、快恢复。</p>
+</blockquote>
+<blockquote>
+<p>流量控制：流量控制是作用于接收者的，它是控制发送者的发送速度从而使接收者来得及接收，防止分组丢失的。</p>
+</blockquote>
+<h4 id="同一台机器上使用同一个应用，该应用使用2000端口，现在该应用有两个进程发给同1服务器，这两个应用的套接字一样吗"><a href="#同一台机器上使用同一个应用，该应用使用2000端口，现在该应用有两个进程发给同1服务器，这两个应用的套接字一样吗" class="headerlink" title="同一台机器上使用同一个应用，该应用使用2000端口，现在该应用有两个进程发给同1服务器，这两个应用的套接字一样吗"></a>同一台机器上使用同一个应用，该应用使用2000端口，现在该应用有两个进程发给同1服务器，这两个应用的套接字一样吗</h4><blockquote>
+<p>不一样，每个进程都会有自己的套接字和端口号，即使是同一个应用程序。因此，这两个进程使用的套接字是不同的。</p>
+</blockquote>
+<h4 id="为什么不同，他们源ip，源端口，目的ip端口都一样"><a href="#为什么不同，他们源ip，源端口，目的ip端口都一样" class="headerlink" title="为什么不同，他们源ip，源端口，目的ip端口都一样"></a>为什么不同，他们源ip，源端口，目的ip端口都一样</h4><blockquote>
+<p>每个进程在运行时都会分配自己的套接字和端口号，即使是同一个应用程序，不同的进程也会使用不同的套接字。这是因为套接字是一个抽象的概念，它包括了IP地址、端口号和协议等信息，而每个进程都有自己的标识符，所以它们的套接字也是不同的。虽然源IP、源端口和目的IP、目的端口都一样，但是套接字还包括了进程标识符等其他信息，因此这两个进程使用的套接字是不同的。</p>
+</blockquote>
+<h4 id="tcp中，发送方发送了1，2，3，4这4个报文，2的报文丢失了，3，4发送ack2，2，发送方收到ack2，ack2后发送2的报文段，接收方收到2后，发送多少ack"><a href="#tcp中，发送方发送了1，2，3，4这4个报文，2的报文丢失了，3，4发送ack2，2，发送方收到ack2，ack2后发送2的报文段，接收方收到2后，发送多少ack" class="headerlink" title="tcp中，发送方发送了1，2，3，4这4个报文，2的报文丢失了，3，4发送ack2，2，发送方收到ack2，ack2后发送2的报文段，接收方收到2后，发送多少ack?"></a>tcp中，发送方发送了1，2，3，4这4个报文，2的报文丢失了，3，4发送ack2，2，发送方收到ack2，ack2后发送2的报文段，接收方收到2后，发送多少ack?</h4><blockquote>
+<p>我认为发送ack4，表示4之前的都到了</p>
+</blockquote>
+<h4 id="tcp四次挥手-最后一次ack如果没有收到"><a href="#tcp四次挥手-最后一次ack如果没有收到" class="headerlink" title="tcp四次挥手 最后一次ack如果没有收到"></a>tcp四次挥手 最后一次ack如果没有收到</h4><blockquote>
+<p>当第四步的A发送的确认报文，B收到时，A会等待2MSL的时间后，连接彻底关闭。(因为B收到了，所以2MSL时间内B不会重发第三步的释放报文)</p>
+</blockquote>
+<blockquote>
+<p>当第四步的A发送的确认报文，B没有收到时，B会继续发送第三步的释放报文，A收到后会继续发送第四步的确认报文（此时会重新启动2MSL计时器，重新等待2MSL时间），若在接下来的2MSL的时间内未收到B发送的第三步的释放报文，则意味着B已经收到了A的ack确认报文，连接彻底关闭</p>
+</blockquote>
+<blockquote>
+<p>MSL 是Maximum Segment Lifetime英文的缩写，中文可以译为“报文最大生存时间”，他是任何报文在网络上存在的最长时间，超过这个时间报文将被丢弃。</p>
+</blockquote>
+<h4 id="网络中心路由器就可以做物理层、数据链路层、网络层的工作吗"><a href="#网络中心路由器就可以做物理层、数据链路层、网络层的工作吗" class="headerlink" title="网络中心路由器就可以做物理层、数据链路层、网络层的工作吗"></a>网络中心路由器就可以做物理层、数据链路层、网络层的工作吗</h4><blockquote>
+<p>网络中心路由器可以做物理层、数据链路层、网络层的工作，但它也可以做更高层次的工作，如传输层、应用层等。它的主要任务是将来自不同网络的数据包转发到正确的目的地，实现网络的互联互通。在这个过程中，它需要对不同层次的协议进行解析和处理，以确保数据能够正确地传输和接收。因此，网络中心路由器是网络中非常重要的设备。</p>
+</blockquote>
+<h4 id="网络中心的交换机是做什么的，既然路由器都可以做"><a href="#网络中心的交换机是做什么的，既然路由器都可以做" class="headerlink" title="网络中心的交换机是做什么的，既然路由器都可以做"></a>网络中心的交换机是做什么的，既然路由器都可以做</h4><blockquote>
+<p>网络中心的交换机和路由器虽然都是网络设备，但是它们的功能不同，有不同的应用场景。</p>
+<p>交换机是一种数据链路层设备，主要用于在局域网中传输数据，它可以在&gt;不同设备之间进行数据的交换和转发，从而实现局域网内部的互联互通。&gt;交换机通常使用MAC地址进行寻址和转发，具有快速转发和低延迟的特点，&gt;能够提供高效的局域网数据传输服务。交换机的主要作用是在局域网内部&gt;进行数据包的转发和过滤，减少网络拥塞和冲突。</p>
+<p>而路由器则是一种网络层设备，主要用于在不同网络之间进行数据的传输&gt;和转发，它能够识别不同网络之间的IP地址，并根据路由表将数据包转发&gt;到正确的目的地。路由器能够实现不同网络之间的互联互通，是实现互联&gt;网的重要设备之一。路由器的主要作用是在不同网络之间进行数据包的转&gt;发和路由选择，保证数据能够正确地传输和接收。</p>
+<p>因此，交换机和路由器虽然都是网络设备，但是它们的功能和应用场景不同，各自有着自己的优势和特点。在网络中心中，交换机和路由器通常都会同时使用，以提供高效、可靠的数据传输服务。</p>
+</blockquote>
+<h4 id="我们局域网的路由器可以做物理层、数据链路层、网络层的工作吗"><a href="#我们局域网的路由器可以做物理层、数据链路层、网络层的工作吗" class="headerlink" title="我们局域网的路由器可以做物理层、数据链路层、网络层的工作吗"></a>我们局域网的路由器可以做物理层、数据链路层、网络层的工作吗</h4><blockquote>
+<p>通常情况下，局域网的路由器可以同时做物理层、数据链路层和网络层的工作。</p>
+<p>在物理层方面，路由器需要通过物理接口与局域网内的设备进行连接，以&gt;便进行数据的传输。路由器通常会提供多个物理接口，如以太网口、无线&gt;接口等，以适应不同的接入方式。</p>
+<p>在数据链路层方面，路由器需要解析数据帧，进行帧头和帧尾的处理，并&gt;对MAC地址进行寻址和转发，以实现局域网内部的数据传输。</p>
+<p>在网络层方面，路由器需要解析IP数据包，并根据路由表将数据包转发到&gt;正确的目的地。路由器还需要支持不同的网络协议，如TCP/IP、IPX/SPX&gt;等，以适应不同的网络环境。</p>
+<p>总之，局域网的路由器需要支持物理层、数据链路层和网络层的相关功能，以实现局域网内部的数据传输和互联互通。</p>
+</blockquote>
+<h4 id="那么还要局域网的其他设备干什么"><a href="#那么还要局域网的其他设备干什么" class="headerlink" title="那么还要局域网的其他设备干什么"></a>那么还要局域网的其他设备干什么</h4><blockquote>
+<p>除了路由器，局域网中还需要其他设备来完成不同的任务。以下是一些常见的局域网设备：</p>
+<ol>
+<li><p>交换机：交换机是局域网中的核心设备，主要用于在局域网内部进行数&gt;据包的转发和过滤，以实现设备之间的互联互通。交换机通常使用MAC地址&gt;进行寻址和转发，具有快速转发和低延迟的特点，能够提供高效的局域网&gt;数据传输服务。</p>
+</li>
+<li><p>防火墙：防火墙是一种网络安全设备，用于保护局域网内的设备免受网&gt;络攻击和恶意软件的侵害。防火墙可以对网络流量进行过滤和检测，屏蔽&gt;不安全的流量，保护局域网内部的数据安全。</p>
+</li>
+<li><p>无线接入点：无线接入点是一种无线局域网设备，用于提供无线接入服&gt;务。无线接入点可以将有线网络转换为无线网络，让无线设备可以接入到&gt;局域网中。无线接入点通常支持不同的无线协议和加密方式，以提供安全&gt;和高速的无线接入服务。</p>
+</li>
+<li><p>打印机和其他外围设备：局域网中通常还需要打印机、扫描仪、存储设&gt;备等外围设备，以方便用户进行打印、扫描、存储等操作。这些设备需要&gt;支持局域网协议和接口，以便与局域网中的其他设备进行通信和互动。</p>
+</li>
+</ol>
+<p>总之，局域网中需要不同类型的设备来完成不同的任务，这些设备通常需要相互配合，以实现局域网的高效运行和数据传输。</p>
+</blockquote>
+<h4 id="交换机可以做物理层的工作还要这些设备干什么"><a href="#交换机可以做物理层的工作还要这些设备干什么" class="headerlink" title="交换机可以做物理层的工作还要这些设备干什么"></a>交换机可以做物理层的工作还要这些设备干什么</h4><blockquote>
+<p>虽然交换机可以在一定程度上承担物理层的功能，但是在实际的网络中，还需要其他物理层设备来配合使用，以实现更加高效、稳定和可靠的数据传输。</p>
+<ol>
+<li><p>中继器：中继器是一种物理层设备，可以放大信号和延长信号传输距&gt;离。在局域网中，如果数据传输距离超过了交换机的传输范围，就需要使&gt;用中继器来扩展局域网的范围，从而实现更广泛的设备互联互通。</p>
+</li>
+<li><p>光纤收发器：在需要使用光纤进行数据传输的情况下，需要使用光纤收&gt;发器将数字信号转换为光信号，并在光纤中进行传输。交换机通常支持光&gt;纤接口，但是光纤收发器可以提供更高效、稳定和可靠的光纤传输服务。</p>
+</li>
+<li><p>网线：网线是计算机和网络设备之间连接的物理媒介，不同类型的网线&gt;可以支持不同的传输速率和距离。在局域网中，使用不同类型的网线可以&gt;适应不同的传输需求，从而实现更高效、稳定和可靠的数据传输服务。</p>
+</li>
+</ol>
+<p>综上所述，虽然交换机可以在一定程度上承担物理层的功能，但是在实际的网络中，还需要其他物理层设备来配合使用，以实现更加高效、稳定和可靠的数据传输。</p>
+</blockquote>
+<h4 id="是不是高层次的设备都可以做低层次设备的工作"><a href="#是不是高层次的设备都可以做低层次设备的工作" class="headerlink" title="是不是高层次的设备都可以做低层次设备的工作"></a>是不是高层次的设备都可以做低层次设备的工作</h4><blockquote>
+<p>是的，高层次的设备通常都可以完成低层次设备的工作，但是低层次设备不一定能够完成高层次设备的工作。</p>
+<p>在OSI模型中，每一层都有自己的功能和任务，高层次的设备需要支持更多&gt;的协议和功能，以实现更复杂的数据处理和传输。而低层次的设备则主要&gt;负责数据的物理传输和转换，通常只支持少量的协议和功能。</p>
+<p>因此，高层次的设备通常都可以完成低层次设备的工作，如路由器可以完&gt;成交换机的工作，服务器可以完成路由器的工作。但是低层次设备并不一&gt;定能够完成高层次设备的工作，如交换机不能完成路由器的工作。</p>
+<p>总之，高层次的设备通常都可以完成低层次设备的工作，这也是网络设备的发展趋势之一，即设备的功能越来越集成和综合。但是不同设备之间的功能和任务也有着明显的区别，需要根据具体的应用场景进行选择和配置。</p>
+</blockquote>
+<h4 id="中国和美国隔着太平洋，没有光纤连接，那么怎么通信呢"><a href="#中国和美国隔着太平洋，没有光纤连接，那么怎么通信呢" class="headerlink" title="中国和美国隔着太平洋，没有光纤连接，那么怎么通信呢"></a>中国和美国隔着太平洋，没有光纤连接，那么怎么通信呢</h4><blockquote>
+<p>中国和美国之间的通信主要依靠卫星通信和海底电缆两种方式。</p>
+<ol>
+<li><p>卫星通信：卫星通信是利用人造卫星进行通信的一种方式。中国和美国&gt;都有自己的卫星通信系统，可以通过卫星进行通信。卫星通信的优点是覆&gt;盖范围广，可以实现远距离通信，但是信号传输时延较大，容易受到天气&gt;等因素的影响。</p>
+</li>
+<li><p>海底电缆：海底电缆是一种在海底铺设的光纤电缆，可以实现跨越大洋&gt;的通信。中国和美国之间有多条海底电缆连接，如亚太2号、亚太3号、太&gt;平洋光缆等，可以提供高速、稳定和可靠的通信服务。海底电缆的优点是&gt;传输速度快、带宽大、时延低，适合大量数据传输和高质量的视频通信等&gt;应用。</p>
+</li>
+</ol>
+<p>综上所述，中国和美国之间的通信主要依靠卫星通信和海底电缆两种方式。这些通信方式的选择和配置需要考虑到各种因素，如通信距离、传输速度、时延、可靠性等，以提供高效、稳定和可靠的通信服务。</p>
+</blockquote>
+<h4 id="如果没有这两种东西是不是就没办法通信了"><a href="#如果没有这两种东西是不是就没办法通信了" class="headerlink" title="如果没有这两种东西是不是就没办法通信了"></a>如果没有这两种东西是不是就没办法通信了</h4><blockquote>
+<p>如果没有卫星通信和海底电缆，中国和美国之间的通信就会受到很大的&gt;限制，但并不是完全没有办法通信。</p>
+<p>在没有卫星通信和海底电缆的情况下，可以使用其他的通信方式，如：</p>
+<p>短波无线电：短波无线电可以实现远距离通信，但是信号容易受到干扰和&gt;衰减，通信质量不稳定。</p>
+<p>气球通信：气球通信是一种通过高空气球搭载通信设备进行通信的方式，可以实现远距离通信，但是成本较高，通信质量不稳定。</p>
+</blockquote>
+<h4 id="网络重定向是怎么回事"><a href="#网络重定向是怎么回事" class="headerlink" title="网络重定向是怎么回事"></a>网络重定向是怎么回事</h4><blockquote>
+<p>网络重定向是将一个网址或者一个网站的访问请求重定向到另一个网址或者网站的过程。它可以通过服务器端或者客户端进行实现。</p>
+<p>服务器端的重定向是指在服务器端进行配置，当用户访问某个网址或者网&gt;站时，服务器会将请求重定向到另一个网址或者网站。这种重定向常用于&gt;网站迁移、网址更改等场景。</p>
+<p>客户端的重定向是指当用户访问某个网址或者网站时，服务器会返回一个&gt;重定向指令，让客户端自动跳转到另一个网址或者网站。这种重定向常用&gt;于网站跳转、页面跳转等场景。</p>
+<p>重定向可以帮助网站提高用户体验、解决网站迁移等问题，但也可能会影响网站的SEO排名和用户隐私。因此，在进行重定向操作时，需要慎重考虑。</p>
+</blockquote>
+<h4 id="as之间需要运行相同的域间路由选择协议，那么全世界不就只能运行一种协议了吗，不然怎么交互"><a href="#as之间需要运行相同的域间路由选择协议，那么全世界不就只能运行一种协议了吗，不然怎么交互" class="headerlink" title="as之间需要运行相同的域间路由选择协议，那么全世界不就只能运行一种协议了吗，不然怎么交互"></a>as之间需要运行相同的域间路由选择协议，那么全世界不就只能运行一种协议了吗，不然怎么交互</h4><blockquote>
+<p>实际上，不同的自治域可以选择不同的域间路由选择协议，只要它们之间有一种方式来交换路由信息。这种方式可以是通过互联网交换点（IXP）或者运营商之间的互联互通（Peering）来实现。通过这些方式，不同的自治域可以交换其选择的域间路由选择协议所需的路由信息，并实现跨自治域的通信。因此，全世界可以同时运行多种不同的域间路由选择协议。</p>
+</blockquote>
+<h4 id="正常来说mac地址不应该是下一跳的mac地址吗"><a href="#正常来说mac地址不应该是下一跳的mac地址吗" class="headerlink" title="正常来说mac地址不应该是下一跳的mac地址吗"></a>正常来说mac地址不应该是下一跳的mac地址吗</h4><blockquote>
+<p>在网络通信中，源MAC地址是发送方设备的MAC地址，目标MAC地址是接收方设备的MAC地址。当数据包经过多个路由器转发时，每个路由器都会将数据包的目标MAC地址设置为下一个路由器的MAC地址，以确保数据包能够到达下一个路由器。因此，在路由器之间传输的数据包的目标MAC地址通常是下一个路由器的MAC地址，而不是最终目的地设备的MAC地址。最终目的地设备的MAC地址只有在数据包到达最终目的地时才会被使用。</p>
+</blockquote>
+<h4 id="下一跳路由器通过查看ip头部来查arp表确定下一跳mac？"><a href="#下一跳路由器通过查看ip头部来查arp表确定下一跳mac？" class="headerlink" title="下一跳路由器通过查看ip头部来查arp表确定下一跳mac？"></a>下一跳路由器通过查看ip头部来查arp表确定下一跳mac？</h4><blockquote>
+<p>是的，下一跳路由器通常通过查看数据包IP头部中的目标IP地址来确定下一跳的MAC地址。在进行路由转发时，路由器通常会将数据包的目标IP地址与其路由表进行匹配，以确定数据包的下一跳。下一跳路由器的MAC地址通常会存储在路由器的ARP缓存中，因为路由器需要将数据包发送到下一跳路由器的MAC地址。因此，当路由器需要将数据包转发到下一跳路由器时，它会在ARP缓存中查找下一跳路由器的MAC地址，并将其添加到数据包的目标MAC地址中，以便成功将数据包发送到下一跳路由器。</p>
+</blockquote>
+
+      
+    </div>
+    <div class="article-footer">
+      <br>
+<br>
+<blockquote class="mt-2x">
+  <ul class="post-copyright list-unstyled">
+    
+    <li class="post-copyright-link hidden-xs">
+      <strong>本文链接：</strong>
+      <a href="https://codecodegogogo.github.io/2023/05/20/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E7%96%91%E9%97%AE/" title="计算机网络疑问" target="_blank" rel="external">https://codecodegogogo.github.io/2023/05/20/计算机网络疑问/</a>
+    </li>
+    
+    <li class="post-copyright-license">
+      <strong></strong>
+      <!-- <strong>版权声明： </strong> 本博客所有文章除特别声明外，均采用 <a href="http://creativecommons.org/licenses/by/4.0/deed.zh" target="_blank" rel="external">CC BY 4.0 CN协议</a> 许可协议。转载请注明出处！ -->
+    </li>
+  </ul>
+</blockquote>
+
+    </div>
+  </article>
+  
+    
+  <section id="comments">
+  	
+  </section>
+
+
+  
+</div>
+
+  <nav class="bar bar-footer clearfix" data-stick-bottom>
+  <div class="bar-inner">
+  
+  <ul class="pager pull-left">
+    
+    <li class="prev">
+      <a href="/2023/05/20/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C-%E7%AC%AC%E4%B8%80%E7%AB%A0%E6%80%BB%E8%BF%B0/" title="计算机网络-自顶向下_第一章总述"><i class="icon icon-angle-left" aria-hidden="true"></i><span>&nbsp;&nbsp;上一篇</span></a>
+    </li>
+    
+    
+    <li class="next">
+      <a href="/2023/05/18/linux%E5%B0%8F%E9%A2%98/" title="linux小题"><span>下一篇&nbsp;&nbsp;</span><i class="icon icon-angle-right" aria-hidden="true"></i></a>
+    </li>
+    
+    
+  </ul>
+  
+  
+  <!-- Button trigger modal -->
+  <button type="button" class="btn btn-fancy btn-donate pop-onhover bg-gradient-warning" data-toggle="modal" data-target="#donateModal"><span>赏</span></button>
+  <!-- <div class="wave-icon wave-icon-danger btn-donate" data-toggle="modal" data-target="#donateModal">
+    <div class="wave-circle"><span class="icon"><i class="icon icon-bill"></i></span></div>
+  </div> -->
+  
+  
+  <div class="bar-right">
+    
+    <div class="share-component" data-sites="weibo,qq,wechat,facebook,twitter" data-mobile-sites="weibo,qq,qzone"></div>
+    
+  </div>
+  </div>
+</nav>
+  
+<!-- Modal -->
+<div class="modal modal-center modal-small modal-xs-full fade" id="donateModal" tabindex="-1" role="dialog">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content donate">
+      <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+      <div class="modal-body">
+        <div class="donate-box">
+          <div class="donate-head">
+            <p>感谢您的支持，我会继续努力的!</p>
+          </div>
+          <div class="tab-content">
+            <div role="tabpanel" class="tab-pane fade active in" id="alipay">
+              <div class="donate-payimg">
+                <img src="/images/donate/alipayimg.png" alt="扫码支持" title="扫一扫" />
+              </div>
+              <p class="text-muted mv">扫码打赏，你说多少就多少</p>
+              <p class="text-grey">打开支付宝扫一扫，即可进行扫码打赏哦</p>
+            </div>
+            <div role="tabpanel" class="tab-pane fade" id="wechatpay">
+              <div class="donate-payimg">
+                <img src="/images/donate/wechatpayimg.png" alt="扫码支持" title="扫一扫" />
+              </div>
+              <p class="text-muted mv">扫码打赏，你说多少就多少</p>
+              <p class="text-grey">打开微信扫一扫，即可进行扫码打赏哦</p>
+            </div>
+          </div>
+          <div class="donate-footer">
+            <ul class="nav nav-tabs nav-justified" role="tablist">
+              <li role="presentation" class="active">
+                <a href="#alipay" id="alipay-tab" role="tab" data-toggle="tab" aria-controls="alipay" aria-expanded="true"><i class="icon icon-alipay"></i> 支付宝</a>
+              </li>
+              <li role="presentation" class="">
+                <a href="#wechatpay" role="tab" id="wechatpay-tab" data-toggle="tab" aria-controls="wechatpay" aria-expanded="false"><i class="icon icon-wepay"></i> 微信支付</a>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+
+
+
+</main>
+
+  <footer class="footer" itemscope itemtype="http://schema.org/WPFooter">
+	
+	
+    <ul class="social-links">
+    	
+        <li><a href="https://github.com/codecodegogogo" target="_blank" title="Github" data-toggle=tooltip data-placement=top><i class="icon icon-github"></i></a></li>
+        
+    </ul>
+
+    <div class="copyright">
+    	
+        联系邮箱：<br>codecodegogogo@163.com
+        <!-- 2024 Sunny -->
+        
+        <!--  -->
+    </div>
+</footer>
+  <script src="//cdn.jsdelivr.net/npm/jquery@1.12.4/dist/jquery.min.js"></script>
+<script>
+window.jQuery || document.write('<script src="js/jquery.min.js"><\/script>')
+</script>
+
+<script src="/js/plugin.min.js"></script>
+
+
+<script src="/js/application.js"></script>
+
+
+    <script>
+(function (window) {
+    var INSIGHT_CONFIG = {
+        TRANSLATION: {
+            POSTS: '文章',
+            PAGES: '页面',
+            CATEGORIES: '分类',
+            TAGS: '标签',
+            UNTITLED: '(未命名)',
+        },
+        ROOT_URL: '/',
+        CONTENT_URL: '/content.json',
+    };
+    window.INSIGHT_CONFIG = INSIGHT_CONFIG;
+})(window);
+</script>
+
+<script src="/js/insight.js"></script>
+
+
+
+
+
+
+   
+<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+
+   
+
+
+
+
+
+
+</body>
+
+</html>
